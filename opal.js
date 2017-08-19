@@ -31,7 +31,7 @@ client.on('message', message => {
             console.log(split, OpalBot.prefixes[i]);
             //console.log(message.member.roles.find(n => n.name == 'admin');
             for (var role in OpalBot.commands) {
-                if (message.member.roles.find(n => n.name == role) && OpalBot.commands[role].hasOwnProperty(command)) {
+                if (message.member.roles.find(n => n.name.toLowerCase() == role) && OpalBot.commands[role].hasOwnProperty(command)) {
                     try {
                         var command_fn = OpalBot.commands[role][command];
                         if (command_fn.constructor === String) {
@@ -154,8 +154,8 @@ OpalBot.commands.admin.ban = (message, reason) => {
 
 OpalBot.commands.admin.eval = (message, content) => {
     try {
+        console.log(content);
         var r = eval(content);
-        console.log(r);
         if (true) {
             message.reply(r);
         }

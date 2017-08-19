@@ -155,7 +155,8 @@ OpalBot.commands.admin.ban = (message, reason) => {
 OpalBot.commands.admin.eval = (message, content) => {
     try {
         var r = eval(content);
-        if (r) {
+        console.log(r);
+        if (true) {
             message.reply(r);
         }
     } catch(e) {

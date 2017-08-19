@@ -160,7 +160,7 @@ OpalBot.commands.admin.eval = (message, content) => {
             message.reply(message);
         }
     } catch(e) {
-        message.reply(e);
+        message.reply('ERROR: ' + e);
     }
 };
 

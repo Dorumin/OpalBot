@@ -1,4 +1,5 @@
 const Discord = require('discord.js');
+const http = require('http');
 const client = new Discord.Client();
 
 client.on('ready', async () => {
@@ -147,3 +148,8 @@ OpalBot.commands.admin.ban = (message, reason) => {
         console.log('Error (commands.admin.ban):', err);
     });
 };
+
+http.createServer((request, response) => {
+  response.writeHead(404);
+  response.end();
+}).listen(process.env.PORT || 5000);

@@ -56,8 +56,6 @@ client.on('message', message => {
     }
 });
 
-client.login('MzQ4MjMzMjI0MjkzNDQ5NzI5.DHkZdQ.MpDm7AMKSyICp5rFwfn9FuB4lWQ');
-
 var OpalBot = {
     prefixes: ['!', '@', '>'],
     v: '0.01'
@@ -153,3 +151,5 @@ http.createServer((request, response) => {
   response.writeHead(404);
   response.end();
 }).listen(process.env.PORT || 5000);
+
+client.login(process.env.token);

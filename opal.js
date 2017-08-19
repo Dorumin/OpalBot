@@ -3,7 +3,7 @@ const http = require('http');
 const client = new Discord.Client();
 
 client.on('ready', async () => {
-  var storage = localStorage.get('prefixes');
+  var storage = null;
   if (!storage) {
     storage = '["!", "@", ">", "¬¬"]';
   }

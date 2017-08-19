@@ -1,0 +1,2 @@
+# OpalBot
+Discord bot

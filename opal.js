@@ -152,15 +152,20 @@ OpalBot.commands.admin.ban = (message, reason) => {
     });
 };
 
+OpalBot.commands.admin.run = 'eval';
 OpalBot.commands.admin.eval = (message, content) => {
     try {
-        console.log(content);
-        var r = eval(content);
-        if (r && r.toString().trim()) {
-            message.reply(r.toString().trim());
-        }
+        eval(content);
     } catch(e) {
         message.reply('ERROR: ' + e);
+    }
+};
+
+OpalBot.commands.admin.say = (message, content) => {
+    try {
+        message.channel.send(eval(content));
+    } catch(e) {
+        message.channel.send(content);
     }
 };
 

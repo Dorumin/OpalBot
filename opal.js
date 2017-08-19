@@ -163,7 +163,9 @@ OpalBot.commands.admin.eval = (message, content) => {
 
 OpalBot.commands.admin.say = (message, content) => {
     try {
-        message.channel.send(eval(content));
+        var r = eval(content);
+        if (!r || !r.toString().trim()) throw r;
+        message.channel.send(r);
     } catch(e) {
         message.channel.send(content);
     }

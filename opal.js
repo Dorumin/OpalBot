@@ -3,6 +3,11 @@ const http = require('http');
 const client = new Discord.Client();
 
 client.on('ready', async () => {
+  var storage = localStorage.get('prefixes');
+  if (!storage) {
+    storage = '["!", "@", ">", "¬¬"]';
+  }
+  OpalBot.prefixes = JSON.parse(storage);
   OpalBot.prefixes.push(`<@${client.user.id}>, do `, `<@${client.user.id}>`);
   console.log(`OpalBot v${OpalBot.v} is online!`);
 });
@@ -57,7 +62,7 @@ client.on('message', message => {
 });
 
 var OpalBot = {
-    prefixes: ['!', '@', '>'],
+    prefixes: [],
     v: '0.01'
 };
 
@@ -153,4 +158,3 @@ http.createServer((request, response) => {
 }).listen(process.env.PORT || 5000);
 
 client.login(process.env.token);
-console.log(process.env.token);

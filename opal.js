@@ -157,7 +157,7 @@ OpalBot.commands.admin.eval = (message, content) => {
     try {
         var r = eval(content);
         if (r) {
-            message.reply(message);
+            message.reply(message.toString());
         }
     } catch(e) {
         message.reply('ERROR: ' + e);

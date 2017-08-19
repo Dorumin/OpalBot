@@ -1,9 +1,10 @@
 {
   "name": "opalbot",
   "version": "0.0.1",
-  "description": "Discord bot,
+  "description": "Discord bot",
   "engines": {
-    "node": "6.11.1"
+    "node": "8.4.0",
+    "npm": "5.3.0"
   },
   "main": "opal.js",
   "scripts": {

@@ -153,11 +153,11 @@ OpalBot.commands.admin.ban = (message, reason) => {
 };
 
 OpalBot.commands.admin.eval = (message, content) => {
-    message.channel.send('Evaluating...');
+    //message.channel.send('Evaluating...');
     try {
         var r = eval(content);
         if (r) {
-            message.reply(Object.prototype.toString.call(r));
+            message.reply(r);
         }
     } catch(e) {
         message.reply('ERROR: ' + e);

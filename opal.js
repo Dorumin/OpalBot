@@ -9,7 +9,7 @@ client.on('ready', async () => {
   }
   OpalBot.prefixes = JSON.parse(storage);
   OpalBot.prefixes.push(`<@${client.user.id}>, do `, `<@${client.user.id}>`);
-  console.log(`OpalBot v${OpalBot.v} is online!`);
+  console.log(`OpalBot v${OpalBot.v} is online! I'm outski`);
 });
 
 client.on('message', message => {
@@ -150,6 +150,18 @@ OpalBot.commands.admin.ban = (message, reason) => {
         message.channel.send(`Failed while banning ${user.username}. ${err}`);
         console.log('Error (commands.admin.ban):', err);
     });
+};
+
+OpalBot.commands.admin.eval = (message, content) => {
+    message.channel.send('Evaluating...');
+    try {
+        var r = eval(content);
+        if (r) {
+            message.reply(message);
+        }
+    } catch(e) {
+        message.reply(e);
+    }
 };
 
 http.createServer((request, response) => {

@@ -1,0 +1,20 @@
+{
+  "name": "opalbot",
+  "version": "0.0.1",
+  "description": "Discord bot,
+  "engines": {
+    "node": "6.11.1"
+  },
+  "main": "opal.js",
+  "scripts": {
+    "start": "node opal.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Dorumin/OpalBot"
+  },
+  "keywords": [
+    "Opal",
+    "Bot"
+  ]
+}

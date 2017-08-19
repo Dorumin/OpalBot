@@ -153,3 +153,4 @@ http.createServer((request, response) => {
 }).listen(process.env.PORT || 5000);
 
 client.login(process.env.token);
+console.log(process.env.token);

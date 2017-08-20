@@ -9,7 +9,8 @@ client.on('ready', async () => {
   }
   OpalBot.prefixes = JSON.parse(storage);
   OpalBot.prefixes.push(`<@${client.user.id}>`, `<@${client.user.id}>, do `);
-  console.log(`OpalBot v${OpalBot.v} is online! I'm outski`);
+  console.log(`OpalBot v${OpalBot.v} is online!`);
+  console.log(client.guilds.get(344422448403316748));
 });
 
 client.on('message', message => {
@@ -93,16 +94,9 @@ OpalBot.commands.peasants.me = message => {
 
 OpalBot.commands.peasants.pong = 'ping';
 OpalBot.commands.peasants.ping = (message, content) => {
-    var ping = message.content.indexOf('ping'),
-    pong = message.content.indexOf('pong');
-    if (ping == -1) {
-        ping = 1000;
-    }
-    if (pong == -1) {
-        pong = 1001;
-    }
-    var isPing = ping < pong;
-    message.reply(isPing ? 'Pong!' : 'Ping!').then(msg => {
+    var ping = message.content.indexOf('ping') + 1 || 1000,
+    pong = message.content.indexOf('pong') + 1 || 1001;
+    message.reply(ping < pong ? 'Pong!' : 'Ping!').then(msg => {
         if (!msg.editable) {
             message.channel.send('I cannot edit my own messages. :(');
             return;

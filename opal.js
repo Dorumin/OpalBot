@@ -10,7 +10,7 @@ client.on('ready', async () => {
   OpalBot.prefixes = JSON.parse(storage);
   OpalBot.prefixes.push(`<@${client.user.id}>`, `<@${client.user.id}>, do `);
   console.log(`OpalBot v${OpalBot.v} is online!`);
-  console.log(client.guilds.find('344422448403316748'));
+  console.log(client.guilds);
 });
 
 client.on('message', message => {

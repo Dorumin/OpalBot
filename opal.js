@@ -8,7 +8,7 @@ client.on('ready', async () => {
     storage = '["!", "@", ">", "¬¬"]';
   }
   OpalBot.prefixes = JSON.parse(storage);
-  OpalBot.prefixes.push(`<@${client.user.id}>, do `, `<@${client.user.id}>`);
+  OpalBot.prefixes.push(`<@${client.user.id}>`, `<@${client.user.id}>, do `);
   console.log(`OpalBot v${OpalBot.v} is online! I'm outski`);
 });
 

@@ -16,7 +16,7 @@ client.on('ready', async () => {
         .find(n => n.id == 344422448403316748).channels
             .find(n => n.name == 'secret')
                 .send(`Bot has been up for ${++i} hours (not really, more like 6 minutes) without idling or crashing!`);
-  }, 360000);
+  }, 3600000);
 });
 
 client.on('message', message => {

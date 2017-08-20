@@ -90,6 +90,22 @@ OpalBot.commands.peasants.me = message => {
     message.channel.send('( ͡° ͜ʖ ͡°)');
 };
 
+OpalBot.commands.peasants.pong = 'ping';
+OpalBot.commands.peasants.ping = (message, content) => {
+    var ping = message.content.indexOf('ping'),
+    pong = message.content.indexOf('pong');
+    ping == -1 && ping = 1000;
+    pong == -1 && pong = 1001;
+    var isPing = ping < pong;
+    message.reply(isPing ? 'Pong!' : 'Ping!').then(msg => {
+        if (!msg.editable) {
+            message.channel.send('I cannot edit my own messages. :(');
+            return;
+        }
+        msg.edit(msg.content + '\n' + (msg.createdTimestamp - message.createdTimestamp) + 'ms!');
+    });
+};
+
 OpalBot.commands.peasants.runtime = message => {
     var s = client.uptime
     message.channel.send(`OpalBot v${OpalBot.v} has been running for ${client.uptime}`);

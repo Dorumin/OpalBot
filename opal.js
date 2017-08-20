@@ -246,9 +246,10 @@ OpalBot.commands.admin.say = (message, content) => {
     }
 };
 
-http.createServer((request, response) => {
-  response.write('Hello, world!');
-  response.end();
+http.createServer((req, res) => {
+  res
+    .write('Hello, world!')
+      .end();
 }).listen(process.env.PORT || 5000);
 
 client.login(process.env.token || 'MzQ4MjMzMjI0MjkzNDQ5NzI5.DHpZ_A.ABB3YsfVWglFXYcURh0GR1ZnXQU');

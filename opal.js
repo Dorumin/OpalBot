@@ -2,7 +2,7 @@ const Discord = require('discord.js');
 const http = require('http');
 const i18n = require('./i18n/en.json');
 const client = new Discord.Client();
-console.log(i18n);
+console.log(i18n.key);
 
 client.on('ready', async () => {
   var storage = null;

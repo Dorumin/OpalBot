@@ -2,7 +2,24 @@ const Discord = require('discord.js');
 const http = require('http');
 const i18n = require(`./i18n/${process.env.lang || 'en'}.json`);
 const client = new Discord.Client();
-console.log(i18n.key);
+
+i18n.msg = (message, obj, ...vars) => {
+    var ref = obj;
+    if (typeof obj == 'string') {
+        obj = i18n[obj];
+    }
+    var msg = obj[message];
+    if (!msg || typeof msg != 'string') {
+        if (typeof ref == 'string') {
+            throw new ReferenceError('(i18n) No key <${message}> in object <i18n.${ref}> found.');
+        }
+        throw new ReferenceError(`(i18n) No key <${message}> found.`);
+    }
+    if (!vars.length) return msg;
+    return msg.replace(/\$(\d)/g, (s, n) => {
+        return vars[n - 1] || s;
+    });
+};
 
 client.on('ready', async () => {
   var storage = null;
@@ -10,8 +27,8 @@ client.on('ready', async () => {
     storage = '["!", "@", ">", "¬¬"]';
   }
   OpalBot.prefixes = JSON.parse(storage);
-  OpalBot.prefixes.push(`<@${client.user.id}>`, i18n.main.prefix.replace('$1', client.user.id));
-  console.log(i18n.main.online.replace('$1', OpalBot.v));
+  OpalBot.prefixes.push(`<@${client.user.id}>`, i18n.msg('prefix', 'main', client.user.id));
+  console.log(i18n.msg('online', 'main', OpalBot.v));
   var i = 0;
   setInterval(n => {
       client.guilds
@@ -91,8 +108,10 @@ OpalBot.commands.peasants.hello = (message) => {
             message.reply('hello useless pile of goop!');
         break;
         case 'Oasis#4730':
-            message.reply('Hello, {data-error: user-not-implemented}');
+            message.reply('hello, loser!');
             break;
+        default:
+            message.reply('hello!');
     }
 };
 
@@ -105,12 +124,12 @@ OpalBot.commands.peasants.pong = 'ping';
 OpalBot.commands.peasants.ping = (message, content) => {
     var ping = message.content.indexOf('ping') + 1 || 1000,
     pong = message.content.indexOf('pong') + 1 || 1001;
-    message.reply(ping < pong ? 'Pong!' : 'Ping!').then(msg => {
+    message.reply(ping < pong ? i18n.msg('pong', 'ping') : i18n.msg('ping', 'ping')).then(msg => {
         if (!msg.editable) {
-            message.channel.send('I cannot edit my own messages. :(');
+            message.channel.send(i18n.msg('cannot-edit', 'ping'));
             return;
         }
-        msg.edit(msg.content + '\n' + (msg.createdTimestamp - message.createdTimestamp) + 'ms!');
+        msg.edit(msg.content + '\n' + i18n.msg('result', 'ping', msg.createdTimestamp - message.createdTimestamp);
     });
 };
 
@@ -128,35 +147,39 @@ OpalBot.commands.peasants.runtime = message => {
     },
     a = Object.keys(o).filter(n => o[n]).reverse(),
     k = a.join('-'),
-    str = i18n.runtime[k].replace(/\$(\d)/g, (s, n) => {
-        if (n == 1) {
-            return OpalBot.v;
-        }
-        return o[a[n - 2]];
-    }).replace(/\((\d+?\|.+?\|.+?)\)/g, (s, match) => {
+    p = [
+        OpalBot.v,
+        ...a.map(n => o[n])
+    ],
+    str = i18n.msg(k, 'runtime', ...p).replace(/\((\d+?\|.+?\|.+?)\)/g, (s, match) => {
         var split = match.split('|');
         return split[0] == 1 ? split[1] : split[2];
     });
     message.channel.send(str);
 };
 
+OpalBot.commands.peasants.status = 'test';
+OpalBot.commands.peasants.test = message => {
+    message.reply(i18n.msg('online', 'test'));
+};
+
 OpalBot.commands.admin.kick = (message, reason) => {
     var user = message.mentions.users.filter(u => u.id != client.user.id).first();
     if (!user) {
-        message.channel.send('No user mention found. Please @ the user you want to kick!');
+        message.channel.send(i18n.msg('no-mention', 'kick'));
         return;
     }
     var guild_user = message.guild.members.find(member => member.user.id == user.id),
     reason = reason.replace(`<@${user.id}>`, '').trim();
     if (!guild_user.kickable) {
-        message.channel.send(`Cannot kick ${user.username}: missing permissions.`);
+        message.channel.send(i18n.msg('cannot-kick', 'kick', user.username));
         return;
     }
-    message.channel.send(`Kicking ${user.username}${reason && ': ' + reason}...`);
+    message.channel.send(i18n.msg('kicking' + (reason ? 'with-reason' : ''), 'kick', reason));
     guild_user.kick(reason).then(() => {
-        message.channel.send(`Successfully kicked ${user.username}!`);
+        message.channel.send(i18n.msg('success', 'kick', user.username));
     }).catch(err => {
-        message.channel.send(`Failed while kicking ${user.username}. ${err}`);
+        message.channel.send(i18n.msg('failure', 'kick', user.username, err));
         console.log('Error (commands.admin.kick):', err);
     });
 };
@@ -164,7 +187,7 @@ OpalBot.commands.admin.kick = (message, reason) => {
 OpalBot.commands.admin.ban = (message, reason) => {
     var user = message.mentions.users.filter(u => u.id != client.user.id).first();
     if (!user) {
-        message.channel.send('No user mention found. Please @ the user you want to ban!');
+        message.channel.send(i18n.msg('no-mention', 'ban'));
         return;
     }
     var guild_user = message.guild.members.find(member => member.user.id == user.id),
@@ -173,11 +196,11 @@ OpalBot.commands.admin.ban = (message, reason) => {
     reason = split.slice(1).join('|').trim(),
     ban;
     if (!guild_user.bannable) {
-        message.channel.send(`Cannot ban ${user.username}: missing permissions.`);
+        message.channel.send(i18n.msg('cannot-ban', 'ban', user.username));
         return;
     }
     if (reason && !isNaN(days)) {
-        message.channel.send(`Banning ${user.username}...`);
+        message.channel.send(i18n.msg('banning', 'ban', user.username));
         ban = guild_user.ban({
             days: Number(days),
             reason: reason
@@ -187,9 +210,9 @@ OpalBot.commands.admin.ban = (message, reason) => {
     }
     ban.then(() => {
         message.channel.send(
-            `Successfully banned ${user.username}!` +
-            (days && !isNaN(days) ? `\nDeleted messages since ${days} days ago.` : '') + 
-            (reason || isNaN(days) ? `\nReason: ${reason || days}` : '')
+            i18n.msg('success', 'ban', user.username) +
+            (days && !isNaN(days) ? '\n' + i18n.msg('deleted-since', 'ban', days) : '') + 
+            (reason || isNaN(days) ? '\n' + i18n.msg('reason', 'ban', reason || days) : '')
         );
     }).catch(err => {
         message.channel.send(`Failed while banning ${user.username}. ${err}`);
@@ -224,7 +247,6 @@ OpalBot.commands.admin.say = (message, content) => {
 };
 
 http.createServer((request, response) => {
-  console.log('SERVER REQUEST CAUGHT.');
   response.writeHead(200);
   response.end();
 }).listen(process.env.PORT || 5000);

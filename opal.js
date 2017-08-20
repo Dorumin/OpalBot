@@ -39,6 +39,7 @@ client.on('message', message => {
                             return;
                         }
                         command_fn(message, params);
+                        break;
                     } catch(e) {
                         console.log(`Uncaught error (command ${role}.${command}):`, e);
                     }
@@ -51,6 +52,7 @@ client.on('message', message => {
                             return;
                         }
                         command_fn(message, params);
+                        break;
                     } catch(e) {
                         console.log(`Uncaught error (command peasants.${command}):`, e);
                     }

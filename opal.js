@@ -200,6 +200,7 @@ OpalBot.commands.admin.say = (message, content) => {
 };
 
 http.createServer((request, response) => {
+  console.log('SERVER REQUEST CAUGHT.');
   response.writeHead(200);
   response.end();
 }).listen(process.env.PORT || 5000);

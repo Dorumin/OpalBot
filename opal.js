@@ -39,7 +39,7 @@ client.on('message', message => {
                             return;
                         }
                         command_fn(message, params);
-                        break;//
+                        break;
                     } catch(e) {
                         console.log(`Uncaught error (command ${role}.${command}):`, e);
                     }
@@ -182,6 +182,12 @@ OpalBot.commands.admin.eval = (message, content) => {
     }
 };
 
+OpalBot.commands.admin.destroy = () => {
+    client.destroy().then(() => {
+        client.login(process.env.token || 'MzQ4MjMzMjI0MjkzNDQ5NzI5.DHpZ_A.ABB3YsfVWglFXYcURh0GR1ZnXQU');
+    });
+};
+
 OpalBot.commands.admin.say = (message, content) => {
     try {
         var r = eval(content);
@@ -194,8 +200,8 @@ OpalBot.commands.admin.say = (message, content) => {
 };
 
 http.createServer((request, response) => {
-  response.writeHead(404);
+  response.writeHead(200);
   response.end();
 }).listen(process.env.PORT || 5000);
 
-client.login(process.env.token);
+client.login(process.env.token || 'MzQ4MjMzMjI0MjkzNDQ5NzI5.DHpZ_A.ABB3YsfVWglFXYcURh0GR1ZnXQU');

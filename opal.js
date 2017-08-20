@@ -154,7 +154,7 @@ OpalBot.commands.peasants.runtime = message => {
             return '';
         }
         return '#invalid type#';
-    }).replace(/,\s*./g, '.');
+    }).replace(/,\s*./g, '.').replace(/(\s)+/, '$1');
     message.channel.send(str);
 };
 

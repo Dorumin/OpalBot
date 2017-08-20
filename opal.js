@@ -24,6 +24,7 @@ client.on('message', message => {
     var content = message.content,
     name = message.author.username,
     i = OpalBot.prefixes.length;
+    if (!content.trim()) return;
     console.log(name + ': ' + content + (message.channel.type == 'text' ? ' @ ' + message.guild.name : ''));
     if (message.channel.type == 'dm' || message.channel.type == 'group') {
         message.reply('Add me on your server: <https://discordapp.com/oauth2/authorize?client_id=348233224293449729&scope=bot>');
@@ -112,8 +113,49 @@ OpalBot.commands.peasants.ping = (message, content) => {
 };
 
 OpalBot.commands.peasants.runtime = message => {
-    var s = client.uptime
-    message.channel.send(`OpalBot v${OpalBot.v} has been running for ${client.uptime}`);
+    var f = Math.floor,
+    s = f(client.uptime / 1000),
+    m = f(s / 60),
+    h = f(m / 60),
+    d = f(h / 24),
+    w = f(d / 7),
+    a = [
+        s % 60,
+        m % 60,
+        h % 24,
+        d % 7,
+        w
+    ],
+    i = {
+        s: 0,
+        m: 1,
+        h: 2,
+        d: 3,
+        w: 4
+    },
+    str = 'OpalBot v${v} has been running for ${w "$1 weeks," "$1 week,"} ${d "$1 days," "$1 day,"} ${h "$1 hours," "$1 hour,"} ${m "$1 minutes," "$1 minute,"} ${s "and $1 seconds" "and $1 second"}.';
+    str = str.replace(/\${(.+?)}/g, (s, match) => {
+        var type = match.charAt(0);
+        if (type == 'v') {
+            return OpalBot.v;
+        }
+        var cases = match.match(/".+?"/g),
+        item = a[i[type]];
+        if (!cases) {
+            return '#invalid cases#';
+        } else if (cases.length = 1) {
+            cases = [cases[0], cases[0]];
+        }
+        cases = cases.map(str => str.slice(1, -1)); // rm quotes
+        if (item) {
+            var which = (item == 1 ? cases[0] : cases[1]).replace('$1', item);
+            return which;
+        } else if (item === 0) {
+            return '';
+        }
+        return '#invalid type#';
+    }).replace(/,\s*./g, '.');
+    message.channel.send(str);
 };
 
 OpalBot.commands.admin.kick = (message, reason) => {

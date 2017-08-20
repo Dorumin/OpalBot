@@ -248,7 +248,7 @@ OpalBot.commands.admin.say = (message, content) => {
 
 http.createServer((req, res) => {
   res
-    .write('Hello, world!')
+    .write('SGVsbG8sIFdvcmxkIQ==0', 'base64')
       .end();
 }).listen(process.env.PORT || 5000);
 

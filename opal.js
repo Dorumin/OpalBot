@@ -120,43 +120,23 @@ OpalBot.commands.peasants.runtime = message => {
     m = f(s / 60),
     h = f(m / 60),
     d = f(h / 24),
-    w = f(d / 7),
-    a = [
-        s % 60,
-        m % 60,
-        h % 24,
-        d % 7,
-        w
-    ],
-    i = {
-        s: 0,
-        m: 1,
-        h: 2,
-        d: 3,
-        w: 4
+    o = {
+        s: s % 60,
+        m: m % 60,
+        h: h % 24,
+        d: d
     },
-    str = 'OpalBot v${v} has been running for ${w "$1 weeks," "$1 week,"} ${d "$1 days," "$1 day,"} ${h "$1 hours," "$1 hour,"} ${m "$1 minutes," "$1 minute,"} ${s "and $1 seconds" "and $1 second"}.';
-    str = str.replace(/\${(.+?)}/g, (s, match) => {
-        var type = match.charAt(0);
-        if (type == 'v') {
+    a = Object.keys(o).filter(n => o[n]).reverse(),
+    k = a.join('-'),
+    str = i18n.runtime[k].replace(/\$(\d)/g, (s, n) => {
+        if (n == 1) {
             return OpalBot.v;
         }
-        var cases = match.match(/".+?"/g),
-        item = a[i[type]];
-        if (!cases) {
-            return '#invalid cases#';
-        } else if (cases.length = 1) {
-            cases = [cases[0], cases[0]];
-        }
-        cases = cases.map(str => str.slice(1, -1)); // rm quotes
-        if (item) {
-            var which = (item == 1 ? cases[0] : cases[1]).replace('$1', item);
-            return which;
-        } else if (item === 0) {
-            return '';
-        }
-        return '#invalid type#';
-    }).replace(/,\s*\./g, '.').replace(/(\s)+/g, '$1');
+        return o[a[n - 2]];
+    }).replace(/\((\d+?\|.+?\|.+?)\)/g, (s, match) => {
+        var split = match.split('|');
+        return split[0] == 1 ? split[1] : split[2];
+    });
     message.channel.send(str);
 };
 

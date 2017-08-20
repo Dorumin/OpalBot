@@ -10,7 +10,13 @@ client.on('ready', async () => {
   OpalBot.prefixes = JSON.parse(storage);
   OpalBot.prefixes.push(`<@${client.user.id}>`, `<@${client.user.id}>, do `);
   console.log(`OpalBot v${OpalBot.v} is online!`);
-  console.log(client.guilds.find(n => n.id == 344422448403316748).channels);
+  var i = 0;
+  setInterval(n => {
+      client.guilds
+        .find(n => n.id == 344422448403316748).channels
+            .find(n => n.name == 'secret')
+                .send(`Bot has been up for ${++i} hours (not really, more like 6 minutes) without idling or crashing!`);
+  }, 360000);
 });
 
 client.on('message', message => {

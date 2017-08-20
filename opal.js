@@ -215,7 +215,7 @@ OpalBot.commands.admin.ban = (message, reason) => {
             (reason || isNaN(days) ? '\n' + i18n.msg('reason', 'ban', reason || days) : '')
         );
     }).catch(err => {
-        message.channel.send(`Failed while banning ${user.username}. ${err}`);
+        message.channel.send(i18n.msg('failure', 'ban', user.username, err));
         console.log('Error (commands.admin.ban):', err);
     });
 };
@@ -252,4 +252,3 @@ http.createServer((req, res) => {
 }).listen(process.env.PORT || 5000);
 
 client.login(process.env.token);
-// dummy edit

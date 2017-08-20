@@ -129,7 +129,7 @@ OpalBot.commands.peasants.ping = (message, content) => {
             message.channel.send(i18n.msg('cannot-edit', 'ping'));
             return;
         }
-        msg.edit(msg.content + '\n' + i18n.msg('result', 'ping', msg.createdTimestamp - message.createdTimestamp);
+        msg.edit(msg.content + '\n' + i18n.msg('result', 'ping', msg.createdTimestamp - message.createdTimestamp));
     });
 };
 

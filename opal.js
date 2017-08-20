@@ -130,7 +130,7 @@ OpalBot.commands.peasants.ping = (message, content) => {
             return;
         }
         var latency = msg.createdTimestamp - message.createdTimestamp;
-        msg.edit(msg.content + '\n' + i18n.msg('result', 'ping', latency) + (latency > 300 ? '\n' + i18n.msg('diss', 'ping') : ''));
+        msg.edit(msg.content + '\n' + i18n.msg('result', 'ping', latency) + (latency > 200 ? '\n' + i18n.msg('diss', 'ping') : ''));
     });
 };
 

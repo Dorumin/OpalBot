@@ -1,0 +1,48 @@
+{
+    "main": {
+        "prefix": "<@$1>, do",
+        "online": "OpalBot v$1 is online!"
+    },
+    "runtime": {
+        "s": "OpalBot v$1 has been running for $2 ($2|second|seconds).",
+        "m": "OpalBot v$1 has been running for $2 ($2|minute|minutes).",
+        "h": "OpalBot v$1 has been running for $2 ($2|hour|hours).",
+        "d": "OpalBot v$1 has been running for $2 ($2|day|days).",
+        "m-s": "OpalBot v$1 has been running for $2 ($2|minute|minutes) and $3 ($3|second|seconds).",
+        "h-s": "OpalBot v$1 has been running for $2 ($2|hour|hours) and $3 ($3|second|seconds).",
+        "d-s": "OpalBot v$1 has been running for $2 ($2|day|days) and $3 ($3|second|seconds).",
+        "h-m": "OpalBot v$1 has been running for $2 ($2|hour|hours) and $3 ($3|minute|minutes).",
+        "d-m": "OpalBot v$1 has been running for $2 ($2|day|days) and $3 ($3|minute|minutes).",
+        "d-h": "OpalBot v$1 has been running for $2 ($2|day|days) and $3 ($3|hour|hours).",
+        "h-m-s": "OpalBot v$1 has been running for $2 ($2|hour|hours), $3 ($3|minute|minutes), and $4 ($4|second|seconds).",
+        "d-m-s": "OpalBot v$1 has been running for $2 ($2|day|days), $3 ($3|minute|minutes), and $4 ($4|second|seconds).",
+        "d-h-s": "OpalBot v$1 has been running for $2 ($2|day|days), $3 ($3|hour|hours), and $4 ($4|second|seconds).",
+        "d-h-m": "OpalBot v$1 has been running for $2 ($2|day|days), $3 ($3|hour|hours), and $4 ($4|minute|minutes).",
+        "d-h-m-s": "OpalBot v$1 has been running for $2 ($2|day|days), $3 ($3|hour|hours), $4 ($4|minute|minutes), and $5 ($5|second|seconds)."
+    },
+    "ping": {
+        "ping": "Ping!",
+        "pong": "Pong!",
+        "cannot-edit": "I cannot edit my own messages. :(",
+        "result": "$1ms"
+    },
+    "test": {
+        "online": "all sistems fully operational!"
+    },
+    "kick": {
+        "no-mention": "No user mention found. Please @ the user you want to kick!",
+        "cannot-kick": "Cannot kick $1: missing permissions.",
+        "kicking": "Kicking $1...",
+        "kicking-with-reason": "Kicking $1: $2...",
+        "success": "Successfully kicked $1!",
+        "failure": "Failed while kicking $1: $2"
+    },
+    "ban": {
+        "no-mention": "No user mention found. Please @ the user you want to kick!",
+        "cannot-ban": "Cannot ban $1: missing permissions.",
+        "banning": "Banning $1...",
+        "success": "Successfully banned $1!",
+        "deleted-since": "Deleted messages since $1 days ago.",
+        "reason": "Reason: $1"
+    }
+}

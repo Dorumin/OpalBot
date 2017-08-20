@@ -24,7 +24,8 @@
         "ping": "Ping!",
         "pong": "Pong!",
         "cannot-edit": "I cannot edit my own messages. :(",
-        "result": "$1ms"
+        "result": "$1ms",
+        "diss": "still faster than your reaction times."
     },
     "test": {
         "online": "all sistems fully operational!"

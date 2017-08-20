@@ -166,7 +166,7 @@ OpalBot.commands.admin.say = (message, content) => {
         var r = eval(content);
         console.log(r);
         if (!r || !r.toString().trim()) throw r;
-        message.channel.send(r);
+        message.channel.send(r.toString().trim());
     } catch(e) {
         message.channel.send(content);
     }

@@ -56,7 +56,7 @@ client.on('message', message => {
             command = split[0],
             params = split.slice(1).join(' ');
             for (var role in OpalBot.commands) {
-                console.log(role, role == 'operator', OpalBot.operators.includes(message.author.id));
+                console.log(role, role == 'operator', message.author.id);
                 if (role == 'operator' && OpalBot.operators.includes(message.author.id) && OpalBot.commands.operator.hasOwnProperty(command)) {
                     try {
                         var command_fn = OpalBot.commands[role][command];

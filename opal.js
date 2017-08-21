@@ -56,6 +56,19 @@ client.on('message', message => {
             command = split[0],
             params = split.slice(1).join(' ');
             for (var role in OpalBot.commands) {
+                if (role == 'operator' && OpalBot.operators.includes(message.author.id) && OpalBot.commands.operator.hasOwnProperty(command)) {
+                    try {
+                        var command_fn = OpalBot.commands[role][command];
+                        if (command_fn.constructor === String) {
+                            OpalBot.commands[role][command_fn](message, params);
+                            return;
+                        }
+                        command_fn(message, params);
+                        break;
+                    } catch(e) {
+                        console.log(`Uncaught error (command operator.${command}):`, e);
+                    }
+                }
                 if (message.member.roles.find(n => n.name.toLowerCase() == role) && OpalBot.commands[role].hasOwnProperty(command)) {
                     try {
                         var command_fn = OpalBot.commands[role][command];
@@ -89,13 +102,77 @@ client.on('message', message => {
 
 var OpalBot = {
     prefixes: [],
-    v: '0.01'
+    v: '0.01',
+    operators: [155545848812535808, 195712766214930432],
+    permissionAliases: {
+        admin: 'ADMINISTRATOR',
+        create_instant: 'CREATE_INSTANT_INVITE',
+        kick: 'KICK_MEMBERS',
+        ban: 'BAN_MEMBERS',
+        channel: 'MANAGE_CHANNELS',
+        guild: 'MANAGE_GUILD',
+        react: 'ADD_REACTIONS',
+        audit: 'VIEW_AUDIT_LOG',
+        read: 'READ_MESSAGES',
+        send: 'SEND_MESSAGES',
+        tts: 'SEND_TTS_MESSAGES',
+        messages: 'MANAGE_MESSAGES',
+        embed: 'EMBED_LINKS',
+        attach: 'ATTACH_FILES',
+        history: 'READ_MESSAGE_HISTORY',
+        everyone: 'MENTION_EVERYONE',
+        external: 'EXTERNAL_EMOJIS',
+        use_external: 'USE_EXTERNAL_EMOJIS',
+        connect: 'CONNECT',
+        speak: 'SPEAK',
+        mute: 'MUTE_MEMBERS',
+        deafen: 'DEAFEN_MEMBERS',
+        move: 'MOVE_MEMBERS',
+        vad: 'USE_VAD',
+        nick: 'CHANGE_NICKNAME',
+        manage_nicks: 'MANAGE_NICKNAMES',
+        roles: 'MANAGE_ROLES',
+        permissions: 'MANAGE_ROLES_OR_PERMISSIONS',
+        webhooks: 'MANAGE_WEBHOOKS',
+        emojis: 'MANAGE_EMOJIS'
+    }
 };
 
 OpalBot.commands = {
+    roles: {}, // role-specific commands. case-insensitive
+    peasants: {}, // commands that everyone can use
+    operator: {}, // commands that only the users with ID declared in OpalBot.operators can use
+    // permission commands
     admin: {},
-    mods: {},
-    peasants: {}
+    create_instant: {},
+    kick: {},
+    ban: {},
+    channel: {},
+    guild: {},
+    react: {},
+    audit: {},
+    read: {},
+    send: {},
+    tts: {},
+    messages: {},
+    embed: {},
+    attach: {},
+    history: {},
+    everyone: {},
+    external: {},
+    use_external: {},
+    connect: {},
+    speak: {},
+    mute: {},
+    deafen: {},
+    move: {},
+    vad: {},
+    nick: {},
+    manage_nicks: {},
+    roles: {},
+    permissions: {},
+    webhooks: {},
+    emojis: {}
 };
 
 OpalBot.commands.peasants.hi = 'hello';
@@ -219,8 +296,8 @@ OpalBot.commands.admin.ban = (message, reason) => {
     });
 };
 
-OpalBot.commands.admin.run = 'eval';
-OpalBot.commands.admin.eval = (message, content) => {
+OpalBot.commands.operator.run = 'eval';
+OpalBot.commands.operator.eval = (message, content) => {
     try {
         eval(content);
     } catch(e) {
@@ -228,13 +305,13 @@ OpalBot.commands.admin.eval = (message, content) => {
     }
 };
 
-OpalBot.commands.admin.destroy = () => {
+OpalBot.commands.operator.destroy = () => {
     client.destroy().then(() => {
         client.login(process.env.token);
     });
 };
 
-OpalBot.commands.admin.say = (message, content) => {
+OpalBot.commands.operator.say = (message, content) => {
     try {
         var r = eval(content);
         console.log(r);

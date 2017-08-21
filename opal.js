@@ -104,7 +104,7 @@ client.on('message', message => {
 var OpalBot = {
     prefixes: [],
     v: '0.01',
-    operators: [155545848812535808, 195712766214930432],
+    operators: ['155545848812535808', '195712766214930432'],
     permissionAliases: {
         admin: 'ADMINISTRATOR',
         create_instant: 'CREATE_INSTANT_INVITE',

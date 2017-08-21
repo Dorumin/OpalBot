@@ -42,7 +42,11 @@ client.on('message', message => {
     if (message.author.id == client.user.id) return;
     var content = message.content,
     name = message.author.username,
-    i = OpalBot.prefixes.length;
+    i = OpalBot.prefixes.length,
+    permissions = message.member.permissions.serialize();
+    for (var key in OpalBot.permissionAliases) {
+        permissions[key] = permissions[OpalBot.permissionAliases[key]];
+    }
     if (!content.trim()) return;
     console.log(name + ': ' + content + (message.channel.type == 'text' ? ' @ ' + message.guild.name : ''));
     if (message.channel.type == 'dm' || message.channel.type == 'group') {
@@ -69,7 +73,7 @@ client.on('message', message => {
                         console.log(`Uncaught error (command operator.${command}):`, e);
                     }
                 }
-                if (message.member.roles.find(n => n.name.toLowerCase() == role) && OpalBot.commands[role].hasOwnProperty(command)) {
+                if (permissions[role] && OpalBot.commands[role].hasOwnProperty(command)) {
                     try {
                         var command_fn = OpalBot.commands[role][command];
                         if (command_fn.constructor === String) {
@@ -239,7 +243,7 @@ OpalBot.commands.peasants.test = message => {
     message.reply(i18n.msg('online', 'test'));
 };
 
-OpalBot.commands.admin.kick = (message, reason) => {
+OpalBot.commands.kick.kick = (message, reason) => {
     var user = message.mentions.users.filter(u => u.id != client.user.id).first();
     if (!user) {
         message.channel.send(i18n.msg('no-mention', 'kick'));
@@ -260,7 +264,7 @@ OpalBot.commands.admin.kick = (message, reason) => {
     });
 };
 
-OpalBot.commands.admin.ban = (message, reason) => {
+OpalBot.commands.ban.ban = (message, reason) => {
     var user = message.mentions.users.filter(u => u.id != client.user.id).first();
     if (!user) {
         message.channel.send(i18n.msg('no-mention', 'ban'));

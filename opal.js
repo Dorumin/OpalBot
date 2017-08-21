@@ -24,7 +24,7 @@ i18n.msg = (message, obj, ...vars) => {
 client.on('ready', async () => {
   var storage = null;
   if (!storage) {
-    storage = '["!", "@", ">", "¬¬"]';
+    storage = '["!", ">", "¬¬"]';
   }
   OpalBot.prefixes = JSON.parse(storage);
   OpalBot.prefixes.push(`<@${client.user.id}>`, i18n.msg('prefix', 'main', client.user.id));
@@ -55,8 +55,6 @@ client.on('message', message => {
             var split = content.slice(OpalBot.prefixes[i].length).split(' ').filter(Boolean),
             command = split[0],
             params = split.slice(1).join(' ');
-            console.log(split, OpalBot.prefixes[i]);
-            //console.log(message.member.roles.find(n => n.name == 'admin');
             for (var role in OpalBot.commands) {
                 if (message.member.roles.find(n => n.name.toLowerCase() == role) && OpalBot.commands[role].hasOwnProperty(command)) {
                     try {
@@ -126,11 +124,11 @@ OpalBot.commands.peasants.ping = (message, content) => {
     pong = message.content.indexOf('pong') + 1 || 1001;
     message.reply(ping < pong ? i18n.msg('pong', 'ping') : i18n.msg('ping', 'ping')).then(msg => {
         if (!msg.editable) {
-            message.channel.send(i18n.msg('cannot-edit', 'ping'));
+            message.channel.send(i18n.msg('result', 'ping', latency));
             return;
         }
         var latency = msg.createdTimestamp - message.createdTimestamp;
-        msg.edit(msg.content + '\n' + i18n.msg('result', 'ping', latency) + (latency > 200 ? '\n' + i18n.msg('diss', 'ping') : ''));
+        msg.edit(msg.content + '\n' + i18n.msg('result', 'ping', latency));
     });
 };
 
@@ -176,7 +174,7 @@ OpalBot.commands.admin.kick = (message, reason) => {
         message.channel.send(i18n.msg('cannot-kick', 'kick', user.username));
         return;
     }
-    message.channel.send(i18n.msg('kicking' + (reason ? 'with-reason' : ''), 'kick', reason));
+    message.channel.send(i18n.msg('kicking' + (reason ? 'with-reason' : ''), 'kick', user.username, reason));
     guild_user.kick(reason).then(() => {
         message.channel.send(i18n.msg('success', 'kick', user.username));
     }).catch(err => {
@@ -240,7 +238,7 @@ OpalBot.commands.admin.say = (message, content) => {
     try {
         var r = eval(content);
         console.log(r);
-        if (!r || !r.toString().trim()) throw r;
+        if (r == null || !r.toString().trim()) throw r;
         message.channel.send(r.toString().trim());
     } catch(e) {
         message.channel.send(content);

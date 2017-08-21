@@ -23,9 +23,7 @@
     "ping": {
         "ping": "Ping!",
         "pong": "Pong!",
-        "cannot-edit": "I cannot edit my own messages. :(",
-        "result": "$1ms",
-        "diss": "Still faster than your reaction times in CS:GO"
+        "result": "$1ms"
     },
     "test": {
         "online": "all sistems fully operational!"

@@ -300,6 +300,15 @@ OpalBot.commands.ban.ban = (message, reason) => {
     });
 };
 
+OpalBot.commands.ban.unban = async (message, content) => {
+    var split = content.split('#'),
+    name = split[0],
+    id = split[1],
+    bans = await message.guild.fetchBans(),
+    filtered = bans.filter(n => n.username == name && (id ? n.discriminator == id : true));
+    message.reply(filtered.length);
+};
+
 OpalBot.commands.operator.run = 'eval';
 OpalBot.commands.operator.eval = (message, content) => {
     try {

@@ -306,7 +306,20 @@ OpalBot.commands.ban.unban = async (message, content) => {
     id = split[1],
     bans = await message.guild.fetchBans(),
     filtered = bans.filter(n => n.username == name && (id ? n.discriminator == id : true));
-    message.reply(filtered.length);
+    if (!filtered.size) {
+        message.reply(i18n.msg('no-matches' + (id ? 'with-discriminator' : ''), 'unban', name, id));
+    } else if (filtered.size == 1) {
+        message.guild.unban(filtered.first()).then(user => {
+            message.channel.send(i18n.msg('success', 'unban', user.username));
+        }).catch(err => {
+            message.channel.send(i18n.msg('failure', 'unban', username, err));
+            console.log('Error (commands.admin.ban):', err);
+        });
+    } else {
+        var users = [];
+        filtered.forEach(n => users.push(n));
+        message.channel.send(i18n.msg('multiple-matches', 'unban', users.join(' ')));
+    }
 };
 
 OpalBot.commands.operator.run = 'eval';

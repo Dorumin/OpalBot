@@ -303,6 +303,7 @@ OpalBot.commands.ban.ban = (message, reason) => {
 OpalBot.commands.ban.unban = async (message, content) => {
     if (!content.trim()) {
         message.reply(i18n.msg('no-name', 'unban'));
+        return;
     }
     var split = content.split('#'),
     name = split[0],

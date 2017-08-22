@@ -46,6 +46,7 @@
         "reason": "Reason: $1"
     },
     "unban": {
+        "no-name": "please specify a name!",
         "no-matches": "No ban records found with the username $1",
         "no-matches-with-discriminator": "No ban records found with the username $1 and discriminator $2",
         "success": "Successfully unbanned $1!",

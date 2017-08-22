@@ -44,5 +44,12 @@
         "failure": "Failed while banning $1: $2",
         "deleted-since": "Deleted messages since $1 days ago.",
         "reason": "Reason: $1"
+    },
+    "unban": {
+        "no-matches": "No ban records found with the username $1",
+        "no-matches-with-discriminator": "No ban records found with the username $1 and discriminator $2",
+        "success": "Successfully unbanned $1!",
+        "failure": "Failed while unbanning $1: $2",
+        "multiple-matches": "Multiple matches detected! Please, pick one with the discriminator (#1234). \n $1"
     }
 }

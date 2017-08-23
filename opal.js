@@ -68,8 +68,8 @@ client.on('message', message => {
     }
     if (message.channel.type != 'text') return;
     while (i--) {
-        if (content.startsWith(OpalBot.prefixes[i])) {
-            var split = content.slice(OpalBot.prefixes[i].length).split(' ').filter(Boolean),
+        if (content.startsWith(prefixes[i])) {
+            var split = content.slice(prefixes[i].length).split(' ').filter(Boolean),
             command = split[0],
             params = split.slice(1).join(' ');
             for (var role in OpalBot.commands) {

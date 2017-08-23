@@ -43,10 +43,10 @@ client.on('ready', async () => {
             .send(i18n.msg('online', 'main', OpalBot.v));
     var i = 0;
     setInterval(n => {
-    client.guilds
-        .find(n => n.id == 344422448403316748).channels
-            .find(n => n.name == 'secret')
-                .send(`Bot has been up for ${++i} hours without idling or crashing!`);
+        client.guilds
+            .find(n => n.id == 344422448403316748).channels
+                .find(n => n.name == 'secret')
+                    .send(`Bot has been up for ${++i} hours without idling or crashing!`);
     }, 3600000);
 });
 
@@ -55,7 +55,8 @@ client.on('message', message => {
     var content = message.content,
     name = message.author.username,
     i = OpalBot.prefixes.length,
-    permissions = message.member.permissions.serialize();
+    permissions = message.member.permissions.serialize(),
+    prefixes = OpalBot.prefixes[message.guild.id] || OpalBot.prefixes.default;
     for (var key in OpalBot.permissionAliases) {
         permissions[key] = permissions[OpalBot.permissionAliases[key]];
     }
@@ -160,6 +161,10 @@ var OpalBot = {
                 return;
             }
             database.filesListFolder({path: ''}).then(files => {
+                if (!files.entries.length) {
+                    res(OpalBot._db);
+                    return;
+                }
                 var promises = [];
                 files.entries.forEach(entry => {
                     promises.push(
@@ -183,10 +188,10 @@ var OpalBot = {
     set db(obj) {
         if (!obj.name) return;
         OpalBot._db[obj.name] = obj.value;
-        if (OpalBot.timeouts.db[name]) return;
-        OpalBot.timeouts.db[name] = setTimeout(() => {
+        if (OpalBot.timeouts.db[obj.name]) return;
+        OpalBot.timeouts.db[obj.name] = setTimeout(() => {
             database.filesUpload({
-                path: '/' + name + '.json',
+                path: '/' + obj.name + '.json',
                 contents: JSON.stringify(OpalBot_.db[obj.name])
             });
             delete OpalBot.timeouts.db[name];

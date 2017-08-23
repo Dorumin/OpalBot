@@ -189,6 +189,7 @@ var OpalBot = {
         if (!obj.name) return;
         OpalBot._db[obj.name] = obj.value;
         if (OpalBot.timeouts.db[obj.name]) return;
+        console.log('set db', JSON.stringify(OpalBot._db[obj.name]));
         OpalBot.timeouts.db[obj.name] = setTimeout(() => {
             console.log('updating database', JSON.stringify(OpalBot._db[obj.name]));
             database.filesUpload({
@@ -434,7 +435,7 @@ OpalBot.commands.peasants.prefix = async (message, content) => {
                     [message.guild.id]: arr
                 }
             }
-            message.reply('prefix-added', 'prefix', content.trim());
+            message.reply(i18n.msg('prefix-added', 'prefix', content.trim()));
             break;
         case remove:
             if (!content.trim().length) {
@@ -465,7 +466,7 @@ OpalBot.commands.peasants.prefix = async (message, content) => {
                     [message.guild.id]: arr
                 }
             }
-            message.reply('prefix-removed', 'prefix', content.trim());
+            message.reply(i18n.msg('prefix-removed', 'prefix', content.trim()));
             break;
     }
 };

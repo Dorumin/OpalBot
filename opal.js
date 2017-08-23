@@ -487,6 +487,7 @@ OpalBot.commands.peasants.prefix = async (message, content) => {
 OpalBot.commands.operator.run = 'eval';
 OpalBot.commands.operator.eval = (message, content) => {
     try {
+        var send = message.channel.send;
         eval(content);
     } catch(e) {
         message.reply('ERROR: ' + e);

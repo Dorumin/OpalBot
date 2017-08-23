@@ -24,20 +24,30 @@ i18n.msg = (message, obj, ...vars) => {
 };
 
 client.on('ready', async () => {
-  var storage = null;
-  if (!storage) {
-    storage = '["!", ">", "¬¬"]';
-  }
-  OpalBot.prefixes = JSON.parse(storage);
-  OpalBot.prefixes.push(`<@${client.user.id}>`, i18n.msg('prefix', 'main', client.user.id));
-  console.log(i18n.msg('online', 'main', OpalBot.v));
-  var i = 0;
-  setInterval(n => {
-      client.guilds
+    var storage = (await OpalBot.db).data;
+    if (!storage) {
+        OpalBot.db = {
+            name: 'data',
+            value: {
+                prefixes: {
+                    default: ['!', '>', '¬¬', `<@${client.user.id}>`, i18n.msg('prefix', 'main', client.user.id)]
+                }
+            }
+        };
+    }
+    OpalBot.prefixes = (await OpalBot.db).data.prefixes;
+    console.log(i18n.msg('online', 'main', OpalBot.v));
+    client.guilds
+        .get('344422448403316748').channels
+        .find(n => n.name == 'secret')
+            .send(i18n.msg('online', 'main', OpalBot.v));
+    var i = 0;
+    setInterval(n => {
+    client.guilds
         .find(n => n.id == 344422448403316748).channels
             .find(n => n.name == 'secret')
                 .send(`Bot has been up for ${++i} hours without idling or crashing!`);
-  }, 3600000);
+    }, 3600000);
 });
 
 client.on('message', message => {

@@ -51,7 +51,7 @@ client.on('ready', async () => {
 });
 
 client.on('message', message => {
-    if (message.author.id == client.user.id) return;
+    if (message.author.id == client.user.id || !message.member) return;
     var content = message.content,
     name = message.author.username,
     i = OpalBot.prefixes.length,
@@ -157,7 +157,7 @@ var OpalBot = {
     get db() {
         return new Promise((res, rej) => {
             if (Object.keys(OpalBot._db).length) { // cache that stuff so we're not a pain to the nice guys at dropbox, they provide a really nice free api ^^
-                res(OpalBot_db);
+                res(OpalBot._db);
                 return;
             }
             database.filesListFolder({path: ''}).then(files => {
@@ -192,7 +192,7 @@ var OpalBot = {
         OpalBot.timeouts.db[obj.name] = setTimeout(() => {
             database.filesUpload({
                 path: '/' + obj.name + '.json',
-                contents: JSON.stringify(OpalBot_.db[obj.name])
+                contents: JSON.stringify(OpalBot._db[obj.name])
             });
             delete OpalBot.timeouts.db[name];
         }, 10000);

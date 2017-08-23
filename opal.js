@@ -54,9 +54,9 @@ client.on('message', message => {
     if (message.author.id == client.user.id || !message.member) return;
     var content = message.content,
     name = message.author.username,
-    i = OpalBot.prefixes.length,
-    permissions = message.member.permissions.serialize(),
-    prefixes = OpalBot.prefixes[message.guild.id] || OpalBot.prefixes.default;
+    prefixes = OpalBot.prefixes[message.guild.id] || OpalBot.prefixes.default,
+    i = prefixes.length,
+    permissions = message.member.permissions.serialize();
     for (var key in OpalBot.permissionAliases) {
         permissions[key] = permissions[OpalBot.permissionAliases[key]];
     }
@@ -67,7 +67,6 @@ client.on('message', message => {
         return;
     }
     if (message.channel.type != 'text') return;
-    console.log(OpalBot.prefixes, prefixes);
     while (i--) {
         if (content.startsWith(prefixes[i])) {
             var split = content.slice(prefixes[i].length).split(' ').filter(Boolean),

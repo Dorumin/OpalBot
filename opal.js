@@ -194,7 +194,8 @@ var OpalBot = {
             console.log('updating database', JSON.stringify(OpalBot._db[obj.name]));
             database.filesUpload({
                 path: '/' + obj.name + '.json',
-                contents: JSON.stringify(OpalBot._db[obj.name])
+                contents: JSON.stringify(OpalBot._db[obj.name]),
+                mode: 'overwrite'
             }).then(console.log).catch(console.log);
             delete OpalBot.timeouts.db[obj.name];
         }, 10000);

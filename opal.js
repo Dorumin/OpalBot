@@ -423,7 +423,7 @@ OpalBot.commands.peasants.prefix = async (message, content) => {
                         }
                     }
                 }
-                OpalBot.prefixes[message.guild.id] = prefixes;
+                OpalBot.prefixes[message.guild.id] = [...prefixes];
             }
             var arr = OpalBot.prefixes[message.guild.id],
             i = arr.indexOf(content.trim());
@@ -460,7 +460,7 @@ OpalBot.commands.peasants.prefix = async (message, content) => {
                         }
                     }
                 }
-                OpalBot.prefixes[message.guild.id] = prefixes;
+                OpalBot.prefixes[message.guild.id] = [...prefixes];
             }
             var arr = OpalBot.prefixes[message.guild.id],
             i = arr.indexOf(content.trim());

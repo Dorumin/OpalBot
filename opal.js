@@ -265,13 +265,14 @@ OpalBot.commands.peasants.me = message => {
 OpalBot.commands.peasants.pong = 'ping';
 OpalBot.commands.peasants.ping = (message, content) => {
     var ping = message.content.indexOf('ping') + 1 || 1000,
-    pong = message.content.indexOf('pong') + 1 || 1001;
+    pong = message.content.indexOf('pong') + 1 || 1001,
+    d1 = Date.now();
     message.reply(ping < pong ? i18n.msg('pong', 'ping') : i18n.msg('ping', 'ping')).then(msg => {
+        var latency = Date.now() - d1;
         if (!msg.editable) {
             message.channel.send(i18n.msg('result', 'ping', latency));
             return;
         }
-        var latency = Math.abs(msg.createdTimestamp - message.createdTimestamp);
         msg.edit(msg.content + '\n' + i18n.msg('result', 'ping', latency));
     });
 };

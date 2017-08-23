@@ -195,7 +195,7 @@ var OpalBot = {
             database.filesUpload({
                 path: '/' + obj.name + '.json',
                 contents: JSON.stringify(OpalBot._db[obj.name])
-            });
+            }).then(console.log).catch(console.log);
             delete OpalBot.timeouts.db[obj.name];
         }, 10000);
     },

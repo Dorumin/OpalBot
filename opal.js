@@ -190,6 +190,7 @@ var OpalBot = {
         OpalBot._db[obj.name] = obj.value;
         if (OpalBot.timeouts.db[obj.name]) return;
         OpalBot.timeouts.db[obj.name] = setTimeout(() => {
+            console.log('updating database', JSON.stringify(OpalBot._db[obj.name]));
             database.filesUpload({
                 path: '/' + obj.name + '.json',
                 contents: JSON.stringify(OpalBot._db[obj.name])

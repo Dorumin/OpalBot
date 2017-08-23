@@ -405,7 +405,7 @@ OpalBot.commands.peasants.prefix = async (message, content) => {
                 return;
             }
             message.reply(i18n.msg('list-prefixes', 'prefix', '`' + prefixes.join('` `') + '`'));
-            break;//
+            break;
         case add:
             if (!content.trim().length) {
                 message.reply(i18n.msg('no-prefix-add', 'prefix'));

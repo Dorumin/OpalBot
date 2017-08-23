@@ -194,7 +194,7 @@ var OpalBot = {
                 path: '/' + obj.name + '.json',
                 contents: JSON.stringify(OpalBot._db[obj.name])
             });
-            delete OpalBot.timeouts.db[name];
+            delete OpalBot.timeouts.db[obj.name];
         }, 10000);
     },
     timeouts: {

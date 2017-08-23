@@ -386,6 +386,89 @@ OpalBot.commands.ban.unban = async (message, content) => {
     }
 };
 
+OpalBot.commands.peasants.prefixes = 'prefix'
+OpalBot.commands.peasants.prefix = async (message, content) => {
+    var list = i18n.msg('list', 'prefix'),
+    add = i18n.msg('add', 'prefix'),
+    remove = i18n.msg('remove', 'prefix'),
+    mode = list,
+    prefixes = OpalBot.prefixes[message.guild.id] || OpalBot.prefixes.default;
+    if (content.slice(0, add.length) == add) mode = add;
+    if (content.slice(0, remove.length) == add) mode = remove;
+    content = content.slice(mode.length);
+    switch (mode) {
+        case list:
+            if (!prefixes.length) {
+                message.reply(i18n.msg('no-prefixes', 'prefix'));
+                return;
+            }
+            message.reply(i18n.msg('list-prefixes', 'prefix', '`' + prefixes.join('` `') + '`'));
+            break;
+        case add:
+            if (!content.trim().length) {
+                message.reply(i18n.msg('no-prefix-add', 'prefix'));
+                return;
+            }
+            if (!OpalBot.prefixes[message.guild.id]) {
+                OpalBot.db = {
+                    name: 'data',
+                    value: {
+                        ...(await OpalBot.db).data,
+                        [message.guild.id]: prefixes
+                    }
+                }
+                OpalBot.prefixes[message.guild.id] = prefixes;
+            }
+            var arr = OpalBot.prefixes[message.guild.id],
+            i = arr.indexOf(content.trim());
+            if (i != -1) {
+                message.reply(i18n.msg('prefix-already-in-use', 'prefix'));
+                return;
+            }
+            arr.push(content.trim());
+            OpalBot.db = {
+                name: 'data',
+                value: {
+                    ...(await OpalBot.db).data,
+                    [message.guild.id]: arr
+                }
+            }
+            message.reply('prefix-added', 'prefix', content.trim());
+            break;
+        case remove:
+            if (!content.trim().length) {
+                message.reply(i18n.msg('no-prefix-add', 'prefix'));
+                return;
+            }
+            if (!OpalBot.prefixes[message.guild.id]) {
+                OpalBot.db = {
+                    name: 'data',
+                    value: {
+                        ...(await OpalBot.db).data,
+                        [message.guild.id]: prefixes
+                    }
+                }
+                OpalBot.prefixes[message.guild.id] = prefixes;
+            }
+            var arr = OpalBot.prefixes[message.guild.id],
+            i = arr.indexOf(content.trim());
+            if (i == -1) {
+                message.reply(i18n.msg('no-prefix-found', 'prefix'));
+                return;
+            }
+            arr.splice(i, 1);
+            OpalBot.db = {
+                name: 'data',
+                value: {
+                    ...(await OpalBot.db).data,
+                    [message.guild.id]: arr
+                }
+            }
+            message.reply('prefix-removed', 'prefix', content.trim());
+            break;
+    }
+};
+
 OpalBot.commands.operator.run = 'eval';
 OpalBot.commands.operator.eval = (message, content) => {
     try {

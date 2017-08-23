@@ -26,7 +26,7 @@
         "result": "$1ms"
     },
     "test": {
-        "online": "all sistems fully operational!"
+        "online": "all systems fully operational!"
     },
     "kick": {
         "no-mention": "No user mention found. Please @ the user you want to kick!",
@@ -52,5 +52,18 @@
         "success": "Successfully unbanned $1!",
         "failure": "Failed while unbanning $1: $2",
         "multiple-matches": "Multiple matches detected! Please, pick one with the discriminator (#1234). \n $1"
+    },
+    "prefix": {
+        "list": "list",
+        "add": "add",
+        "remove": "remove",
+        "no-prefixes": "there are no custom prefixes for this guild!",
+        "list-prefixes": "these are the custom prefixes for this guild: $1",
+        "no-prefix-add": "please provide a prefix to add!",
+        "no-prefix-remove": "please provide a prefix to remove!",
+        "prefix-already-in-use": "the prefix is already being used!",
+        "no-prefix-found": "the prefix is not being used!",
+        "prefix-added": "The `$1` prefix has been successfully added!",
+        "prefix-removed": "The `$1` prefix has been successfully removed!"
     }
 }

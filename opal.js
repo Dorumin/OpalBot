@@ -416,7 +416,10 @@ OpalBot.commands.peasants.prefix = async (message, content) => {
                     name: 'data',
                     value: {
                         ...(await OpalBot.db).data,
-                        [message.guild.id]: prefixes
+                        prefixes: {
+                            ...(await OpalBot.db).data.prefixes,
+                            [message.guild.id]: prefixes
+                        }
                     }
                 }
                 OpalBot.prefixes[message.guild.id] = prefixes;
@@ -432,7 +435,10 @@ OpalBot.commands.peasants.prefix = async (message, content) => {
                 name: 'data',
                 value: {
                     ...(await OpalBot.db).data,
-                    [message.guild.id]: arr
+                    prefixes: {
+                        ...(await OpalBot.db).data.prefixes,
+                        [message.guild.id]: arr
+                    }
                 }
             }
             message.reply(i18n.msg('prefix-added', 'prefix', content.trim()));
@@ -447,7 +453,10 @@ OpalBot.commands.peasants.prefix = async (message, content) => {
                     name: 'data',
                     value: {
                         ...(await OpalBot.db).data,
-                        [message.guild.id]: prefixes
+                        prefixes: {
+                            ...(await OpalBot.db).data.prefixes,
+                            [message.guild.id]: prefixes
+                        }
                     }
                 }
                 OpalBot.prefixes[message.guild.id] = prefixes;
@@ -459,11 +468,14 @@ OpalBot.commands.peasants.prefix = async (message, content) => {
                 return;
             }
             arr.splice(i, 1);
-            OpalBot.db = {
+                OpalBot.db = {
                 name: 'data',
                 value: {
                     ...(await OpalBot.db).data,
-                    [message.guild.id]: arr
+                    prefixes: {
+                        ...(await OpalBot.db).data.prefixes,
+                        [message.guild.id]: arr
+                    }
                 }
             }
             message.reply(i18n.msg('prefix-removed', 'prefix', content.trim()));

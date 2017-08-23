@@ -30,7 +30,7 @@ client.on('ready', async () => {
             name: 'data',
             value: {
                 prefixes: {
-                    default: ['!', '>', '¬¬', `<@${client.user.id}>`, i18n.msg('prefix', 'main', client.user.id)]
+                    default: ['!', '>', '¬¬']
                 }
             }
         };
@@ -54,7 +54,7 @@ client.on('message', message => {
     if (message.author.id == client.user.id || !message.member) return;
     var content = message.content,
     name = message.author.username,
-    prefixes = OpalBot.prefixes[message.guild.id] || OpalBot.prefixes.default,
+    prefixes = (OpalBot.prefixes[message.guild.id] || OpalBot.prefixes.default).concat([[`<@${client.user.id}>`, i18n.msg('prefix', 'main', client.user.id)]),
     i = prefixes.length,
     permissions = message.member.permissions.serialize();
     for (var key in OpalBot.permissionAliases) {

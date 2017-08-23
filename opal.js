@@ -178,7 +178,7 @@ var OpalBot = {
                         var name = r.name;
                         if (name.slice(-5) != '.json') return;
                         name = name.slice(0, -5);
-                        OpalBot._db[name] = JSON.parse(Buffer.from(r.fileBinary, 'base64').toString()));
+                        OpalBot._db[name] = JSON.parse(Buffer.from(r.fileBinary, 'base64').toString());
                     });
                     res(OpalBot._db);
                 }).catch(rej);

@@ -1,7 +1,9 @@
 const Discord = require('discord.js');
+const Dropbox = require('dropbox');
 const http = require('http');
 const i18n = require(`./i18n/${process.env.lang || 'en'}.json`);
 const client = new Discord.Client();
+const database = new Dropbox({accessToken: process.env.dropbox_token});
 
 i18n.msg = (message, obj, ...vars) => {
     var ref = obj;
@@ -139,6 +141,49 @@ var OpalBot = {
         permissions: 'MANAGE_ROLES_OR_PERMISSIONS',
         webhooks: 'MANAGE_WEBHOOKS',
         emojis: 'MANAGE_EMOJIS'
+    },
+    _db: {},
+    get db() {
+        return new Promise((res, rej) => {
+            if (Object.keys(OpalBot._db).length) { // cache that stuff so we're not a pain to the nice guys at dropbox, they provide a really nice free api ^^
+                res(OpalBot_db);
+                return;
+            }
+            database.filesListFolder({path: ''}).then(files => {
+                var promises = [];
+                files.entries.forEach(entry => {
+                    promises.push(
+                        database.filesDownload({
+                            path: entry.path_lower
+                        })
+                    );
+                });
+                Promise.all(promises).then(a => {
+                    a.forEach(r => {
+                        var name = r.name;
+                        if (name.slice(-5) != '.json') return;
+                        name = name.slice(0, -5);
+                        OpalBot._db[name] = JSON.parse(r.fileBinary);
+                    });
+                    res(OpalBot._db);
+                }).catch(rej);
+            }).catch(rej);
+        });
+    },
+    set db(obj) {
+        if (!obj.name) return;
+        OpalBot._db[obj.name] = obj.value;
+        if (OpalBot.timeouts.db[name]) return;
+        OpalBot.timeouts.db[name] = setTimeout(() => {
+            database.filesUpload({
+                path: '/' + name + '.json',
+                contents: JSON.stringify(OpalBot_.db[obj.name])
+            });
+            delete OpalBot.timeouts.db[name];
+        }, 10000);
+    },
+    timeouts: {
+        db: {}
     }
 };
 
@@ -337,7 +382,7 @@ OpalBot.commands.operator.eval = (message, content) => {
 
 OpalBot.commands.operator.destroy = () => {
     client.destroy().then(() => {
-        client.login(process.env.token);
+        OpalBot.server.close();
     });
 };
 
@@ -352,7 +397,7 @@ OpalBot.commands.operator.say = (message, content) => {
     }
 };
 
-http.createServer((req, res) => {
+OpalBot.server = http.createServer((req, res) => {
   res.write('Hello, world!')
   res.end();
 }).listen(process.env.PORT || 5000);

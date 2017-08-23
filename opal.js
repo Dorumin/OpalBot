@@ -486,7 +486,7 @@ OpalBot.commands.peasants.prefix = async (message, content) => {
 };
 
 OpalBot.commands.operator.run = 'eval';
-OpalBot.commands.operator.eval = (message, content) => {
+OpalBot.commands.operator.eval = async (message, content) => {
     try {
         var send = n => message.channel.send(n);
         eval(content);
@@ -501,7 +501,7 @@ OpalBot.commands.operator.destroy = () => {
     });
 };
 
-OpalBot.commands.operator.say = (message, content) => {
+OpalBot.commands.operator.say = async (message, content) => {
     try {
         var r = eval(content);
         console.log(r);

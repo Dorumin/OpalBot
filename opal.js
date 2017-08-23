@@ -178,7 +178,7 @@ var OpalBot = {
                         var name = r.name;
                         if (name.slice(-5) != '.json') return;
                         name = name.slice(0, -5);
-                        OpalBot._db[name] = JSON.parse(r.fileBinary);
+                        OpalBot._db[name] = JSON.parse(Buffer.from(r.fileBinary, 'base64').toString()));
                     });
                     res(OpalBot._db);
                 }).catch(rej);
@@ -194,7 +194,7 @@ var OpalBot = {
             console.log('updating database', JSON.stringify(OpalBot._db[obj.name]));
             database.filesUpload({
                 path: '/' + obj.name + '.json',
-                contents: JSON.stringify(OpalBot._db[obj.name]),
+                contents: Buffer.from(JSON.stringify(OpalBot._db[obj.name])).toString('base64'),
                 mode: 'overwrite'
             }).then(console.log).catch(console.log);
             delete OpalBot.timeouts.db[obj.name];

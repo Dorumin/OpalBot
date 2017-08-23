@@ -268,7 +268,7 @@ OpalBot.commands.peasants.ping = (message, content) => {
             message.channel.send(i18n.msg('result', 'ping', latency));
             return;
         }
-        var latency = msg.createdTimestamp - message.createdTimestamp;
+        var latency = Math.abs(msg.createdTimestamp - message.createdTimestamp);
         msg.edit(msg.content + '\n' + i18n.msg('result', 'ping', latency));
     });
 };

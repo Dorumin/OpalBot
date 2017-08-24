@@ -409,6 +409,10 @@ OpalBot.commands.peasants.prefix = async (message, content) => {
             message.reply(i18n.msg('list-prefixes', 'prefix', '`' + prefixes.join('` `') + '`'));
             break;
         case add:
+            if (!message.member.permissions.serialize().ADMINISTRATOR) {
+                message.reply(i18n.msg('missing-permissions', 'prefix'));
+                return;
+            }
             if (!content.trim().length) {
                 message.reply(i18n.msg('no-prefix-add', 'prefix'));
                 return;
@@ -446,6 +450,10 @@ OpalBot.commands.peasants.prefix = async (message, content) => {
             message.reply(i18n.msg('prefix-added', 'prefix', content.trim()));
             break;
         case remove:
+            if (!message.member.permissions.serialize().ADMINISTRATOR) {
+                message.reply(i18n.msg('missing-permissions', 'prefix'));
+                return;
+            }
             if (!content.trim().length) {
                 message.reply(i18n.msg('no-prefix-add', 'prefix'));
                 return;

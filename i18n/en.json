@@ -1,7 +1,9 @@
 {
     "main": {
         "prefix": "<@$1>, do",
-        "online": "OpalBot v$1 is online!"
+        "online": "OpalBot v$1 is online!",
+        "confirm": "confirm",
+        "cancel": "cancel"
     },
     "runtime": {
         "s": "OpalBot v$1 has been running for $2 ($2|second|seconds).",
@@ -66,5 +68,15 @@
         "no-prefix-found": "the prefix is not being used!",
         "prefix-added": "`$1` prefix has been successfully added for this guild!",
         "prefix-removed": "`$1` prefix has been successfully removed from this guild!"
+    },
+    "prune": {
+        "invalid": "please input a valid number!",
+        "missing-permissions": "Cannot prune: missing permissions.",
+        "lonely": "there are no users to prune!",
+        "prompt": "This will kick $1 people! Type \"confirm\" if you're you want to proceed.",
+        "timed-out": "The server prune has been automatically cancelled after 15 seconds. Use the command again to proceed.",
+        "cancelled": "Server prune cancelled!",
+        "pruning": "Pruning...",
+        "pruned": "Successfully pruned $1 users!"
     }
 }

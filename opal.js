@@ -115,10 +115,32 @@ client.on('message', message => {
             }
         }
     }
+    // Unprefixed triggers, usually used by confirm and cancel commands.
+    OpalBot.unprefixed.forEach(function(obj) {
+        var cases = obj.triggers || [obj.trigger],
+        content = message.content.trim();
+        if (cases.length == 1 && cases[0] == undefined) {
+            console.log('Invalid unprefixed command: missing trigger');
+            return;
+        }
+        if (obj.caseinsensitive) {
+            cases = cases.map(str => str.toLowerCase());
+            content = content.toLowerCase();
+        }
+        var index = cases.indexOf(message.content.trim());
+        if (index == -1) return;
+        if (obj.user == message.author.id && obj.channel == message.channel.id) {
+            if (obj.__timeoutID) {
+                clearTimeout(obj.__timeoutID);
+            }
+            obj.callback(message, index);
+        }
+    });
 });
 
 var OpalBot = {
     prefixes: [],
+    unprefixed: [],
     v: '0.01',
     operators: ['155545848812535808', '195712766214930432'],
     permissionAliases: {
@@ -204,6 +226,23 @@ var OpalBot = {
         db: {}
     }
 };
+
+OpalBot.unprefixed.push = (...arr) => { // It's hacky, but it works. Try not to access OpalBot.unprefixed by reference though.
+    arr.forEach(obj => {
+        if (obj.timeout && obj.ontimeout) {
+            obj.__timeoutID = setTimeout(() => {
+                var idx = OpalBot.unprefixed.indexOf(obj);
+                OpalBot.unprefixed.splice(idx, 1);
+                try {
+                    obj.ontimeout();
+                } catch(e) {
+                    console.log('Error caught in unprefixed timeout callback', e);
+                }
+            }, obj.timeout);
+        }
+    });
+    OpalBot.unprefixed = [...OpalBot.unprefixed, ...arr];
+}
 
 OpalBot.commands = {
     roles: {}, // role-specific commands. case-insensitive
@@ -491,6 +530,49 @@ OpalBot.commands.peasants.prefix = async (message, content) => {
             message.reply(i18n.msg('prefix-removed', 'prefix', content.trim()));
             break;
     }
+};
+
+OpalBot.commands.admin.prune = (message, content) => {
+    if (!content.trim()) {
+        content = 7;
+    } else if (isNaN(parseInt(content, 10))) {
+        message.reply(i18n.msg('invalid', 'prune'));
+        return;
+    }
+    try {
+        var pruned = await message.guild.pruneMembers(parseInt(content, 10), true);
+    } catch(e) {
+        message.channel.send(i18n.msg('missing-permissions', 'prune'));
+        return;
+    }
+    if (!pruned) {
+        message.reply(i18n.msg('lonely', 'prune'));
+        return;
+    }
+    message.channel.send(i18n.msg('prompt', 'prune', pruned));
+    OpalBot.unprefixed.push({
+        triggers: [
+            i18n.msg('confirm', 'main'),
+            i18n.msg('cancel', 'main')
+        ],
+        user: message.author.id,
+        channel: message.channel.id,
+        caseinsensitive: true,
+        timeout: 15000,
+        callback: (message, index) => {
+            if (index == 0) { // confirm
+                try {
+                    var pruned = message.channel.send(i18n.msg('pruning', 'prune'));
+                    message.channel.send(i18n.msg('pruned', 'prune', pruned));
+                } catch(e) {
+                    message.channel.send(i18n.msg('missing-permissions', 'prune'));
+                }
+            } else {
+                message.channel.send(i18n.msg('cancelled', 'prune'));
+        },
+        ontimeout: message => {
+        }
+    });
 };
 
 OpalBot.commands.operator.run = 'eval';

@@ -569,8 +569,10 @@ OpalBot.commands.admin.prune = async (message, content) => {
                 }
             } else {
                 message.channel.send(i18n.msg('cancelled', 'prune'));
+            }
         },
         ontimeout: message => {
+            message.channel.send(i18n.msg('timed-out', 'prune'));
         }
     });
 };

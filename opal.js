@@ -594,7 +594,7 @@ OpalBot.commands.admin.prune = async (message, content) => {
         channel: message.channel.id,
         caseinsensitive: true,
         timeout: 15000,
-        callback: (message, index) => {
+        callback: async (message, index) => {
             if (index == 0) { // confirm
                 try {
                     message.channel.send(i18n.msg('pruning', 'prune'));

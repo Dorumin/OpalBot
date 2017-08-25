@@ -80,7 +80,7 @@
         "pruned": "Successfully pruned $1 ($1|user|users)!"
     },
     "purge": {
-        "usage": "usage: [Number: days to delete (required)] [Mention or Name#Identifier: from user]",
+        "usage": "usage: [Number: messages to delete (required)] [Mention or Name#Identifier: from user]",
         "loading": "Loading messages, please wait...",
         "no-messages": "No results found for your query. Try double-checking your user username and discriminator.",
         "missing-permissions": "Cannot bulk delete: missing permissions.",

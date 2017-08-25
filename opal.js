@@ -643,7 +643,7 @@ OpalBot.commands.admin.purge = async (message, content) => {
         }
     }
     messages = messages.filter(msg => msg.deletable); // This is done separately to the main .filter to provide a helpful error message
-    if (!filtered.size) {
+    if (!messages.size) {
         message.channel.send(i18n.msg('missing-permissions', 'purge'));
         return;
     }

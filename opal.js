@@ -229,10 +229,9 @@ var OpalBot = {
 };
 
 OpalBot.unprefixed.push = (...arr) => { // It's hacky, but it works. Try not to access OpalBot.unprefixed by reference though.
-    arr.forEach(obj => {
+    arr.forEach((obj, idx) => {
         if (obj.timeout && obj.ontimeout) {
             obj.__timeoutID = setTimeout(() => {
-                var idx = OpalBot.unprefixed.indexOf(obj);
                 OpalBot.unprefixed.splice(idx, 1);
                 try {
                     obj.ontimeout();
@@ -572,7 +571,7 @@ OpalBot.commands.admin.prune = async (message, content) => {
                 message.channel.send(i18n.msg('cancelled', 'prune'));
             }
         },
-        ontimeout: message => {
+        ontimeout: () => {
             message.channel.send(i18n.msg('timed-out', 'prune'));
         }
     });

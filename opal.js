@@ -532,7 +532,7 @@ OpalBot.commands.peasants.prefix = async (message, content) => {
     }
 };
 
-OpalBot.commands.admin.prune = (message, content) => {
+OpalBot.commands.admin.prune = async (message, content) => {
     if (!content.trim()) {
         content = 7;
     } else if (isNaN(parseInt(content, 10))) {

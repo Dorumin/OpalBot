@@ -20,6 +20,9 @@ i18n.msg = (message, obj, ...vars) => {
     if (!vars.length) return msg;
     return msg.replace(/\$(\d)/g, (s, n) => {
         return vars[n - 1] || s;
+    }).replace(/\((\d+?\|.+?\|.+?)\)/g, (s, match) => { // Plural markdown, (1|singular|plural) => "1 singular"; (4|singular|plural) => "4 plural"
+        var split = match.split('|');
+        return split[0] == 1 ? split[1] : split[2];
     });
 };
 
@@ -69,7 +72,7 @@ client.on('message', message => {
     if (message.channel.type != 'text') return;
     while (i--) {
         if (content.startsWith(prefixes[i])) {
-            var split = content.slice(prefixes[i].length).split(' ').filter(Boolean),
+            var split = content.slice(prefixes[i].length).split(/\s/).filter(Boolean),
             command = split[0],
             params = split.slice(1).join(' ');
             for (var role in OpalBot.commands) {
@@ -144,6 +147,7 @@ var OpalBot = {
     unprefixed: [],
     v: '0.01',
     operators: ['155545848812535808', '195712766214930432'],
+    util: {},
     permissionAliases: {
         admin: 'ADMINISTRATOR',
         create_instant: 'CREATE_INSTANT_INVITE',
@@ -246,6 +250,38 @@ OpalBot.unprefixed.push = (...arr) => { // It's hacky, but it works. Try not to 
     OpalBot.unprefixed = [...OpalBot.unprefixed, ...arr];
 }
 
+OpalBot.util.getChannelMessages = async (channel, before) => {
+    before = before || Date.now() - 1209600000; // 2 weeks
+    return new Promise(async (res, rej) => {
+        var LIMIT = 50,
+        lastId = null,
+        collection = null;
+        while (LIMIT--) {
+            try {
+                var coll = await channel.fetchMessages({
+                    limit: 100,
+                    ...lastId
+                });
+            } catch(e) {
+                rej(e);
+            }
+            if (!collection) {
+                collection = coll;
+            } else {
+                collection = collection.concat(coll);
+            }
+            lastId = {before: coll.last().id};
+            if (coll.last().createdTimestamp < before) {
+                break;
+            }
+        }
+        collection = collection.filter(model => {
+            return model.createdTimestamp > before;
+        });
+        res(collection);
+    });
+};
+
 OpalBot.commands = {
     roles: {}, // role-specific commands. case-insensitive
     peasants: {}, // commands that everyone can use
@@ -336,10 +372,7 @@ OpalBot.commands.peasants.runtime = message => {
         OpalBot.v,
         ...a.map(n => o[n])
     ],
-    str = i18n.msg(k, 'runtime', ...p).replace(/\((\d+?\|.+?\|.+?)\)/g, (s, match) => {
-        var split = match.split('|');
-        return split[0] == 1 ? split[1] : split[2];
-    });
+    str = i18n.msg(k, 'runtime', ...p);
     message.channel.send(str);
 };
 
@@ -564,12 +597,13 @@ OpalBot.commands.admin.prune = async (message, content) => {
         callback: (message, index) => {
             if (index == 0) { // confirm
                 try {
-                    var pruned = message.channel.send(i18n.msg('pruning', 'prune'));
+                    message.channel.send(i18n.msg('pruning', 'prune'));
+                    var pruned = await message.guild.pruneMembers(parseInt(content, 10));
                     message.channel.send(i18n.msg('pruned', 'prune', pruned));
                 } catch(e) {
                     message.channel.send(i18n.msg('missing-permissions', 'prune'));
                 }
-            } else {
+            } else { // cancel
                 message.channel.send(i18n.msg('cancelled', 'prune'));
             }
         },
@@ -579,14 +613,79 @@ OpalBot.commands.admin.prune = async (message, content) => {
     });
 };
 
+OpalBot.commands.admin.bulkdelete = 'purge';
+OpalBot.commands.admin.purge = async (message, content) => {
+    if (isNaN(parseInt(content, 10))) {
+        message.reply(i18n.msg('usage', 'purge'));
+        return;
+    }
+    var count = parseInt(content, 10),
+    member = message.mentions.users.first() || content.replace(/^\d+/, '').trim(),
+    isId = false;
+    if (typeof member != 'string') {
+        isId = true;
+        member = member.id;
+    }
+    message.channel.send(i18n.msg('loading', 'purge'));
+    var ids = new Set(),
+    messages = await OpalBot.util.getChannelMessages(message.channel);
+    messages = messages.filter(model => {
+        return member ? (isId ? model.author.id == member : model.author.username + '#' + model.author.discriminator == member) : true;
+    });
+    messages.forEach(model => ids.add(model.author.id));
+    if (!messages.size) {
+        message.channel.send(i18n.msg('no-messages', 'purge'));
+        return;
+    } else if (messages.size > count) {
+        var i = messages.size - count;
+        while (i--) {
+            messages.delete(messages.lastKey());
+        }
+    }
+    messages = messages.filter(msg => msg.deletable); // This is done separately to the main .filter to provide a helpful error message
+    if (!filtered.size) {
+        message.channel.send(i18n.msg('missing-permissions', 'purge'));
+        return;
+    }
+    message.send(i18n.msg('prompt', 'purge', messages.size, ids.size));
+    OpalBot.unprefixed.push({
+        triggers: [
+            i18n.msg('confirm', 'main'),
+            i18n.msg('cancel', 'main')
+        ],
+        user: message.author.id,
+        channel: message.channel.id,
+        caseinsensitive: true,
+        timeout: 15000,
+        callback: (message, index) => {
+            if (index == 0) { // confirm
+                try {
+                    message.channel.send(i18n.msg('deleting', 'purge'));
+                    var deleted = await message.channel.bulkDelete(messages);
+                    message.channel.send(i18n.msg('deleted', 'purge', pruned));
+                } catch(e) {
+                    message.channel.send(i18n.msg('missing-permissions', 'purge'));
+                }
+            } else { // cancel
+                message.channel.send(i18n.msg('cancelled', 'purge'));
+            }
+        },
+        ontimeout: () => {
+            message.channel.send(i18n.msg('timed-out', 'purge'));
+        }
+    });
+};
+
 OpalBot.commands.operator.run = 'eval';
 OpalBot.commands.operator.eval = (message, content) => {
-    try {
-        var send = n => message.channel.send(n);
-        eval('(async () => {' + content + '})();');
-    } catch(e) {
-        message.reply('ERROR: ' + e);
-    }
+    var send = msg => message.channel.send(msg);
+    eval(`(async () => {
+        try {
+            ${content}
+        } catch(e) {
+            send('ERROR: ' + e);
+        }
+    })();`);
 };
 
 OpalBot.commands.operator.destroy = () => {

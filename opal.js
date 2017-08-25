@@ -662,9 +662,17 @@ OpalBot.commands.admin.purge = async (message, content) => {
             if (index == 0) { // confirm
                 try {
                     deletionStack.push(message, await message.channel.send(i18n.msg('deleting', 'purge')));
-                    for (var msg of messages.values()) { // bulkdelete can suck it
-                        await msg.delete();
+                    var i = Math.ceil(messages.size / 100),
+                    chunks = new Array(i).fill(undefined).map(() => []); // .fill([]) would fill them all with the same array. We don't want that
+                    while (i--) {
+                        var h = 100;
+                        while (h--) {
+                            if (!messages.first()) break;
+                            chunks[i].push(messages.first());
+                            messages.delete(messages.firstKey());
+                        }
                     }
+                    chunks.forEach(message.channel.bulkDelete);
                     deletionStack.forEach(msg => msg.delete());
                     message.channel.send(i18n.msg('deleted', 'purge', messages.size + deletionStack.length));
                 } catch(e) {

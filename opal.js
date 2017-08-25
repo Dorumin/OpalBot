@@ -665,7 +665,6 @@ OpalBot.commands.admin.purge = async (message, content) => {
                     for (var msg of messages.values()) { // bulkdelete can suck it
                         await msg.delete();
                     }
-                    var deleted = await message.channel.bulkDelete(messages);
                     deletionStack.forEach(msg => msg.delete());
                     message.channel.send(i18n.msg('deleted', 'purge', messages.size + deletionStack.length));
                 } catch(e) {

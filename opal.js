@@ -664,7 +664,7 @@ OpalBot.commands.admin.purge = async (message, content) => {
                     deletionStack.push(message, await message.channel.send(i18n.msg('deleting', 'purge')));
                     var deleted = await message.channel.bulkDelete(messages);
                     deletionStack.forEach(msg => msg.delete());
-                    message.channel.send(i18n.msg('deleted', 'purge', deleted.size));
+                    message.channel.send(i18n.msg('deleted', 'purge', messages.size + deletionStack.length));
                 } catch(e) {
                     message.channel.send(i18n.msg('missing-permissions', 'purge'));
                     console.log(e);

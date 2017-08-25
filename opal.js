@@ -23,9 +23,6 @@ i18n.msg = (message, obj, ...vars) => {
     });
 };
 
-client.on('ready', () => {
-    client.user.setGame('testing');
-});
 client.on('ready', async () => {
     var storage = (await OpalBot.db).data;
     if (!storage) {

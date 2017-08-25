@@ -593,7 +593,7 @@ OpalBot.commands.admin.prune = async (message, content) => {
         user: message.author.id,
         channel: message.channel.id,
         caseinsensitive: true,
-        timeout: 15000,
+        timeout: 30000,
         callback: async (message, index) => {
             if (index == 0) { // confirm
                 try {
@@ -632,7 +632,6 @@ OpalBot.commands.admin.purge = async (message, content) => {
     messages = messages.filter(model => {
         return member ? (isId ? model.author.id == member : model.author.username + '#' + model.author.discriminator == member) : true;
     });
-    messages.forEach(model => ids.add(model.author.id));
     if (!messages.size) {
         message.channel.send(i18n.msg('no-messages', 'purge'));
         return;
@@ -647,6 +646,7 @@ OpalBot.commands.admin.purge = async (message, content) => {
         message.channel.send(i18n.msg('missing-permissions', 'purge'));
         return;
     }
+    messages.forEach(model => ids.add(model.author.id));
     message.channel.send(i18n.msg('prompt', 'purge', messages.size, ids.size));
     OpalBot.unprefixed.push({
         triggers: [
@@ -656,7 +656,7 @@ OpalBot.commands.admin.purge = async (message, content) => {
         user: message.author.id,
         channel: message.channel.id,
         caseinsensitive: true,
-        timeout: 15000,
+        timeout: 30000,
         callback: async (message, index) => {
             if (index == 0) { // confirm
                 try {

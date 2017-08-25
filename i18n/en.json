@@ -74,7 +74,7 @@
         "missing-permissions": "Cannot prune: missing permissions.",
         "lonely": "there are no users to prune!",
         "prompt": "This will kick $1 people! Type `confirm` if you're you want to proceed, or `cancel` to quit.",
-        "timed-out": "The server prune has been automatically cancelled after 15 seconds. Use the command again to try again.",
+        "timed-out": "The server prune has been automatically cancelled after 30 seconds. Use the command again to try again.",
         "cancelled": "Server prune cancelled!",
         "pruning": "Pruning...",
         "pruned": "Successfully pruned $1 ($1|user|users)!"
@@ -85,7 +85,7 @@
         "no-messages": "No results found for your query. Try double-checking your user username and discriminator.",
         "missing-permissions": "Cannot bulk delete: missing permissions.",
         "prompt": "This will delete $1 ($1|message|messages) by $2 ($2|user|users). THIS ACTION IS IRREVERSIBLE. Type `confirm` if you want to proceed, or `cancel` to quit.",
-        "timed-out": "The bulk deletion has been automatically cancelled after 15 seconds. Use the command again to try again.",
+        "timed-out": "The bulk deletion has been automatically cancelled after 30 seconds. Use the command again to try again.",
         "cancelled": "Bulk delete cancelled!",
         "deleting": "Deleting...",
         "deleted": "Successfully deleted $1 ($1|message|messages)"

@@ -647,7 +647,8 @@ OpalBot.commands.admin.purge = async (message, content) => {
         return;
     }
     messages.forEach(model => ids.add(model.author.id));
-    message.channel.send(i18n.msg('prompt', 'purge', messages.size, ids.size));
+    var deletionStack = [];
+    deletionStack.push(await message.channel.send(i18n.msg('prompt', 'purge', messages.size, ids.size)));
     OpalBot.unprefixed.push({
         triggers: [
             i18n.msg('confirm', 'main'),
@@ -660,10 +661,11 @@ OpalBot.commands.admin.purge = async (message, content) => {
         callback: async (message, index) => {
             if (index == 0) { // confirm
                 try {
-                    var ownMessage = await message.channel.send(i18n.msg('deleting', 'purge')),
-                    deleted = await message.channel.bulkDelete(messages);
+                    deletionStack.push(message, await message.channel.send(i18n.msg('deleting', 'purge')));
+                    var deleted = await message.channel.bulkDelete(messages);
                     ownMessage.delete();
-                    message.channel.send(i18n.msg('deleted', 'purge', deleted));
+                    deletionStack.forEach(msg => msg.delete());
+                    message.channel.send(i18n.msg('deleted', 'purge', deleted.size));
                 } catch(e) {
                     message.channel.send(i18n.msg('missing-permissions', 'purge'));
                     console.log(e);

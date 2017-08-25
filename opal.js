@@ -647,7 +647,7 @@ OpalBot.commands.admin.purge = async (message, content) => {
         message.channel.send(i18n.msg('missing-permissions', 'purge'));
         return;
     }
-    message.send(i18n.msg('prompt', 'purge', messages.size, ids.size));
+    message.channel.send(i18n.msg('prompt', 'purge', messages.size, ids.size));
     OpalBot.unprefixed.push({
         triggers: [
             i18n.msg('confirm', 'main'),

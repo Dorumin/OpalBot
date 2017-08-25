@@ -127,7 +127,7 @@ client.on('message', message => {
             cases = cases.map(str => str.toLowerCase());
             content = content.toLowerCase();
         }
-        var index = cases.indexOf(message.content.trim());
+        var index = cases.indexOf(content);
         if (index == -1) return;
         if (obj.user == message.author.id && obj.channel == message.channel.id) {
             if (obj.__timeoutID) {

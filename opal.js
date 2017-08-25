@@ -116,7 +116,7 @@ client.on('message', message => {
         }
     }
     // Unprefixed triggers, usually used by confirm and cancel commands.
-    OpalBot.unprefixed.forEach(function(obj) {
+    OpalBot.unprefixed.forEach(function(obj, idx) {
         var cases = obj.triggers || [obj.trigger],
         content = message.content.trim();
         if (cases.length == 1 && cases[0] == undefined) {
@@ -134,6 +134,7 @@ client.on('message', message => {
                 clearTimeout(obj.__timeoutID);
             }
             obj.callback(message, index);
+            OpalBot.unprefixed.splice(idx, 1);
         }
     });
 });

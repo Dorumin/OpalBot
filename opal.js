@@ -660,11 +660,13 @@ OpalBot.commands.admin.purge = async (message, content) => {
         callback: async (message, index) => {
             if (index == 0) { // confirm
                 try {
-                    message.channel.send(i18n.msg('deleting', 'purge'));
-                    var deleted = await message.channel.bulkDelete(messages);
-                    message.channel.send(i18n.msg('deleted', 'purge', pruned));
+                    var ownMessage = await message.channel.send(i18n.msg('deleting', 'purge')),
+                    deleted = await message.channel.bulkDelete(messages);
+                    ownMessage.delete();
+                    message.channel.send(i18n.msg('deleted', 'purge', deleted));
                 } catch(e) {
                     message.channel.send(i18n.msg('missing-permissions', 'purge'));
+                    console.log(e);
                 }
             } else { // cancel
                 message.channel.send(i18n.msg('cancelled', 'purge'));

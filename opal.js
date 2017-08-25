@@ -230,11 +230,13 @@ var OpalBot = {
 
 OpalBot.unprefixed.push = (...arr) => { // It's hacky, but it works. Try not to access OpalBot.unprefixed by reference though.
     arr.forEach((obj, idx) => {
-        if (obj.timeout && obj.ontimeout) {
+        if (obj.timeout) {
             obj.__timeoutID = setTimeout(() => {
                 OpalBot.unprefixed.splice(idx, 1);
                 try {
-                    obj.ontimeout();
+                    if (obj.timeout) {
+                        obj.ontimeout();
+                    }
                 } catch(e) {
                     console.log('Error caught in unprefixed timeout callback', e);
                 }

@@ -276,7 +276,16 @@ OpalBot.unprefixed.push = (...arr) => {     // It's hacky, but it works. Try not
             }, obj.timeout);
         }
     });
-    OpalBot.unprefixed = [...OpalBot.unprefixed, ...arr];
+    var obj = {};
+    for (var i in OpalBot.unprefixed) { // Save methods
+        if (isNaN(i)) {
+            obj[i] = OpalBot.unprefixed[i];
+        }
+    }
+    OpalBot.unprefixed = OpalBot.unprefixed.concat(arr);
+    for (var k in obj) { // Port methods
+        OpalBot.unprefixed[k] = obj[k]
+    }
 };
 
 OpalBot.unprefixed.remove = (obj) => {

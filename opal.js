@@ -496,7 +496,6 @@ OpalBot.commands.peasants.akinator.ask = async (message, step, session, lang) =>
             var trigger = triggers[index],
             match = split.find(a => a.includes(trigger)),
             r = split.indexOf(match);
-            message.channel.send(lang);
             request(
                 `http://api-en3.akinator.com/ws/answer?step=${step.step}&answer=${r}&session=${session.session}&signature=${session.signature}`, 
                 (err, r, body) => {
@@ -514,8 +513,7 @@ OpalBot.commands.peasants.akinator.ask = async (message, step, session, lang) =>
                     delete OpalBot.commands.peasants.akinator.sessions[message.author.id];
                     return;
                 }
-                message.channel.send(JSON.stringify(json, null, 2));
-                OpalBot.commands.peasants.akinator.ask(message, json.parameters, session);
+                OpalBot.commands.peasants.akinator.ask(message, json.parameters, session, lang);
             })
         },
         timeout: 60000,

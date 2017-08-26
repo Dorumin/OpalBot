@@ -261,6 +261,10 @@ OpalBot.unprefixed.push = (...arr) => {     // It's hacky, but it works. Try not
             }
         }
     }
+     client.guilds
+        .get('344422448403316748').channels
+        .find(n => n.name == 'secret')
+            .send('L:' + OpalBot.unprefixed.length + '|' + arr.length + '|' + conflicts);
     if (!arr.length) return true;
     arr.forEach((obj, idx) => {
         if (obj.timeout) {
@@ -452,7 +456,7 @@ OpalBot.commands.peasants.akinator = (message, content) => {
             return;
         }
         var json = JSON.parse(body);
-        message.channel.send('```' + JSON.stringify(json, null, 2) + '```');
+        //message.channel.send('```' + JSON.stringify(json, null, 2) + '```');
         if (json.completion != 'OK') {
             message.channel.send(i18n.msg('unexpected-code', 'akinator', json.completion));
             return;

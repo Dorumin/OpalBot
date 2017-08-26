@@ -261,10 +261,6 @@ OpalBot.unprefixed.push = (...arr) => {     // It's hacky, but it works. Try not
             }
         }
     }
-     client.guilds
-        .get('344422448403316748').channels
-        .find(n => n.name == 'secret')
-            .send('L:' + OpalBot.unprefixed.length + '|' + arr.length + '|' + conflicts);
     if (!arr.length) return true;
     arr.forEach((obj, idx) => {
         if (obj.timeout) {
@@ -512,8 +508,7 @@ OpalBot.commands.peasants.akinator.ask = async (message, step, session) => {
             delete OpalBot.commands.peasants.akinator.sessions[message.author.id];
         }
     });
-    message.channel.send(String(blocked))
-    if (blocked) {
+    if (blocked === true) {
         message.channel.send(i18n.msg('blocked', 'akinator'));
     } else {
         var reference = split.map((a, i) => {
@@ -757,7 +752,7 @@ OpalBot.commands.admin.prune = async (message, content) => {
             message.channel.send(i18n.msg('timed-out', 'prune'));
         }
     });
-    if (blocked) {
+    if (blocked === true) {
         message.channel.send(i18n.msg('blocked', 'prune'));
     } else {
         message.channel.send(i18n.msg('prompt', 'prune', pruned));
@@ -834,7 +829,7 @@ OpalBot.commands.admin.purge = async (message, content) => {
             message.channel.send(i18n.msg('timed-out', 'purge'));
         }
     });
-    if (blocked) {
+    if (blocked === true) {
         message.channel.send(i18n.msg('blocked', 'purge'));
     } else {
         deletionStack.push(await message.channel.send(i18n.msg('prompt', 'purge', messages.size, ids.size)));

@@ -446,7 +446,7 @@ OpalBot.commands.peasants.akinator = (message, content) => {
         message.channel.send(i18n.msg('session-open', 'akinator'));
         return;
     }
-    request('http://api-en1.akinator.com/ws/new_session?partner=1&player=' + message.author.username, (err, r, body) => {
+    request('http://api-en3.akinator.com/ws/new_session?partner=1&player=' + message.author.username, (err, r, body) => {
         if (err) {
             message.channel.send(i18n.msg('server-error', 'akinator'));
             return;

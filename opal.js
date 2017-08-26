@@ -357,7 +357,16 @@ OpalBot.commands.peasants.hello = (message) => {
 OpalBot.commands.peasants.avi = 'avatar';
 OpalBot.commands.peasants.avatar = (message) => {
     var user = message.mentions.users.first() || message.author;
-    message.channel.send(user.avatarURL);
+    message.channel.send({
+        embed: {
+            color: 0x2196f3,
+            title: i18n.msg('title', 'avatar'),
+            image: {
+                url: user.displayAvatarURL
+            },
+            description: i18n.msg('description', 'avatar', user.username).replace(user.username.slice(0, -1) + "s's", user.username + "'")
+        }
+    });
 };
 
 OpalBot.commands.peasants.lenny = 'me';
@@ -594,14 +603,18 @@ OpalBot.commands.peasants.prefix = async (message, content) => {
 };
 
 OpalBot.commands.admin.prune = async (message, content) => {
+    var count;
     if (!content) {
         content = 7;
-    } else if (isNaN(parseInt(content, 10))) {
+    } else if (isNaN(count = parseInt(content, 10))) {
         message.reply(i18n.msg('invalid', 'prune'));
+        return;
+    } else if (count == 0) {
+        message.reply(i18n.msg('non-zero', 'prune'));
         return;
     }
     try {
-        var pruned = await message.guild.pruneMembers(parseInt(content, 10), true);
+        var pruned = await message.guild.pruneMembers(count, true);
     } catch(e) {
         message.channel.send(i18n.msg('missing-permissions', 'prune'));
         return;
@@ -623,7 +636,7 @@ OpalBot.commands.admin.prune = async (message, content) => {
             if (index == 0) { // confirm
                 try {
                     message.channel.send(i18n.msg('pruning', 'prune'));
-                    var pruned = await message.guild.pruneMembers(parseInt(content, 10));
+                    var pruned = await message.guild.pruneMembers(count);
                     message.channel.send(i18n.msg('pruned', 'prune', pruned));
                 } catch(e) {
                     message.channel.send(i18n.msg('missing-permissions', 'prune'));

@@ -30,6 +30,10 @@
     "test": {
         "online": "all systems fully operational!"
     },
+    "avatar": {
+        "title": "Result",
+        "description": "$1's avatar:"
+    },
     "kick": {
         "no-mention": "No user mention found. Please @ the user you want to kick!",
         "cannot-kick": "Cannot kick $1: missing permissions.",
@@ -71,6 +75,7 @@
     },
     "prune": {
         "invalid": "please input a valid number!",
+        "non-zero": "please provide a non-zero value!",
         "missing-permissions": "Cannot prune: missing permissions.",
         "lonely": "there are no users to prune!",
         "blocked": "Cannot request for confirmation while another command is awaiting a response. Cancel it and try again!",

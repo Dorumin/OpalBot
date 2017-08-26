@@ -354,6 +354,12 @@ OpalBot.commands.peasants.hello = (message) => {
     }
 };
 
+OpalBot.commands.peasants.avi = 'avatar';
+OpalBot.commands.peasants.avatar = (message) => {
+    var user = message.mentions.users.first() || message.author;
+    message.channel.send(user.avatarURL);
+};
+
 OpalBot.commands.peasants.lenny = 'me';
 OpalBot.commands.peasants.me = message => {
     message.channel.send('( ͡° ͜ʖ ͡°)');

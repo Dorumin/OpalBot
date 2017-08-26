@@ -112,10 +112,10 @@ client.on('message', async (message) => {
                     try {
                         var command_fn = OpalBot.commands.peasants[command];
                         if (command_fn.constructor === String) {
-                            OpalBot.commands.peasants[command_fn](message, params);
+                            OpalBot.commands.peasants[command_fn](message, params, local);
                             return;
                         }
-                        command_fn(message, params);
+                        command_fn(message, params, local);
                         break;
                     } catch(e) {
                         console.log(`Uncaught error (command peasants.${command}):`, e);

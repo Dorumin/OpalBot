@@ -460,7 +460,7 @@ OpalBot.commands.peasants.akinator = (message, content) => {
     });
 };
 
-OpalBot.commands.peasants.akinator.ask = (message, step, session) => {
+OpalBot.commands.peasants.akinator.ask = async (message, step, session) => {
     var split = [
         i18n.msg('1', 'akinator').split('|'), // Yes
         i18n.msg('2', 'akinator').split('|'), // No

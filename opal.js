@@ -250,17 +250,18 @@ OpalBot.unprefixed.push = (...arr) => { // It's hacky, but it works. Try not to 
     OpalBot.unprefixed = [...OpalBot.unprefixed, ...arr];
 }
 
-OpalBot.util.getChannelMessages = async (channel, before) => {
+
+OpalBot.util.getChannelMessages = async (channel, before, break_function) => { // break function MUST return true for the message querying to stop, truthy values don't do the trick
     before = before || Date.now() - 1209600000; // 2 weeks
     return new Promise(async (res, rej) => {
         var LIMIT = 50,
-        lastId = null,
+        last_id = null,
         collection = null;
         while (LIMIT--) {
             try {
                 var coll = await channel.fetchMessages({
                     limit: 100,
-                    ...lastId
+                    ...last_id
                 });
             } catch(e) {
                 rej(e);
@@ -270,8 +271,8 @@ OpalBot.util.getChannelMessages = async (channel, before) => {
             } else {
                 collection = collection.concat(coll);
             }
-            lastId = {before: coll.last().id};
-            if (coll.last().createdTimestamp < before) {
+            last_id = {before: coll.last().id};
+            if (coll.last().createdTimestamp < before || (typeof break_function != 'function' || break_function(collection) === true)) {
                 break;
             }
         }
@@ -628,7 +629,12 @@ OpalBot.commands.admin.purge = async (message, content) => {
     }
     message.channel.send(i18n.msg('loading', 'purge'));
     var ids = new Set(),
-    messages = await OpalBot.util.getChannelMessages(message.channel);
+    messages = await OpalBot.util.getChannelMessages(message.channel, null, coll => {
+        var l = coll.filter(model => {
+            return member ? (isId ? model.author.id == member : model.author.username + '#' + model.author.discriminator == member) : true;
+        }).length;
+        if (l > count) return true;
+    });
     messages = messages.filter(model => {
         return member ? (isId ? model.author.id == member : model.author.username + '#' + model.author.discriminator == member) : true;
     });

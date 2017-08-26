@@ -452,8 +452,10 @@ OpalBot.commands.peasants.akinator = (message, content) => {
             return;
         }
         var json = JSON.parse(body);
+        message.channel.send('```' + JSON.stringify(json, null, 2) + '```');
         if (json.completion != 'OK') {
             message.channel.send(i18n.msg('unexpected-code', 'akinator', json.completion));
+            return;
         }
         ref.sessions[id] = json.parameters.identification;
         OpalBot.commands.peasants.akinator.ask(message, json.parameters.step_information, json.parameters.identification);

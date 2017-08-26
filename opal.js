@@ -482,7 +482,7 @@ OpalBot.commands.peasants.akinator.ask = async (message, step, session) => {
             match = split.find(a => a.includes(trigger)),
             r = split.indexOf(match);
             request(
-                `http://api-en1.akinator.com/ws/answer?step=${step.step}&answer=${r}&session=${session.session}&signature=${session.signature}`, 
+                `http://api-en3.akinator.com/ws/answer?step=${step.step}&answer=${r}&session=${session.session}&signature=${session.signature}`, 
                 (err, r, body) => {
                 if (err) {
                     message.channel.send(i18n.msg('server-error', 'akinator'));

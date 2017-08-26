@@ -495,6 +495,7 @@ OpalBot.commands.peasants.akinator.ask = async (message, step, session) => {
                         return;
                     }
                     message.channel.send(i18n.msg('unexpected-code', 'akinator', json.completion));
+                    delete OpalBot.commands.peasants.akinator.sessions[message.author.id];
                     return;
                 }
                 OpalBot.commands.peasants.akinator.ask(message, json.parameters, session);
@@ -503,6 +504,7 @@ OpalBot.commands.peasants.akinator.ask = async (message, step, session) => {
         timeout: 60000,
         ontimeout: () => {
             message.channel.send(i18n.msg('timed-out', 'akinator'));
+            delete OpalBot.commands.peasants.akinator.sessions[message.author.id];
         }
     });
     if (blocked) {

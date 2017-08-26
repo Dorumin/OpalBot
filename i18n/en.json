@@ -101,7 +101,7 @@
         "close": "close",
         "session-closed": "Your akinator session has been closed!",
         "no-session-open": "You have no sessions online! Begin playing with `akinator start`.",
-        "session-open": "You already have a session open! Finish it or close the game with `akinator close`."
+        "session-open": "You already have a session open! Finish it or close the game with `akinator close`.",
         "server-error": "Server error. Most likely caused by an invalid language code.",
         "unexpected-code": "Server returned an unexpected status code `$1`.",
         "blocked": "Cannot start a game due to another command expecting a response. Cancel it and try again!",

@@ -596,8 +596,7 @@ OpalBot.commands.admin.prune = async (message, content) => {
         message.reply(i18n.msg('lonely', 'prune'));
         return;
     }
-    message.channel.send(i18n.msg('prompt', 'prune', pruned));
-    OpalBot.unprefixed.push({
+    var blocked = OpalBot.unprefixed.push({
         triggers: [
             i18n.msg('confirm', 'main'),
             i18n.msg('cancel', 'main')
@@ -623,6 +622,11 @@ OpalBot.commands.admin.prune = async (message, content) => {
             message.channel.send(i18n.msg('timed-out', 'prune'));
         }
     });
+    if (blocked) {
+        message.channel.send(i18n.msg('blocked', 'prune'));
+    } else {
+        message.channel.send(i18n.msg('prompt', 'prune', pruned));
+    }
 };
 
 OpalBot.commands.admin.bulkdelete = 'purge';

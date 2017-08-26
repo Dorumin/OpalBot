@@ -84,10 +84,11 @@
         "loading": "Loading messages, please wait...",
         "no-messages": "No results found for your query. Try double-checking your user username and discriminator.",
         "missing-permissions": "Cannot bulk delete: missing permissions.",
+        "blocked": "Cannot request for confirmation while another command is awaiting a response. Cancel it and try again!",
         "prompt": "This will delete $1 ($1|message|messages) by $2 ($2|user|users). THIS ACTION IS IRREVERSIBLE. Type `confirm` if you want to proceed, or `cancel` to quit.",
         "timed-out": "The bulk deletion has been automatically cancelled after 30 seconds. Use the command again to try again.",
         "cancelled": "Bulk delete cancelled!",
         "deleting": "Deleting...",
-        "deleted": "Successfully deleted $1 ($1|message|messages)"
+        "deleted": "Successfully deleted $1 ($1|message|messages)!"
     }
 }

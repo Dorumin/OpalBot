@@ -232,7 +232,18 @@ var OpalBot = {
     }
 };
 
-OpalBot.unprefixed.push = (...arr) => { // It's hacky, but it works. Try not to access OpalBot.unprefixed by reference though.
+OpalBot.unprefixed.push = (...arr) => {     // It's hacky, but it works. Try not to access OpalBot.unprefixed by reference though. 
+                                            // And also try to always provide a timeout. This isn't supposed to be a replacement for commands.
+    for (var i in OpalBot.unprefixed) {
+        var original = OpalBot.unprefixed[i];
+        for (var k in arr) {
+            var item = arr[k];
+            if (original.user == item.user && original.channel == item.channel) {
+                arr.splice(k, 1);
+            }
+        }
+    }
+    if (!arr.length) return true;
     arr.forEach((obj, idx) => {
         if (obj.timeout) {
             obj.__timeoutID = setTimeout(() => {
@@ -653,9 +664,8 @@ OpalBot.commands.admin.purge = async (message, content) => {
         return;
     }
     messages.forEach(model => ids.add(model.author.id));
-    var deletionStack = [];
-    deletionStack.push(await message.channel.send(i18n.msg('prompt', 'purge', messages.size, ids.size)));
-    OpalBot.unprefixed.push({
+    var deletionStack = [],
+    blocked = OpalBot.unprefixed.push({
         triggers: [
             i18n.msg('confirm', 'main'),
             i18n.msg('cancel', 'main')
@@ -685,6 +695,11 @@ OpalBot.commands.admin.purge = async (message, content) => {
             message.channel.send(i18n.msg('timed-out', 'purge'));
         }
     });
+    if (blocked) {
+        message.channel.send(i18n.msg('blocked', 'purge'));
+    } else {
+        deletionStack.push(await message.channel.send(i18n.msg('prompt', 'purge', messages.size, ids.size)));
+    }
 };
 
 OpalBot.commands.operator.run = 'eval';

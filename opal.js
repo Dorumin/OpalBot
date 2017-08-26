@@ -2,9 +2,11 @@ const Discord  = require('discord.js');
 const Dropbox  = require('dropbox');
 const request  = require('request');
 const http     = require('http');
-const i18n     = require(`./i18n/${process.env.lang || 'en'}.json`);
+const i18n     = require(`./i18n`);
 const client   = new Discord.Client();
 const database = new Dropbox({accessToken: process.env.dropbox_token});
+
+console.log(i18n);
 
 i18n.msg = (message, obj, ...vars) => {
     var ref = obj;
@@ -335,6 +337,10 @@ OpalBot.util.getChannelMessages = async (channel, before, break_function) => { /
         });
         res(collection);
     });
+};
+
+OpalBot.util.getGuildLanguage = async (guild) {
+    return (await OpalBot.db).data.guilds
 };
 
 OpalBot.commands = {

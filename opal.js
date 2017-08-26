@@ -632,7 +632,7 @@ OpalBot.commands.admin.purge = async (message, content) => {
     messages = await OpalBot.util.getChannelMessages(message.channel, null, coll => {
         var l = coll.filter(model => {
             return member ? (isId ? model.author.id == member : model.author.username + '#' + model.author.discriminator == member) : true;
-        }).length;
+        }).size;
         if (l > count) return true;
     });
     messages = messages.filter(model => {

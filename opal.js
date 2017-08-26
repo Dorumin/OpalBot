@@ -55,7 +55,7 @@ client.on('ready', async () => {
 
 client.on('message', message => {
     if (message.author.id == client.user.id || !message.member) return;
-    var content = message.content,
+    var content = message.content.trim(),
     name = message.author.username,
     prefixes = (OpalBot.prefixes[message.guild.id] || OpalBot.prefixes.default).concat([`<@${client.user.id}>`, i18n.msg('prefix', 'main', client.user.id)]),
     i = prefixes.length,
@@ -63,7 +63,7 @@ client.on('message', message => {
     for (var key in OpalBot.permissionAliases) {
         permissions[key] = permissions[OpalBot.permissionAliases[key]];
     }
-    if (!content.trim()) return;
+    if (!content) return;
     console.log(name + ': ' + content + (message.channel.type == 'text' ? ' @ ' + message.guild.name : ''));
     if (message.channel.type == 'dm' || message.channel.type == 'group') {
         message.reply('Add me on your server: <https://discordapp.com/oauth2/authorize?client_id=348233224293449729&scope=bot>');
@@ -120,8 +120,7 @@ client.on('message', message => {
     }
     // Unprefixed triggers, usually used by confirm and cancel commands.
     OpalBot.unprefixed.forEach(function(obj, idx) {
-        var cases = obj.triggers || [obj.trigger],
-        content = message.content.trim();
+        var cases = obj.triggers || [obj.trigger];
         if (cases.length == 1 && cases[0] == undefined) {
             console.log('Invalid unprefixed command: missing trigger');
             return;
@@ -451,7 +450,7 @@ OpalBot.commands.ban.ban = (message, reason) => {
 };
 
 OpalBot.commands.ban.unban = async (message, content) => {
-    if (!content.trim()) {
+    if (!content) {
         message.reply(i18n.msg('no-name', 'unban'));
         return;
     }
@@ -485,7 +484,7 @@ OpalBot.commands.peasants.prefix = async (message, content) => {
     prefixes = OpalBot.prefixes[message.guild.id] || OpalBot.prefixes.default;
     if (content.slice(0, add.length) == add) mode = add;
     if (content.slice(0, remove.length) == remove) mode = remove;
-    content = content.slice(mode.length);
+    content = content.slice(mode.length).trim();
     switch (mode) {
         case list:
             if (!prefixes.length) {
@@ -499,7 +498,7 @@ OpalBot.commands.peasants.prefix = async (message, content) => {
                 message.reply(i18n.msg('missing-permissions', 'prefix'));
                 return;
             }
-            if (!content.trim().length) {
+            if (!content.length) {
                 message.reply(i18n.msg('no-prefix-add', 'prefix'));
                 return;
             }
@@ -517,12 +516,12 @@ OpalBot.commands.peasants.prefix = async (message, content) => {
                 OpalBot.prefixes[message.guild.id] = [...prefixes];
             }
             var arr = OpalBot.prefixes[message.guild.id],
-            i = arr.indexOf(content.trim());
+            i = arr.indexOf(content);
             if (i != -1) {
                 message.reply(i18n.msg('prefix-already-in-use', 'prefix'));
                 return;
             }
-            arr.push(content.trim());
+            arr.push(content);
             OpalBot.db = {
                 name: 'data',
                 value: {
@@ -533,14 +532,14 @@ OpalBot.commands.peasants.prefix = async (message, content) => {
                     }
                 }
             }
-            message.reply(i18n.msg('prefix-added', 'prefix', content.trim()));
+            message.reply(i18n.msg('prefix-added', 'prefix', content));
             break;
         case remove:
             if (!message.member.permissions.serialize().ADMINISTRATOR) {
                 message.reply(i18n.msg('missing-permissions', 'prefix'));
                 return;
             }
-            if (!content.trim().length) {
+            if (!content.length) {
                 message.reply(i18n.msg('no-prefix-add', 'prefix'));
                 return;
             }
@@ -558,7 +557,7 @@ OpalBot.commands.peasants.prefix = async (message, content) => {
                 OpalBot.prefixes[message.guild.id] = [...prefixes];
             }
             var arr = OpalBot.prefixes[message.guild.id],
-            i = arr.indexOf(content.trim());
+            i = arr.indexOf(content);
             if (i == -1) {
                 message.reply(i18n.msg('no-prefix-found', 'prefix'));
                 return;
@@ -574,13 +573,13 @@ OpalBot.commands.peasants.prefix = async (message, content) => {
                     }
                 }
             }
-            message.reply(i18n.msg('prefix-removed', 'prefix', content.trim()));
+            message.reply(i18n.msg('prefix-removed', 'prefix', content));
             break;
     }
 };
 
 OpalBot.commands.admin.prune = async (message, content) => {
-    if (!content.trim()) {
+    if (!content) {
         content = 7;
     } else if (isNaN(parseInt(content, 10))) {
         message.reply(i18n.msg('invalid', 'prune'));

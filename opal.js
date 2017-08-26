@@ -515,7 +515,7 @@ OpalBot.commands.peasants.akinator.ask = async (message, step, session) => {
             return a.join('|') + '=' + step.answers[i].answer;
         });
         reference = '```' + reference.join('\n') + '```';
-        last_bot_message = await message.channel.send(i18n.msg('question', 'akinator', step.step + 1, step.question) + reference);
+        last_bot_message = await message.channel.send(i18n.msg('question', 'akinator', Number(step.step) + 1, step.question) + reference);
     }
 };
 

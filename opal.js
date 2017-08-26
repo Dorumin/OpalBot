@@ -240,10 +240,20 @@ OpalBot.unprefixed.push = (...arr) => {     // It's hacky, but it works. Try not
                                             // And also try to always provide a timeout. This isn't supposed to be a replacement for commands.
     for (var i in OpalBot.unprefixed) {
         var original = OpalBot.unprefixed[i];
+        original.triggers = original.triggers || [original.trigger];
         for (var k in arr) {
             var item = arr[k];
+            item.triggers = item.triggers || [item.trigger];
+            var conflicts = false,
+            l = item.triggers.length;
+            while (l--) {
+                if (original.triggers.includes(item.triggers[i])) {
+                    conflicts = true;
+                }
+            }
             if (
                 !item.channel ||
+                (conflicts) &&
                 (item.user ? original.user == item.user : false) && 
                 (item.channel ? original.channel == item.channel : false)
             ) {
@@ -414,6 +424,94 @@ OpalBot.commands.peasants.runtime = message => {
 OpalBot.commands.peasants.status = 'test';
 OpalBot.commands.peasants.test = message => {
     message.reply(i18n.msg('online', 'test'));
+};
+
+OpalBot.commands.peasants.akinator = (message, content) => {
+    var ref = OpalBot.commands.peasants.akinator,
+    id = message.author.id,
+    mode = 'start',
+    close = i18n.msg('close', 'akrivus');
+    if (content.slice(0, close.length) == close) mode = close;
+    if (mode == close) {
+        if (ref.sessions[id]) {
+            delete ref.sessions[id];
+            message.channel.send(i18n.msg('session-closed', 'akinator'));
+        } else {
+            message.channel.send(i18n.msg('no-session-open', 'akinator'));
+        }
+        return;
+    }
+    ref.sessions = ref.sessions || {};
+    if (ref.sessions[id]) {
+        message.channel.send(i18n.msg('session-open', 'akinator'));
+        return;
+    }
+    request('http://api-en1.akinator.com/ws/new_session?partner=1&player=' + message.author.username, (err, r, body) => {
+        if (err) {
+            message.channel.send(i18n.msg('server-error', 'akinator'));
+            return;
+        }
+        var json = JSON.parse(body);
+        if (json.completion != 'OK') {
+            message.channel.send(i18n.msg('unexpected-code', 'akinator', json.completion));
+        }
+        ref.sessions[id] = json.parameters.identification;
+        OpalBot.commands.peasants.akinator.ask(message, json.parameters.step_information, json.parameters.identification);
+    });
+};
+
+OpalBot.commands.peasants.akinator.ask = (message, step, session) => {
+    var split = [
+        i18n.msg('1', 'akinator').split('|'), // Yes
+        i18n.msg('2', 'akinator').split('|'), // No
+        i18n.msg('3', 'akinator').split('|'), // I don't know
+        i18n.msg('4', 'akinator').split('|'), // Probably
+        i18n.msg('5', 'akinator').split('|')  // Probably not
+    ],
+    triggers = [].concat(...split),
+    last_bot_message = null,
+    blocked = OpalBot.unprefixed.push({
+        triggers: triggers,
+        channel: message.channel.id,
+        user: message.author.id,
+        caseinsensitive: true,
+        callback: (message, index) => {
+            var trigger = triggers[index],
+            match = split.find(a => a.includes(trigger)),
+            r = split.indexOf(match);
+            request(
+                `http://api-en1.akinator.com/ws/answer?step=${step.step}&answer=${r}&session=${session.session}&signature=${session.signature}`, 
+                (err, r, body) => {
+                if (err) {
+                    message.channel.send(i18n.msg('server-error', 'akinator'));
+                    return;
+                }
+                var json = JSON.parse(body);
+                if (json.completion != 'OK') {
+                    if (json.completion == 'KO - TIMEOUT') {
+                        message.channel.send(i18n.msg('timed-out', 'akinator'));
+                        return;
+                    }
+                    message.channel.send(i18n.msg('unexpected-code', 'akinator', json.completion));
+                    return;
+                }
+                OpalBot.commands.peasants.akinator.ask(message, json.parameters, session);
+            })
+        },
+        timeout: 60000,
+        ontimeout: () => {
+            message.channel.send(i18n.msg('timed-out', 'akinator'));
+        }
+    });
+    if (blocked) {
+        message.channel.send(i18n.msg('blocked', 'akinator'));
+    } else {
+        var reference = split.map((a, i) => {
+            return a.join('|') + '=' + step.answers[i].answer;
+        });
+        reference = '```' + reference.join('\n') + '```';
+        last_bot_message = await message.channel.send(i18n.msg('question', 'akinator', step.step + 1, step.question) + reference);
+    }
 };
 
 OpalBot.commands.kick.kick = (message, reason) => {

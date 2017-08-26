@@ -96,5 +96,9 @@
         "cancelled": "Bulk delete cancelled!",
         "deleting": "Deleting...",
         "deleted": "Successfully deleted $1 ($1|message|messages)!"
+    },
+    "akinator": {
+        "server-error": "Server error. Most likely caused by an invalid language code.",
+        "unexpected-code": "Server returned an unexpected status code `$1`."
     }
 }

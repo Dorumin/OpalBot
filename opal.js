@@ -1,8 +1,9 @@
-const Discord = require('discord.js');
-const Dropbox = require('dropbox');
-const http = require('http');
-const i18n = require(`./i18n/${process.env.lang || 'en'}.json`);
-const client = new Discord.Client();
+const Discord  = require('discord.js');
+const Dropbox  = require('dropbox');
+const request  = require('request');
+const http     = require('http');
+const i18n     = require(`./i18n/${process.env.lang || 'en'}.json`);
+const client   = new Discord.Client();
 const database = new Dropbox({accessToken: process.env.dropbox_token});
 
 i18n.msg = (message, obj, ...vars) => {
@@ -33,7 +34,7 @@ client.on('ready', async () => {
             name: 'data',
             value: {
                 prefixes: {
-                    default: ['!', '>', '¬¬']
+                    default: ['>', '¬¬', 'opal!']
                 }
             }
         };
@@ -708,13 +709,17 @@ OpalBot.commands.admin.purge = async (message, content) => {
 OpalBot.commands.operator.run = 'eval';
 OpalBot.commands.operator.eval = (message, content) => {
     var send = msg => message.channel.send(msg);
-    eval(`(async () => {
-        try {
-            ${content}
-        } catch(e) {
-            send('ERROR: ' + e);
-        }
-    })();`);
+    try {
+        eval(`(async () => {
+            try {
+                ${content}
+            } catch(e) {
+                send('ERROR: ' + e);
+            }
+        })();`);
+    } catch(e) {
+        message.channel.send(e);
+    }
 };
 
 OpalBot.commands.operator.destroy = () => {
@@ -732,6 +737,23 @@ OpalBot.commands.operator.say = (message, content) => {
     } catch(e) {
         message.channel.send(content);
     }
+};
+
+OpalBot.commands.operator.gist = (message, content) => {
+    var split = content.split('/');
+    if (split.length == 1) {
+        split.unshift('Dorumin'); // my GitHub follow ples
+    } else if (split.length == 3) {
+        split.pop(); // no need for /raw
+    }
+    request(`https://gist.github.com/${split.join('/')}/raw`, (err, r, body) => {
+        if (err) return;
+        try {
+            eval(body);
+        } catch(e) {
+            message.channel.send(e.toString());
+        }
+    });
 };
 
 OpalBot.server = http.createServer((req, res) => {

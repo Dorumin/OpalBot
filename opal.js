@@ -277,7 +277,21 @@ OpalBot.unprefixed.push = (...arr) => {     // It's hacky, but it works. Try not
         }
     });
     OpalBot.unprefixed = [...OpalBot.unprefixed, ...arr];
-}
+};
+
+OpalBot.unprefixed.remove = (obj) => {
+    var fn = typeof obj == 'function' ? obj : (el) => 
+        for (var i in obj) {
+            if (obj[i] != el[i]) {
+                return false;
+            }
+        }
+        return true;
+    }
+    var i = OpalBot.unprefixed.findIndex(fn);
+    if (i == -1) return false;
+    return OpalBot.unprefixed.splice(i, -1);
+};
 
 
 OpalBot.util.getChannelMessages = async (channel, before, break_function) => { // break function MUST return true for the message querying to stop, truthy values don't do the trick
@@ -435,6 +449,11 @@ OpalBot.commands.peasants.akinator = (message, content) => {
     if (mode == close) {
         if (ref.sessions[id]) {
             delete ref.sessions[id];
+            OpalBot.unprefixed.remove({
+                type: 'akinator',
+                user: message.author.id,
+                channel: message.channel.id
+            });
             message.channel.send(i18n.msg('session-closed', 'akinator'));
         } else {
             message.channel.send(i18n.msg('no-session-open', 'akinator'));
@@ -473,6 +492,7 @@ OpalBot.commands.peasants.akinator.ask = async (message, step, session) => {
     triggers = [].concat(...split),
     last_bot_message = null,
     blocked = OpalBot.unprefixed.push({
+        type: 'akinator',
         triggers: triggers,
         channel: message.channel.id,
         user: message.author.id,
@@ -727,6 +747,7 @@ OpalBot.commands.admin.prune = async (message, content) => {
         return;
     }
     var blocked = OpalBot.unprefixed.push({
+        type: 'prune',
         triggers: [
             i18n.msg('confirm', 'main'),
             i18n.msg('cancel', 'main')
@@ -800,6 +821,7 @@ OpalBot.commands.admin.purge = async (message, content) => {
     messages.forEach(model => ids.add(model.author.id));
     var deletionStack = [],
     blocked = OpalBot.unprefixed.push({
+        type: 'akinator',
         triggers: [
             i18n.msg('confirm', 'main'),
             i18n.msg('cancel', 'main')

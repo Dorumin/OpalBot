@@ -280,14 +280,14 @@ OpalBot.unprefixed.push = (...arr) => {     // It's hacky, but it works. Try not
 };
 
 OpalBot.unprefixed.remove = (obj) => {
-    var fn = typeof obj == 'function' ? obj : (el) => 
+    var fn = typeof obj == 'function' ? obj : (el) => {
         for (var i in obj) {
             if (obj[i] != el[i]) {
                 return false;
             }
         }
         return true;
-    }
+    };
     var i = OpalBot.unprefixed.findIndex(fn);
     if (i == -1) return false;
     return OpalBot.unprefixed.splice(i, -1);

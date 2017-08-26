@@ -430,7 +430,7 @@ OpalBot.commands.peasants.akinator = (message, content) => {
     var ref = OpalBot.commands.peasants.akinator,
     id = message.author.id,
     mode = 'start',
-    close = i18n.msg('close', 'akrivus');
+    close = i18n.msg('close', 'akinator');
     if (content.slice(0, close.length) == close) mode = close;
     if (mode == close) {
         if (ref.sessions[id]) {

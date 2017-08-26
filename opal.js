@@ -9,12 +9,11 @@ const database = new Dropbox({accessToken: process.env.dropbox_token});
 console.log(i18n);
 
 i18n.msg = (message, obj, ...vars) => {
-    var local = vars[vars.length - 1],
-    i18n = global.i18n[local],
+    var local = i18n[vars[vars.length - 1]],
     ref = obj;
     vars = vars.slice(0, -1);
     if (typeof obj == 'string') {
-        obj = i18n[obj];
+        obj = local[obj];
     }
     var msg = obj[message];
     if (!msg || typeof msg != 'string') {

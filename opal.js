@@ -537,6 +537,11 @@ OpalBot.commands.peasants.akinator.ask = async (message, step, session) => {
         ontimeout: () => {
             message.channel.send(i18n.msg('timed-out', 'akinator'));
             delete OpalBot.commands.peasants.akinator.sessions[message.author.id];
+            OpalBot.unprefixed.remove({
+                type: 'akinator',
+                user: message.author.id,
+                channel: message.channel.id
+            });
         }
     });
     if (blocked === true) {

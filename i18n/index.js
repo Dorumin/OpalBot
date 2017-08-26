@@ -1,5 +1,4 @@
 const fs = require('fs');
-const exports = module.exports = {};
 
 fs.readdirSync('../i18n')
     .filter(file => file.endsWith('.json'))

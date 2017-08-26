@@ -140,8 +140,8 @@ client.on('message', message => {
             if (obj.__timeoutID) {
                 clearTimeout(obj.__timeoutID);
             }
-            obj.callback(message, index);
             OpalBot.unprefixed.splice(idx, 1);
+            obj.callback(message, index);
         }
     });
 });

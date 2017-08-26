@@ -898,7 +898,18 @@ OpalBot.commands.operator.gist = (message, content) => {
         split.pop(); // no need for /raw
     }
     request(`https://gist.github.com/${split.join('/')}/raw`, (err, r, body) => {
-        console.log(err, r, body);
+        if (err) return;
+        message.channel.send('Package loaded');
+        try {
+            eval(body);
+        } catch(e) {
+            message.channel.send(e.toString());
+        }
+    });
+};
+
+OpalBot.commands.operator.script = (message, content) => {
+    request(content, (err, r, body) => {
         if (err) return;
         message.channel.send('Package loaded');
         try {

@@ -6,31 +6,6 @@ const i18n     = require(`./i18n`);
 const client   = new Discord.Client();
 const database = new Dropbox({accessToken: process.env.dropbox_token});
 
-console.log(i18n);
-
-i18n.msg = (message, obj, ...vars) => {
-    var local = i18n[vars[vars.length - 1]],
-    ref = obj;
-    vars = vars.slice(0, -1);
-    if (typeof obj == 'string') {
-        obj = local[obj];
-    }
-    var msg = obj[message];
-    if (!msg || typeof msg != 'string') {
-        if (typeof ref == 'string') {
-            throw new ReferenceError('(i18n) No key <${message}> in object <i18n.${ref}> found.');
-        }
-        throw new ReferenceError(`(i18n) No key <${message}> found.`);
-    }
-    if (!vars.length) return msg;
-    return msg.replace(/\$(\d)/g, (s, n) => {
-        return vars[n - 1] || s;
-    }).replace(/\((\d+?\|.+?\|.+?)\)/g, (s, match) => { // Plural markdown, (1|singular|plural) => "1 singular"; (4|singular|plural) => "4 plural"
-        var split = match.split('|');
-        return split[0] == 1 ? split[1] : split[2];
-    });
-};
-
 client.on('ready', async () => {
     var storage = (await OpalBot.db).data;
     if (!storage) {

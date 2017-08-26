@@ -121,7 +121,8 @@ client.on('message', message => {
     }
     // Unprefixed triggers, usually used by confirm and cancel commands.
     OpalBot.unprefixed.forEach(function(obj, idx) {
-        var cases = obj.triggers || [obj.trigger];
+        var cases = obj.triggers || [obj.trigger],
+        users = obj.users || [obj.user].filter(Boolean);
         if (cases.length == 1 && cases[0] == undefined) {
             console.log('Invalid unprefixed command: missing trigger');
             return;
@@ -132,7 +133,10 @@ client.on('message', message => {
         }
         var index = cases.indexOf(content);
         if (index == -1) return;
-        if (obj.user == message.author.id && obj.channel == message.channel.id) {
+        if (
+            (users.length ? users.includes(message.author.id) : true) &&
+            obj.channel == message.channel.id
+        ) {
             if (obj.__timeoutID) {
                 clearTimeout(obj.__timeoutID);
             }
@@ -239,6 +243,7 @@ OpalBot.unprefixed.push = (...arr) => {     // It's hacky, but it works. Try not
         for (var k in arr) {
             var item = arr[k];
             if (
+                !item.channel ||
                 (item.user ? original.user == item.user : false) && 
                 (item.channel ? original.channel == item.channel : false)
             ) {

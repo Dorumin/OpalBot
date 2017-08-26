@@ -660,18 +660,18 @@ OpalBot.commands.peasants.prefix = async (message, content, lang) => {
     switch (mode) {
         case list:
             if (!prefixes.length) {
-                message.reply(i18n.msg('no-prefixes', 'prefix'));
+                message.reply(i18n.msg('no-prefixes', 'prefix', lang));
                 return;
             }
-            message.reply(i18n.msg('list-prefixes', 'prefix', '`' + prefixes.join('` `') + '`'));
+            message.reply(i18n.msg('list-prefixes', 'prefix', '`' + prefixes.join('` `') + '`', lang));
             break;
         case add:
             if (!message.member.permissions.serialize().ADMINISTRATOR) {
-                message.reply(i18n.msg('missing-permissions', 'prefix'));
+                message.reply(i18n.msg('missing-permissions', 'prefix', lang));
                 return;
             }
             if (!content.length) {
-                message.reply(i18n.msg('no-prefix-add', 'prefix'));
+                message.reply(i18n.msg('no-prefix-add', 'prefix', lang));
                 return;
             }
             if (!OpalBot.prefixes[message.guild.id]) {

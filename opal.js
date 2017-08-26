@@ -9,7 +9,10 @@ const database = new Dropbox({accessToken: process.env.dropbox_token});
 console.log(i18n);
 
 i18n.msg = (message, obj, ...vars) => {
-    var ref = obj;
+    var local = vars[vars.length - 1],
+    i18n = global.i18n[local],
+    ref = obj;
+    vars = vars.slice(0, -1);
     if (typeof obj == 'string') {
         obj = i18n[obj];
     }
@@ -42,6 +45,15 @@ client.on('ready', async () => {
         };
     }
     OpalBot.prefixes = (await OpalBot.db).data.prefixes;
+    OpalBot.db = {
+        name: 'data',
+        value: {
+            ...(await OpalBot.db).data,
+            languages: {
+                default: 'en'
+            }
+        }
+    }
     console.log(i18n.msg('online', 'main', OpalBot.v));
     client.guilds
         .get('344422448403316748').channels
@@ -56,13 +68,14 @@ client.on('ready', async () => {
     }, 3600000);
 });
 
-client.on('message', message => {
+client.on('message', async (message) => {
     if (message.author.id == client.user.id || !message.member) return;
     var content = message.content.trim(),
     name = message.author.username,
     prefixes = (OpalBot.prefixes[message.guild.id] || OpalBot.prefixes.default).concat([`<@${client.user.id}>`, i18n.msg('prefix', 'main', client.user.id)]),
     i = prefixes.length,
-    permissions = message.member.permissions.serialize();
+    permissions = message.member.permissions.serialize(),
+    local = OpalBot.getGuildLanguage(message.guild);
     for (var key in OpalBot.permissionAliases) {
         permissions[key] = permissions[OpalBot.permissionAliases[key]];
     }

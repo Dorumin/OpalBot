@@ -512,6 +512,7 @@ OpalBot.commands.peasants.akinator.ask = async (message, step, session) => {
             delete OpalBot.commands.peasants.akinator.sessions[message.author.id];
         }
     });
+    message.channel.send(String(blocked))
     if (blocked) {
         message.channel.send(i18n.msg('blocked', 'akinator'));
     } else {

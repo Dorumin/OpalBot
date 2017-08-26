@@ -45,11 +45,11 @@ client.on('ready', async () => {
         };
     }
     OpalBot.prefixes = (await OpalBot.db).data.prefixes;
-    console.log(i18n.msg('online', 'main', OpalBot.v));
+    console.log(i18n.msg('online', 'main', OpalBot.v, 'en'));
     client.guilds
         .get('344422448403316748').channels
         .find(n => n.name == 'secret')
-            .send(i18n.msg('online', 'main', OpalBot.v));
+            .send(i18n.msg('online', 'main', OpalBot.v, 'en'));
     var i = 0;
     setInterval(n => {
         client.guilds
@@ -63,10 +63,10 @@ client.on('message', async (message) => {
     if (message.author.id == client.user.id || !message.member) return;
     var content = message.content.trim(),
     name = message.author.username,
-    prefixes = (OpalBot.prefixes[message.guild.id] || OpalBot.prefixes.default).concat([`<@${client.user.id}>`, i18n.msg('prefix', 'main', client.user.id)]),
+    local = await OpalBot.util.getGuildLanguage(message.guild),
+    prefixes = (OpalBot.prefixes[message.guild.id] || OpalBot.prefixes.default).concat([`<@${client.user.id}>`, i18n.msg('prefix', 'main', client.user.id, local)]),
     i = prefixes.length,
-    permissions = message.member.permissions.serialize(),
-    local = await OpalBot.util.getGuildLanguage(message.guild);
+    permissions = message.member.permissions.serialize();
     for (var key in OpalBot.permissionAliases) {
         permissions[key] = permissions[OpalBot.permissionAliases[key]];
     }
@@ -87,10 +87,10 @@ client.on('message', async (message) => {
                     try {
                         var command_fn = OpalBot.commands[role][command];
                         if (command_fn.constructor === String) {
-                            OpalBot.commands[role][command_fn](message, params);
+                            OpalBot.commands[role][command_fn](message, params, local);
                             return;
                         }
-                        command_fn(message, params);
+                        command_fn(message, params, local);
                         break;
                     } catch(e) {
                         console.log(`Uncaught error (command operator.${command}):`, e);
@@ -100,10 +100,10 @@ client.on('message', async (message) => {
                     try {
                         var command_fn = OpalBot.commands[role][command];
                         if (command_fn.constructor === String) {
-                            OpalBot.commands[role][command_fn](message, params);
+                            OpalBot.commands[role][command_fn](message, params, local);
                             return;
                         }
-                        command_fn(message, params);
+                        command_fn(message, params, local);
                         break;
                     } catch(e) {
                         console.log(`Uncaught error (command ${role}.${command}):`, e);
@@ -401,16 +401,16 @@ OpalBot.commands.peasants.hello = (message) => {
 };
 
 OpalBot.commands.peasants.avi = 'avatar';
-OpalBot.commands.peasants.avatar = (message) => {
+OpalBot.commands.peasants.avatar = (message, content, lang) => {
     var user = message.mentions.users.first() || message.author;
     message.channel.send({
         embed: {
             color: 0x2196f3,
-            title: i18n.msg('title', 'avatar'),
+            title: i18n.msg('title', 'avatar', lang),
             image: {
                 url: user.displayAvatarURL
             },
-            description: i18n.msg('description', 'avatar', user.username).replace(user.username.slice(0, -1) + "s's", user.username + "'")
+            description: i18n.msg('description', 'avatar', user.username, lang).replace(user.username.slice(0, -1) + "s's", user.username + "'")
         }
     });
 };
@@ -421,21 +421,21 @@ OpalBot.commands.peasants.me = message => {
 };
 
 OpalBot.commands.peasants.pong = 'ping';
-OpalBot.commands.peasants.ping = (message, content) => {
+OpalBot.commands.peasants.ping = (message, content, lang) => {
     var ping = message.content.indexOf('ping') + 1 || 1000,
     pong = message.content.indexOf('pong') + 1 || 1001,
     d1 = Date.now();
-    message.reply(ping < pong ? i18n.msg('pong', 'ping') : i18n.msg('ping', 'ping')).then(msg => {
+    message.reply(ping < pong ? i18n.msg('pong', 'ping', lang) : i18n.msg('ping', 'ping', lang)).then(msg => {
         var latency = Date.now() - d1;
         if (!msg.editable) {
-            message.channel.send(i18n.msg('result', 'ping', latency));
+            message.channel.send(i18n.msg('result', 'ping', latency, lang));
             return;
         }
-        msg.edit(msg.content + '\n' + i18n.msg('result', 'ping', latency));
+        msg.edit(msg.content + '\n' + i18n.msg('result', 'ping', latency, lang));
     });
 };
 
-OpalBot.commands.peasants.runtime = message => {
+OpalBot.commands.peasants.runtime = (message, content, lang) => {
     var f = Math.floor,
     s = f(client.uptime / 1000),
     m = f(s / 60),
@@ -453,20 +453,20 @@ OpalBot.commands.peasants.runtime = message => {
         OpalBot.v,
         ...a.map(n => o[n])
     ],
-    str = i18n.msg(k, 'runtime', ...p);
+    str = i18n.msg(k, 'runtime', ...p, lang);
     message.channel.send(str);
 };
 
 OpalBot.commands.peasants.status = 'test';
-OpalBot.commands.peasants.test = message => {
-    message.reply(i18n.msg('online', 'test'));
+OpalBot.commands.peasants.test = (message, content, lang) => {
+    message.reply(i18n.msg('online', 'test', lang));
 };
 
-OpalBot.commands.peasants.akinator = (message, content) => {
+OpalBot.commands.peasants.akinator = (message, content, lang) => {
     var ref = OpalBot.commands.peasants.akinator,
     id = message.author.id,
     mode = 'start',
-    close = i18n.msg('close', 'akinator');
+    close = i18n.msg('close', 'akinator', lang);
     if (content.slice(0, close.length) == close) mode = close;
     if (mode == close) {
         if (ref.sessions[id]) {
@@ -476,40 +476,39 @@ OpalBot.commands.peasants.akinator = (message, content) => {
                 user: message.author.id,
                 channel: message.channel.id
             });
-            message.channel.send(i18n.msg('session-closed', 'akinator'));
+            message.channel.send(i18n.msg('session-closed', 'akinator', lang));
         } else {
-            message.channel.send(i18n.msg('no-session-open', 'akinator'));
+            message.channel.send(i18n.msg('no-session-open', 'akinator', lang));
         }
         return;
     }
     ref.sessions = ref.sessions || {};
     if (ref.sessions[id]) {
-        message.channel.send(i18n.msg('session-open', 'akinator'));
+        message.channel.send(i18n.msg('session-open', 'akinator', lang));
         return;
     }
     request('http://api-en3.akinator.com/ws/new_session?partner=1&player=' + message.author.username, (err, r, body) => {
         if (err) {
-            message.channel.send(i18n.msg('server-error', 'akinator'));
+            message.channel.send(i18n.msg('server-error', 'akinator', lang));
             return;
         }
         var json = JSON.parse(body);
-        //message.channel.send('```' + JSON.stringify(json, null, 2) + '```');
         if (json.completion != 'OK') {
-            message.channel.send(i18n.msg('unexpected-code', 'akinator', json.completion));
+            message.channel.send(i18n.msg('unexpected-code', 'akinator', json.completion, lang));
             return;
         }
         ref.sessions[id] = json.parameters.identification;
-        OpalBot.commands.peasants.akinator.ask(message, json.parameters.step_information, json.parameters.identification);
+        OpalBot.commands.peasants.akinator.ask(message, json.parameters.step_information, json.parameters.identification, lang);
     });
 };
 
-OpalBot.commands.peasants.akinator.ask = async (message, step, session) => {
+OpalBot.commands.peasants.akinator.ask = async (message, step, session, lang) => {
     var split = [
-        i18n.msg('1', 'akinator').split('|'), // Yes
-        i18n.msg('2', 'akinator').split('|'), // No
-        i18n.msg('3', 'akinator').split('|'), // I don't know
-        i18n.msg('4', 'akinator').split('|'), // Probably
-        i18n.msg('5', 'akinator').split('|')  // Probably not
+        i18n.msg('1', 'akinator', lang).split('|'), // Yes
+        i18n.msg('2', 'akinator', lang).split('|'), // No
+        i18n.msg('3', 'akinator', lang).split('|'), // I don't know
+        i18n.msg('4', 'akinator', lang).split('|'), // Probably
+        i18n.msg('5', 'akinator', lang).split('|')  // Probably not
     ],
     triggers = [].concat(...split),
     last_bot_message = null,
@@ -527,16 +526,16 @@ OpalBot.commands.peasants.akinator.ask = async (message, step, session) => {
                 `http://api-en3.akinator.com/ws/answer?step=${step.step}&answer=${r}&session=${session.session}&signature=${session.signature}`, 
                 (err, r, body) => {
                 if (err) {
-                    message.channel.send(i18n.msg('server-error', 'akinator'));
+                    message.channel.send(i18n.msg('server-error', 'akinator', lang));
                     return;
                 }
                 var json = JSON.parse(body);
                 if (json.completion != 'OK') {
                     if (json.completion == 'KO - TIMEOUT') {
-                        message.channel.send(i18n.msg('timed-out', 'akinator'));
+                        message.channel.send(i18n.msg('timed-out', 'akinator', lang));
                         return;
                     }
-                    message.channel.send(i18n.msg('unexpected-code', 'akinator', json.completion));
+                    message.channel.send(i18n.msg('unexpected-code', 'akinator', json.completion, lang));
                     delete OpalBot.commands.peasants.akinator.sessions[message.author.id];
                     return;
                 }
@@ -546,7 +545,7 @@ OpalBot.commands.peasants.akinator.ask = async (message, step, session) => {
         },
         timeout: 60000,
         ontimeout: () => {
-            message.channel.send(i18n.msg('timed-out', 'akinator'));
+            message.channel.send(i18n.msg('timed-out', 'akinator', lang));
             delete OpalBot.commands.peasants.akinator.sessions[message.author.id];
             OpalBot.unprefixed.remove({
                 type: 'akinator',
@@ -556,41 +555,41 @@ OpalBot.commands.peasants.akinator.ask = async (message, step, session) => {
         }
     });
     if (blocked === true) {
-        message.channel.send(i18n.msg('blocked', 'akinator'));
+        message.channel.send(i18n.msg('blocked', 'akinator', lang));
     } else {
         var reference = split.map((a, i) => {
             return a.join('|') + '=' + step.answers[i].answer;
         });
         reference = '```' + reference.join('\n') + '```';
-        last_bot_message = await message.channel.send(i18n.msg('question', 'akinator', Number(step.step) + 1, step.question) + reference);
+        last_bot_message = await message.channel.send(i18n.msg('question', 'akinator', Number(step.step) + 1, step.question, lang) + reference);
     }
 };
 
-OpalBot.commands.kick.kick = (message, reason) => {
+OpalBot.commands.kick.kick = (message, reason, lang) => {
     var user = message.mentions.users.filter(u => u.id != client.user.id).first();
     if (!user) {
-        message.channel.send(i18n.msg('no-mention', 'kick'));
+        message.channel.send(i18n.msg('no-mention', 'kick', lang));
         return;
     }
     var guild_user = message.guild.members.find(member => member.user.id == user.id),
     reason = reason.replace(`<@${user.id}>`, '').trim();
     if (!guild_user.kickable) {
-        message.channel.send(i18n.msg('cannot-kick', 'kick', user.username));
+        message.channel.send(i18n.msg('cannot-kick', 'kick', user.username, lang));
         return;
     }
-    message.channel.send(i18n.msg('kicking' + (reason ? 'with-reason' : ''), 'kick', user.username, reason));
+    message.channel.send(i18n.msg('kicking' + (reason ? 'with-reason' : ''), 'kick', user.username, reason, lang));
     guild_user.kick(reason).then(() => {
-        message.channel.send(i18n.msg('success', 'kick', user.username));
+        message.channel.send(i18n.msg('success', 'kick', user.username, lang));
     }).catch(err => {
-        message.channel.send(i18n.msg('failure', 'kick', user.username, err));
+        message.channel.send(i18n.msg('failure', 'kick', user.username, err, lang));
         console.log('Error (commands.admin.kick):', err);
     });
 };
 
-OpalBot.commands.ban.ban = (message, reason) => {
+OpalBot.commands.ban.ban = (message, reason, lang) => {
     var user = message.mentions.users.filter(u => u.id != client.user.id).first();
     if (!user) {
-        message.channel.send(i18n.msg('no-mention', 'ban'));
+        message.channel.send(i18n.msg('no-mention', 'ban', lang));
         return;
     }
     var guild_user = message.guild.members.find(member => member.user.id == user.id),
@@ -599,11 +598,11 @@ OpalBot.commands.ban.ban = (message, reason) => {
     reason = split.slice(1).join('|').trim(),
     ban;
     if (!guild_user.bannable) {
-        message.channel.send(i18n.msg('cannot-ban', 'ban', user.username));
+        message.channel.send(i18n.msg('cannot-ban', 'ban', user.username, lang));
         return;
     }
     if (reason && !isNaN(days)) {
-        message.channel.send(i18n.msg('banning', 'ban', user.username));
+        message.channel.send(i18n.msg('banning', 'ban', user.username, lang));
         ban = guild_user.ban({
             days: Number(days),
             reason: reason
@@ -613,19 +612,19 @@ OpalBot.commands.ban.ban = (message, reason) => {
     }
     ban.then(() => {
         message.channel.send(
-            i18n.msg('success', 'ban', user.username) +
-            (days && !isNaN(days) ? '\n' + i18n.msg('deleted-since', 'ban', days) : '') + 
-            (reason || isNaN(days) ? '\n' + i18n.msg('reason', 'ban', reason || days) : '')
+            i18n.msg('success', 'ban', user.username, lang) +
+            (days && !isNaN(days) ? '\n' + i18n.msg('deleted-since', 'ban', days, lang) : '') + 
+            (reason || isNaN(days) ? '\n' + i18n.msg('reason', 'ban', reason || days, lang) : '')
         );
     }).catch(err => {
-        message.channel.send(i18n.msg('failure', 'ban', user.username, err));
+        message.channel.send(i18n.msg('failure', 'ban', user.username, err, lang));
         console.log('Error (commands.admin.ban):', err);
     });
 };
 
-OpalBot.commands.ban.unban = async (message, content) => {
+OpalBot.commands.ban.unban = async (message, content, lang) => {
     if (!content) {
-        message.reply(i18n.msg('no-name', 'unban'));
+        message.reply(i18n.msg('no-name', 'unban', lang));
         return;
     }
     var split = content.split('#'),
@@ -634,26 +633,26 @@ OpalBot.commands.ban.unban = async (message, content) => {
     bans = await message.guild.fetchBans(),
     filtered = bans.filter(n => n.username == name && (id ? n.discriminator == id : true));
     if (!filtered.size) {
-        message.reply(i18n.msg('no-matches' + (id ? 'with-discriminator' : ''), 'unban', name, id));
+        message.reply(i18n.msg('no-matches' + (id ? 'with-discriminator' : ''), 'unban', name, id, lang));
     } else if (filtered.size == 1) {
         message.guild.unban(filtered.first()).then(user => {
-            message.channel.send(i18n.msg('success', 'unban', user.username));
+            message.channel.send(i18n.msg('success', 'unban', user.username, lang));
         }).catch(err => {
-            message.channel.send(i18n.msg('failure', 'unban', username, err));
+            message.channel.send(i18n.msg('failure', 'unban', username, err, lang));
             console.log('Error (commands.admin.ban):', err);
         });
     } else {
         var users = [];
         filtered.forEach(n => users.push(n));
-        message.channel.send(i18n.msg('multiple-matches', 'unban', users.join(' ')));
+        message.channel.send(i18n.msg('multiple-matches', 'unban', users.join(' '), lang));
     }
 };
 
 OpalBot.commands.peasants.prefixes = 'prefix'
-OpalBot.commands.peasants.prefix = async (message, content) => {
-    var list = i18n.msg('list', 'prefix'),
-    add = i18n.msg('add', 'prefix'),
-    remove = i18n.msg('remove', 'prefix'),
+OpalBot.commands.peasants.prefix = async (message, content, lang) => {
+    var list = i18n.msg('list', 'prefix', lang),
+    add = i18n.msg('add', 'prefix', lang),
+    remove = i18n.msg('remove', 'prefix', lang),
     mode = list,
     prefixes = OpalBot.prefixes[message.guild.id] || OpalBot.prefixes.default;
     if (content.slice(0, add.length) == add) mode = add;
@@ -692,7 +691,7 @@ OpalBot.commands.peasants.prefix = async (message, content) => {
             var arr = OpalBot.prefixes[message.guild.id],
             i = arr.indexOf(content);
             if (i != -1) {
-                message.reply(i18n.msg('prefix-already-in-use', 'prefix'));
+                message.reply(i18n.msg('prefix-already-in-use', 'prefix', lang));
                 return;
             }
             arr.push(content);
@@ -706,15 +705,15 @@ OpalBot.commands.peasants.prefix = async (message, content) => {
                     }
                 }
             }
-            message.reply(i18n.msg('prefix-added', 'prefix', content));
+            message.reply(i18n.msg('prefix-added', 'prefix', content, lang));
             break;
         case remove:
             if (!message.member.permissions.serialize().ADMINISTRATOR) {
-                message.reply(i18n.msg('missing-permissions', 'prefix'));
+                message.reply(i18n.msg('missing-permissions', 'prefix', lang));
                 return;
             }
             if (!content.length) {
-                message.reply(i18n.msg('no-prefix-add', 'prefix'));
+                message.reply(i18n.msg('no-prefix-add', 'prefix', lang));
                 return;
             }
             if (!OpalBot.prefixes[message.guild.id]) {
@@ -733,7 +732,7 @@ OpalBot.commands.peasants.prefix = async (message, content) => {
             var arr = OpalBot.prefixes[message.guild.id],
             i = arr.indexOf(content);
             if (i == -1) {
-                message.reply(i18n.msg('no-prefix-found', 'prefix'));
+                message.reply(i18n.msg('no-prefix-found', 'prefix', lang));
                 return;
             }
             arr.splice(i, 1);
@@ -747,37 +746,37 @@ OpalBot.commands.peasants.prefix = async (message, content) => {
                     }
                 }
             }
-            message.reply(i18n.msg('prefix-removed', 'prefix', content));
+            message.reply(i18n.msg('prefix-removed', 'prefix', content, lang));
             break;
     }
 };
 
-OpalBot.commands.admin.prune = async (message, content) => {
+OpalBot.commands.admin.prune = async (message, content, lang) => {
     var count;
     if (!content) {
         content = 7;
     } else if (isNaN(count = parseInt(content, 10))) {
-        message.reply(i18n.msg('invalid', 'prune'));
+        message.reply(i18n.msg('invalid', 'prune', lang));
         return;
     } else if (count == 0) {
-        message.reply(i18n.msg('non-zero', 'prune'));
+        message.reply(i18n.msg('non-zero', 'prune', lang));
         return;
     }
     try {
         var pruned = await message.guild.pruneMembers(count, true);
     } catch(e) {
-        message.channel.send(i18n.msg('missing-permissions', 'prune'));
+        message.channel.send(i18n.msg('missing-permissions', 'prune', lang));
         return;
     }
     if (!pruned) {
-        message.reply(i18n.msg('lonely', 'prune'));
+        message.reply(i18n.msg('lonely', 'prune', lang));
         return;
     }
     var blocked = OpalBot.unprefixed.push({
         type: 'prune',
         triggers: [
-            i18n.msg('confirm', 'main'),
-            i18n.msg('cancel', 'main')
+            i18n.msg('confirm', 'main', lang),
+            i18n.msg('cancel', 'main', lang)
         ],
         user: message.author.id,
         channel: message.channel.id,
@@ -786,31 +785,31 @@ OpalBot.commands.admin.prune = async (message, content) => {
         callback: async (message, index) => {
             if (index == 0) { // confirm
                 try {
-                    message.channel.send(i18n.msg('pruning', 'prune'));
+                    message.channel.send(i18n.msg('pruning', 'prune', lang));
                     var pruned = await message.guild.pruneMembers(count);
-                    message.channel.send(i18n.msg('pruned', 'prune', pruned));
+                    message.channel.send(i18n.msg('pruned', 'prune', pruned, lang));
                 } catch(e) {
-                    message.channel.send(i18n.msg('missing-permissions', 'prune'));
+                    message.channel.send(i18n.msg('missing-permissions', 'prune', lang));
                 }
             } else { // cancel
-                message.channel.send(i18n.msg('cancelled', 'prune'));
+                message.channel.send(i18n.msg('cancelled', 'prune', lang));
             }
         },
         ontimeout: () => {
-            message.channel.send(i18n.msg('timed-out', 'prune'));
+            message.channel.send(i18n.msg('timed-out', 'prune', lang));
         }
     });
     if (blocked === true) {
-        message.channel.send(i18n.msg('blocked', 'prune'));
+        message.channel.send(i18n.msg('blocked', 'prune', lang));
     } else {
-        message.channel.send(i18n.msg('prompt', 'prune', pruned));
+        message.channel.send(i18n.msg('prompt', 'prune', pruned, lang));
     }
 };
 
 OpalBot.commands.admin.bulkdelete = 'purge';
-OpalBot.commands.admin.purge = async (message, content) => {
+OpalBot.commands.admin.purge = async (message, content, lang) => {
     if (isNaN(parseInt(content, 10))) {
-        message.reply(i18n.msg('usage', 'purge'));
+        message.reply(i18n.msg('usage', 'purge', lang));
         return;
     }
     var count = parseInt(content, 10),
@@ -820,7 +819,7 @@ OpalBot.commands.admin.purge = async (message, content) => {
         isId = true;
         member = member.id;
     }
-    message.channel.send(i18n.msg('loading', 'purge'));
+    message.channel.send(i18n.msg('loading', 'purge', lang));
     var ids = new Set(),
     messages = await OpalBot.util.getChannelMessages(message.channel, null, coll => {
         var l = coll.filter(model => {
@@ -832,7 +831,7 @@ OpalBot.commands.admin.purge = async (message, content) => {
         return member ? (isId ? model.author.id == member : model.author.username + '#' + model.author.discriminator == member) : true;
     });
     if (!messages.size) {
-        message.channel.send(i18n.msg('no-messages', 'purge'));
+        message.channel.send(i18n.msg('no-messages', 'purge', lang));
         return;
     } else if (messages.size > count) {
         var i = messages.size - count;
@@ -842,7 +841,7 @@ OpalBot.commands.admin.purge = async (message, content) => {
     }
     messages = messages.filter(msg => msg.deletable); // This is done separately to the main .filter to provide a helpful error message
     if (!messages.size) {
-        message.channel.send(i18n.msg('missing-permissions', 'purge'));
+        message.channel.send(i18n.msg('missing-permissions', 'purge', lang));
         return;
     }
     messages.forEach(model => ids.add(model.author.id));
@@ -850,8 +849,8 @@ OpalBot.commands.admin.purge = async (message, content) => {
     blocked = OpalBot.unprefixed.push({
         type: 'akinator',
         triggers: [
-            i18n.msg('confirm', 'main'),
-            i18n.msg('cancel', 'main')
+            i18n.msg('confirm', 'main', lang),
+            i18n.msg('cancel', 'main', lang)
         ],
         user: message.author.id,
         channel: message.channel.id,
@@ -860,28 +859,28 @@ OpalBot.commands.admin.purge = async (message, content) => {
         callback: async (message, index) => {
             if (index == 0) { // confirm
                 try {
-                    deletionStack.push(message, await message.channel.send(i18n.msg('deleting', 'purge')));
+                    deletionStack.push(message, await message.channel.send(i18n.msg('deleting', 'purge', lang)));
                     for (var msg of messages.values()) {
                         await msg.delete();
                     }
                     deletionStack.forEach(msg => msg.delete());
-                    message.channel.send(i18n.msg('deleted', 'purge', messages.size));
+                    message.channel.send(i18n.msg('deleted', 'purge', messages.size, lang));
                 } catch(e) {
-                    message.channel.send(i18n.msg('missing-permissions', 'purge'));
+                    message.channel.send(i18n.msg('missing-permissions', 'purge', lang));
                     console.log(e);
                 }
             } else { // cancel
-                message.channel.send(i18n.msg('cancelled', 'purge'));
+                message.channel.send(i18n.msg('cancelled', 'purge', lang));
             }
         },
         ontimeout: () => {
-            message.channel.send(i18n.msg('timed-out', 'purge'));
+            message.channel.send(i18n.msg('timed-out', 'purge', lang));
         }
     });
     if (blocked === true) {
-        message.channel.send(i18n.msg('blocked', 'purge'));
+        message.channel.send(i18n.msg('blocked', 'purge', lang));
     } else {
-        deletionStack.push(await message.channel.send(i18n.msg('prompt', 'purge', messages.size, ids.size)));
+        deletionStack.push(await message.channel.send(i18n.msg('prompt', 'purge', messages.size, ids.size, lang)));
     }
 };
 

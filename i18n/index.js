@@ -4,8 +4,9 @@ fs.readdirSync('./i18n')
     .filter(file => file.endsWith('.json'))
     .forEach(title => exports[title.slice(0, -5)] = require('./' + title));
 
-exports.msg = (message, obj, ...vars) => {
-    var local = i18n[vars[vars.length - 1]],
+exports.msg = function(message, obj, ...vars) {
+    var i18n = this,
+    local = exports[vars[vars.length - 1]],
     ref = obj;
     vars = vars.slice(0, -1);
     if (typeof obj == 'string') {

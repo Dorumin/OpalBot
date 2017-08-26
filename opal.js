@@ -45,15 +45,6 @@ client.on('ready', async () => {
         };
     }
     OpalBot.prefixes = (await OpalBot.db).data.prefixes;
-    OpalBot.db = {
-        name: 'data',
-        value: {
-            ...(await OpalBot.db).data,
-            languages: {
-                default: 'en'
-            }
-        }
-    }
     console.log(i18n.msg('online', 'main', OpalBot.v));
     client.guilds
         .get('344422448403316748').channels

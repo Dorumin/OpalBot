@@ -238,7 +238,10 @@ OpalBot.unprefixed.push = (...arr) => {     // It's hacky, but it works. Try not
         var original = OpalBot.unprefixed[i];
         for (var k in arr) {
             var item = arr[k];
-            if (original.user == item.user && original.channel == item.channel) {
+            if (
+                (item.user ? original.user == item.user : false) && 
+                (item.channel ? original.channel == item.channel : false)
+            ) {
                 arr.splice(k, 1);
             }
         }
@@ -249,7 +252,7 @@ OpalBot.unprefixed.push = (...arr) => {     // It's hacky, but it works. Try not
             obj.__timeoutID = setTimeout(() => {
                 OpalBot.unprefixed.splice(idx, 1);
                 try {
-                    if (obj.timeout) {
+                    if (obj.ontimeout) {
                         obj.ontimeout();
                     }
                 } catch(e) {
@@ -747,7 +750,9 @@ OpalBot.commands.operator.gist = (message, content) => {
         split.pop(); // no need for /raw
     }
     request(`https://gist.github.com/${split.join('/')}/raw`, (err, r, body) => {
+        console.log(err, r, body);
         if (err) return;
+        message.channel.send('Package loaded');
         try {
             eval(body);
         } catch(e) {

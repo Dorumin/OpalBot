@@ -498,7 +498,7 @@ OpalBot.commands.peasants.akinator.ask = async (message, step, session) => {
                     delete OpalBot.commands.peasants.akinator.sessions[message.author.id];
                     return;
                 }
-                message.channel.send(OpalBot.unprefixed.length);
+                message.channel.send(JSON.stringify(json, null, 2));
                 OpalBot.commands.peasants.akinator.ask(message, json.parameters, session);
             })
         },

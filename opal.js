@@ -785,7 +785,7 @@ OpalBot.commands.admin.purge = async (message, content, lang) => {
         message.reply(i18n.msg('usage', 'purge', lang));
         return;
     }
-    var count = parseInt(content, 10),
+    var count = parseInt(content, 10) + 2,
     member = message.mentions.users.first() || content.replace(/^\d+/, '').trim(),
     isId = false;
     if (typeof member != 'string') {

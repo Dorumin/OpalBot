@@ -284,7 +284,7 @@ OpalBot.unprefixed.push = (...arr) => {     // It's hacky, but it works. Try not
     }
     OpalBot.unprefixed = OpalBot.unprefixed.concat(arr);
     for (var k in obj) { // Port methods
-        if (isNaN(k) {
+        if (isNaN(k)) {
             OpalBot.unprefixed[k] = obj[k];
         }
     }

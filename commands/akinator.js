@@ -6,7 +6,6 @@ const rl = readline.createInterface({
 });
 
 class Akinator {
-    
     get(url) {
         return new Promise((res, rej) => {
             request(url, (err, r, body) => {
@@ -86,7 +85,8 @@ class Akinator {
     }
 }
 
-OpalBot.commands.peasants.akinator = async function(message, content, lang) {
+module.exports.peasants = {};
+module.exports.peasants.akinator = async function(message, content, lang) {
     this.sessions = this.sessions || [];
     var id = message.author.id,
     mode = 'start',

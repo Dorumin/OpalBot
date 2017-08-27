@@ -936,7 +936,7 @@ OpalBot.commands.operator.gist = (message, content) => {
 };
 
 // Commands
-require('./commands');
+console.log(require('./commands'));
 
 OpalBot.commands.operator.script = (message, content) => {
     request(content, (err, r, body) => {

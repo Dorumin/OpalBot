@@ -451,7 +451,7 @@ OpalBot.commands.peasants.pick = (message, content, lang) => {
     }
     var split = content.split(i18n.msg('delimiter', 'pick', lang));
     if (split.length == 1) {
-        message.reply(i18n.msg('missing', 'pick', lang));
+        message.reply(i18n.msg('one', 'pick', lang));
     } else {
         var randum = split[Math.floor(Math.random() * split.length)].replace(/(\\\*)|\*/g, (s, c) => c ? s : '\\*');
         message.reply(i18n.msg('result', 'pick', randum, lang));

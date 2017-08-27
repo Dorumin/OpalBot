@@ -129,7 +129,7 @@ module.exports.peasants.akinator = async function(message, content, lang, i18n, 
     },
     akinator = new Akinator(),
     q = (await akinator.init(lang, message.author.id)).step_information,
-    responses = i18n.msg('responses', 'akinator').split('/'),
+    responses = i18n.msg('responses', 'akinator').split('/');
     message.channel.send(i18n.msg('question', 'akinator', q.step, q.question, lang) + '\n[' + responses.join('/') + ']');
     var res = await ask({
         triggers: responses,

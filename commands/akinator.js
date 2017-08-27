@@ -125,8 +125,9 @@ module.exports.peasants.akinator = async function(message, content, lang, i18n) 
         });
     },
     akinator = new Akinator(),
-    q = akinator.init();
-    var res = await ask('This is a test question.');
+    q = await akinator.init(lang, message.author.id);
+    message.channel.send('This is a test question.');
+    var res = await ask({trigger: 'test response'});
     console.log(res);
 };
 

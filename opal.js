@@ -101,7 +101,7 @@ client.on('message', async (message) => {
     }
     // Unprefixed triggers, usually used by confirm and cancel commands.
     OpalBot.unprefixed.forEach(function(obj, idx) {
-        var cases = obj.triggers || [obj.trigger],
+        var cases = (obj.triggers || [obj.trigger]).map(hopefully_str => String(hopefully_str)),
         users = obj.users || [obj.user].filter(Boolean);
         if (cases.length == 1 && cases[0] == undefined) {
             console.log('Invalid unprefixed command: missing trigger');

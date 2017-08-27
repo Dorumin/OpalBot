@@ -140,7 +140,7 @@ module.exports.peasants.akinator = async function(message, content, lang, i18n, 
         user: message.author.id
     }),
     index = res.index,
-    answer = isNaN(responses[index]) ? index - responses.length / 2 : responses[index] - 1;
+    answer = isNaN(responses[index]) ? index - 5 : responses[index] - 1;
     responses = responses.concat([i18n.msg('back', 'akinator'), 1, 2, 3, 4, 5, 6]);
     message.channel.send('Caught response, answer index: ' + answer + '\nTriggers: ' + responses.join('|'));
 };

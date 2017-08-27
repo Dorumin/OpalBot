@@ -86,7 +86,7 @@ class Akinator {
     }
 }
 
-OpalBot.commands.peasants.akinator = function(message, content, lang) {
+OpalBot.commands.peasants.akinator = async function(message, content, lang) {
     this.sessions = this.sessions || [];
     var id = message.author.id,
     mode = 'start',

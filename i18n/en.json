@@ -112,5 +112,15 @@
         "4": "4|probably",
         "5": "5|probably not",
         "question": "Question N°$1: $2"
+    },
+    "flip": {
+        "tails": "$1 flipped **tails**!",
+        "heads": "$1 flipped **heads**!"
+    },
+    "pick": {
+        "delimiter": ";",
+        "missing": "I don't pick anything!",
+        "one": "Separate your options with `;`!",
+        "result": "I pick **$1**!"
     }
 }

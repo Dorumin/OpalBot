@@ -374,6 +374,7 @@ OpalBot.commands.peasants.hello = (message) => {
     }
 };
 
+OpalBot.commands.peasants.a = 'avatar';
 OpalBot.commands.peasants.avi = 'avatar';
 OpalBot.commands.peasants.avatar = (message, content, lang) => {
     var user = message.mentions.users.first() || message.author;
@@ -436,6 +437,27 @@ OpalBot.commands.peasants.test = (message, content, lang) => {
     message.reply(i18n.msg('online', 'test', lang));
 };
 
+OpalBot.commands.peasants.coinflip = 'flip';
+OpalBot.commands.peasants.flip = (message, content, lang) {
+    var result = Math.round(Math.random()) == 1;
+    message.reply(i18n.msg(result ? 'heads' : 'tails', 'flip', `<@${message.author.id}>`, lang));
+};
+
+OpalBot.commands.peasants.choose = 'pick';
+OpalBot.commands.peasants.pick = (message, content, lang) => {
+    if (!content) {
+        message.reply(i18n.msg('missing', 'pick', lang));
+        return;
+    }
+    var split = content.split(i18n.msg('delimiter', 'pick', lang));
+    if (split.length == 1) {
+        message.reply(i18n.msg('missing', 'pick', lang));
+    } else {
+        var randum = split[Math.floor(Math.random() * split.length)].replace(/(\\\*)|\*/g, (s, c) => c ? s : '\\*');
+        message.reply(i18n.msg('result', 'pick', randum, lang));
+    }
+};
+
 OpalBot.commands.peasants.akinator = (message, content, lang) => {
     var ref = OpalBot.commands.peasants.akinator,
     id = message.author.id,
@@ -493,6 +515,7 @@ OpalBot.commands.peasants.akinator.ask = async (message, step, session, lang) =>
         user: message.author.id,
         caseinsensitive: true,
         callback: (message, index) => {
+            last_bot_message.edit(last_bot_message.content.replace(/```[\s\S]+```/, '').trim());
             var trigger = triggers[index],
             match = split.find(a => a.includes(trigger)),
             r = split.indexOf(match);

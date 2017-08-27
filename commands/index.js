@@ -9,5 +9,6 @@ fs.readdirSync('./commands')
             module.exports[key] = {
                 ...module.exports[key],
                 ...commands[key]
+            };
         }
     });

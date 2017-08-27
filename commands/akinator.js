@@ -131,6 +131,7 @@ module.exports.peasants.akinator = async function(message, content, lang, i18n, 
     q = await akinator.init(lang, message.author.id);
     message.channel.send('This is a test question.');
     var res = await ask({trigger: 'test response', channel: message.channel.id, user: message.author.id});
+    message.channel.send('Caught response');
     console.log(res);
 };
 

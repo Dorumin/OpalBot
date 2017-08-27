@@ -128,14 +128,20 @@ module.exports.peasants.akinator = async function(message, content, lang, i18n, 
         });
     },
     akinator = new Akinator(),
-    q = await akinator.init(lang, message.author.id);
-    message.channel.send(JSON.stringify(q, null, 2));
-    var res = await ask({triggers: ['r1', 'r2'], channel: message.channel.id, user: message.author.id});
+    q = (await akinator.init(lang, message.author.id)).step_information,
+    responses = i18n.msg('responses', 'akinator').split('/'),
+    message.channel.send(i18n.msg('question', 'akinator', q.step, q.question, lang) + '\n[' + responses.join('/') + ']');
+    var res = await ask({
+        triggers: responses,
+        channel: message.channel.id,
+        user: message.author.id
+    });
+    responses.push(i18n.msg('back', 'akinator'));
     message.channel.send('Caught response');
     console.log(res.index);
 };
 
-module.exports.peasants.akinator.Class = Akinator;
+//module.exports.peasants.akinator.Class = Akinator;
 
 /*
 var ask = q => new Promise(res => rl.question(q, ans => res(ans)));

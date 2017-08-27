@@ -86,7 +86,7 @@ class Akinator {
 }
 
 module.exports.peasants = {};
-module.exports.peasants.akinator = async function(message, content, lang, i18n) {
+module.exports.peasants.akinator = async function(message, content, lang, i18n, OpalBot) {
     this.sessions = this.sessions || [];
     var id = message.author.id,
     mode = 'start',

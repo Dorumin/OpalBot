@@ -65,6 +65,9 @@ class Akinator {
         });
     }
     
+    back(step) {
+    }
+    
     guess(step) {
         return new Promise(async (res, rej) => {
             if (isNaN(step)) {
@@ -132,13 +135,13 @@ module.exports.peasants.akinator = async function(message, content, lang, i18n, 
     responses = i18n.msg('responses', 'akinator').split('/');
     message.channel.send(i18n.msg('question', 'akinator', q.step, q.question, lang) + '\n[' + responses.join('/') + ']');
     var res = await ask({
-        triggers: responses,
+        triggers: responses.concat([1,2,3,4,5]),
         channel: message.channel.id,
         user: message.author.id
-    });
-    responses.push(i18n.msg('back', 'akinator'));
-    message.channel.send('Caught response');
-    console.log(res.index);
+    }),
+    answer = isNaN(responses[index]) ? index : responses[index] - 1;
+    responses = responses.concat([i18n.msg('back', 'akinator'), 1, 2, 3, 4, 5, 6]);
+    message.channel.send('Caught response, answer index: ' + ans + '\nTriggers: ' + responses.join('|'));
 };
 
 //module.exports.peasants.akinator.Class = Akinator;

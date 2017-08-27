@@ -281,7 +281,11 @@ OpalBot.unprefixed.remove = (obj) => {
     };
     var i = OpalBot.unprefixed.findIndex(fn);
     if (i == -1) return false;
-    return OpalBot.unprefixed.splice(i, 1);
+    var elem = OpalBot.unprefixed.splice(i, 1)[0]
+    if (elem.__timeoutID) {
+        clearTimeout(elem.__timeoutID);
+    }
+    return elem;
 };
 
 

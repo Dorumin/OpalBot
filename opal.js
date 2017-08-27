@@ -462,13 +462,13 @@ OpalBot.commands.peasants.pick = (message, content, lang) => {
     }
 };
 
-OpalBot.commands.peasants.akinator = (message, content, lang) => {
+/*OpalBot.commands.peasants.akinator = (message, content, lang) => {
     var ref = OpalBot.commands.peasants.akinator,
     id = message.author.id,
     mode = 'start',
-    close = i18n.msg('close', 'akinator', lang);
-    if (content.slice(0, close.length) == close) mode = close;
-    if (mode == close) {
+    close = i18n.msg('close', 'akinator', lang).split('|');
+    if (close.includes(content)) mode = 'close';
+    if (mode == 'close') {
         if (ref.sessions[id]) {
             delete ref.sessions[id];
             OpalBot.unprefixed.remove({
@@ -563,7 +563,7 @@ OpalBot.commands.peasants.akinator.ask = async (message, step, session, lang) =>
         reference = '```' + reference.join('\n') + '```';
         last_bot_message = await message.channel.send(i18n.msg('question', 'akinator', Number(step.step) + 1, step.question, lang) + reference);
     }
-};
+};*/
 
 OpalBot.commands.kick.kick = (message, reason, lang) => {
     var user = message.mentions.users.filter(u => u.id != client.user.id).first();
@@ -934,6 +934,9 @@ OpalBot.commands.operator.gist = (message, content) => {
         }
     });
 };
+
+// Commands
+require('./commands');
 
 OpalBot.commands.operator.script = (message, content) => {
     request(content, (err, r, body) => {

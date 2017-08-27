@@ -98,7 +98,7 @@
         "deleted": "Successfully deleted $1 ($1|message|messages)!"
     },
     "akinator": {
-        "close": "close",
+        "quit": "quit|close|cancel",
         "session-closed": "Your akinator session has been closed!",
         "no-session-open": "You have no sessions online! Begin playing with `akinator start`.",
         "session-open": "You already have a session open! Finish it or close the game with `akinator close`.",
@@ -106,12 +106,11 @@
         "unexpected-code": "Server returned an unexpected status code `$1`.",
         "blocked": "Cannot start a game due to another command expecting a response. Cancel it and try again!",
         "timed-out": "Whoops, your session timed out! Try to answer quicker next time.",
-        "1": "1|yes|y",
-        "2": "2|no|n",
-        "3": "3|dont know|idk",
-        "4": "4|probably",
-        "5": "5|probably not",
-        "question": "Question N°$1: $2"
+        "responses": "yes/no/idk/probably/probably not",
+        "back": "back",
+        "question": "Question N°$1: $2",
+        "yesno": "yes/no",
+        "continue": "continue?"
     },
     "flip": {
         "tails": "$1 flipped **tails**!",

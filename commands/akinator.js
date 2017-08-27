@@ -47,6 +47,7 @@ class Akinator {
     }
     
     ans(step, answer) {
+        if (answer == 5) return this.back(step);
         return new Promise(async (res, rej) => {
             if (isNaN(answer) || isNaN(step)) { // Because TypeScript is too lame
                 rej('PARAMS NEED TO BE INT MATE, LEARN YOUR APIS');
@@ -66,6 +67,9 @@ class Akinator {
     }
     
     back(step) {
+        return new Promise(async (res, rej) => {
+            
+        });
     }
     
     guess(step) {
@@ -125,24 +129,54 @@ module.exports.peasants.akinator = async function(message, content, lang, i18n, 
                 },
                 ...obj
             });
-            if (blocked) {
+            if (blocked === true) {
                 rej('blocked');
             }
         });
     },
     akinator = new Akinator(),
     q = (await akinator.init(lang, message.author.id)).step_information,
+    step = 0,
     responses = i18n.msg('responses', 'akinator').split('/');
     message.channel.send(i18n.msg('question', 'akinator', q.step, q.question, lang) + '\n[' + responses.join('/') + ']');
-    var res = await ask({
-        triggers: responses.concat([1,2,3,4,5]),
-        channel: message.channel.id,
-        user: message.author.id
-    }),
-    index = res.index,
-    answer = isNaN(responses[index]) ? index - 5 : responses[index] - 1;
-    responses = responses.concat([i18n.msg('back', 'akinator'), 1, 2, 3, 4, 5, 6]);
-    message.channel.send('Caught response, answer index: ' + answer + '\nTriggers: ' + responses.join('|'));
+    while (step++ < 75) {
+        try {
+            var res = await ask({
+                triggers: responses.concat([1,2,3,4,5]),
+                channel: message.channel.id,
+                user: message.author.id
+            });
+        } catch(e) {
+            if (e == 'blocked') {
+                message.channel.send(i18n.msg('blocked', 'akinator'));
+            } else if (e == 'timeout') {
+                message.channel.send(i18n.msg('timed-out', 'akinator'));
+            }
+            return;
+        }
+        if (step == 1 && responses.length == 5) {
+            responses = responses.concat([i18n.msg('back', 'akinator'), 1, 2, 3, 4, 5, 6]);
+        }
+        var index = res.index,
+        answer = isNaN(responses[index]) ? index : responses[index] - 1,
+        res = await akinator.ans(q.step, answer);
+        if (answer == 5) {
+            step--;
+        }
+        q = res;
+        console.log(res);
+        console.log(res.progression);
+        if (res.progression > 97) {
+            try {
+                var guess = await akinator.guess(q.step);
+            } catch(e) {
+                message.channel.send('Uncaught error.');
+                return;
+            }
+            message.channel.send(JSON.stringify(guess, null, 2));
+            break;
+        }
+    }
 };
 
 //module.exports.peasants.akinator.Class = Akinator;

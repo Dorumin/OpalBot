@@ -360,7 +360,8 @@ OpalBot.commands = {
     roles: {},
     permissions: {},
     webhooks: {},
-    emojis: {}
+    emojis: {},
+    ...require('./commands')
 };
 
 OpalBot.commands.peasants.hi = 'hello';
@@ -934,9 +935,6 @@ OpalBot.commands.operator.gist = (message, content) => {
         }
     });
 };
-
-// Commands
-console.log(require('./commands'));
 
 OpalBot.commands.operator.script = (message, content) => {
     request(content, (err, r, body) => {

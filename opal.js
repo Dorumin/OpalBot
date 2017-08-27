@@ -438,7 +438,7 @@ OpalBot.commands.peasants.test = (message, content, lang) => {
 };
 
 OpalBot.commands.peasants.coinflip = 'flip';
-OpalBot.commands.peasants.flip = (message, content, lang) {
+OpalBot.commands.peasants.flip = (message, content, lang) => {
     var result = Math.round(Math.random()) == 1;
     message.reply(i18n.msg(result ? 'heads' : 'tails', 'flip', `<@${message.author.id}>`, lang));
 };

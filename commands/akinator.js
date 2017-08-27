@@ -86,7 +86,7 @@ class Akinator {
 }
 
 module.exports.peasants = {};
-module.exports.peasants.akinator = async function(message, content, lang) {
+module.exports.peasants.akinator = async function(message, content, lang, i18n) {
     this.sessions = this.sessions || [];
     var id = message.author.id,
     mode = 'start',
@@ -129,6 +129,9 @@ module.exports.peasants.akinator = async function(message, content, lang) {
     var res = await ask('This is a test question.');
     console.log(res);
 };
+
+module.exports.peasants.akinator.Class = Akinator;
+
 /*
 var ask = q => new Promise(res => rl.question(q, ans => res(ans)));
 (async () => {

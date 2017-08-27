@@ -61,10 +61,10 @@ client.on('message', async (message) => {
                     try {
                         var command_fn = OpalBot.commands[role][command];
                         if (command_fn.constructor === String) {
-                            OpalBot.commands[role][command_fn](message, params, local);
+                            OpalBot.commands[role][command_fn](message, params, local, i18n);
                             return;
                         }
-                        command_fn(message, params, local);
+                        command_fn(message, params, local, i18n);
                         break;
                     } catch(e) {
                         console.log(`Uncaught error (command operator.${command}):`, e);
@@ -74,10 +74,10 @@ client.on('message', async (message) => {
                     try {
                         var command_fn = OpalBot.commands[role][command];
                         if (command_fn.constructor === String) {
-                            OpalBot.commands[role][command_fn](message, params, local);
+                            OpalBot.commands[role][command_fn](message, params, local, i18n);
                             return;
                         }
-                        command_fn(message, params, local);
+                        command_fn(message, params, local, i18n);
                         break;
                     } catch(e) {
                         console.log(`Uncaught error (command ${role}.${command}):`, e);
@@ -87,10 +87,10 @@ client.on('message', async (message) => {
                     try {
                         var command_fn = OpalBot.commands.peasants[command];
                         if (command_fn.constructor === String) {
-                            OpalBot.commands.peasants[command_fn](message, params, local);
+                            OpalBot.commands.peasants[command_fn](message, params, local, i18n);
                             return;
                         }
-                        command_fn(message, params, local);
+                        command_fn(message, params, local, i18n);
                         break;
                     } catch(e) {
                         console.log(`Uncaught error (command peasants.${command}):`, e);

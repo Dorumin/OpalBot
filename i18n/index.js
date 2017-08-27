@@ -2,7 +2,7 @@ const fs = require('fs');
 
 fs.readdirSync('./i18n')
     .filter(file => file.endsWith('.json'))
-    .forEach(title => exports[title.slice(0, -5)] = require('../i18n/' + title));
+    .forEach(title => exports[title.slice(0, -5)] = require('./' + title));
 
 exports.msg = function(message, obj, ...vars) {
     var i18n = this,

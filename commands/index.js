@@ -1,5 +1,5 @@
 const fs = require('fs');
 
-fs.readdirSync('./i18n')
+fs.readdirSync('./commands')
     .filter(file => file != 'index.js')
     .forEach(title => require('./' + title));

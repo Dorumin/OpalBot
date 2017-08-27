@@ -115,19 +115,22 @@ module.exports.peasants.akinator = async function(message, content, lang, i18n, 
             var blocked = OpalBot.unprefixed.push({
                 type: 'akinator',
                 caseinsensitive: true,
-            callback: (message, index) => res({message: message, index: index}),
+                callback: (message, index) => res({message: message, index: index}),
                 timeout: 60000,
                 ontimeout: () => {
                     rej('timeout');
                 },
                 ...obj
             });
+            if (blocked) {
+                rej('blocked');
+            }
         });
     },
     akinator = new Akinator(),
     q = await akinator.init(lang, message.author.id);
     message.channel.send('This is a test question.');
-    var res = await ask({trigger: 'test response'});
+    var res = await ask({trigger: 'test response', channel: message.channel.id, user: message.author.id});
     console.log(res);
 };
 

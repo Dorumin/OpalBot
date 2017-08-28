@@ -181,6 +181,7 @@ module.exports.peasants.akinator = async function(message, content, lang, i18n, 
                 message.channel.send(i18n.msg('blocked', 'akinator', lang));
             } else if (e == 'timeout') {
                 message.channel.send(i18n.msg('timed-out', 'akinator', lang));
+                delete this.sessions[id];
             }
             return;
         }
@@ -231,6 +232,7 @@ module.exports.peasants.akinator = async function(message, content, lang, i18n, 
         }
     }
     message.channel.send(i18n.msg(defeated ? 'defeated' : 'victory', 'akinator', lang));
+    delete this.sessions[id];
 };
 
 //module.exports.peasants.akinator.Class = Akinator;

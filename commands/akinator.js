@@ -127,7 +127,7 @@ module.exports.peasants.akinator = async function(message, content, lang, i18n, 
                 type: 'akinator',
                 caseinsensitive: true,
                 callback: (message, index) => res({message: message, index: index}),
-                timeout: 60000,
+                timeout: 300000,
                 ontimeout: () => {
                     rej('timeout');
                 },
@@ -175,7 +175,7 @@ module.exports.peasants.akinator = async function(message, content, lang, i18n, 
             if (e == 'blocked') {
                 message.channel.send(i18n.msg('blocked', 'akinator', lang));
             } else if (e == 'timeout') {
-                message.channel.send(i18n.msg('timed-out', 'akinator', lang));
+                message.channel.send(i18n.msg('timed-out', 'akinator', `<@${id}>`, lang));
                 delete this.sessions[id];
             }
             return;
@@ -196,7 +196,7 @@ module.exports.peasants.akinator = async function(message, content, lang, i18n, 
                 return;
             }
             message.channel.send({embed: {
-                title: i18n.msg('title', 'akinator', guess.name, Number(guess.proba).toFixed(2).split('.')[1], lang),
+                title: i18n.msg('title', 'akinator', guess.name, parseInt(guess.proba * 100, 10), lang),
                 description: guess.description,
                 footer: {
                     text: '[' + yesno + ']'

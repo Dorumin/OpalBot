@@ -105,7 +105,7 @@
         "server-error": "Server error. Most likely caused by an invalid language code.",
         "unexpected-code": "Server returned an unexpected status code `$1`.",
         "blocked": "Cannot start a game due to another command expecting a response. Cancel it and try again!",
-        "timed-out": "Whoops, your session timed out! Try to answer quicker next time.",
+        "timed-out": "Whoops, your session timed out, $1! Try to answer quicker next time.",
         "responses": "yes/no/idk/probably/probably not",
         "back": "back",
         "question": "Question N°$1: $2",

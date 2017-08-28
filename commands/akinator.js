@@ -139,7 +139,7 @@ module.exports.peasants.akinator = async function(message, content, lang, i18n, 
     step = 0,
     responses = i18n.msg('responses', 'akinator').split('/');
     while (step++ < 75) {
-        message.channel.send(i18n.msg('question', 'akinator', q.step + 1, q.question, lang) + '\n[' + responses.filter(str => isNaN(str)).join('/') + ']');
+        message.channel.send(i18n.msg('question', 'akinator', Number(q.step) + 1, q.question, lang) + '\n[' + responses.filter(str => isNaN(str)).join('/') + ']');
         try {
             var res = await ask({
                 triggers: responses.concat([1,2,3,4,5]),

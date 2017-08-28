@@ -165,7 +165,7 @@ module.exports.peasants.akinator = async function(message, content, lang, i18n, 
         });
         // End bodge
         if (step != 1) {
-            responses = responses.filter(str => str == i18n.msg('back', 'akinator') && isNaN(str)).concat([i18n.msg('back', 'akinator'), 1, 2, 3, 4, 5, 6]);
+            responses = responses.filter(str => str != i18n.msg('back', 'akinator') && isNaN(str)).concat([i18n.msg('back', 'akinator'), 1, 2, 3, 4, 5, 6]);
         } else {
             responses = responses.filter(trigger => ![i18n.msg('back', 'akinator'), 6].includes(trigger));
         }

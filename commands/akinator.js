@@ -156,11 +156,7 @@ module.exports.peasants.akinator = async function(message, content, lang, i18n, 
             user: message.author.id
         });
         if (blocked === true) {
-            if (e == 'blocked') {
-                message.channel.send(i18n.msg('blocked', 'akinator'));
-            } else if (e == 'timeout') {
-                message.channel.send(i18n.msg('timed-out', 'akinator'));
-            }
+            message.channel.send(i18n.msg('blocked', 'akinator'));
             return;
         }
         OpalBot.unprefixed.remove({

@@ -137,12 +137,12 @@ module.exports.peasants.akinator = async function(message, content, lang, i18n, 
     akinator = new Akinator(),
     q = (await akinator.init(lang, message.author.id)).step_information,
     step = 0,
-    responses = i18n.msg('responses', 'akinator').split('/');
+    responses = i18n.msg('responses', 'akinator').split('/').concat([1,2,3,4,5]);
     while (step++ < 75) {
         message.channel.send(i18n.msg('question', 'akinator', Number(q.step) + 1, q.question, lang) + '\n[' + responses.filter(str => isNaN(str)).join('/') + ']');
         try {
             var res = await ask({
-                triggers: responses.concat([1,2,3,4,5]),
+                triggers: responses,
                 channel: message.channel.id,
                 user: message.author.id
             });
@@ -155,7 +155,7 @@ module.exports.peasants.akinator = async function(message, content, lang, i18n, 
             return;
         }
         if (step == 1 && responses.length == 5) {
-            responses = responses.concat([i18n.msg('back', 'akinator'), 1, 2, 3, 4, 5, 6]);
+            responses = responses.slice(0, -5).concat([i18n.msg('back', 'akinator'), 1, 2, 3, 4, 5, 6]);
         }
         var index = res.index,
         answer = isNaN(responses[index]) ? index : responses[index] - 1,

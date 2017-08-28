@@ -167,9 +167,9 @@ module.exports.peasants.akinator = async function(message, content, lang, i18n, 
             channel: message.channel.id
         });
         // End bodge
-        if (step == 1 && responses.length == 10) {
-            responses = responses.slice(0, -5).concat([i18n.msg('back', 'akinator'), 1, 2, 3, 4, 5, 6]);
-        } else if (step == 1) {
+        if (step != 1) {
+            responses = responses.filter(str => isNaN(str)).concat([i18n.msg('back', 'akinator'), 1, 2, 3, 4, 5, 6]);
+        } else {
             responses = responses.filter(trigger => ![i18n.msg('back', 'akinator'), 6].includes(trigger));
         }
         message.channel.send(i18n.msg('question', 'akinator', Number(q.step) + 1, q.question, lang) + '\n[' + responses.filter(str => isNaN(str)).join('/') + ']');

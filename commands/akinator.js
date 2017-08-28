@@ -148,6 +148,25 @@ module.exports.peasants.akinator = async function(message, content, lang, i18n, 
     step = 0,
     responses = i18n.msg('responses', 'akinator').split('/').concat([1,2,3,4,5]);
     while (step++ < 75) {
+        // This long bodge is to prevent conflicting akinator sessions
+        var blocked = OpalBot.unprefixed.push({
+            triggers: responses,
+            channel: message.channel.id,
+            user: message.author.id
+        });
+        if (blocked === true) {
+            if (e == 'blocked') {
+                message.channel.send(i18n.msg('blocked', 'akinator'));
+            } else if (e == 'timeout') {
+                message.channel.send(i18n.msg('timed-out', 'akinator'));
+            }
+            return;
+        }
+        OpalBot.unprefixed.remove({
+            user: message.user.id,
+            channel: message.channel.id
+        });
+        // End bodge
         message.channel.send(i18n.msg('question', 'akinator', Number(q.step) + 1, q.question, lang) + '\n[' + responses.filter(str => isNaN(str)).join('/') + ']');
         try {
             var res = await ask({

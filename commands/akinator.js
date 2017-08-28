@@ -138,9 +138,9 @@ module.exports.peasants.akinator = async function(message, content, lang, i18n, 
     q = (await akinator.init(lang, message.author.id)).step_information,
     step = 0,
     responses = i18n.msg('responses', 'akinator').split('/');
-    message.channel.send(i18n.msg('question', 'akinator', q.step, q.question, lang) + '\n[' + responses.join('/') + ']');
     while (step++ < 75) {
         message.channel.send('Beginning loop iteration!');
+        message.channel.send(i18n.msg('question', 'akinator', q.step, q.question, lang) + '\n[' + responses.join('/') + ']');
         try {
             var res = await ask({
                 triggers: responses.concat([1,2,3,4,5]),

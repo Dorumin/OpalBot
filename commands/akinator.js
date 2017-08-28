@@ -146,7 +146,7 @@ module.exports.peasants.akinator = async function(message, content, lang, i18n, 
     akinator = this.sessions[id] = new Akinator(),
     q = (await akinator.init(lang, id)).step_information,
     step = 0,
-    responses = i18n.msg('responses', 'akinator').split('/').concat([1,2,3,4,5]),
+    responses = i18n.msg('responses', 'akinator', lang).split('/').concat([1,2,3,4,5]),
     defeated = false;
     while (step++ < 50) {
         // This long bodge is to prevent conflicting akinator sessions
@@ -156,7 +156,7 @@ module.exports.peasants.akinator = async function(message, content, lang, i18n, 
             channel: message.channel.id
         });
         if (blocked === true) {
-            message.channel.send(i18n.msg('blocked', 'akinator'));
+            message.channel.send(i18n.msg('blocked', 'akinator', lang));
             return;
         }
         OpalBot.unprefixed.remove({
@@ -165,9 +165,9 @@ module.exports.peasants.akinator = async function(message, content, lang, i18n, 
         });
         // End bodge
         if (step != 1) {
-            responses = responses.filter(str => str != i18n.msg('back', 'akinator') && isNaN(str)).concat([i18n.msg('back', 'akinator'), 1, 2, 3, 4, 5, 6]);
+            responses = responses.filter(str => str != i18n.msg('back', 'akinator', lang) && isNaN(str)).concat([i18n.msg('back', 'akinator'), 1, 2, 3, 4, 5, 6]);
         } else {
-            responses = responses.filter(trigger => ![i18n.msg('back', 'akinator'), 6].includes(trigger));
+            responses = responses.filter(trigger => ![i18n.msg('back', 'akinator', lang), 6].includes(trigger));
         }
         message.channel.send(i18n.msg('question', 'akinator', Number(q.step) + 1, q.question, lang) + '\n[' + responses.filter(str => isNaN(str)).join('/') + ']');
         try {
@@ -178,9 +178,9 @@ module.exports.peasants.akinator = async function(message, content, lang, i18n, 
             });
         } catch(e) {
             if (e == 'blocked') {
-                message.channel.send(i18n.msg('blocked', 'akinator'));
+                message.channel.send(i18n.msg('blocked', 'akinator', lang));
             } else if (e == 'timeout') {
-                message.channel.send(i18n.msg('timed-out', 'akinator'));
+                message.channel.send(i18n.msg('timed-out', 'akinator', lang));
             }
             return;
         }
@@ -194,13 +194,13 @@ module.exports.peasants.akinator = async function(message, content, lang, i18n, 
         if (res.progression > 97 || step % 25 == 0) {
             try {
                 var guess = (await akinator.guess(q.step)).elements[0],
-                yesno = i18n.msg('yesno', 'akinator');
+                yesno = i18n.msg('yesno', 'akinator', lang);
             } catch(e) {
                 message.channel.send('Uncaught error.');
                 return;
             }
             message.channel.send({embed: {
-                title: i18n.msg('title', 'akinator', guess.name, Number(guess.proba).toFixed(2).split('.')[1]),
+                title: i18n.msg('title', 'akinator', guess.name, Number(guess.proba).toFixed(2).split('.')[1], lang),
                 description: guess.description,
                 footer: {
                     text: '[' + yesno + ']'
@@ -215,7 +215,7 @@ module.exports.peasants.akinator = async function(message, content, lang, i18n, 
                 channel: message.channel.id
             });
             if (correct.index == 1) {
-                message.channel.send(i18n.msg('continue', 'akinator') + ' [' + yesno + ']');
+                message.channel.send(i18n.msg('continue', 'akinator', lang) + ' [' + yesno + ']');
                 var keep_going = await ask({
                     triggers: yesno.split('/'),
                     user: id,
@@ -230,7 +230,7 @@ module.exports.peasants.akinator = async function(message, content, lang, i18n, 
             break;
         }
     }
-    message.channel.send(i18n.msg(defeated ? 'defeated' : 'victory', 'akinator'));
+    message.channel.send(i18n.msg(defeated ? 'defeated' : 'victory', 'akinator', lang));
 };
 
 //module.exports.peasants.akinator.Class = Akinator;

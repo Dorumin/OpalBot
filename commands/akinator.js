@@ -162,7 +162,7 @@ module.exports.peasants.akinator = async function(message, content, lang, i18n, 
     step = 0,
     responses = i18n.msg('responses', 'akinator', lang).split('/').concat([1,2,3,4,5]),
     defeated = false;
-    while (step++ < 50) {
+    while (step++ < 75) {
         // This long bodge is to prevent conflicting akinator sessions
         var blocked = OpalBot.unprefixed.push({
             triggers: responses,
@@ -235,7 +235,7 @@ module.exports.peasants.akinator = async function(message, content, lang, i18n, 
                 } catch(e) {
                     message.channel.send(i18n.msg('unknown-error', 'akinator', lang));
                 }
-                if (step == 50) {
+                if (step == 75) {
                     defeated = true;
                     break;
                 }

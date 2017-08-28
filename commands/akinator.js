@@ -139,8 +139,7 @@ module.exports.peasants.akinator = async function(message, content, lang, i18n, 
     step = 0,
     responses = i18n.msg('responses', 'akinator').split('/');
     while (step++ < 75) {
-        message.channel.send('Beginning loop iteration!');
-        message.channel.send(i18n.msg('question', 'akinator', q.step, q.question, lang) + '\n[' + responses.join('/') + ']');
+        message.channel.send(i18n.msg('question', 'akinator', q.step + 1, q.question, lang) + '\n[' + responses.filter(str => isNaN(str)).join('/') + ']');
         try {
             var res = await ask({
                 triggers: responses.concat([1,2,3,4,5]),
@@ -177,7 +176,6 @@ module.exports.peasants.akinator = async function(message, content, lang, i18n, 
             message.channel.send(JSON.stringify(guess, null, 2));
             break;
         }
-        message.channel.send('Finished loop iteration!');
     }
     message.channel.send('Finished loop!');
 };

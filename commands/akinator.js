@@ -204,7 +204,7 @@ module.exports.peasants.akinator = async function(message, content, lang, i18n, 
                 message.channel.send('Uncaught error.');
                 return;
             }
-            message.channel.send(JSON.stringify(guess, null, 2));
+            message.channel.send('```' + JSON.stringify(guess, null, 2) + '```');
             break;
         }
     }

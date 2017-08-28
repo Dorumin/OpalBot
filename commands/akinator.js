@@ -238,27 +238,3 @@ module.exports.peasants.akinator = async function(message, content, lang, i18n, 
     message.channel.send(i18n.msg(defeated ? 'defeated' : 'victory', 'akinator', lang));
     delete this.sessions[id];
 };
-
-//module.exports.peasants.akinator.Class = Akinator;
-
-/*
-var ask = q => new Promise(res => rl.question(q, ans => res(ans)));
-(async () => {
-    var akinator = new Akinator();
-    var q = (await akinator.init('en', 'Dorumin')).step_information;
-    console.log(JSON.stringify(q, null, 2));
-    while (1) {
-        var answer = await ask(q.question),
-        res = await akinator.ans(q.step, answer);
-        q = res;
-        console.log(res);
-        console.log(res.progression);
-        if (res.progression > 97) {
-            var guess = await akinator.guess(q.step);
-            console.log(JSON.stringify(guess, null, 2));
-            break;
-        }
-    }
-})();
-
-setInterval(() => {}, 1000);*/

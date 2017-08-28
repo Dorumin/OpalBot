@@ -213,6 +213,9 @@ var OpalBot = {
     },
     timeouts: {
         db: {}
+    },
+    get uptime() {
+        return client.uptime;
     }
 };
 

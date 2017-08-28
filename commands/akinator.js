@@ -184,6 +184,8 @@ module.exports.peasants.akinator = async function(message, content, lang, i18n, 
         }
         if (step == 1 && responses.length == 10) {
             responses = responses.slice(0, -5).concat([i18n.msg('back', 'akinator'), 1, 2, 3, 4, 5, 6]);
+        } else if (step == 1) {
+            responses = responses.filter(trigger => ![i18n.msg('back'), 6].includes(trigger));
         }
         var index = res.index,
         answer = isNaN(responses[index]) ? index : responses[index] - 1,

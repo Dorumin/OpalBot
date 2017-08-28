@@ -140,6 +140,7 @@ module.exports.peasants.akinator = async function(message, content, lang, i18n, 
     responses = i18n.msg('responses', 'akinator').split('/');
     message.channel.send(i18n.msg('question', 'akinator', q.step, q.question, lang) + '\n[' + responses.join('/') + ']');
     while (step++ < 75) {
+        message.channel.send('Beginning loop iteration!');
         try {
             var res = await ask({
                 triggers: responses.concat([1,2,3,4,5]),
@@ -176,7 +177,9 @@ module.exports.peasants.akinator = async function(message, content, lang, i18n, 
             message.channel.send(JSON.stringify(guess, null, 2));
             break;
         }
+        message.channel.send('Finished loop iteration!');
     }
+    message.channel.send('Finished loop!');
 };
 
 //module.exports.peasants.akinator.Class = Akinator;

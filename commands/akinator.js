@@ -148,7 +148,7 @@ module.exports.peasants.akinator = async function(message, content, lang, i18n, 
     step = 0,
     responses = i18n.msg('responses', 'akinator').split('/').concat([1,2,3,4,5]),
     defeated = false;
-    while (step++ < 75) {
+    while (step++ < 50) {
         // This long bodge is to prevent conflicting akinator sessions
         var blocked = OpalBot.unprefixed.push({
             triggers: responses,
@@ -191,20 +191,46 @@ module.exports.peasants.akinator = async function(message, content, lang, i18n, 
             step -= 2;
         }
         q = res;
-        console.log(res);
-        console.log(res.progression);
-        if (res.progression > 97) {
+        if (res.progression > 97 || step % 25 == 0) {
             try {
-                var guess = await akinator.guess(q.step);
+                var guess = (await akinator.guess(q.step)).elements[0],
+                yesno = i18n.msg('yesno', 'akinator');
             } catch(e) {
                 message.channel.send('Uncaught error.');
                 return;
             }
-            message.channel.send('```' + JSON.stringify(guess, null, 2) + '```');
+            message.channel.send({embed: {
+                title: i18n.msg('title', 'akinator', guess.name, Number(guess.proba).toFixed(2).split('.')[1]),
+                description: guess.description,
+                footer: {
+                    text: '[' + yesno + ']'
+                },
+                image: {
+                    url: guess.absolute_picture_path
+                }
+            }});
+            var correct = await ask({
+                triggers: yesno.split('/'),
+                user: id,
+                channel: message.channel.id
+            });
+            if (correct.index == 1) {
+                message.channel.send(i18n.msg('continue', 'akinator') + ' [' + yesno + ']');
+                var keep_going = await ask({
+                    triggers: yesno.split('/'),
+                    user: id,
+                    channel: message.channel.id
+                });
+                if (keep_going.index == 0) {
+                    continue;
+                } else {
+                    defeated = true;
+                }
+            }
             break;
         }
     }
-    message.channel.send('Finished loop!');
+    message.channel.send(i18n.msg(defeated ? 'defeated' : 'victory', 'akinator'));
 };
 
 //module.exports.peasants.akinator.Class = Akinator;

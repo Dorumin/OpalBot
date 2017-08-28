@@ -109,8 +109,11 @@
         "responses": "yes/no/idk/probably/probably not",
         "back": "back",
         "question": "Question N°$1: $2",
+        "title": "$1 ($2% match)",
         "yesno": "yes/no",
-        "continue": "continue?"
+        "continue": "continue?",
+        "defeated": "Bravo, you have defeated me.",
+        "victory": "Great! Guessed right one more time. I love playing with you!"
     },
     "flip": {
         "tails": "$1 flipped **tails**!",

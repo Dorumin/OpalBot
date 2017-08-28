@@ -163,7 +163,7 @@ module.exports.peasants.akinator = async function(message, content, lang, i18n, 
             return;
         }
         OpalBot.unprefixed.remove({
-            user: message.user.id,
+            user: message.author.id,
             channel: message.channel.id
         });
         // End bodge

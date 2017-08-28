@@ -193,7 +193,7 @@ module.exports.peasants.akinator = async function(message, content, lang, i18n, 
         q = res;
         if (res.progression > 97 || step % 25 == 0) {
             try {
-                var guess = (await akinator.guess(q.step)).elements[0],
+                var guess = (await akinator.guess(q.step)).elements[0].element,
                 yesno = i18n.msg('yesno', 'akinator', lang);
             } catch(e) {
                 message.channel.send('Uncaught error.');

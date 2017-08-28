@@ -68,7 +68,16 @@ class Akinator {
     
     back(step) {
         return new Promise(async (res, rej) => {
-            
+            var response = null;
+            try {
+                response = await this.get(this.session.server + `cancel_answer?session=${this.session.session}&signature=${this.session.signature}&step=${step}&answer=-1`);
+            } catch(e) {}
+            if (!response) {
+                rej('no-response');
+            } else if (response.completion != 'OK') {
+                rej(response);
+            }
+            res(response.parameters);
         });
     }
     

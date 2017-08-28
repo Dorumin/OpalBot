@@ -110,7 +110,7 @@ module.exports.peasants.akinator = async function(message, content, lang, i18n, 
     if (close.includes(content)) mode = 'close';
     if (mode == 'close') {
         if (this.sessions[id]) {
-            delete ref.sessions[id];
+            delete this.sessions[id];
             OpalBot.unprefixed.remove({
                 type: 'akinator',
                 user: message.author.id,

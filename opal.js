@@ -54,7 +54,7 @@ client.on('message', async (message) => {
     while (i--) {
         if (content.startsWith(prefixes[i])) {
             var split = content.slice(prefixes[i].length).split(/\s/).filter(Boolean),
-            command = split[0].tolowerCase(),
+            command = split[0].toLowerCase(),
             params = split.slice(1).join(' ');
             for (var role in OpalBot.commands) {
                 if (role == 'operator' && OpalBot.operators.includes(message.author.id) && OpalBot.commands.operator.hasOwnProperty(command)) {

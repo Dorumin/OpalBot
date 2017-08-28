@@ -143,8 +143,8 @@ module.exports.peasants.akinator = async function(message, content, lang, i18n, 
             }
         });
     },
-    akinator = new Akinator(),
-    q = (await akinator.init(lang, message.author.id)).step_information,
+    akinator = this.sessions[id] = new Akinator(),
+    q = (await akinator.init(lang, id)).step_information,
     step = 0,
     responses = i18n.msg('responses', 'akinator').split('/').concat([1,2,3,4,5]),
     defeated = false;
@@ -152,15 +152,15 @@ module.exports.peasants.akinator = async function(message, content, lang, i18n, 
         // This long bodge is to prevent conflicting akinator sessions
         var blocked = OpalBot.unprefixed.push({
             triggers: responses,
-            channel: message.channel.id,
-            user: message.author.id
+            user: id,
+            channel: message.channel.id
         });
         if (blocked === true) {
             message.channel.send(i18n.msg('blocked', 'akinator'));
             return;
         }
         OpalBot.unprefixed.remove({
-            user: message.author.id,
+            user: id,
             channel: message.channel.id
         });
         // End bodge
@@ -173,8 +173,8 @@ module.exports.peasants.akinator = async function(message, content, lang, i18n, 
         try {
             var res = await ask({
                 triggers: responses,
-                channel: message.channel.id,
-                user: message.author.id
+                user: id,
+                channel: message.channel.id
             });
         } catch(e) {
             if (e == 'blocked') {

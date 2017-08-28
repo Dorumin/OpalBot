@@ -99,8 +99,8 @@ module.exports.peasants.pick = (message, content, lang, i18n) => {
     }
 };
 
-OpalBot.commands.peasants.prefixes = 'prefix'
-OpalBot.commands.peasants.prefix = async (message, content, lang, i18n, OpalBot) => {
+module.exports.peasants.prefixes = 'prefix'
+module.exports.peasants.prefix = async (message, content, lang, i18n, OpalBot) => {
     var list = i18n.msg('list', 'prefix', lang),
     add = i18n.msg('add', 'prefix', lang),
     remove = i18n.msg('remove', 'prefix', lang),

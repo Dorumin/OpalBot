@@ -146,7 +146,8 @@ module.exports.peasants.akinator = async function(message, content, lang, i18n, 
     akinator = new Akinator(),
     q = (await akinator.init(lang, message.author.id)).step_information,
     step = 0,
-    responses = i18n.msg('responses', 'akinator').split('/').concat([1,2,3,4,5]);
+    responses = i18n.msg('responses', 'akinator').split('/').concat([1,2,3,4,5]),
+    defeated = false;
     while (step++ < 75) {
         // This long bodge is to prevent conflicting akinator sessions
         var blocked = OpalBot.unprefixed.push({
@@ -168,7 +169,7 @@ module.exports.peasants.akinator = async function(message, content, lang, i18n, 
         });
         // End bodge
         if (step != 1) {
-            responses = responses.filter(str => isNaN(str)).concat([i18n.msg('back', 'akinator'), 1, 2, 3, 4, 5, 6]);
+            responses = responses.filter(str => str == i18n.msg('back', 'akinator') && isNaN(str)).concat([i18n.msg('back', 'akinator'), 1, 2, 3, 4, 5, 6]);
         } else {
             responses = responses.filter(trigger => ![i18n.msg('back', 'akinator'), 6].includes(trigger));
         }
@@ -191,7 +192,7 @@ module.exports.peasants.akinator = async function(message, content, lang, i18n, 
         answer = isNaN(responses[index]) ? index : responses[index] - 1,
         res = await akinator.ans(q.step, answer);
         if (answer == 5) {
-            step--;
+            step -= 2;
         }
         q = res;
         console.log(res);

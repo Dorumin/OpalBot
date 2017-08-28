@@ -12,6 +12,9 @@ exports.msg = function(message, obj, ...vars) {
     if (typeof obj == 'string') {
         obj = local[obj];
     }
+    if (!obj) {
+        obj = exports['en'][ref];
+    }
     var msg = obj[message];
     if (!msg || typeof msg != 'string') {
         if (typeof ref == 'string') {

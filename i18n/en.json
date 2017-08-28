@@ -113,7 +113,8 @@
         "yesno": "yes/no",
         "continue": "Continue?",
         "defeated": "Bravo, you have defeated me.",
-        "victory": "Great! Guessed right one more time. I love playing with you!"
+        "victory": "Great! Guessed right one more time. I love playing with you!",
+        "unknown-error": "Unknown error. Your session has been automatically closed."
     },
     "flip": {
         "tails": "$1 flipped **tails**!",

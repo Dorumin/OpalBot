@@ -216,6 +216,10 @@ module.exports.peasants.akinator = async function(message, content, lang, i18n, 
                 channel: message.channel.id
             });
             if (correct.index == 1) {
+                if (step == 50) {
+                    defeated = true;
+                    break;
+                }
                 message.channel.send(i18n.msg('continue', 'akinator', lang) + ' [' + yesno + ']');
                 var keep_going = await ask({
                     triggers: yesno.split('/'),

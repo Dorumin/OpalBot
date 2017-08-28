@@ -182,7 +182,7 @@ module.exports.peasants.akinator = async function(message, content, lang, i18n, 
             }
             return;
         }
-        if (step == 1 && responses.length == 5) {
+        if (step == 1 && responses.length == 10) {
             responses = responses.slice(0, -5).concat([i18n.msg('back', 'akinator'), 1, 2, 3, 4, 5, 6]);
         }
         var index = res.index,

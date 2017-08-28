@@ -94,6 +94,25 @@ class Akinator {
             res(response.parameters);
         });
     }
+    
+    exclude(step) {
+        return new Promise(async (res, rej) => {
+            if (isNaN(step)) {
+                rej('no-step');
+                return;
+            }
+            var response = null;
+            try {
+                response = await this.get(this.session.server + `exclusion?session=${this.session.session}&signature=${this.session.signature}&step=${step}&forward_answer=1`);
+            } catch(e) {}
+            if (!response) {
+                rej('no-response');
+            } else if (response.completion != 'OK') {
+                rej(response);
+            }
+            res(response.parameters);
+        });
+    }
 }
 
 module.exports.peasants = {};
@@ -192,7 +211,7 @@ module.exports.peasants.akinator = async function(message, content, lang, i18n, 
                 var guess = (await akinator.guess(q.step)).elements[0].element,
                 yesno = i18n.msg('yesno', 'akinator', lang);
             } catch(e) {
-                message.channel.send('Uncaught error.');
+                message.channel.send(i18n.msg('unknown-error', 'akinator', lang));
                 return;
             }
             message.channel.send({embed: {
@@ -211,6 +230,11 @@ module.exports.peasants.akinator = async function(message, content, lang, i18n, 
                 channel: message.channel.id
             });
             if (correct.index == 1) {
+                try {
+                    await akinator.exclude(q.step);
+                } catch(e) {
+                    message.channel.send(i18n.msg('unknown-error', 'akinator', lang));
+                }
                 if (step == 50) {
                     defeated = true;
                     break;

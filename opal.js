@@ -47,7 +47,7 @@ client.on('message', async (message) => {
     if (!content) return;
     console.log(name + ': ' + content + (message.channel.type == 'text' ? ' @ ' + message.guild.name : ''));
     if (message.channel.type == 'dm' || message.channel.type == 'group') {
-        message.reply('Add me on your server: <https://discordapp.com/oauth2/authorize?client_id=348233224293449729&scope=bot>');
+        message.reply('Add me on your server! <https://discordapp.com/oauth2/authorize?client_id=348233224293449729&scope=bot&permissions=60416>');
         return;
     }
     if (message.channel.type != 'text') return;

@@ -231,7 +231,7 @@ module.exports.peasants.akinator = async function(message, content, lang, i18n, 
                 yesno = i18n.msg('yesno', 'akinator', lang);
                 guess = {
                     ...guess,
-                    (await akinator.choose(q.step, guess.id)).element_informations
+                    ...(await akinator.choose(q.step, guess.id)).element_informations
                 };
             } catch(e) {
                 message.channel.send(i18n.msg('unknown-error', 'akinator', lang));

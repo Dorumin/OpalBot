@@ -95,25 +95,6 @@ class Akinator {
         });
     }
     
-    choose(step, id) {
-        return new Promise(async (res, rej) => {
-            if (isNaN(step) || isNaN(id)) {
-                rej('no-step-or-no-id');
-                return;
-            }
-            var response = null;
-            try {
-                response = await this.get(this.session.server + `choice?session=${this.session.session}&signature=${this.session.signature}&step=${step}&element=${id}`);
-            } catch(e) {}
-            if (!response) {
-                rej('no-response');
-            } else if (response.completion != 'OK') {
-                rej(response);
-            }
-            res(response.parameters);
-        });
-    }
-    
     exclude(step) {
         return new Promise(async (res, rej) => {
             if (isNaN(step)) {
@@ -229,17 +210,13 @@ module.exports.peasants.akinator = async function(message, content, lang, i18n, 
             try {
                 var guess = (await akinator.guess(q.step)).elements[0].element,
                 yesno = i18n.msg('yesno', 'akinator', lang);
-                guess = {
-                    ...guess,
-                    ...(await akinator.choose(q.step, guess.id)).element_informations
-                };
             } catch(e) {
                 message.channel.send(i18n.msg('unknown-error', 'akinator', lang));
                 return;
             }
             message.channel.send({embed: {
                 title: i18n.msg('title', 'akinator', guess.name, parseInt(guess.proba * 100, 10), lang),
-                description: guess.description + '\n\n' + i18n.msg('guessed', 'akinator', guess.times_selected, lang),
+                description: guess.description,
                 footer: {
                     text: '[' + yesno + ']'
                 },

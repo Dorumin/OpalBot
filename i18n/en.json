@@ -110,7 +110,6 @@
         "back": "back",
         "question": "Question N°$1: $2",
         "title": "$1 ($2% match)",
-        "guessed": "Character played $1 times.",
         "yesno": "yes/no",
         "continue": "Continue?",
         "defeated": "Bravo, you have defeated me.",

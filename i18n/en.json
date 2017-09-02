@@ -128,7 +128,7 @@
     },
     "mp3": {
         "invalid": "please input a valid YouTube video URL or ID!",
-        "server-error": "An error code has been returned by the server! Please check the bot logs for details.",
+        "server-error": "An error code has been returned by the server! This is most likely caused by an invalid video ID. Please check the bot logs for details.",
         "download": "Download",
         "size": "Size"
     }

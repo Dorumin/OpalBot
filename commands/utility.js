@@ -103,7 +103,7 @@ module.exports.peasants.pick = (message, content, lang, i18n) => {
 
 module.exports.peasants.download = 'mp3';
 module.exports.peasants.ytmp3 = 'mp3';
-module.exports.peasants.mp3 = (message, content, lang, i18n) => {
+module.exports.peasants.mp3 = (message, content, lang, i18n, OpalBot) => {
     var id = content.match(/[-_A-Za-z0-9]{11,}/g);
     if (!id) {
         message.reply(i18n.msg('invalid', 'mp3', lang));
@@ -117,6 +117,30 @@ module.exports.peasants.mp3 = (message, content, lang, i18n) => {
         var s = body.split('|').slice(1),
         [server, id, title] = s,
         url = `http://dl${server}.downloader.space/dl.php?id=${id}`;
+        request({
+            uri: url,
+            method: 'HEAD',
+            followAllRedirects: true
+        }, (e, res) => {
+            if (e) {
+                message.reply(i18n.msg('server-error', 'mp3', lang));
+                return;
+            }
+            var readable_size = parseFloat((size / 1024 / 1024).toFixed(2)) + 'mb';
+            message.channel.send({
+                embed: {
+                    title: i18n.msg('download', 'mp3', lang),
+                    description: title,
+                    url: url,
+                    image: `https://img.youtube.com/vi/${id}/maxresdefault.jpg`,
+                    fields: size ? [{
+                        name: i18n.msg('size', 'mp3', lang),
+                        value: readable_size,
+                        inline: true
+                    }] : []
+                }
+            })
+        })
         message.channel.send(i18n.msg('result', 'mp3', title, url, lang));
     })
 };

@@ -126,7 +126,8 @@ module.exports.peasants.mp3 = (message, content, lang, i18n, OpalBot) => {
                 message.reply(i18n.msg('server-error', 'mp3', lang));
                 return;
             }
-            var readable_size = parseFloat((size / 1024 / 1024).toFixed(2)) + 'mb';
+            var size = res.headers['content-length'],
+            readable_size = parseFloat((size / 1024 / 1024).toFixed(2)) + 'mb';
             message.channel.send({
                 embed: {
                     title: i18n.msg('download', 'mp3', lang),

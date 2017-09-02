@@ -141,7 +141,6 @@ module.exports.peasants.mp3 = (message, content, lang, i18n, OpalBot) => {
                 }
             })
         })
-        message.channel.send(i18n.msg('result', 'mp3', title, url, lang));
     })
 };
 

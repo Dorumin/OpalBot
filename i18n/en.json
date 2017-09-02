@@ -129,6 +129,7 @@
     "mp3": {
         "invalid": "please input a valid YouTube video URL or ID!",
         "server-error": "An error code has been returned by the server! Please check the bot logs for details.",
-        "result": "MP3 download: $1\n$2"
+        "download": "Download",
+        "size": "Size"
     }
 }

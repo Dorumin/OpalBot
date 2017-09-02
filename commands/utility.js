@@ -115,8 +115,8 @@ module.exports.peasants.mp3 = (message, content, lang, i18n, OpalBot) => {
             return;
         }
         var s = body.split('|').slice(1),
-        [server, id, title] = s,
-        url = `http://dl${server}.downloader.space/dl.php?id=${id}`;
+        [server, key, title] = s,
+        url = `http://dl${server}.downloader.space/dl.php?id=${key}`;
         request({
             uri: url,
             method: 'HEAD',

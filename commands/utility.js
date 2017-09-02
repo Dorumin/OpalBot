@@ -1,3 +1,5 @@
+const request = require('request');
+
 module.exports.peasants = {};
 
 module.exports.peasants.hi = 'hello';
@@ -97,6 +99,26 @@ module.exports.peasants.pick = (message, content, lang, i18n) => {
         var randum = split[Math.floor(Math.random() * split.length)].replace(/(\\\*)|\*/g, (s, c) => c ? s : '\\*');
         message.reply(i18n.msg('result', 'pick', randum, lang));
     }
+};
+
+module.exports.peasants.download = 'mp3';
+module.exports.peasants.ytmp3 = 'mp3';
+module.exports.peasants.mp3 = (message, content) => {
+    var id = content.match(/[-_A-Za-z0-9]{11,}$/);
+    if (!id) {
+        message.reply(i18n.msg('invalid', 'mp3'));
+    }
+    id = id[0];
+    request(`http://api.convert2mp3.cc/check.php?api=true&v=${id}&h=${Date,now()}`, function(err, r, body) {
+        if (err || body.slice(0, 2) != 'OK') {
+            message.reply(i18n.msg('server-error', 'mp3'));
+            return;
+        }
+        var s = body.split('|').slice(1),
+        [server, id, title] = s,
+        url = `http://dl${server}.downloader.space/dl.php?id=${id}`;
+        message.channel.send(i18n.msg('result', 'mp3', title, url));
+    })
 };
 
 module.exports.peasants.prefixes = 'prefix'

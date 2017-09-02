@@ -103,21 +103,21 @@ module.exports.peasants.pick = (message, content, lang, i18n) => {
 
 module.exports.peasants.download = 'mp3';
 module.exports.peasants.ytmp3 = 'mp3';
-module.exports.peasants.mp3 = (message, content) => {
+module.exports.peasants.mp3 = (message, content, lang, i18n) => {
     var id = content.match(/[-_A-Za-z0-9]{11,}$/);
     if (!id) {
-        message.reply(i18n.msg('invalid', 'mp3'));
+        message.reply(i18n.msg('invalid', 'mp3', lang));
     }
     id = id[0];
-    request(`http://api.convert2mp3.cc/check.php?api=true&v=${id}&h=${Date,now()}`, function(err, r, body) {
+    request(`http://api.convert2mp3.cc/check.php?api=true&v=${id}&h=${Date.now()}`, function(err, r, body) {
         if (err || body.slice(0, 2) != 'OK') {
-            message.reply(i18n.msg('server-error', 'mp3'));
+            message.reply(i18n.msg('server-error', 'mp3', lang));
             return;
         }
         var s = body.split('|').slice(1),
         [server, id, title] = s,
         url = `http://dl${server}.downloader.space/dl.php?id=${id}`;
-        message.channel.send(i18n.msg('result', 'mp3', title, url));
+        message.channel.send(i18n.msg('result', 'mp3', title, url, lang));
     })
 };
 

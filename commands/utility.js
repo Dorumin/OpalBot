@@ -109,6 +109,7 @@ module.exports.peasants.mp3 = (message, content, lang, i18n, OpalBot) => {
         message.reply(i18n.msg('invalid', 'mp3', lang));
     }
     id = id[id.length - 1];
+    var masked = /<https?:\/\//i.test(content);
     request(`http://api.convert2mp3.cc/check.php?api=true&v=${id}&h=${Date.now()}`, function(err, r, body) {
         if (err || body.slice(0, 2) != 'OK') {
             message.reply(i18n.msg('server-error', 'mp3', lang));
@@ -133,9 +134,9 @@ module.exports.peasants.mp3 = (message, content, lang, i18n, OpalBot) => {
                     title: i18n.msg('download', 'mp3', lang),
                     description: title,
                     url: url,
-                    image: {
+                    image: masked ? {
                         url: `https://img.youtube.com/vi/${id}/maxresdefault.jpg`
-                    },
+                    } : null,
                     fields: size ? [{
                         name: i18n.msg('size', 'mp3', lang),
                         value: readable_size,

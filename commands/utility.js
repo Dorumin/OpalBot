@@ -133,7 +133,9 @@ module.exports.peasants.mp3 = (message, content, lang, i18n, OpalBot) => {
                     title: i18n.msg('download', 'mp3', lang),
                     description: title,
                     url: url,
-                    image: `https://img.youtube.com/vi/${id}/maxresdefault.jpg`,
+                    image: {
+                        url: `https://img.youtube.com/vi/${id}/maxresdefault.jpg`
+                    },
                     fields: size ? [{
                         name: i18n.msg('size', 'mp3', lang),
                         value: readable_size,

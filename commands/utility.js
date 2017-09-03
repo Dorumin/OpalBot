@@ -138,7 +138,7 @@ module.exports.peasants.youtube = (message, content, lang, i18n, OpalBot) => {
         }
         var blocked = OpalBot.unprefixed.push({
             type: 'youtube',
-            triggers: new Array(r.length).fill(undefined).map((n, i) => i + 1),
+            triggers: new Array(r.length).fill(undefined).map((n, i) => String(i + 1)),
             callback: (msg, index) => {
                 result(r[index]);
             },

@@ -1,7 +1,7 @@
 const request = require('request'),
-req = (obj) => {
+req = (obj, POST) => {
     return new Promise((res, rej) => {
-        request(obj, (e, r, body) => {
+        (POST ? request.post : request)(obj, (e, r, body) => {
             if (e || r.statusCode == '404') {
                 rej(e);
                 return;
@@ -10,6 +10,7 @@ req = (obj) => {
         });
     });
 };
+req.post = (obj) => req(obj, true);
 
 module.exports.peasants = {};
 
@@ -184,71 +185,83 @@ module.exports.peasants.youtube = async (message, content, lang, i18n, OpalBot) 
 };
 
 module.exports.peasants.download = 'mp3';
-module.exports.peasants.mp3 = (message, content, lang, i18n, OpalBot) => {
+module.exports.peasants.mp3 = async (message, content, lang, i18n, OpalBot) => {
     // SoundCloud
     var sc = content.match(/https?:\/{2}soundcloud\.com\/[_\-\w\d]+\/[_\-\w\d]+/),
     masked = /<https?:\/\//i.test(content);
     if (sc) {
-        request('http://soundcloudmp3.org/', (err, response, main_content) => {
-            try {
-                var token = main_content.match(/name="_token" type="hidden" value="([\d\w]+)"/)[1];
-            } catch(e) {
-                message.channel.send(i18n.msg('sc-server-error-token', 'mp3', lang));
-                return;
-            }
-            request.post({
+        try {
+            var {res, body} = await req('http://soundcloudmp3.org/');
+        } catch(e) {
+            return;
+        }
+        try {
+            var token = main_content.match(/name="_token" type="hidden" value="([\d\w]+)"/)[1];
+        } catch(e) {
+            message.channel.send(i18n.msg('sc-server-error-token', 'mp3', lang));
+            return;
+        }
+        try {
+            var {res, body} = await req({
                 url: 'http://soundcloudmp3.org/converter',
                 form: {
                     _token: token,
                     url: sc[0]
                 }
-            }, (e, r, body) => {
-                var dl = body.match(/href="([^"]+)" id="download-btn"/),
-                title = body.match(/<b>Title:<\/b>([^<]+)/),
-                duration = body.match(/<b>Length:<\/b>([\d:]+)/),
-                img = body.match(/src="([^"]+)" alt="preview image"/);
-                if (!dl) {
-                    message.channel.send(i18n.msg('sc-server-error-download', 'mp3', lang));
-                    return;
-                }
-                if (!title) {
-                    message.channel.send(i18n.msg('sc-server-error-title', 'mp3', lang));
-                    return;
-                }
-                request({
-                    uri: dl[1],
-                    method: 'HEAD',
-                    followAllRedirects: true
-                }, (error, res) => {
-                    var size = res.headers['content-length'],
-                    readable_size = parseFloat((size / 1024 / 1024).toFixed(2)) + 'mb',
-                    fields = [];
-                    if (size) {
-                        fields.push({
-                            name: i18n.msg('size', 'mp3', lang),
-                            value: readable_size
-                        });
-                    }
-                    if (duration) {
-                        fields.push({
-                            name: i18n.msg('duration', 'mp3', lang),
-                            value: duration[1].replace(/0(\d):/, '$1:')
-                        });
-                    }
-                    message.channel.send({
-                        embed: {
-                            title: i18n.msg('download', 'mp3', lang),
-                            description: title[1],
-                            url: dl[1],
-                            color: OpalBot.color,
-                            image: img && masked ? {
-                                url: img[1].replace('large', 't500x500')
-                            } : null,
-                            fields: fields
-                        }
-                    });
-                })
-            }); 
+            });
+        } catch(e) {
+            return;
+        }
+        var dl = body.match(/href="([^"]+)" id="download-btn"/),
+        title = body.match(/<b>Title:<\/b>([^<]+)/),
+        duration = body.match(/<b>Length:<\/b>([\d:]+)/),
+        img = body.match(/src="([^"]+)" alt="preview image"/);
+        if (!dl) {
+            message.channel.send(i18n.msg('sc-server-error-download', 'mp3', lang));
+            return;
+        }
+        if (!title) {
+            message.channel.send(i18n.msg('sc-server-error-title', 'mp3', lang));
+            return;
+        }
+        
+        try {
+            var {res, body} = await req({
+                uri: dl[1],
+                method: 'HEAD',
+                followAllRedirects: true
+            });
+        } catch(e) {
+            return;
+        }
+
+        var size = res.headers['content-length'],
+        readable_size = parseFloat((size / 1024 / 1024).toFixed(2)) + 'mb',
+        fields = [];
+        if (size) {
+            fields.push({
+                name: i18n.msg('size', 'mp3', lang),
+                value: readable_size
+            });
+        }
+        if (duration) {
+            fields.push({
+                name: i18n.msg('duration', 'mp3', lang),
+                value: duration[1].replace(/0(\d):/, '$1:')
+            });
+        }
+
+        message.channel.send({
+            embed: {
+                title: i18n.msg('download', 'mp3', lang),
+                description: title[1],
+                url: dl[1],
+                color: OpalBot.color,
+                image: img && masked ? {
+                    url: img[1].replace('large', 't500x500')
+                } : null,
+                fields: fields
+            }
         });
         return;
     }

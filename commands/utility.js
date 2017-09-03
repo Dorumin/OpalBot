@@ -164,7 +164,7 @@ module.exports.peasants.youtube = (message, content, lang, i18n, OpalBot) => {
         } else {
             var list = '';
             for (var i in titles) {
-                list += `\n${Number(i) + 1} - ${titles[i]}`
+                list += `\n[${Number(i) + 1}] - ${titles[i]}`
             }
             bot_message = await message.channel.send('```' + list.slice(1) + '```');
         }

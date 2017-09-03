@@ -130,6 +130,9 @@
     "mp3": {
         "invalid": "please input a valid YouTube video URL or ID!",
         "server-error": "An error code has been returned by the server! This is most likely caused by an invalid video ID. Please check the bot logs for details.",
+        "sc-server-error-token": "Error while parsing SoundCloud API: Cannot find token",
+        "sc-server-error-download": "Error while parsing SoundCloud API: Cannot find download URL",
+        "sc-server-error-title": "Error while parsing SoundCloud API: Cannot find title",
         "download": "Download",
         "size": "Size",
         "duration": "Duration"

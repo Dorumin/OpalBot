@@ -42,10 +42,16 @@ client.on('guildCreate', (guild) => {
 
 client.on('message', async (message) => {
     if (message.author.id == client.user.id || !message.member) return;
+    console.log(name + ': ' + content + (message.channel.type == 'text' ? ' @ ' + message.guild.name : ''));
+    if (message.channel.type == 'dm' || message.channel.type == 'group') {
+        console.log(message.author.username + ': ' + message.content.trim());
+        message.reply('Add me on your server! <https://discordapp.com/oauth2/authorize?client_id=348233224293449729&scope=bot&permissions=60416>');
+        return;
+    }
     var content = message.content.trim(),
     name = message.author.username,
     local = await OpalBot.util.getGuildLanguage(message.guild),
-    prefixes = (OpalBot.prefixes[message.guild && message.guild.id] || OpalBot.prefixes.default).concat([`<@${client.user.id}>`, i18n.msg('prefix', 'main', client.user.id, local)]),
+    prefixes = (OpalBot.prefixes[message.guild.id] || OpalBot.prefixes.default).concat([`<@${client.user.id}>`, i18n.msg('prefix', 'main', client.user.id, local)]),
     i = prefixes.length,
     permissions = message.member.permissions.serialize();
     for (var key in OpalBot.permissionAliases) {
@@ -53,10 +59,6 @@ client.on('message', async (message) => {
     }
     if (!content) return;
     console.log(name + ': ' + content + (message.channel.type == 'text' ? ' @ ' + message.guild.name : ''));
-    if (message.channel.type == 'dm' || message.channel.type == 'group') {
-        message.reply('Add me on your server! <https://discordapp.com/oauth2/authorize?client_id=348233224293449729&scope=bot&permissions=60416>');
-        return;
-    }
     if (message.channel.type != 'text') return;
     while (i--) {
         if (content.startsWith(prefixes[i])) {

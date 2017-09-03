@@ -199,22 +199,53 @@ module.exports.peasants.mp3 = (message, content, lang, i18n, OpalBot) => {
             }
             var size = res.headers['content-length'],
             readable_size = parseFloat((size / 1024 / 1024).toFixed(2)) + 'mb';
-            message.channel.send({
-                embed: {
-                    title: i18n.msg('download', 'mp3', lang),
-                    description: title,
-                    url: url,
-                    color: OpalBot.color,
-                    image: masked ? {
-                        url: `https://img.youtube.com/vi/${id}/maxresdefault.jpg`
-                    } : null,
-                    fields: size ? [{
+            request(`https://www.googleapis.com/youtube/v3/videos?id=${id}&part=contentDetails&key=${process.env.youtube_token}`, (err, r, body) => {
+                var details = JSON.parse(body),
+                iso_duration = details.items[0].contentDetails.duration,
+                split = iso.split(/\D+/).filter(Boolean),
+                duration = '',
+                fields = [];
+                if (split.length > 3) {
+                    if (split.length == 4) {
+                        split[1] = Number(split[1]) + Number(split[0]) * 24;
+                        split = split.slice(1);
+                        duration = split.join(':');
+                    } else if (split.length == 5) {
+                        split[2] = Number(split[2]) + Number(split[1]) * 24;
+                        split[2] = split[2] + Number(split[0]) * 24 * 7;
+                        split = split.slice(2);
+                        duration = split.join(':');
+                    }
+                } else {
+                    duration = split.join(':');
+                }
+                if (size) {
+                    fields.push({
                         name: i18n.msg('size', 'mp3', lang),
                         value: readable_size,
                         inline: true
-                    }] : []
+                    });
                 }
-            })
+                if (duration) {
+                    fields.push({
+                        name: i18n.msg('duration', 'mp3', lang),
+                        value: duration,
+                        inline: true
+                    });
+                }
+                message.channel.send({
+                    embed: {
+                        title: i18n.msg('download', 'mp3', lang),
+                        description: title,
+                        url: url,
+                        color: OpalBot.color,
+                        image: masked ? {
+                            url: `https://img.youtube.com/vi/${id}/maxresdefault.jpg`
+                        } : null,
+                        fields: fields
+                    }
+                })
+            });
         })
     })
 };

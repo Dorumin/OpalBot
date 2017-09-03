@@ -41,7 +41,7 @@ client.on('guildCreate', (guild) => {
 });
 
 client.on('message', async (message) => {
-    if (message.author.id == client.user.id || !message.member) return;
+    if (message.author.id == client.user.id || (!message.member && message.channel.type == 'text')) return;
     console.log(name + ': ' + content + (message.channel.type == 'text' ? ' @ ' + message.guild.name : ''));
     if (message.channel.type == 'dm' || message.channel.type == 'group') {
         console.log(message.author.username + ': ' + message.content.trim());

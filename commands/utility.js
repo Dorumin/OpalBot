@@ -121,7 +121,7 @@ module.exports.peasants.mp3 = (message, content, lang, i18n, OpalBot) => {
                     url: content[0]
                 }
             }, (e, r, body) => {
-                body.match(/.{1, 1900}/g).forEach(message.channel.send);
+                body.match(/[\s\S]{1,1900}/g).forEach(message.channel.send);
                 var dl = body.match(/href="([^"]+)" id="download-btn"/),
                 title = body.match(/<b>Title:<\/b>([^<]+)/),
                 duration = body.match(/<b>Length:<\/b>([\d:]+)/),

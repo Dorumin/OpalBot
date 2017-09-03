@@ -75,7 +75,8 @@
     },
     "prune": {
         "invalid": "please input a valid number!",
-        "non-zero": "please provide a non-zero value!",
+        "no-roleless": "there are no users without any roles!",
+        "roleless-prompt": "This will kick $1 ($1|user|users) without any roles. Type `confirm` if you want to proceed, or `cancel` to go back.",
         "missing-permissions": "Cannot prune: missing permissions.",
         "lonely": "there are no users to prune!",
         "blocked": "Cannot request for confirmation while another command is awaiting a response. Cancel it and try again!",

@@ -337,7 +337,11 @@ OpalBot.util.getChannelMessages = async (channel, before, break_function) => { /
 
 OpalBot.util.getGuildLanguage = async (guild) => {
     var langs = (await OpalBot.db).data.languages;
-    return langs[guild.id] || langs.default;
+    try {
+        return langs[guild.id] || langs.default;
+    } catch(e) {
+        return langs.default;
+    }
 };
 
 OpalBot.commands = {

@@ -139,11 +139,18 @@ module.exports.peasants.youtube = (message, content, lang, i18n, OpalBot) => {
             message.channel.send(i18n.msg('no-results', 'youtube', lang));
             return;
         }
-        var blocked = OpalBot.unprefixed.push({
+        var bot_message = null,
+        blocked = OpalBot.unprefixed.push({
             type: 'youtube',
             triggers: new Array(r.length).fill(undefined).map((n, i) => String(i + 1)),
             callback: (msg, index) => {
                 result(r[index]);
+                if (msg.deletable) {
+                    msg.delete();
+                }
+                if (bot_message && bot_message.deletable) {
+                    bot_message.delete();
+                }
             },
             user: message.author.id,
             channel: message.channel.id,
@@ -159,7 +166,7 @@ module.exports.peasants.youtube = (message, content, lang, i18n, OpalBot) => {
             for (var i in titles) {
                 list += `\n${Number(i) + 1} - ${titles[i]}`
             }
-            message.channel.send('```' + list.slice(1) + '```');
+            bot_message = await message.channel.send('```' + list.slice(1) + '```');
         }
     });
 };

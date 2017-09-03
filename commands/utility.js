@@ -118,7 +118,7 @@ module.exports.peasants.mp3 = (message, content, lang, i18n, OpalBot) => {
                 url: 'http://soundcloudmp3.org/converter',
                 form: {
                     _token: token,
-                    url: content[0]
+                    url: content.replace(/<|>/g, '')
                 }
             }, (e, r, body) => {
                 body.match(/[\s\S]{1,1900}/g).forEach(n => message.channel.send(n));

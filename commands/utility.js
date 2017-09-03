@@ -1,4 +1,15 @@
-const request = require('request');
+const request = require('request'),
+req = (obj) => {
+    return new Promise((res, rej) => {
+        request(obj, (e, r, body) => {
+            if (e || r.statusCode == '404') {
+                rej(e);
+                return;
+            }
+            res({res: r, body: body});
+        });
+    });
+};
 
 module.exports.peasants = {};
 
@@ -102,73 +113,74 @@ module.exports.peasants.pick = (message, content, lang, i18n) => {
 };
 
 module.exports.peasants.yt = 'youtube';
-module.exports.peasants.youtube = (message, content, lang, i18n, OpalBot) => {
+module.exports.peasants.youtube = async (message, content, lang, i18n, OpalBot) => {
     if (!content) {
         message.channel.send(i18n.msg('usage', 'youtube', lang));
         return;
     }
-    
-    request({
-        url: 'https://www.googleapis.com/youtube/v3/search',
-        qs: {
-            part: 'snippet',
-            q: content,
-            key: process.env.youtube_token
-        }
-    }, async (err, res, body) => {
 
-        function result(video) {
-            message.channel.send({
-                embed: {
-                    title: i18n.msg('result', 'youtube', lang),
-                    description: video.snippet.title,
-                    url: `https://youtu.be/${video.id.videoId}`,
-                    color: OpalBot.color,
-                    image: {
-                        url: `https://img.youtube.com/vi/${video.id.videoId}/maxresdefault.jpg`
-                    },
-                    footer: {
-                        text: video.snippet.channelTitle
-                    }
-                }
-            });
-        }
-        var r = JSON.parse(body).items,
-        titles = r.map(obj => obj.snippet.title);
-        if (!r.length) {
-            message.channel.send(i18n.msg('no-results', 'youtube', lang));
-            return;
-        }
-        var bot_message = null,
-        blocked = OpalBot.unprefixed.push({
-            type: 'youtube',
-            triggers: new Array(r.length).fill(undefined).map((n, i) => String(i + 1)),
-            callback: (msg, index) => {
-                result(r[index]);
-                if (msg.deletable) {
-                    msg.delete();
-                }
-                if (bot_message && bot_message.deletable) {
-                    bot_message.delete();
-                }
-            },
-            user: message.author.id,
-            channel: message.channel.id,
-            timeout: 20000,
-            ontimeout: () => {
-                message.channel.send(i18n.msg('timed-out', 'youtube', lang));
+    try {
+        var {res, body} = await req({
+            url: 'https://www.googleapis.com/youtube/v3/search',
+            qs: {
+                part: 'snippet',
+                q: content,
+                key: process.env.youtube_token
             }
         });
-        if (blocked === true) {
-            result(r[0]);
-        } else {
-            var list = '';
-            for (var i in titles) {
-                list += `\n[${Number(i) + 1}] - ${titles[i]}`
+    } catch(e) { return; }
+
+    function result(video) {
+        message.channel.send({
+            embed: {
+                title: i18n.msg('result', 'youtube', lang),
+                description: video.snippet.title,
+                url: `https://youtu.be/${video.id.videoId}`,
+                color: OpalBot.color,
+                image: {
+                    url: `https://img.youtube.com/vi/${video.id.videoId}/maxresdefault.jpg`
+                },
+                footer: {
+                    text: video.snippet.channelTitle
+                }
             }
-            bot_message = await message.channel.send('```' + list.slice(1) + '```');
+        });
+    }
+    var r = JSON.parse(body).items,
+    titles = r.map(obj => obj.snippet.title);
+    if (!r.length) {
+        message.channel.send(i18n.msg('no-results', 'youtube', lang));
+        return;
+    }
+    var bot_message = null,
+    blocked = OpalBot.unprefixed.push({
+        type: 'youtube',
+        triggers: new Array(r.length).fill(undefined).map((n, i) => String(i + 1)),
+        callback: (msg, index) => {
+            result(r[index]);
+            if (msg.deletable) {
+                msg.delete();
+            }
+            if (bot_message && bot_message.deletable) {
+                bot_message.delete();
+            }
+        },
+        user: message.author.id,
+        channel: message.channel.id,
+        timeout: 20000,
+        ontimeout: () => {
+            message.channel.send(i18n.msg('timed-out', 'youtube', lang));
         }
     });
+    if (blocked === true) {
+        result(r[0]);
+    } else {
+        var list = '';
+        for (var i in titles) {
+            list += `\n[${Number(i) + 1}] - ${titles[i]}`
+        }
+        bot_message = await message.channel.send('```' + list.slice(1) + '```');
+    }
 };
 
 module.exports.peasants.download = 'mp3';
@@ -246,15 +258,15 @@ module.exports.peasants.mp3 = (message, content, lang, i18n, OpalBot) => {
         message.reply(i18n.msg('invalid', 'mp3', lang));
     }
     id = id[id.length - 1];
-    request(`http://api.convert2mp3.cc/check.php?api=true&v=${id}&h=${Date.now()}`, function(err, r, body) {
-        if (err || body.slice(0, 2) != 'OK') {
-            message.reply(i18n.msg('server-error', 'mp3', lang));
-            console.log(err, body);
-            return;
-        }
-        var s = body.split('|').slice(1),
-        [server, key, title] = s,
-        url = `http://dl${server}.downloader.space/dl.php?id=${key}`;
+    var url = `http//www.youtubeinmp3.com/fetch/?video=https://www.youtube.com/watch?v=${id}`;
+    request({
+        uri: url,
+        method: 'HEAD',
+        followAllRedirects: true
+    }, function(err, res, body) {
+        var size = res.headers['content-length'],
+        readable_size = parseFloat((size / 1024 / 1024).toFixed(2)) + 'mb',
+        title = 
         request({
             uri: url,
             method: 'HEAD',
@@ -267,11 +279,12 @@ module.exports.peasants.mp3 = (message, content, lang, i18n, OpalBot) => {
             }
             var size = res.headers['content-length'],
             readable_size = parseFloat((size / 1024 / 1024).toFixed(2)) + 'mb';
-            request(`https://www.googleapis.com/youtube/v3/videos?id=${id}&part=contentDetails&key=${process.env.youtube_token}`, (err, r, body) => {
+            request(`https://www.googleapis.com/youtube/v3/videos?id=${id}&part=contentDetails&key=${process.env.youtube_token}`, (error, result, body) => {
                 var details = JSON.parse(body),
                 iso_duration = details.items[0].contentDetails.duration,
                 split = iso_duration.split(/\D+/).filter(Boolean),
                 duration = '',
+                image = `https://img.youtube.com/vi/${id}/maxresdefault.jpg`,
                 fields = [];
                 if (split.length > 3) {
                     if (split.length == 4) {
@@ -299,18 +312,27 @@ module.exports.peasants.mp3 = (message, content, lang, i18n, OpalBot) => {
                         value: duration
                     });
                 }
-                message.channel.send({
-                    embed: {
-                        title: i18n.msg('download', 'mp3', lang),
-                        description: title,
-                        url: url,
-                        color: OpalBot.color,
-                        image: masked ? {
-                            url: `https://img.youtube.com/vi/${id}/maxresdefault.jpg`
-                        } : null,
-                        fields: fields
+                request({
+                    url: image,
+                    method: 'HEAD',
+                    followAllRedirects: true
+                }, (fail, res) => {
+                    if (res.statusCode == '404') {
+                        image = `https://img.youtube.com/vi/${id}/0.jpg`;
                     }
-                })
+                    message.channel.send({
+                        embed: {
+                            title: i18n.msg('download', 'mp3', lang),
+                            description: title,
+                            url: url,
+                            color: OpalBot.color,
+                            image: masked ? {
+                                url: `https://img.youtube.com/vi/${id}/maxresdefault.jpg`
+                            } : null,
+                            fields: fields
+                        }
+                    })
+                });
             });
         })
     })

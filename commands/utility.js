@@ -144,13 +144,15 @@ module.exports.peasants.mp3 = (message, content, lang, i18n, OpalBot) => {
                     if (size) {
                         fields.push({
                             name: i18n.msg('size', 'mp3', lang),
-                            value: readable_size
+                            value: readable_size,
+                            inline: true
                         });
                     }
                     if (duration) {
                         fields.push({
                             name: i18n.msg('duration', 'mp3', lang),
-                            value: duration[1].replace(/0(\d):/, '$1:')
+                            value: duration[1].replace(/0(\d):/, '$1:'),
+                            inline: true
                         });
                     }
                     message.channel.send({

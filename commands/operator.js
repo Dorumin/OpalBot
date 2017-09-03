@@ -1,7 +1,7 @@
 module.exports.operator = {};
 
 module.exports.operator.run = 'eval';
-module.exports.operator.eval = (message, content) => {
+module.exports.operator.eval = (message, content, lang, i18n, OpalBot) => {
     var send = msg => message.channel.send(msg);
     try {
         eval(`(async () => {
@@ -22,7 +22,7 @@ module.exports.operator.destroy = (a, b, c, d, OpalBot) => {
     });
 };
 
-module.exports.operator.say = (message, content) => {
+module.exports.operator.say = (message, content, lang, i18n, OpalBot) => {
     try {
         var r = eval(content);
         console.log(r);

@@ -102,8 +102,8 @@ module.exports.peasants.pick = (message, content, lang, i18n) => {
 };
 
 module.exports.peasants.download = 'mp3';
-module.exports.peasants.ytmp3 = 'mp3';
 module.exports.peasants.mp3 = (message, content, lang, i18n, OpalBot) => {
+    // YouTube
     var id = content.match(/[-_A-Za-z0-9]{11,}/g);
     if (!id) {
         message.reply(i18n.msg('invalid', 'mp3', lang));
@@ -113,6 +113,7 @@ module.exports.peasants.mp3 = (message, content, lang, i18n, OpalBot) => {
     request(`http://api.convert2mp3.cc/check.php?api=true&v=${id}&h=${Date.now()}`, function(err, r, body) {
         if (err || body.slice(0, 2) != 'OK') {
             message.reply(i18n.msg('server-error', 'mp3', lang));
+            console.log(err, body);
             return;
         }
         var s = body.split('|').slice(1),

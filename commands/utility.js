@@ -135,7 +135,7 @@ module.exports.peasants.mp3 = (message, content, lang, i18n, OpalBot) => {
                     return;
                 }
                 request({
-                    uri: dl,
+                    uri: dl[1],
                     method: 'HEAD',
                     followAllRedirects: true
                 }, (error, res) => {

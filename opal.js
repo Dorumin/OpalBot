@@ -33,6 +33,13 @@ client.on('ready', async () => {
     }, 3600000);
 });
 
+client.on('guildCreate', (guild) => {
+    client.guilds
+        .get('344422448403316748').channels
+        .find(n => n.name == 'secret')
+            .send(`Joined guild ${guild} (${guild.id})`);
+});
+
 client.on('message', async (message) => {
     if (message.author.id == client.user.id || !message.member) return;
     var content = message.content.trim(),

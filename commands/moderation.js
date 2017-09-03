@@ -2,7 +2,7 @@ module.exports.kick = {};
 module.exports.ban = {};
 
 module.exports.kick.kick = (message, content, lang, i18n) => {
-    var user = message.mentions.users.filter(u => u.id != client.user.id).first();
+    var user = message.mentions.users.filter(u => u.id != OpalBot.client.user.id).first();
     if (!user) {
         message.channel.send(i18n.msg('no-mention', 'kick', lang));
         return;
@@ -23,7 +23,7 @@ module.exports.kick.kick = (message, content, lang, i18n) => {
 };
 
 module.exports.ban.ban = (message, content, lang, i18n) => {
-    var user = message.mentions.users.filter(u => u.id != client.user.id).first();
+    var user = message.mentions.users.filter(u => u.id != OpalBot.client.user.id).first();
     if (!user) {
         message.channel.send(i18n.msg('no-mention', 'ban', lang));
         return;

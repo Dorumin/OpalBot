@@ -217,6 +217,9 @@ var OpalBot = {
     },
     get uptime() {
         return client.uptime;
+    },
+    get client() {
+        return client;
     }
 };
 

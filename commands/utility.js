@@ -202,7 +202,7 @@ module.exports.peasants.mp3 = (message, content, lang, i18n, OpalBot) => {
             request(`https://www.googleapis.com/youtube/v3/videos?id=${id}&part=contentDetails&key=${process.env.youtube_token}`, (err, r, body) => {
                 var details = JSON.parse(body),
                 iso_duration = details.items[0].contentDetails.duration,
-                split = iso.split(/\D+/).filter(Boolean),
+                split = iso_duration.split(/\D+/).filter(Boolean),
                 duration = '',
                 fields = [];
                 if (split.length > 3) {

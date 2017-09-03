@@ -101,6 +101,64 @@ module.exports.peasants.pick = (message, content, lang, i18n) => {
     }
 };
 
+module.exports.peasants.yt = 'youtube';
+module.exports.peasants.youtube = (message, content, lang, i18n, OpalBot) => {
+    if (!content) {
+        message.channel.send(i18n.msg('usage', 'youtube', lang));
+        return;
+    }
+    
+    request({
+        url: 'https://www.googleapis.com/youtube/v3/search',
+        qs: {
+            part: 'snippet',
+            q: content,
+            key: process.env.youtube_token
+        }
+    }, (err, res, body) => {
+
+        function result(video) {
+            message.channel.send({
+                embed: {
+                    title: i18n.msg('result', 'youtube', lang),
+                    description: video.snippet.title,
+                    url: `https://youtu.be/${video.id.videoId}`,
+                    color: OpalBot.color,
+                    image: {
+                        url: `https://img.youtube.com/vi/${video.id.videoId}/maxresdefault.jpg`
+                    }
+                }
+            });
+        }
+        var r = JSON.parse(body).items,
+        titles = r.map(obj => obj.snippet.title);
+        if (!r.length) {
+            message.channel.send(i18n.msg('no-results', 'youtube', lang));
+            return;
+        }
+        var blocked = OpalBot.unprefixed.push({
+            type: 'youtube',
+            triggers: new Array(r.length).fill(undefined).map((n, i) => i + 1),
+            callback: (msg, index) => {
+                result(r[index]);
+            },
+            timeout: 20000,
+            ontimeout: () => {
+                message.channel.send(i18n.msg('timed-out', 'youtube', lang));
+            }
+        });
+        if (blocked === true) {
+            result(r[0]);
+        } else {
+            var list = '';
+            for (var i in titles) {
+                list += `\n${i + 1} - ${titles[i]}`
+            }
+            message.channel.send('```' + list.slice(1) + '```');
+        }
+    });
+};
+
 module.exports.peasants.download = 'mp3';
 module.exports.peasants.mp3 = (message, content, lang, i18n, OpalBot) => {
     // SoundCloud

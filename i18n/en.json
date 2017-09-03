@@ -127,6 +127,12 @@
         "one": "Separate your options with `;`!",
         "result": "I pick **$1**!"
     },
+    "youtube": {
+        "usage": "Usage: [Search query (required)]",
+        "no-results": "No results found for your search query.",
+        "timed-out": "Your time has run out! Choose an index faster next time.",
+        "result": "Result"
+    },
     "mp3": {
         "invalid": "please input a valid YouTube video URL or ID!",
         "server-error": "An error code has been returned by the server! This is most likely caused by an invalid video ID. Please check the bot logs for details.",

@@ -17,7 +17,7 @@ module.exports.operator.eval = (message, content, lang, i18n, OpalBot) => {
 };
 
 module.exports.operator.destroy = (a, b, c, d, OpalBot) => {
-    client.destroy().then(() => {
+    OpalBot.client.destroy().then(() => {
         OpalBot.server.close();
     });
 };

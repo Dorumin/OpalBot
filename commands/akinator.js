@@ -217,6 +217,7 @@ module.exports.peasants.akinator = async function(message, content, lang, i18n, 
             message.channel.send({embed: {
                 title: i18n.msg('title', 'akinator', guess.name, parseInt(guess.proba * 100, 10), lang),
                 description: guess.description,
+                color: OpalBot.color,
                 footer: {
                     text: '[' + yesno + ']'
                 },

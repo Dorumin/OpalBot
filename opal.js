@@ -130,6 +130,7 @@ var OpalBot = {
     prefixes: [],
     unprefixed: [],
     v: '0.01',
+    color: 0x2196f3,
     operators: ['155545848812535808', '195712766214930432'],
     util: {},
     permissionAliases: {

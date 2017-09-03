@@ -19,11 +19,11 @@ module.exports.peasants.hello = (message) => {
 
 module.exports.peasants.a = 'avatar';
 module.exports.peasants.avi = 'avatar';
-module.exports.peasants.avatar = (message, content, lang, i18n) => {
+module.exports.peasants.avatar = (message, content, lang, i18n, OpalBot) => {
     var user = message.mentions.users.first() || message.author;
     message.channel.send({
         embed: {
-            color: 0x2196f3,
+            color: OpalBot.color,
             title: i18n.msg('title', 'avatar', lang),
             image: {
                 url: user.displayAvatarURL
@@ -134,6 +134,7 @@ module.exports.peasants.mp3 = (message, content, lang, i18n, OpalBot) => {
                     title: i18n.msg('download', 'mp3', lang),
                     description: title,
                     url: url,
+                    color: OpalBot.color,
                     image: masked ? {
                         url: `https://img.youtube.com/vi/${id}/maxresdefault.jpg`
                     } : null,

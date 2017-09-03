@@ -103,13 +103,79 @@ module.exports.peasants.pick = (message, content, lang, i18n) => {
 
 module.exports.peasants.download = 'mp3';
 module.exports.peasants.mp3 = (message, content, lang, i18n, OpalBot) => {
+    // SoundCloud
+    var sc = content.match(/https?:\/{2}soundcloud\.com\/[_\-\w\d]+\/[_\-\w\d]+/),
+    masked = /<https?:\/\//i.test(content);
+    if (sc) {
+        request('http://soundcloudmp3.org/', (err, response, main_content) => {
+            try {
+                var token = main_content.match(/name="_token" type="hidden" value="([\d\w]+)"/)[1];
+            } catch(e) {
+                message.channel.send(i18n.msg('sc-server-error-token', 'mp3', lang));
+                return;
+            }
+            request.post({
+                url: 'http://soundcloudmp3.org/converter',
+                form: {
+                    _token: token,
+                    url: content[0]
+                }
+            }, (e, r, body) => {
+                var dl = body.match(/href="([^"]+)" id="download-btn"/),
+                title = body.match(/<b>Title:<\/b>([^<]+)/),
+                duration = body.match(/<b>Length:<\/b>([\d:]+)/),
+                img = body.match(/src="([^"]+)" alt="preview image"/);
+                if (!dl) {
+                    message.channel.send(i18n.msg('sc-server-error-download', 'mp3', lang));
+                    return;
+                }
+                if (!title) {
+                    message.channel.send(i18n.msg('sc-server-error-title', 'mp3', lang));
+                    return;
+                }
+                request({
+                    uri: url,
+                    method: 'HEAD',
+                    followAllRedirects: true
+                }, (error, res) => {
+                    var size = res.headers['content-length'],
+                    readable_size = parseFloat((size / 1024 / 1024).toFixed(2)) + 'mb',
+                    fields = [];
+                    if (size) {
+                        fields.push({
+                            name: i18n.msg('size', 'mp3', lang),
+                            value: readable_size
+                        });
+                    }
+                    if (duration) {
+                        fields.push({
+                            name: i18n.msg('duration', 'mp3', lang),
+                            value: duration[1].replace(/0(\d):/, '$1:')
+                        });
+                    }
+                    message.channel.send({
+                        embed: {
+                            title: i18n.msg('download', 'mp3', lang),
+                            description: title[1],
+                            url: dl,
+                            color: OpalBot.color,
+                            image: img && masked && {
+                                url: img[1].replace('large', 't500x500')
+                            },
+                            fields: fields
+                        }
+                    });
+                })
+            }); 
+        });
+        return;
+    }
     // YouTube
     var id = content.match(/[-_A-Za-z0-9]{11,}/g);
     if (!id) {
         message.reply(i18n.msg('invalid', 'mp3', lang));
     }
     id = id[id.length - 1];
-    var masked = /<https?:\/\//i.test(content);
     request(`http://api.convert2mp3.cc/check.php?api=true&v=${id}&h=${Date.now()}`, function(err, r, body) {
         if (err || body.slice(0, 2) != 'OK') {
             message.reply(i18n.msg('server-error', 'mp3', lang));
@@ -126,6 +192,7 @@ module.exports.peasants.mp3 = (message, content, lang, i18n, OpalBot) => {
         }, (e, res) => {
             if (e) {
                 message.reply(i18n.msg('server-error', 'mp3', lang));
+                console.log(e, res);
                 return;
             }
             var size = res.headers['content-length'],

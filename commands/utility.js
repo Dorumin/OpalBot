@@ -126,6 +126,9 @@ module.exports.peasants.youtube = (message, content, lang, i18n, OpalBot) => {
                     color: OpalBot.color,
                     image: {
                         url: `https://img.youtube.com/vi/${video.id.videoId}/maxresdefault.jpg`
+                    },
+                    footer: {
+                        text: video.snippet.channelTitle
                     }
                 }
             });
@@ -142,6 +145,8 @@ module.exports.peasants.youtube = (message, content, lang, i18n, OpalBot) => {
             callback: (msg, index) => {
                 result(r[index]);
             },
+            user: message.author.id,
+            channel: message.channel.id,
             timeout: 20000,
             ontimeout: () => {
                 message.channel.send(i18n.msg('timed-out', 'youtube', lang));

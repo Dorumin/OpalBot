@@ -45,7 +45,7 @@ client.on('message', async (message) => {
     var content = message.content.trim(),
     name = message.author.username,
     local = await OpalBot.util.getGuildLanguage(message.guild),
-    prefixes = (OpalBot.prefixes[message.guild.id] || OpalBot.prefixes.default).concat([`<@${client.user.id}>`, i18n.msg('prefix', 'main', client.user.id, local)]),
+    prefixes = (OpalBot.prefixes[message.guild && message.guild.id] || OpalBot.prefixes.default).concat([`<@${client.user.id}>`, i18n.msg('prefix', 'main', client.user.id, local)]),
     i = prefixes.length,
     permissions = message.member.permissions.serialize();
     for (var key in OpalBot.permissionAliases) {

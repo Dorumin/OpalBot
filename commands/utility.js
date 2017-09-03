@@ -158,11 +158,11 @@ module.exports.peasants.mp3 = (message, content, lang, i18n, OpalBot) => {
                         embed: {
                             title: i18n.msg('download', 'mp3', lang),
                             description: title[1],
-                            url: dl,
+                            url: dl[1],
                             color: OpalBot.color,
-                            image: img && masked && {
+                            image: img && masked ? {
                                 url: img[1].replace('large', 't500x500')
-                            },
+                            } : null,
                             fields: fields
                         }
                     });

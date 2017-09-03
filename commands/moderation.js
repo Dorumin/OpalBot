@@ -8,7 +8,7 @@ module.exports.kick.kick = (message, content, lang, i18n, OpalBot) => {
         return;
     }
     var guild_user = message.guild.members.find(member => member.user.id == user.id),
-    reason = reason.replace(`<@${user.id}>`, '').trim();
+    reason = content.replace(`<@${user.id}>`, '').trim();
     if (!guild_user.kickable) {
         message.channel.send(i18n.msg('cannot-kick', 'kick', user.username, lang));
         return;
@@ -29,7 +29,7 @@ module.exports.ban.ban = (message, content, lang, i18n, OpalBot) => {
         return;
     }
     var guild_user = message.guild.members.find(member => member.user.id == user.id),
-    split = reason.replace(`<@${user.id}>`, '').trim().split('|'),
+    split = content.replace(`<@${user.id}>`, '').trim().split('|'),
     days = split[0].trim(),
     reason = split.slice(1).join('|').trim(),
     ban;

@@ -1,7 +1,7 @@
 module.exports.kick = {};
 module.exports.ban = {};
 
-module.exports.kick.kick = (message, content, lang, i18n) => {
+module.exports.kick.kick = (message, content, lang, i18n, OpalBot) => {
     var user = message.mentions.users.filter(u => u.id != OpalBot.client.user.id).first();
     if (!user) {
         message.channel.send(i18n.msg('no-mention', 'kick', lang));
@@ -22,7 +22,7 @@ module.exports.kick.kick = (message, content, lang, i18n) => {
     });
 };
 
-module.exports.ban.ban = (message, content, lang, i18n) => {
+module.exports.ban.ban = (message, content, lang, i18n, OpalBot) => {
     var user = message.mentions.users.filter(u => u.id != OpalBot.client.user.id).first();
     if (!user) {
         message.channel.send(i18n.msg('no-mention', 'ban', lang));

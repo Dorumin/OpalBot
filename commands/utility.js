@@ -115,7 +115,7 @@ module.exports.peasants.youtube = (message, content, lang, i18n, OpalBot) => {
             q: content,
             key: process.env.youtube_token
         }
-    }, (err, res, body) => {
+    }, async (err, res, body) => {
 
         function result(video) {
             message.channel.send({

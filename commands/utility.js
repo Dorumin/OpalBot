@@ -191,7 +191,7 @@ module.exports.peasants.mp3 = async (message, content, lang, i18n, OpalBot) => {
     masked = /<https?:\/\//i.test(content);
     if (sc) {
         try {
-            var {res, body} = await req('http://soundcloudmp3.org/');
+            var { res, body } = await req('http://soundcloudmp3.org/');
         } catch(e) {
             return;
         }
@@ -202,7 +202,7 @@ module.exports.peasants.mp3 = async (message, content, lang, i18n, OpalBot) => {
             return;
         }
         try {
-            var {res, body} = await req({
+            var { res, body } = await req({
                 url: 'http://soundcloudmp3.org/converter',
                 form: {
                     _token: token,
@@ -226,7 +226,7 @@ module.exports.peasants.mp3 = async (message, content, lang, i18n, OpalBot) => {
         }
         
         try {
-            var {res, body} = await req({
+            var { res, body } = await req({
                 uri: dl[1],
                 method: 'HEAD',
                 followAllRedirects: true
@@ -265,40 +265,75 @@ module.exports.peasants.mp3 = async (message, content, lang, i18n, OpalBot) => {
         });
         return;
     }
+
     // YouTube
     var id = content.match(/[-_A-Za-z0-9]{11,}/g);
     if (!id) {
         message.reply(i18n.msg('invalid', 'mp3', lang));
     }
     id = id[id.length - 1];
-    var url = `http//www.youtubeinmp3.com/fetch/?video=https://www.youtube.com/watch?v=${id}`;
-    request({
-        uri: url,
-        method: 'HEAD',
-        followAllRedirects: true
-    }, function(err, res, body) {
+    var tries = 5;
+    while (tries--) {
+        try {
+            var { body } = await req({
+                uri: 'http://api.convert2mp3.cc/check.php',
+                qs: {
+                    api: true,
+                    v: id,
+                    h: Date.now()
+                }
+            });
+            var s = body.split('|');
+            if (s[0] == 'ERROR') {
+                if (s[1] != 'PENDING') throw new Error(); // Screw it, the server isn't giving us the link anytime soon
+                await new Promise((resolve) => {
+                    setTimeout(() => resolve(), 1500);
+                });
+            }
+        } catch(e) { break; }
+    }
+    if (typeof body != 'undefined' && body.slice(0, -2) == 'OK') {
+        var [server, key, title] = body.split('|').slice(1),
+        url = `http://dl${server}.downloader.space/dl.php?id=${key}`;
+
+        // Get file size
+        try {
+            var { res } = await req({
+                uri: url,
+                method: 'HEAD',
+                followAllRedirects: true
+            });
+            if (!res || !res.headers || !res.headers['content-length']) throw new Error();
+        } catch(e) {
+            message.channel.send(i18n.msg('size-404', 'mp3', lang));
+            return;
+        }
         var size = res.headers['content-length'],
         readable_size = parseFloat((size / 1024 / 1024).toFixed(2)) + 'mb',
-        title = 
-        request({
-            uri: url,
-            method: 'HEAD',
-            followAllRedirects: true
-        }, (e, res) => {
-            if (e) {
-                message.reply(i18n.msg('server-error', 'mp3', lang));
-                console.log(e, res);
-                return;
-            }
-            var size = res.headers['content-length'],
-            readable_size = parseFloat((size / 1024 / 1024).toFixed(2)) + 'mb';
-            request(`https://www.googleapis.com/youtube/v3/videos?id=${id}&part=contentDetails&key=${process.env.youtube_token}`, (error, result, body) => {
-                var details = JSON.parse(body),
-                iso_duration = details.items[0].contentDetails.duration,
+        fields = [{
+            name: i18n.msg('size', 'mp3', lang),
+            lang: readable_size
+        }];
+        
+        // Get video duration with the YT API
+        try {
+            var { body } = await req({
+                uri: 'https://www.googleapis.com/youtube/v3/videos',
+                qs: {
+                    id: id,
+                    part: 'contentDetails',
+                    key: process.env.youtube_token
+                }
+            });
+        } catch(e) { body = undefined; }
+
+        // Parse the STUPID ISO 8601 timestamp YT uses
+        if (typeof body != 'undefined') {
+            var items = JSON.parse(body).items;
+            if (items && items.length) {
+                var iso_duration = items[0].contentDetails.duration,
                 split = iso_duration.split(/\D+/).filter(Boolean),
-                duration = '',
-                image = `https://img.youtube.com/vi/${id}/maxresdefault.jpg`,
-                fields = [];
+                duration = '';
                 if (split.length > 3) {
                     if (split.length == 4) {
                         split[1] = Number(split[1]) + Number(split[0]) * 24;
@@ -313,42 +348,115 @@ module.exports.peasants.mp3 = async (message, content, lang, i18n, OpalBot) => {
                 } else {
                     duration = split.join(':');
                 }
-                if (size) {
-                    fields.push({
-                        name: i18n.msg('size', 'mp3', lang),
-                        value: readable_size
-                    });
-                }
-                if (duration) {
+                fields.push({
+                    name: i18n.msg('duration', 'mp3', lang),
+                    value: duration
+                });
+            }
+        }
+
+        try { // See if the maxresdefault thumbnail is available.
+            var { res } = await req({
+                url: image,
+                method: 'HEAD',
+                followAllRedirects: true
+            });
+            if (res.statusCode == '404') throw new Error();
+        } catch(e) {
+            image = `https://img.youtube.com/vi/${id}/0.jpg`;
+        }
+        message.channel.send({
+            embed: {
+                title: i18n.msg('download', 'mp3', lang),
+                description: title,
+                url: url,
+                color: OpalBot.color,
+                image: masked ? {
+                    url: `https://img.youtube.com/vi/${id}/maxresdefault.jpg`
+                } : null,
+                fields: fields
+            }
+        });
+    } else { // Main server is down, find a better one.
+        var url = `http://www.youtubeinmp3.com/fetch/?video=https://www.youtube.com/watch?v=${id}`;
+        try {
+            var { res } = await req({
+                uri: url,
+                method: 'HEAD',
+                followAllRedirects: true
+            });
+        } catch(e) {}
+        if (typeof res != 'undefined' || obj.statusCode != '404') {
+            var size = res.headers['content-length'],
+            readable_size = parseFloat((size / 1024 / 1024).toFixed(2)) + 'mb',
+            title = res.headers['content-disposition'].split('filename="')[1] || 'INVALID.',
+            image = `https://img.youtube.com/vi/${id}/maxresdefault.jpg`,
+            fields = [{
+                name: i18n.msg('size', 'mp3', lang),
+                lang: readable_size
+            }];
+            try {
+                var { body } = await req({
+                    url: 'https://www.googleapis.com/youtube/v3/videos',
+                    qs: {
+                        id: id,
+                        part: 'contentDetail',
+                        key: process.env.youtube_token
+                    }
+                })
+            } catch(e) {}
+            if (typeof body != 'undefined') {
+                var items = JSON.parse(body).items;
+                if (items && items.length) {
+                    var iso_duration = items[0].contentDetails.duration,
+                    split = iso_duration.split(/\D+/).filter(Boolean),
+                    duration = '';
+                    if (split.length > 3) {
+                        if (split.length == 4) {
+                            split[1] = Number(split[1]) + Number(split[0]) * 24;
+                            split = split.slice(1);
+                            duration = split.join(':');
+                        } else if (split.length == 5) {
+                            split[2] = Number(split[2]) + Number(split[1]) * 24;
+                            split[2] = split[2] + Number(split[0]) * 24 * 7;
+                            split = split.slice(2);
+                            duration = split.join(':');
+                        }
+                    } else {
+                        duration = split.join(':');
+                    }
                     fields.push({
                         name: i18n.msg('duration', 'mp3', lang),
                         value: duration
                     });
                 }
-                request({
+            }
+            try {
+                var { res } = await req({
                     url: image,
                     method: 'HEAD',
                     followAllRedirects: true
-                }, (fail, res) => {
-                    if (res.statusCode == '404') {
-                        image = `https://img.youtube.com/vi/${id}/0.jpg`;
-                    }
-                    message.channel.send({
-                        embed: {
-                            title: i18n.msg('download', 'mp3', lang),
-                            description: title,
-                            url: url,
-                            color: OpalBot.color,
-                            image: masked ? {
-                                url: `https://img.youtube.com/vi/${id}/maxresdefault.jpg`
-                            } : null,
-                            fields: fields
-                        }
-                    })
                 });
+                if (res.statusCode == '404') throw new Error();
+            } catch(e) {
+                image = `https://img.youtube.com/vi/${id}/0.jpg`;
+            }
+            message.channel.send({
+                embed: {
+                    title: i18n.msg('download', 'mp3', lang),
+                    description: title,
+                    url: url,
+                    color: OpalBot.color,
+                    image: masked ? {
+                        url: `https://img.youtube.com/vi/${id}/maxresdefault.jpg`
+                    } : null,
+                    fields: fields
+                }
             });
-        })
-    })
+        } else {
+            message.channel.send(i18n.msg('servers-down', 'mp3', lang));
+        }
+    }
 };
 
 module.exports.peasants.prefixes = 'prefix'

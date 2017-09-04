@@ -206,7 +206,8 @@ module.exports.peasants.mp3 = async (message, content, lang, i18n, OpalBot) => {
                 url: 'http://soundcloudmp3.org/converter',
                 form: {
                     _token: token,
-                    url: sc[0]
+                    url: sc[0],
+                    submit: ''
                 }
             });
         } catch(e) {
@@ -218,7 +219,7 @@ module.exports.peasants.mp3 = async (message, content, lang, i18n, OpalBot) => {
         img = body.match(/src="([^"]+)" alt="preview image"/);
         if (!dl) {
             message.channel.send(i18n.msg('sc-server-error-download', 'mp3', lang));
-            body.match(/[\s\S]{1,1900}/g).forEach(n => message.channel.send(n));
+            //body.match(/[\s\S]{1,1900}/g).forEach(n => message.channel.send(n));
             return;
         }
         if (!title) {

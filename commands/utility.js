@@ -284,9 +284,10 @@ module.exports.peasants.mp3 = async (message, content, lang, i18n, OpalBot) => {
                     h: Date.now()
                 }
             });
-            console.log(body);
             var s = body.split('|');
-            if (s[0] == 'ERROR') {
+            if (s[0] == 'OK') {
+                break;
+            } else if (s[0] == 'ERROR') {
                 if (s[1] != 'PENDING') throw new Error(); // Screw it, the server isn't giving us the link anytime soon
                 await new Promise((resolve) => {
                     setTimeout(() => resolve(), 1500);
@@ -294,7 +295,7 @@ module.exports.peasants.mp3 = async (message, content, lang, i18n, OpalBot) => {
             }
         } catch(e) { break; }
     }
-    if (typeof body != 'undefined' && body.slice(0, -2) == 'OK') {
+    if (typeof body != 'undefined' && body.slice(0, 2) == 'OK') {
         var [server, key, title] = body.split('|').slice(1),
         url = `http://dl${server}.downloader.space/dl.php?id=${key}`;
 

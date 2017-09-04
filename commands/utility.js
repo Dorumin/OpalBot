@@ -313,7 +313,7 @@ module.exports.peasants.mp3 = async (message, content, lang, i18n, OpalBot) => {
         readable_size = parseFloat((size / 1024 / 1024).toFixed(2)) + 'mb',
         fields = [{
             name: i18n.msg('size', 'mp3', lang),
-            lang: readable_size
+            value: readable_size
         }];
         
         // Get video duration with the YT API

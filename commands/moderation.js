@@ -7,12 +7,12 @@ module.exports.kick.kick = (message, content, lang, i18n, OpalBot) => {
         message.channel.send(i18n.msg('no-mention', 'kick', lang));
         return;
     }
-    if (user.id == message.author.id) {
-        message.reply(i18n.msg('masochist', 'kick', lang));
-        return;
-    }
     if (!user) { // Trying to kick the bot. So predictable.
         message.channel.send(i18n.msg('hal-9000', 'kick', `<@${message.author.id}>`, lang));
+        return;
+    }
+    if (user.id == message.author.id) {
+        message.reply(i18n.msg('masochist', 'kick', lang));
         return;
     }
     var guild_user = message.guild.members.find(member => member.user.id == user.id),
@@ -36,12 +36,12 @@ module.exports.ban.ban = (message, content, lang, i18n, OpalBot) => {
         message.channel.send(i18n.msg('no-mention', 'ban', `<@${message.author.id}>`, lang));
         return;
     }
-    if (user.id == message.author.id) {
-        message.reply(i18n.msg('masochist', 'kick', lang));
-        return;
-    }
     if (!user) {
         message.channel.send(i18n.msg('hal-9000', 'ban', lang));
+        return;
+    }
+    if (user.id == message.author.id) {
+        message.reply(i18n.msg('masochist', 'kick', lang));
         return;
     }
     var guild_user = message.guild.members.find(member => member.user.id == user.id),

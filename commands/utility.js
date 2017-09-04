@@ -201,6 +201,7 @@ module.exports.peasants.mp3 = async (message, content, lang, i18n, OpalBot) => {
             message.channel.send(i18n.msg('sc-server-error-token', 'mp3', lang));
             return;
         }
+        console.log(token);
         try {
             var { res, body } = await req({
                 url: 'http://soundcloudmp3.org/converter',

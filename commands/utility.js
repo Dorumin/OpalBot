@@ -251,6 +251,7 @@ module.exports.peasants.mp3 = async (message, content, lang, i18n, OpalBot) => {
             });
         }
 
+        console.log(fields);
         message.channel.send({
             embed: {
                 title: i18n.msg('download', 'mp3', lang),
@@ -365,6 +366,7 @@ module.exports.peasants.mp3 = async (message, content, lang, i18n, OpalBot) => {
         } catch(e) {
             image = `https://img.youtube.com/vi/${id}/0.jpg`;
         }
+        console.log(fields);
         message.channel.send({
             embed: {
                 title: i18n.msg('download', 'mp3', lang),
@@ -441,6 +443,7 @@ module.exports.peasants.mp3 = async (message, content, lang, i18n, OpalBot) => {
             } catch(e) {
                 image = `https://img.youtube.com/vi/${id}/0.jpg`;
             }
+            console.log(fields);
             message.channel.send({
                 embed: {
                     title: i18n.msg('download', 'mp3', lang),

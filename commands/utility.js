@@ -284,6 +284,7 @@ module.exports.peasants.mp3 = async (message, content, lang, i18n, OpalBot) => {
                     h: Date.now()
                 }
             });
+            console.log(body);
             var s = body.split('|');
             if (s[0] == 'ERROR') {
                 if (s[1] != 'PENDING') throw new Error(); // Screw it, the server isn't giving us the link anytime soon

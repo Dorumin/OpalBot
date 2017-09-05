@@ -141,8 +141,9 @@ module.exports.peasants.youtube = async (message, content, lang, i18n, OpalBot) 
                 image: {
                     url: `https://img.youtube.com/vi/${video.id.videoId}/maxresdefault.jpg`
                 },
-                footer: {
-                    text: video.snippet.channelTitle
+                author: {
+                    name: video.snippet.channelTitle,
+                    url: 'https://youtube.com/channels/' + video.snippet.channelId
                 }
             }
         });

@@ -134,8 +134,7 @@ module.exports.peasants.youtube = async (message, content, lang, i18n, OpalBot) 
     function result(video) {
         message.channel.send({
             embed: {
-                title: i18n.msg('result', 'youtube', lang),
-                description: video.snippet.title,
+                title: video.snippet.title,
                 url: `https://youtu.be/${video.id.videoId}`,
                 color: OpalBot.color,
                 image: {

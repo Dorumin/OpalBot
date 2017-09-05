@@ -155,7 +155,7 @@ module.exports.peasants.youtube = async (message, content, lang, i18n, OpalBot) 
                 },
                 author: {
                     name: video.snippet.channelTitle,
-                    url: 'https://youtube.com/channels/' + video.snippet.channelId
+                    url: 'https://youtube.com/channel/' + video.snippet.channelId
                 }
             }
         });

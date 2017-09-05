@@ -126,7 +126,8 @@ module.exports.peasants.youtube = async (message, content, lang, i18n, OpalBot) 
             qs: {
                 part: 'snippet',
                 q: content,
-                key: process.env.youtube_token
+                key: process.env.youtube_token,
+                type: 'video'
             }
         });
     } catch(e) { return; }

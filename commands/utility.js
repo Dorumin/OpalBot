@@ -200,7 +200,7 @@ module.exports.peasants.download = 'mp3';
 module.exports.peasants.mp3 = async (message, content, lang, i18n, OpalBot) => {
     // SoundCloud
     var sc = content.match(/https?:\/{2}soundcloud\.com\/[_\-\w\d]+\/[_\-\w\d]+/),
-    masked = /<https?:\/\//i.test(content);
+    masked = !content.includes('http') || /<https?:\/\//i.test(content);
     if (sc) {
         try {
             var { res, body } = await req('http://soundcloudmp3.org/');

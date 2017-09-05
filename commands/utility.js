@@ -197,6 +197,7 @@ module.exports.peasants.youtube = async (message, content, lang, i18n, OpalBot) 
     }
 };
 
+module.exports.peasants.dl = 'mp3';
 module.exports.peasants.download = 'mp3';
 module.exports.peasants.mp3 = async (message, content, lang, i18n, OpalBot) => {
     // SoundCloud

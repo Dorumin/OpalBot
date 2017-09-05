@@ -150,7 +150,7 @@ module.exports.peasants.youtube = async (message, content, lang, i18n, OpalBot) 
                 url: `https://youtu.be/${video.id.videoId}`,
                 color: OpalBot.color,
                 image: {
-                    url: `https://img.youtube.com/vi/${video.id.videoId}/maxresdefault.jpg`
+                    url: image
                 },
                 author: {
                     name: video.snippet.channelTitle,

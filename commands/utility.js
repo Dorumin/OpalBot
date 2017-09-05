@@ -131,7 +131,19 @@ module.exports.peasants.youtube = async (message, content, lang, i18n, OpalBot) 
         });
     } catch(e) { return; }
 
-    function result(video) {
+    async function result(video) {
+        var id = video.id.videoId,
+        image = `https://img.youtube.com/vi/${id}/maxresdefault.jpg`;
+        try {
+            var { res } = await req({
+                url: image,
+                method: 'HEAD',
+                followAllRedirects: true
+            });
+            if (res.statusCode == '404') throw new Error();
+        } catch(e) {
+            image = `https://img.youtube.com/vi/${id}/0.jpg`;
+        }
         message.channel.send({
             embed: {
                 title: video.snippet.title,
@@ -313,6 +325,7 @@ module.exports.peasants.mp3 = async (message, content, lang, i18n, OpalBot) => {
         }
         var size = res.headers['content-length'],
         readable_size = parseFloat((size / 1024 / 1024).toFixed(2)) + 'mb',
+        image = `https://img.youtube.com/vi/${id}/maxresdefault.jpg`,
         fields = [{
             name: i18n.msg('size', 'mp3', lang),
             value: readable_size
@@ -375,7 +388,7 @@ module.exports.peasants.mp3 = async (message, content, lang, i18n, OpalBot) => {
                 url: url,
                 color: OpalBot.color,
                 image: masked ? {
-                    url: `https://img.youtube.com/vi/${id}/maxresdefault.jpg`
+                    url: image
                 } : null,
                 fields: fields
             }
@@ -451,7 +464,7 @@ module.exports.peasants.mp3 = async (message, content, lang, i18n, OpalBot) => {
                     url: url,
                     color: OpalBot.color,
                     image: masked ? {
-                        url: `https://img.youtube.com/vi/${id}/maxresdefault.jpg`
+                        url: image
                     } : null,
                     fields: fields
                 }

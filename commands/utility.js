@@ -462,7 +462,7 @@ module.exports.peasants.mp3 = async (message, content, lang, i18n, OpalBot) => {
             message.channel.send({
                 embed: {
                     title: i18n.msg('download', 'mp3', lang),
-                    description: title,
+                    description: title.slice(0, -1),
                     url: url,
                     color: OpalBot.color,
                     image: masked ? {
@@ -473,7 +473,7 @@ module.exports.peasants.mp3 = async (message, content, lang, i18n, OpalBot) => {
             });
         } else {
             message.channel.send(i18n.msg('servers-down', 'mp3', lang));
-        }
+        }<
     }
 };
 

@@ -134,7 +134,7 @@
     "youtube": {
         "usage": "Usage: [Search query (required)]",
         "no-results": "No results found for your search query.",
-        "timed-out": "Your time has run out! Choose an index faster next time.",
+        "timed-out": "Your time has run out! Choose an option faster next time.",
         "result": "Result"
     },
     "mp3": {

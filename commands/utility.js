@@ -199,8 +199,8 @@ module.exports.peasants.youtube = async (message, content, lang, i18n, OpalBot) 
         var list = '',
         emotes = [':one:', ':two:', ':three:', ':four:', ':five:'], // dw these don't need to be translated.
         i = -1;
-        for (var i in titles) {
-            list += `\n[${Number(i) + 1}] - ${titles[i]}`
+        for (var j in titles) {
+            list += `\n[${Number(j) + 1}] - ${titles[j]}`
         }
         bot_message = await message.channel.send('```' + list.slice(1) + '```');
         while ( ++i < r.length ) {

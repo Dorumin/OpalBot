@@ -220,15 +220,16 @@ var OpalBot = {
             delete OpalBot.timeouts.db[obj.name];
         }, 10000);
     },
-    timeouts: {
-        db: {}
-    },
     get uptime() {
         return client.uptime;
     },
     get client() {
         return client;
-    }
+    },
+    timeouts: {
+        db: {}
+    },
+    temp_storage: {}
 };
 
 OpalBot.unprefixed.push = (...arr) => {     // It's hacky, but it works. Try not to access OpalBot.unprefixed by reference though. 
@@ -343,6 +344,30 @@ OpalBot.util.getGuildLanguage = async (guild) => {
     } catch(e) {
         return langs.default;
     }
+};
+
+OpalBot.util.awaitReactions = (message, options) => { // Use promises when it's single use; otherwise use callback
+    return new Promise((res, rej) => {
+        var s = OpalBot.temp_storage;
+        s.reactions = s.reactions || {};
+        s.reactions[message.id] = s.reactions[message.id] || [];
+        
+        if (options.callback) {
+            s.reactions.push((reaction, usr) => {
+                if (options.filter && !options.filter(reaction, usr)) return;
+                options.callback(reaction, usr);
+            });
+        } else {
+            return s.reactions.push((reaction, usr) => {
+                if (options.filter && !options.filter(reaction, usr)) return;
+                res(reaction, usr);
+                s.reactions.splice(i, 1);
+                if (!s.reactions.length) {
+                    delete s.reactions[message.id];
+                }
+            });
+        }
+    });
 };
 
 OpalBot.commands = {

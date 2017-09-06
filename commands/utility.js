@@ -178,6 +178,10 @@ module.exports.peasants.youtube = async (message, content, lang, i18n, OpalBot) 
             if (bot_message && bot_message.deletable) {
                 bot_message.delete();
             }
+            var s = OpalBot.temp_storage;
+            if (s.reactions && s.reactions[message.id]) {
+                delete s.reactions[message.id];
+            }
         },
         user: message.author.id,
         channel: message.channel.id,
@@ -189,11 +193,29 @@ module.exports.peasants.youtube = async (message, content, lang, i18n, OpalBot) 
     if (blocked === true) {
         result(r[0]);
     } else {
-        var list = '';
+        var list = '',
+        emotes = [':one:', ':two:', ':three:', ':four:', ':five:'], // dw these don't need to be translated.
+        i = -1;
         for (var i in titles) {
             list += `\n[${Number(i) + 1}] - ${titles[i]}`
         }
         bot_message = await message.channel.send('```' + list.slice(1) + '```');
+        while ( ++i < r.length ) {
+            await bot_message.react(emotes[i]);
+        }
+        var reaction = await OpalBot.util.awaitReactions(bot_message, { // Y'know, the Message method of awaitReactions should do this natively, but whatevs
+            filter: (reaction, usr) => {
+                if (usr.id != message.author.id) return;
+                return usr.id == message.author.id && emotes.includes(reaction.emoji.name);
+            }
+        });
+        var pick = emotes.indexOf(reaction.emoji.name);
+        result(r[pick]);
+        OpalBot.unprefixed.remove({
+            type: 'youtube',
+            user: message.author.id,
+            channel: message.channel.id
+        });
     }
 };
 

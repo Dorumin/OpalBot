@@ -204,6 +204,7 @@ module.exports.peasants.youtube = async (message, content, lang, i18n, OpalBot) 
         }
         bot_message = await message.channel.send('```' + list.slice(1) + '```');
         while ( ++i < r.length ) {
+            console.log(i, emotes[i]);
             await bot_message.react(emotes[i]);
         }
         var collector = bot_message.createReactionCollector(

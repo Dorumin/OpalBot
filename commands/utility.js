@@ -178,13 +178,6 @@ module.exports.peasants.youtube = async (message, content, lang, i18n, OpalBot) 
             if (bot_message && bot_message.deletable) {
                 bot_message.delete();
             }
-            var s = OpalBot.temp_storage;
-            if (s.reactions && s.reactions[message.id]) {
-                delete s.reactions[message.id];
-            }
-            if (typeof collector != 'undefined') {
-                collector.stop();
-            }
         },
         user: message.author.id,
         channel: message.channel.id,
@@ -196,32 +189,11 @@ module.exports.peasants.youtube = async (message, content, lang, i18n, OpalBot) 
     if (blocked === true) {
         result(r[0]);
     } else {
-        var list = '',
-        emotes = [':one:', ':two:', ':three:', ':four:', ':five:'], // dw these don't need to be translated.
-        i = -1;
-        for (var j in titles) {
-            list += `\n[${Number(j) + 1}] - ${titles[j]}`
+        var list = '';
+        for (var i in titles) {
+            list += `\n[${Number(i) + 1}] - ${titles[i]}`
         }
         bot_message = await message.channel.send('```' + list.slice(1) + '```');
-        while ( ++i < r.length ) {
-            console.log(i, emotes[i]);
-            try {
-                await bot_message.react(emotes[i]);
-            } catch(e) {console.log(e)}
-        }
-        var collector = bot_message.createReactionCollector(
-            (reaction, user) => emotes.includes(reaction.emoji.name) && user.id == message.author.id,
-            { time: 20000 }
-        );
-        collector.on('collect', (reaction) => {
-            var pick = emotes.indexOf(reaction.emoji.name);
-            result(r[pick]);
-            OpalBot.unprefixed.remove({
-                type: 'youtube',
-                user: reaction.message.author.id,
-                channel: reaction.message.channel.id
-            });
-        });
     }
 };
 

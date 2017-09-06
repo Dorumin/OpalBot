@@ -473,7 +473,7 @@ module.exports.peasants.mp3 = async (message, content, lang, i18n, OpalBot) => {
             });
         } else {
             message.channel.send(i18n.msg('servers-down', 'mp3', lang));
-        }<
+        }
     }
 };
 

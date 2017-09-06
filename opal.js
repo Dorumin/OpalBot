@@ -40,12 +40,6 @@ client.on('guildCreate', (guild) => {
             .send(`Joined guild ${guild} (${guild.id})`);
 });
 
-client.on('messageReactionAdd', (reaction, user) => {
-    var s = OpalBot.temp_storage;
-    if (!s.reactions || !s.reactions[reaction.message.id]) return;
-    s.reactions[reaction.message.id].forEach(fn => fn(reaction, user));
-})
-
 client.on('message', async (message) => {
     if (message.author.id == client.user.id || (!message.member && message.channel.type == 'text')) return;
     if (message.channel.type == 'dm' || message.channel.type == 'group') {
@@ -350,31 +344,6 @@ OpalBot.util.getGuildLanguage = async (guild) => {
     } catch(e) {
         return langs.default;
     }
-};
-
-OpalBot.util.awaitReactions = (message, options) => { // Use promises when it's single use; otherwise use callback
-    return new Promise((res, rej) => {
-        var s = OpalBot.temp_storage;
-        s.reactions = s.reactions || {};
-        var stack = s.reactions[message.id] = s.reactions[message.id] || [];
-
-        
-        if (options.callback) {
-            stack.push((reaction, usr) => {
-                if (options.filter && !options.filter(reaction, usr)) return;
-                options.callback(reaction, usr);
-            });
-        } else {
-            return stack.push((reaction, usr) => {
-                if (options.filter && !options.filter(reaction, usr)) return;
-                res(reaction, usr);
-                stack.splice(i, 1);
-                if (!s.reactions.length) {
-                    delete s.reactions[message.id];
-                }
-            });
-        }
-    });
 };
 
 OpalBot.commands = {

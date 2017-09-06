@@ -356,18 +356,19 @@ OpalBot.util.awaitReactions = (message, options) => { // Use promises when it's 
     return new Promise((res, rej) => {
         var s = OpalBot.temp_storage;
         s.reactions = s.reactions || {};
-        s.reactions[message.id] = s.reactions[message.id] || [];
+        var stack = s.reactions[message.id] = s.reactions[message.id] || [];
+
         
         if (options.callback) {
-            s.reactions.push((reaction, usr) => {
+            stack.push((reaction, usr) => {
                 if (options.filter && !options.filter(reaction, usr)) return;
                 options.callback(reaction, usr);
             });
         } else {
-            return s.reactions.push((reaction, usr) => {
+            return stack.push((reaction, usr) => {
                 if (options.filter && !options.filter(reaction, usr)) return;
                 res(reaction, usr);
-                s.reactions.splice(i, 1);
+                stack.splice(i, 1);
                 if (!s.reactions.length) {
                     delete s.reactions[message.id];
                 }

@@ -40,6 +40,12 @@ client.on('guildCreate', (guild) => {
             .send(`Joined guild ${guild} (${guild.id})`);
 });
 
+client.on('messageReactionAdd', (reaction, user) => {
+    var s = OpalBot.temp_storage;
+    if (!s.reactions || !s.reactions[reaction.message.id]) return;
+    s.reactions[reaction.message.id].forEach(fn => fn(reaction, user));
+})
+
 client.on('message', async (message) => {
     if (message.author.id == client.user.id || (!message.member && message.channel.type == 'text')) return;
     if (message.channel.type == 'dm' || message.channel.type == 'group') {

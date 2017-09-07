@@ -120,6 +120,18 @@ module.exports.peasants.youtube = async (message, content, lang, i18n, OpalBot) 
         return;
     }
 
+    var downloading = false,
+    flags = i18n.msg('youtube', 'download-flags', lang).split('|')
+    i = flags.length;
+    while (i--) {
+        if (
+            downloading = content.startsWith('--' + flags[i])
+        ) {
+            content = content.slice(flags[i].length + 2);
+            break;
+        }
+    }
+
     try {
         var {res, body} = await req({
             url: 'https://www.googleapis.com/youtube/v3/search',
@@ -133,6 +145,10 @@ module.exports.peasants.youtube = async (message, content, lang, i18n, OpalBot) 
     } catch(e) { return; }
 
     async function result(video) {
+        if (downloading) {
+            module.exports.peasants.mp3(message, video.id.videoId, lang, i18n, OpalBot);
+            return;
+        }
         var id = video.id.videoId,
         image = `https://img.youtube.com/vi/${id}/maxresdefault.jpg`;
         try {

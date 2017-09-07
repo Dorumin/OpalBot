@@ -137,7 +137,7 @@ client.on('message', async (message) => {
 var OpalBot = {
     prefixes: [],
     unprefixed: [],
-    v: '0.01',
+    v: '0.02',
     color: 0x2196f3,
     operators: ['155545848812535808', '195712766214930432'],
     util: {},
@@ -228,8 +228,7 @@ var OpalBot = {
     },
     timeouts: {
         db: {}
-    },
-    temp_storage: {}
+    }
 };
 
 OpalBot.unprefixed.push = (...arr) => {     // It's hacky, but it works. Try not to access OpalBot.unprefixed by reference though. 

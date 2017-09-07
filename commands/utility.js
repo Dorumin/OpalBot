@@ -364,7 +364,7 @@ module.exports.peasants.mp3 = async (message, content, lang, i18n, OpalBot) => {
                         duration = split.join(':');
                     }
                 } else {
-                    duration = split.join(':');
+                    duration = split.map(d => ('00' + d).slice(-2)).join(':');
                 }
                 fields.push({
                     name: i18n.msg('duration', 'mp3', lang),

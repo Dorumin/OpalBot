@@ -6,9 +6,8 @@ fs.readdirSync('./i18n')
 
 exports.msg = function(message, obj, ...vars) {
     var i18n = this,
-    local = exports[vars[vars.length - 1] || 'en'],
+    local = exports[vars.pop()] || exports.en,
     ref = obj;
-    vars = vars.slice(0, -1);
     if (typeof obj == 'string') {
         obj = local[obj];
     }

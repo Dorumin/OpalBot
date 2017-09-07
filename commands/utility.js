@@ -347,7 +347,8 @@ module.exports.peasants.mp3 = async (message, content, lang, i18n, OpalBot) => {
 
         // Parse the STUPID ISO 8601 timestamp YT uses
         if (typeof body != 'undefined') {
-            var items = JSON.parse(body).items;
+            var items = JSON.parse(body).items,
+            pad = (str) => ('00' + str).slice(-2);
             if (items && items.length) {
                 var iso_duration = items[0].contentDetails.duration,
                 split = iso_duration.split(/\D+/).filter(Boolean),
@@ -356,15 +357,18 @@ module.exports.peasants.mp3 = async (message, content, lang, i18n, OpalBot) => {
                     if (split.length == 4) {
                         split[1] = Number(split[1]) + Number(split[0]) * 24;
                         split = split.slice(1);
-                        duration = split.join(':');
+                        duration = split.map(pad).join(':');
                     } else if (split.length == 5) {
                         split[2] = Number(split[2]) + Number(split[1]) * 24;
                         split[2] = split[2] + Number(split[0]) * 24 * 7;
                         split = split.slice(2);
-                        duration = split.join(':');
+                        duration = split.map(pad).join(':');
                     }
                 } else {
-                    duration = split.map(d => ('00' + d).slice(-2)).join(':');
+                    duration = split.map(pad).join(':');
+                }
+                if (duration.charAt(0) == '0') {
+                    duration = duration.slice(1);
                 }
                 fields.push({
                     name: i18n.msg('duration', 'mp3', lang),

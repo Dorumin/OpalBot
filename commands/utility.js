@@ -121,7 +121,7 @@ module.exports.peasants.youtube = async (message, content, lang, i18n, OpalBot) 
     }
 
     var downloading = false,
-    flags = i18n.msg('youtube', 'download-flags', lang).split('|')
+    flags = i18n.msg('download-flags', 'youtube', lang).split('|')
     i = flags.length;
     while (i--) {
         if (

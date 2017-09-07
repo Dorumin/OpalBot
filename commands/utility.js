@@ -194,7 +194,6 @@ module.exports.peasants.youtube = async (message, content, lang, i18n, OpalBot) 
             list += `\n[${Number(i) + 1}] - ${titles[i]}`
         }
         bot_message = await message.channel.send('```' + list.slice(1) + '```');
-        bot_message.react(':one:');
     }
 };
 

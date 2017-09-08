@@ -226,6 +226,9 @@ var OpalBot = {
     get client() {
         return client;
     },
+    get Discord() {
+        return Discord;
+    },
     timeouts: {
         db: {}
     }

@@ -165,6 +165,7 @@ module.exports.peasants.youtube = async (message, content, lang, i18n, OpalBot) 
             embed: {
                 title: video.snippet.title,
                 url: `https://youtu.be/${video.id.videoId}`,
+                description: video.snippet.description,
                 color: OpalBot.color,
                 image: {
                     url: image

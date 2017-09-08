@@ -229,6 +229,7 @@ var OpalBot = {
     get Discord() {
         return Discord;
     },
+    test: Discord.Attachment,
     timeouts: {
         db: {}
     }

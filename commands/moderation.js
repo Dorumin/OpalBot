@@ -32,7 +32,7 @@ module.exports.kick.kick = async (message, content, lang, i18n, OpalBot) => {
     });
 };
 
-module.exports.ban.ban = (message, content, lang, i18n, OpalBot) => {
+module.exports.ban.ban = async (message, content, lang, i18n, OpalBot) => {
     var user = message.mentions.users.filter(u => u.id != OpalBot.client.user.id).first();
     if (!message.mentions.users.size) {
         message.channel.send(i18n.msg('no-mention', 'ban', `<@${message.author.id}>`, lang));

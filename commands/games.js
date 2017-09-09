@@ -259,6 +259,9 @@ module.exports.peasants.ttt = async function(message, content, lang, i18n, OpalB
             }
         });
     } else {
+        if (session.winner.charAt(1) == 't') {
+            turn = turn == 1 ? 0 : 1;
+        }
         message.channel.send({
             embed: {
                 title: i18n.msg('title', 'tictactoe', names[0], names[1], lang),

@@ -220,7 +220,7 @@ module.exports.peasants.ttt = async function(message, content, lang, i18n, OpalB
                     description: session.render(),
                     color: OpalBot.color,
                     footer: {
-                        text: i18n.msg('turn', 'tictactoe', names[turn], lang)
+                        text: i18n.msg('turn', 'tictactoe', names[turn], lang) + '\npossible moves:' + session.moves().join(',')
                     }
                 }
             }),

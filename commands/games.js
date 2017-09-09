@@ -245,6 +245,7 @@ module.exports.peasants.ttt = async function(message, content, lang, i18n, OpalB
         }
         var move = ['1', '2', '3', '4', '5', '6', '7', '8', '9'].indexOf(session.moves()[index]),
         consequence = session.move(session.player_to_move, move + 1);
+        console.log(consequence);
         if (['x', 'o'].includes(consequence) || consequence === true) break; // Somebody won, somehow. Isn't TicTacToe like super easy to draw?
     }
     if (!session.winner) {

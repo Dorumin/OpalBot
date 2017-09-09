@@ -168,7 +168,7 @@ class TicTacToe {
 module.exports.peasants = {};
 
 module.exports.peasants.tictactoe = 'ttt';
-module.exports.peasants.ttt = function(message, content, lang, i18n, OpalBot) {
+module.exports.peasants.ttt = async function(message, content, lang, i18n, OpalBot) {
     this.sessions = this.sessions || {};
     var id = message.author.id,
     chan_id = message.channel.id;

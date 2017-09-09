@@ -158,7 +158,7 @@
         "title": "$1 vs $2",
         "turn": "Player to move: $1",
         "winner": "$1 has won!",
-        "draw": "Draw!",
+        "draw": "It's a draw!",
         "expired": "Time expired!"
     }
 }

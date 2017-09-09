@@ -232,7 +232,8 @@ var OpalBot = {
     test: Discord.Attachment,
     timeouts: {
         db: {}
-    }
+    },
+    storage: {}
 };
 
 OpalBot.unprefixed.push = (...arr) => {     // It's hacky, but it works. Try not to access OpalBot.unprefixed by reference though. 

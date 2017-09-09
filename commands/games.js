@@ -169,19 +169,20 @@ class TicTacToe {
 module.exports.peasants = {};
 
 module.exports.peasants.tictactoe = 'ttt';
-module.exports.peasants.ttt = async function(message, content, lang, i18n, OpalBot) {
-    this.sessions = this.sessions || {};
+module.exports.peasants.ttt = async (message, content, lang, i18n, OpalBot) => {
+    OpalBot.storage.tictactoe = OpalBot.storage.tictactoe || {};
     var id = message.author.id,
     chan_id = message.channel.id,
-    pending = this.sessions['pending-' + chan_id];
+    sessions = OpalBot.storage.tictactoe,
+    pending = sessions['pending-' + chan_id];
     if (pending && pending[0] == id) {
         message.reply(i18n.msg('forever-alone', 'tictactoe', lang));
         return;
-    } else if (this.sessions[id]) {
+    } else if (sessions[id]) {
         return; // I don't think a specific error message should really be used here. The game is too dynamic for you to forget you're in a game
     } else if (!pending) {
-        this.sessions['pending-' + chan_id] = [id, message.author.username, setTimeout(() => { // Creating a new session
-            delete this.sessions['pending-' + chan_id];
+        sessions['pending-' + chan_id] = [id, message.author.username, setTimeout(() => { // Creating a new session
+            delete sessions['pending-' + chan_id];
             message.channel.send(i18n.msg('timeout', 'tictactoe', lang));
         }, 60000)];
         message.channel.send(i18n.msg('waiting', 'tictactoe', lang));
@@ -190,8 +191,8 @@ module.exports.peasants.ttt = async function(message, content, lang, i18n, OpalB
     var host = pending,
     host_id = host[0];
     clearTimeout(host[2]);
-    delete this.sessions['pending-' + chan_id];
-    var session = this.sessions[id] = this.sessions[host_id] = new TicTacToe(host[0], id, host[1], message.author.username),
+    delete sessions['pending-' + chan_id];
+    var session = sessions[id] = sessions[host_id] = new TicTacToe(host[0], id, host[1], message.author.username),
     turn = Math.round(Math.random()), // get a random number from 0 to 1
     players = session.players,
     names = session.player_names,
@@ -221,7 +222,7 @@ module.exports.peasants.ttt = async function(message, content, lang, i18n, OpalB
                     description: session.render(),
                     color: OpalBot.color,
                     footer: {
-                        text: i18n.msg('turn', 'tictactoe', names[turn], lang) + '\npossible moves:' + session.moves().join(',')
+                        text: i18n.msg('turn', 'tictactoe', names[turn], lang)
                     }
                 }
             }),
@@ -276,8 +277,8 @@ module.exports.peasants.ttt = async function(message, content, lang, i18n, OpalB
             }
         });
     }
-    delete this.sessions[id];
-    delete this.sessions[host_id];
+    delete sessions[id];
+    delete sessions[host_id];
 };
 
 module.exports.peasants.c4 = 'connect4';

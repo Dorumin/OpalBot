@@ -243,7 +243,10 @@ module.exports.peasants.ttt = async (message, content, lang, i18n, OpalBot) => {
             }
         }
         if (bot_message.deletable) {
-            //bot_message.delete();
+            bot_message.delete();
+        }
+        if (message.deletable) {
+            message.delete();
         }
         var move = ['1', '2', '3', '4', '5', '6', '7', '8', '9'].indexOf(session.moves()[index]),
         consequence = session.move(session.player_to_move, move + 1);

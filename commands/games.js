@@ -171,13 +171,14 @@ module.exports.peasants.tictactoe = 'ttt';
 module.exports.peasants.ttt = async function(message, content, lang, i18n, OpalBot) {
     this.sessions = this.sessions || {};
     var id = message.author.id,
-    chan_id = message.channel.id;
-    if (this.sessions['pending-' + id]) {
+    chan_id = message.channel.id,
+    pending = this.sessions['pending-' + chan_id];
+    if (pending && pending[0] == id) {
         message.reply(i18n.msg('forever-alone', 'tictactoe', lang));
         return;
     } else if (this.sessions[id]) {
         return; // I don't think a specific error message should really be used here. The game is too dynamic for you to forget you're in a game
-    } else if (!this.sessions['pending-' + chan_id]) {
+    } else if (!pending) {
         this.sessions['pending-' + chan_id] = [id, message.author.username]; // Creating a new session
         return;
     }

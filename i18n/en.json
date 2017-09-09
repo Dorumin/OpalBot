@@ -149,5 +149,14 @@
         "download": "Download",
         "size": "Size",
         "duration": "Duration"
+    },
+    "tictactoe": {
+        "blocked": "Cannot start a game due to another command expecting a response. Cancel it and try again!",
+        "forever-alone": "you cannot start a game with yourself!",
+        "title": "$1 vs $2",
+        "turn": "Player to move: $1",
+        "winner": "$1 has won!",
+        "draw": "Draw!",
+        "expired": "Time expired!"
     }
 }

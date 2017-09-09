@@ -307,6 +307,22 @@ OpalBot.unprefixed.remove = (obj) => {
     return elem;
 };
 
+OpalBot.unprefixed.expect = (obj) => {
+    return new Promise((res, rej) => {
+        var blocked = OpalBot.unprefixed.push({
+            caseinsensitive: true,
+            callback: (message, index) => res({message: message, index: index}),
+            timeout: 60000,
+            ontimeout: () => {
+                rej('timeout');
+            },
+            ...obj
+        });
+        if (blocked === true) {
+            rej('blocked');
+        }
+    });
+};
 
 OpalBot.util.getChannelMessages = async (channel, before, break_function) => { // break function MUST return true for the message querying to stop, truthy values don't do the trick
     before = before || Date.now() - 1209600000; // 2 weeks

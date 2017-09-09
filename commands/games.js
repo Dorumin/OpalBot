@@ -107,17 +107,17 @@ class TicTacToe {
         while (l--) {
             var col_sum = 0;
             while (y--) {
-                col_sum += m[y][l];
+                col_sum += m[l][y];
             }
             y = 3;
             if (col_sum == 3) {
                 while (y--) {
-                    this.matrix[y][l] += '2';
+                    this.matrix[l][y] += '2';
                 }
                 return 'x';
             } else if (col_sum == -3) {
                 while (y--) {
-                    this.matrix[y][l] += '2';
+                    this.matrix[l][y] += '2';
                 }
                 return 'o';
             }
@@ -151,6 +151,7 @@ class TicTacToe {
                     return false;
                 }
             }
+            j = 3;
         }
         return true;
     }

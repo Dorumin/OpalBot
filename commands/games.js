@@ -166,6 +166,48 @@ class TicTacToe {
     }
 }
 
+class Connect4 {
+    constructor(p1, p2, n1, n2) {
+        this.columns = new Array(7).fill(undefined).map(() => []);
+        this.players = [p1, p2];
+        this.player_names = [n1, n2];
+        this.player_to_move = 'blue';
+    }
+
+    end_turn() {
+        this.player_to_move = this.player_to_move == 'blue' ? 'red' : 'blue';
+    }
+
+    emotify(char) {
+        switch (char) {
+            case 1:
+                return ':one:';
+            case 2:
+                return ':two:';
+            case 3:
+                return ':three:';
+            case 4:
+                return ':four:';
+            case 5:
+                return ':five:';
+            case 6:
+                return ':six:';
+            case 7:
+                return ':seven:';
+            case 'x': 
+                return ':regional_indicator_x:';
+            case 'blue': 
+                return ':large_blue_circle:';
+            case 'red':
+                return ':red_circle:';
+            default:
+                return ':black_circle:';
+        }
+    }
+
+
+}
+
 module.exports.peasants = {};
 
 module.exports.peasants.tictactoe = 'ttt';
@@ -178,6 +220,8 @@ module.exports.peasants.ttt = async (message, content, lang, i18n, OpalBot) => {
     if (pending && pending[0] == id) {
         message.reply(i18n.msg('forever-alone', 'tictactoe', lang));
         return;
+    } else if (pending && pending[3] && pending[3] != id) {
+        return; // You're not invited. You're uninvited.
     } else if (sessions[id]) {
         return; // I don't think a specific error message should really be used here. The game is too dynamic for you to forget you're in a game
     } else if (!pending) {
@@ -185,6 +229,11 @@ module.exports.peasants.ttt = async (message, content, lang, i18n, OpalBot) => {
             delete sessions['pending-' + chan_id];
             message.channel.send(i18n.msg('timeout', 'tictactoe', lang));
         }, 60000)];
+        if (message.mentions.size) {
+            sessions['pending-' + chan_id].push(message.mentions.first().id);
+            message.channel.send(i18n.msg('invited', 'tictactoe', message.mentions.first().username, lang));
+            return;
+        }
         message.channel.send(i18n.msg('waiting', 'tictactoe', lang));
         return;
     }

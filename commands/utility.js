@@ -499,7 +499,7 @@ module.exports.peasants.mp3 = async (message, content, lang, i18n, OpalBot) => {
     }
 };
 
-module.exports.peasants.prefixes = 'prefix'
+module.exports.peasants.prefixes = 'prefix';
 module.exports.peasants.prefix = async (message, content, lang, i18n, OpalBot) => {
     var list = i18n.msg('list', 'prefix', lang),
     add = i18n.msg('add', 'prefix', lang),
@@ -536,7 +536,7 @@ module.exports.peasants.prefix = async (message, content, lang, i18n, OpalBot) =
                             [message.guild.id]: prefixes
                         }
                     }
-                }
+                };
                 OpalBot.prefixes[message.guild.id] = [...prefixes];
             }
             var arr = OpalBot.prefixes[message.guild.id],

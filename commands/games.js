@@ -227,7 +227,7 @@ module.exports.peasants.ttt = async function(message, content, lang, i18n, OpalB
             {message, index} = await OpalBot.unprefixed.expect({
                 type: 'tictactoe',
                 triggers: session.moves(),
-                user: players[i],
+                user: players[turn],
                 channel: message.channel.id
             });
         } catch(e) {

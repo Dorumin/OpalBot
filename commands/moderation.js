@@ -1,14 +1,16 @@
 module.exports.kick = {};
 module.exports.ban = {};
 
-module.exports.kick.kick = (message, content, lang, i18n, OpalBot) => {
+module.exports.kick.kick = async (message, content, lang, i18n, OpalBot) => {
     var user = message.mentions.users.filter(u => u.id != OpalBot.client.user.id).first();
     if (!message.mentions.users.size) {
         message.channel.send(i18n.msg('no-mention', 'kick', lang));
         return;
     }
     if (!user) { // Trying to kick the bot. So predictable.
-        message.channel.send(i18n.msg('hal-9000', 'kick', `<@${message.author.id}>`, lang));
+        await OpalBot.client.user.setAvatar('http://i.imgur.com/o542Hvw.png');
+        await message.channel.send(i18n.msg('hal-9000', 'kick', `<@${message.author.id}>`, lang));
+        OpalBot.client.user.setAvatar('http://i.imgur.com/ylUqzHs.png');
         return;
     }
     if (user.id == message.author.id) {
@@ -37,7 +39,9 @@ module.exports.ban.ban = (message, content, lang, i18n, OpalBot) => {
         return;
     }
     if (!user) {
-        message.channel.send(i18n.msg('hal-9000', 'ban', lang));
+        await OpalBot.client.user.setAvatar('http://i.imgur.com/o542Hvw.png');
+        await message.channel.send(i18n.msg('hal-9000', 'ban', lang));
+        OpalBot.client.user.setAvatar('http://i.imgur.com/ylUqzHs.png');
         return;
     }
     if (user.id == message.author.id) {

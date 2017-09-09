@@ -179,13 +179,18 @@ module.exports.peasants.ttt = async function(message, content, lang, i18n, OpalB
     } else if (this.sessions[id]) {
         return; // I don't think a specific error message should really be used here. The game is too dynamic for you to forget you're in a game
     } else if (!pending) {
-        this.sessions['pending-' + chan_id] = [id, message.author.username]; // Creating a new session
+        this.sessions['pending-' + chan_id] = [id, message.author.username, setTimeout(() => { // Creating a new session
+            delete this.sessions['pending-' + chan_id];
+            message.channel.send(i18n.msg('timeout', 'tictactoe', lang));
+        }, 60000)];
         message.channel.send(i18n.msg('waiting', 'tictactoe', lang));
         return;
     }
-    var host_id = this.sessions['pending-' + chan_id];
+    var host = pending,
+    host_id = host[0];
+    clearTimeout(host[2]);
     delete this.sessions['pending-' + chan_id];
-    var session = this.sessions[id] = this.sessions[host_id] = new TicTacToe(host_id[0], id, host_id[1], message.author.username),
+    var session = this.sessions[id] = this.sessions[host_id] = new TicTacToe(host[0], id, host[1], message.author.username),
     turn = Math.round(Math.random()), // get a random number from 0 to 1
     players = session.players,
     names = session.player_names,

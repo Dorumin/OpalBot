@@ -153,6 +153,7 @@
     "tictactoe": {
         "blocked": "Cannot start a game due to another command expecting a response. Cancel it and try again!",
         "forever-alone": "you cannot start a game with yourself!",
+        "waiting": "Waiting for other players to join...",
         "title": "$1 vs $2",
         "turn": "Player to move: $1",
         "winner": "$1 has won!",

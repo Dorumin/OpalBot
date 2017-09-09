@@ -180,6 +180,7 @@ module.exports.peasants.ttt = async function(message, content, lang, i18n, OpalB
         return; // I don't think a specific error message should really be used here. The game is too dynamic for you to forget you're in a game
     } else if (!pending) {
         this.sessions['pending-' + chan_id] = [id, message.author.username]; // Creating a new session
+        message.channel.send(i18n.msg('waiting', 'tictactoe', lang));
         return;
     }
     var host_id = this.sessions['pending-' + chan_id];
@@ -229,6 +230,7 @@ module.exports.peasants.ttt = async function(message, content, lang, i18n, OpalB
                 message.channel.send(i18n.msg('blocked', 'tictactoe', lang));
                 return;
             } else { // Timeout
+                console.log(e);
                 session.winner = session.player_to_move == 'x' ? 'ot' : 'xt';
                 break;
             }
@@ -243,8 +245,7 @@ module.exports.peasants.ttt = async function(message, content, lang, i18n, OpalB
         message.channel.send({
             embed: {
                 title: i18n.msg('title', 'tictactoe', names[0], names[1], lang),
-                description: 
-                    (session.winner.charAt(1) == 't' ? i18n.msg('expired', 'tictactoe', lang) : '') + session.render(),
+                description: session.render(),
                 color: OpalBot.color,
                 footer: {
                     text: i18n.msg('draw', 'tictactoe', lang)
@@ -255,7 +256,8 @@ module.exports.peasants.ttt = async function(message, content, lang, i18n, OpalB
         message.channel.send({
             embed: {
                 title: i18n.msg('title', 'tictactoe', names[0], names[1], lang),
-                description: session.render(),
+                description: 
+                    (session.winner.charAt(1) == 't' ? i18n.msg('expired', 'tictactoe', lang) + '\n\n' : '') + session.render(),
                 color: OpalBot.color,
                 footer: {
                     text: i18n.msg('winner', 'tictactoe', names[turn], lang)

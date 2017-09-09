@@ -229,9 +229,9 @@ module.exports.peasants.ttt = async (message, content, lang, i18n, OpalBot) => {
             delete sessions['pending-' + chan_id];
             message.channel.send(i18n.msg('timeout', 'tictactoe', lang));
         }, 60000)];
-        if (message.mentions.size) {
-            sessions['pending-' + chan_id].push(message.mentions.first().id);
-            message.channel.send(i18n.msg('invited', 'tictactoe', message.mentions.first().username, lang));
+        if (message.mentions.users.size) {
+            sessions['pending-' + chan_id].push(message.mentions.users.first().id);
+            message.channel.send(i18n.msg('invited', 'tictactoe', message.mentions.users.first().username, lang));
             return;
         }
         message.channel.send(i18n.msg('waiting', 'tictactoe', lang));

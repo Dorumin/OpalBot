@@ -571,7 +571,7 @@ module.exports.peasants.connect4 = async (message, content, lang, i18n, OpalBot)
                 return;
             } else { // Timeout
                 console.log(e);
-                session.winner = session.player_to_move == 'blue' ? 'redt' : 'bluet';
+                c4.winner = c4.player_to_move == 'blue' ? 'redt' : 'bluet';
                 break;
             }
         }
@@ -582,7 +582,7 @@ module.exports.peasants.connect4 = async (message, content, lang, i18n, OpalBot)
             message.delete();
         }
         var move = ['1', '2', '3', '4', '5', '6', '7'].indexOf(c4.moves()[index]),
-        consequence = session.move(move + 1);
+        consequence = c4.move(move + 1);
         console.log(consequence);
         if (['blue', 'red'].includes(consequence) || consequence === true) break; // Somebody won, OR it's a draw
     }
@@ -590,7 +590,7 @@ module.exports.peasants.connect4 = async (message, content, lang, i18n, OpalBot)
         message.channel.send({
             embed: {
                 title: i18n.msg('title', 'tictactoe', blue, red, lang),
-                description: session.render(),
+                description: c4.render(),
                 color: OpalBot.color,
                 footer: {
                     text: i18n.msg('draw', 'tictactoe', lang)
@@ -605,7 +605,7 @@ module.exports.peasants.connect4 = async (message, content, lang, i18n, OpalBot)
             embed: {
                 title: i18n.msg('title', 'tictactoe', names[0], names[1], lang),
                 description: 
-                    (session.winner.slice(-1) == 't' ? i18n.msg('expired', 'connect4', lang) + '\n\n' : '') + session.render(),
+                    (c4.winner.slice(-1) == 't' ? i18n.msg('expired', 'connect4', lang) + '\n\n' : '') + c4.render(),
                 color: OpalBot.color,
                 footer: {
                     text: i18n.msg('winner', 'connect4', names[turn], lang)

@@ -494,7 +494,7 @@ module.exports.peasants.ttt = async (message, content, lang, i18n, OpalBot) => {
 };
 
 module.exports.peasants.c4 = 'connect4';
-module.exports.peasants.connect4 = function(message, content, lang, i18n, OpalBot) {
+module.exports.peasants.connect4 = async (message, content, lang, i18n, OpalBot) => {
     var sessions = OpalBot.storage.connect4 = OpalBot.storage.connect4 || {},
     id = message.author.id,
     chan_id = message.channel.id,

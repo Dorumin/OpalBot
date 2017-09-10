@@ -288,7 +288,7 @@ class Connect4 {
                     if (x < 3) break;
                     if (m[x - i][y] == disc) {
                         count++;
-                        pointers.push([x - 1, y]);
+                        pointers.push([x - i, y]);
                         if (count == 4) {
                             pointers.forEach(arr => {
                                 this.columns[arr[0]][arr[1]] += '2';

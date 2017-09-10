@@ -153,6 +153,7 @@
     "tictactoe": {
         "blocked": "Cannot start a game due to another command expecting a response. Cancel it and try again!",
         "forever-alone": "you cannot start a game with yourself!",
+        "no-ai": "Sorry! I don't know how to play!",
         "waiting": "Waiting for other players to join...",
         "invited": "Waiting for $1 to join...",
         "timeout": "No players joined! Use the command again to create another game.",
@@ -165,6 +166,7 @@
     "connect4": {
         "blocked": "Cannot start a game due to another command expecting a response. Cancel it and try again!",
         "forever-alone": "you cannot start a game with yourself!",
+        "no-ai": "Sorry! I don't know how to play!",
         "waiting": "Waiting for other players to join...",
         "invited": "Waiting for $1 to join...",
         "timeout": "No players joined! Use the command again to create another game.",

@@ -376,9 +376,13 @@ module.exports.peasants.ttt = async (message, content, lang, i18n, OpalBot) => {
     var id = message.author.id,
     chan_id = message.channel.id,
     sessions = OpalBot.storage.tictactoe,
-    pending = sessions['pending-' + chan_id];
+    pending = sessions['pending-' + chan_id],
+    invited = message.mentions.users.first();
     if (pending && pending[0] == id) {
         message.reply(i18n.msg('forever-alone', 'tictactoe', lang));
+        return;
+    } else if (invited && invited.id == OpalBot.client.user.id) {
+        message.channel.send(i18n.msg('no-ai', 'tictactoe', lang));
         return;
     } else if (pending && pending[3] && pending[3] != id) {
         return; // You're not invited. You're uninvited.
@@ -389,7 +393,7 @@ module.exports.peasants.ttt = async (message, content, lang, i18n, OpalBot) => {
             delete sessions['pending-' + chan_id];
             message.channel.send(i18n.msg('timeout', 'tictactoe', lang));
         }, 60000)];
-        if (message.mentions.users.size) {
+        if (invited) {
             sessions['pending-' + chan_id].push(message.mentions.users.first().id);
             message.channel.send(i18n.msg('invited', 'tictactoe', message.mentions.users.first().username, lang));
             return;
@@ -499,17 +503,20 @@ module.exports.peasants.connect4 = async (message, content, lang, i18n, OpalBot)
     id = message.author.id,
     chan_id = message.channel.id,
     invite = sessions['invite-' + id],
-    pending = sessions['pending-' + chan_id];
+    pending = sessions['pending-' + chan_id],
+    invited = message.mentions.users.first();
     if (invite) {
         // Do nothing. Really! This is to skip all the other "else if"s
-    } else if (pending && pending[0] == id || message.mentions.users.size && message.mentions.users.first().id == id) {
+    } else if (pending && pending[0] == id || invited && invited.id == id) {
         message.reply(i18n.msg('forever-alone', 'connect4', lang));
+        return;
+    } else if (invited && invited.id == OpalBot.client.user.id) {
+        message.channel.send(i18n.msg('no-ai', 'connect4', lang));
         return;
     } else if (sessions[id]) {
         return; // You're already in a game. I won't try and give this a custom response since you can't possibly forget you're in a game in 60 seconds
     } else if (!pending) {
-        var invited = message.mentions.users.first(),
-        key = invited ? 'invite-' + invited.id : 'pending-' + chan_id;
+        var key = invited ? 'invite-' + invited.id : 'pending-' + chan_id;
         sessions[key] = [
             id,
             message.author.username,

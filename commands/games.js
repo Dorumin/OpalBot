@@ -560,7 +560,7 @@ module.exports.peasants.connect4 = async (message, content, lang, i18n, OpalBot)
                 }
             }),
             {message, index} = await OpalBot.unprefixed.expect({
-                type: 'tictactoe',
+                type: 'connect4',
                 triggers: c4.moves(),
                 user: players[turn],
                 channel: message.channel.id
@@ -589,11 +589,11 @@ module.exports.peasants.connect4 = async (message, content, lang, i18n, OpalBot)
     if (!c4.winner) {
         message.channel.send({
             embed: {
-                title: i18n.msg('title', 'tictactoe', blue, red, lang),
+                title: i18n.msg('title', 'connect4', blue, red, lang),
                 description: c4.render(),
                 color: OpalBot.color,
                 footer: {
-                    text: i18n.msg('draw', 'tictactoe', lang)
+                    text: i18n.msg('draw', 'connect4', lang)
                 }
             }
         });
@@ -603,7 +603,7 @@ module.exports.peasants.connect4 = async (message, content, lang, i18n, OpalBot)
         }
         message.channel.send({
             embed: {
-                title: i18n.msg('title', 'tictactoe', names[0], names[1], lang),
+                title: i18n.msg('title', 'connect4', names[0], names[1], lang),
                 description: 
                     (c4.winner.slice(-1) == 't' ? i18n.msg('expired', 'connect4', lang) + '\n\n' : '') + c4.render(),
                 color: OpalBot.color,

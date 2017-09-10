@@ -172,40 +172,200 @@ class Connect4 {
         this.players = [p1, p2];
         this.player_names = [n1, n2];
         this.player_to_move = 'blue';
+        this.winner = null;
     }
 
     end_turn() {
         this.player_to_move = this.player_to_move == 'blue' ? 'red' : 'blue';
     }
 
+    moves() {
+        return this.moves_with_x().filter(move => move != 'x');
+    }
+
+    moves_with_x() {
+        return new Array(7).fill(undefined).map((n, i) => {
+            if (this.columns[i].length == 6) {
+                return 'x';
+            } else {
+                return String(i + 1);
+            }
+        });
+    }
+
     emotify(char) {
         switch (char) {
             case 1:
+            case '1':
                 return ':one:';
             case 2:
+            case '2':
                 return ':two:';
             case 3:
+            case '3':
                 return ':three:';
             case 4:
+            case '4':
                 return ':four:';
             case 5:
+            case '5':
                 return ':five:';
             case 6:
+            case '6':
                 return ':six:';
             case 7:
+            case '7':
                 return ':seven:';
             case 'x': 
                 return ':regional_indicator_x:';
             case 'blue': 
                 return ':large_blue_circle:';
+            case 'blue2':
+                return ':large_blue_diamond:';
             case 'red':
                 return ':red_circle:';
+            case 'red2':
+                return ':hearts:';
             default:
                 return ':black_circle:';
         }
     }
 
+    move(col) {
+        if (typeof col != 'number') {
+            throw new Error('col parameter must be an int');
+        }
+        if (col < 1 || col > 7) {
+            throw new Error('col parameter must be a number between 1 and 7');
+        }
+        if (this.columns[col - 1].length == 6) { // Column is full
+            return null;
+        }
+        this.columns[col - 1].push(this.player_to_move);
+        this.end_turn();
+        var v = this.verify();
+        if (v == 'red' || v == 'blue') {
+            this.winner = v;
+        }
+        return v;
+    }
 
+    verify() {
+        var x = 7, m = this.columns;
+
+        while (x--) { // Iterate over all columns
+
+            var col = m[x],
+            y = col.length;
+
+            while (y--) { // Iterate over all discs inside a column
+
+                var disc = col[y],
+                count = 0,
+                pointers = [];
+
+                // Check for vertical lines of 4
+                for (var i = 0; i < 4; i++) {
+                    if (y < 3) break;
+                    if (col[y - i] == disc) {
+                        count++;
+                        pointers.push([x, y - i]);
+                        if (count == 4) {
+                            pointers.forEach(arr => {
+                                this.columns[arr[0]][arr[1]] += '2';
+                            });
+                            return disc;
+                        }
+                    } else {
+                        count = 0;
+                        pointers = [];
+                        break;
+                    }
+                }
+
+                // Check for horizontal ones
+                for (var i = 0; i < 4; i++) {
+                    if (x < 3) break;
+                    if (m[x - i][y] == disc) {
+                        count++;
+                        pointers.push([x - 1, y]);
+                        if (count == 4) {
+                            pointers.forEach(arr => {
+                                this.columns[arr[0]][arr[1]] += '2';
+                            });
+                            return disc;
+                        }
+                    } else {
+                        count = 0;
+                        pointers = [];
+                        break;
+                    }
+                }
+
+                // Check for diagonal ones
+                for (var i = 0; i < 4; i++) {
+                    if (x < 3) break;
+                    if (m[x - i][y - i] == disc) {
+                        count++;
+                        pointers.push([x - i, y - i]);
+                        if (count == 4) {
+                            pointers.forEach(arr => {
+                                this.columns[arr[0]][arr[1]] += '2';
+                            });
+                            return disc;
+                        }
+                    } else {
+                        count = 0;
+                        pointers = [];
+                        break;
+                    }
+                }
+
+                
+                for (var i = 0; i < 4; i++) {
+                    if (x < 3) break;
+                    if (m[x - i][y + i] == disc) {
+                        count++;
+                        pointers.push([x - i, y + i]);
+                        if (count == 4) {
+                            pointers.forEach(arr => {
+                                this.columns[arr[0]][arr[1]] += '2';
+                            });
+                            return disc;
+                        }
+                    } else {
+                        break;
+                    }
+                }
+            }
+        }
+        
+        return this.is_draw();
+    }
+
+    is_draw() {
+        var i = this.columns.length;
+        while (i--) {
+            if (this.columns[i].length != 6) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    render() {
+        var str = '',
+        i = 6;
+        while (i--) {
+            for (var j = 0; j < 7; j++) {
+                str += this.emotify(this.columns[j][i]);
+            }
+            str += '\n';
+        }
+        str += this.moves_with_x().map(this.emotify).join('');
+        return str;
+    }
 }
 
 module.exports.peasants = {};
@@ -263,7 +423,7 @@ module.exports.peasants.ttt = async (message, content, lang, i18n, OpalBot) => {
         });
     };
     while (!session.is_draw()) {
-        turn = turn == 1 ? 0 : 1;
+        turn = Math.abs(turn - 1);
         try {
             var bot_message = await message.channel.send({
                 embed: {
@@ -335,9 +495,117 @@ module.exports.peasants.ttt = async (message, content, lang, i18n, OpalBot) => {
 
 module.exports.peasants.c4 = 'connect4';
 module.exports.peasants.connect4 = function(message, content, lang, i18n, OpalBot) {
-    this.sessions = this.sessions || {};
-    var id = message.author.id,
-    cols = new Array(7).fill(undefined).map(() => {
-        return new Array(6).fill(null);
-    });
+    var sessions = OpalBot.storage.connect4 = OpalBot.storage.connect4 || {},
+    id = message.author.id,
+    chan_id = message.channel.id,
+    invite = sessions['invite-' + id],
+    pending = sessions['pending-' + chan_id];
+    if (invite) {
+        // Do nothing. Really! This is to skip all the other "else if"s
+    } else if (pending && pending[0] == id || message.mentions.users.size && message.mentions.users.first().id == id) {
+        message.reply(i18n.msg('forever-alone', 'connect4', lang));
+        return;
+    } else if (sessions[id]) {
+        return; // You're already in a game. I won't try and give this a custom response since you can't possibly forget you're in a game in 60 seconds
+    } else if (!pending) {
+        var invited = message.mentions.users.first(),
+        key = invited ? 'invite-' + invited.id : 'pending-' + chan_id;
+        sessions[key] = [
+            id,
+            message.author.username,
+            setTimeout(() => {
+                delete sessions['invite-' + invited.id];
+                message.channel.send(i18n.msg('timeout', 'connect4', lang));
+            })
+        ];
+        if (invited) {
+            message.channel.send(i18n.msg('invited', 'connect4', invited.username, lang));
+        } else {
+            message.channel.send(i18n.msg('waiting', 'connect4', lang));
+        }
+        return;
+    }
+    var host = invite || pending,
+    host_id = host[0],
+    host_name = host[1];
+    clearTimeout(host[2]);
+    var c4 = sessions[id] = sessions[host_id] = new Connect4(host_id, id, host_name, message.author.username),
+    turn = Math.round(Math.random()), // 0 or 1
+    players = c4.players,
+    names = c4.player_names,
+    blue = names[Math.abs(turn - 1)],
+    red = names[turn];
+    /*if (turn == 0) {
+        players.push(players.shift());
+        names.push(names.shift());
+    }*/
+    while (!c4.is_draw()) {
+        turn = Math.abs(turn - 1);
+        try {
+            var bot_message = await message.channel.send({
+                embed: {
+                    title: i18n.msg('title', 'connect4', blue, red, lang),
+                    description: c4.render(),
+                    color: OpalBot.color,
+                    footer: {
+                        text: i18n.msg('turn', 'connect4', names[turn], turn, lang)
+                    }
+                }
+            }),
+            {message, index} = await OpalBot.unprefixed.expect({
+                type: 'tictactoe',
+                triggers: c4.moves(),
+                user: players[turn],
+                channel: message.channel.id
+            });
+        } catch(e) {
+            if (e == 'blocked') {
+                message.channel.send(i18n.msg('blocked', 'connect4', lang));
+                return;
+            } else { // Timeout
+                console.log(e);
+                session.winner = session.player_to_move == 'blue' ? 'redt' : 'bluet';
+                break;
+            }
+        }
+        if (bot_message.deletable) {
+            bot_message.delete();
+        }
+        if (message.deletable) {
+            message.delete();
+        }
+        var move = ['1', '2', '3', '4', '5', '6', '7'].indexOf(c4.moves()[index]),
+        consequence = session.move(move + 1);
+        console.log(consequence);
+        if (['blue', 'red'].includes(consequence) || consequence === true) break; // Somebody won, OR it's a draw
+    }
+    if (!c4.winner) {
+        message.channel.send({
+            embed: {
+                title: i18n.msg('title', 'tictactoe', blue, red, lang),
+                description: session.render(),
+                color: OpalBot.color,
+                footer: {
+                    text: i18n.msg('draw', 'tictactoe', lang)
+                }
+            }
+        });
+    } else {
+        if (c4.winner.slice(-1) == 't') {
+            turn = turn == 1 ? 0 : 1;
+        }
+        message.channel.send({
+            embed: {
+                title: i18n.msg('title', 'tictactoe', names[0], names[1], lang),
+                description: 
+                    (session.winner.slice(-1) == 't' ? i18n.msg('expired', 'connect4', lang) + '\n\n' : '') + session.render(),
+                color: OpalBot.color,
+                footer: {
+                    text: i18n.msg('winner', 'connect4', names[turn], lang)
+                }
+            }
+        });
+    }
+    delete sessions[id];
+    delete sessions[host_id];
 };

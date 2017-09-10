@@ -34,7 +34,7 @@ module.exports.peasants.avi = 'avatar';
 module.exports.peasants.avatar = (message, content, lang, i18n, OpalBot) => {
     var user = message.mentions.users.first() || message.author,
     avi = user.displayAvatarURL,
-    lul = Math.random * 150 < 1;
+    lul = Math.random() * 150 < 1;
     if (lul) {
         avi = avi.replace('cdn.discordapp.com', 'cdn.discordapp.com.rsz.io').replace('?size=2048', '%3Fsize%3D2048') + '?flip=y';
     }

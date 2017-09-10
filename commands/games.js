@@ -516,7 +516,7 @@ module.exports.peasants.connect4 = async (message, content, lang, i18n, OpalBot)
             setTimeout(() => {
                 delete sessions['invite-' + invited.id];
                 message.channel.send(i18n.msg('timeout', 'connect4', lang));
-            })
+            }, 60000)
         ];
         if (invited) {
             message.channel.send(i18n.msg('invited', 'connect4', invited.username, lang));

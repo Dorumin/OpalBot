@@ -535,6 +535,11 @@ module.exports.peasants.connect4 = async (message, content, lang, i18n, OpalBot)
     var host = invite || pending,
     host_id = host[0],
     host_name = host[1];
+    if (invite) {
+        delete sessions['invite-' + id];
+    } else {
+        delete sessions['pending-' + chan_id];
+    }
     clearTimeout(host[2]);
     var c4 = sessions[id] = sessions[host_id] = new Connect4(host_id, id, host_name, message.author.username),
     turn = Math.round(Math.random()), // 0 or 1

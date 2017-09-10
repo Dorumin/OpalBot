@@ -608,7 +608,7 @@ module.exports.peasants.connect4 = async (message, content, lang, i18n, OpalBot)
         }
         message.channel.send({
             embed: {
-                title: i18n.msg('title', 'connect4', names[0], names[1], lang),
+                title: i18n.msg('title', 'connect4', blue, red, lang),
                 description: 
                     (c4.winner.slice(-1) == 't' ? i18n.msg('expired', 'connect4', lang) + '\n\n' : '') + c4.render(),
                 color: OpalBot.color,

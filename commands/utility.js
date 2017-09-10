@@ -32,18 +32,13 @@ module.exports.peasants.hello = (message) => {
 module.exports.peasants.a = 'avatar';
 module.exports.peasants.avi = 'avatar';
 module.exports.peasants.avatar = (message, content, lang, i18n, OpalBot) => {
-    var user = message.mentions.users.first() || message.author,
-    avi = user.displayAvatarURL,
-    lul = Math.random() * 150 < 1;
-    if (lul) {
-        avi = avi.replace('cdn.discordapp.com', 'cdn.discordapp.com.rsz.io').replace('?size=2048', '%3Fsize%3D2048') + '?flip=y';
-    }
+    var user = message.mentions.users.first() || message.author;
     message.channel.send({
         embed: {
             color: OpalBot.color,
             title: i18n.msg('title', 'avatar', lang),
             image: {
-                url: avi
+                url: user.displayAvatarURL
             },
             description: i18n.msg('description', 'avatar', user.username, lang).replace(user.username.slice(0, -1) + "s's", user.username + "'")
         }

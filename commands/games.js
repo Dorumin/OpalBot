@@ -547,6 +547,7 @@ module.exports.peasants.connect4 = async (message, content, lang, i18n, OpalBot)
     names = c4.player_names,
     blue = names[Math.abs(turn - 1)],
     red = names[turn];
+    message.channel.send(turn);
     /*if (turn == 0) {
         players.push(players.shift());
         names.push(names.shift());
@@ -584,7 +585,7 @@ module.exports.peasants.connect4 = async (message, content, lang, i18n, OpalBot)
             bot_message.delete();
         }
         if (message.deletable) {
-            message.delete();
+            setTimeout(() => message.delete(), 500);
         }
         var move = ['1', '2', '3', '4', '5', '6', '7'].indexOf(c4.moves()[index]),
         consequence = c4.move(move + 1);

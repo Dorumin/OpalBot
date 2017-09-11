@@ -699,7 +699,7 @@ module.exports.peasants.chess = async (message, content, lang, i18n, OpalBot) =>
     d = new Date(),
     pad = str => ('0' + str).slice(-2),
     year = d.getUTCFullYear(),
-    month = d.getUTCMonth + 1,
+    month = d.getUTCMonth() + 1,
     date = d.getUTCDate();
     chess.header('Date', `${pad(year)}.${pad(month)}.${pad(date)}`, 'White', white, 'Black', black);
     while (!chess.game_over()) {

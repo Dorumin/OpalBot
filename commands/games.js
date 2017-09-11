@@ -695,7 +695,13 @@ module.exports.peasants.chess = async (message, content, lang, i18n, OpalBot) =>
     names = [host_name, message.author.username],
     white = names[(turn + 1) % 2],
     black = names[turn],
-    skip = false;
+    skip = false,
+    d = new Date(),
+    pad = str => ('0' + str).slice(-2),
+    year = d.getUTCFullYear(),
+    month = d.getUTCMonth + 1,
+    date = d.getUTCDate();
+    chess.header('Date', `${pad(year)}.${pad(month)}.${pad(date)}`, 'White', white, 'Black', black);
     while (!chess.game_over()) {
         turn = (turn + 1) % 2;
         try {
@@ -747,14 +753,19 @@ module.exports.peasants.chess = async (message, content, lang, i18n, OpalBot) =>
     if (chess.timeout) {
         msg = 'expired';
         turn = (turn + 1) % 2;
+        chess.header('Result', white == names[turn] ? '1-0' : '0-1');
     } else if (chess.in_checkmate()) {
         msg = 'winner';
+        chess.header('Result', white == names[turn] ? '1-0' : '0-1');
     } else if (chess.in_stalemate()) {
         msg = 'stalemate';
+        chess.header('Result', '½-½')
     } else if (chess.in_threefold_repetition()) {
         msg = 'threefold-repetition';
+        chess.header('Result', '½-½')
     } else {
         msg = 'draw';
+        chess.header('Result', '½-½')
     }
     message.channel.send({
         embed: {
@@ -768,4 +779,5 @@ module.exports.peasants.chess = async (message, content, lang, i18n, OpalBot) =>
             }
         }
     });
+    message.channel.send('```' + chess.pgn({ max_width: 72 }) + '```');
 };

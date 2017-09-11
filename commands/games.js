@@ -1,5 +1,5 @@
 // You know that saying, "don't reinvent the wheel"?
-const BasicChess = require('chess.js').Chess;
+const BasicChess = require('./plugins/chess').Chess;
 
 class TicTacToe {
     constructor(p1, p2, n1, n2) {
@@ -375,26 +375,6 @@ class Chess extends BasicChess {
 
     constructor() {
         super(); // Super!
-
-        this.board = () => {
-            var output = [],
-            row    = [];
-  
-            for (var i = SQUARES.a8; i <= SQUARES.h1; i++) {
-                if (board[i] == null) {
-                    row.push(null)
-                } else {
-                    row.push({type: board[i].type, color: board[i].color})
-                }
-                if ((i + 1) & 0x88) {
-                    output.push(row);
-                    row = []
-                    i += 8;
-                }
-            }
-    
-            return output;
-        };
 
         this.get_board_url = () => {
             console.log(this);

@@ -377,6 +377,7 @@ class Chess extends BasicChess {
         super(); // Super!
 
         this.get_board_url = () => {
+            console.log(this);
             var board = [].concat(...this.board()), // get a 64-length array with all the positions
             p = '';
             board.forEach(obj => {

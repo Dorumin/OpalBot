@@ -450,7 +450,6 @@ module.exports.peasants.ttt = async (message, content, lang, i18n, OpalBot) => {
                 message.channel.send(i18n.msg('blocked', 'tictactoe', lang));
                 return;
             } else { // Timeout
-                console.log(e);
                 session.winner = session.player_to_move == 'x' ? 'ot' : 'xt';
                 break;
             }
@@ -463,7 +462,6 @@ module.exports.peasants.ttt = async (message, content, lang, i18n, OpalBot) => {
         }
         var move = ['1', '2', '3', '4', '5', '6', '7', '8', '9'].indexOf(session.moves()[index]),
         consequence = session.move(session.player_to_move, move + 1);
-        console.log(consequence);
         if (['x', 'o'].includes(consequence) || consequence === true) break; // Somebody won, somehow. Isn't TicTacToe like super easy to draw?
     }
     if (!session.winner) {
@@ -547,7 +545,6 @@ module.exports.peasants.connect4 = async (message, content, lang, i18n, OpalBot)
     names = c4.player_names,
     blue = names[Math.abs(turn - 1)],
     red = names[turn];
-    message.channel.send(turn);
     /*if (turn == 0) {
         players.push(players.shift());
         names.push(names.shift());
@@ -576,7 +573,6 @@ module.exports.peasants.connect4 = async (message, content, lang, i18n, OpalBot)
                 message.channel.send(i18n.msg('blocked', 'connect4', lang));
                 return;
             } else { // Timeout
-                console.log(e);
                 c4.winner = c4.player_to_move == 'blue' ? 'redt' : 'bluet';
                 break;
             }
@@ -589,7 +585,6 @@ module.exports.peasants.connect4 = async (message, content, lang, i18n, OpalBot)
         }
         var move = ['1', '2', '3', '4', '5', '6', '7'].indexOf(c4.moves()[index]),
         consequence = c4.move(move + 1);
-        console.log(consequence);
         if (['blue', 'red'].includes(consequence) || consequence === true) break; // Somebody won, OR it's a draw
     }
     if (!c4.winner) {

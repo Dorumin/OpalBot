@@ -26,7 +26,7 @@ module.exports.kick.kick = (message, content, lang, i18n, OpalBot) => {
         message.channel.send(i18n.msg('success', 'kick', user.username, lang));
     }).catch(err => {
         message.channel.send(i18n.msg('failure', 'kick', user.username, err, lang));
-        console.log('Error (commands.admin.kick):', err);
+        OpalBot.util.log('Error (commands.admin.kick):', err);
     });
 };
 
@@ -70,11 +70,11 @@ module.exports.ban.ban = (message, content, lang, i18n, OpalBot) => {
         );
     }).catch(err => {
         message.channel.send(i18n.msg('failure', 'ban', user.username, err, lang));
-        console.log('Error (commands.admin.ban):', err);
+        OpalBot.util.log('Error (commands.admin.ban):', err);
     });
 };
 
-module.exports.ban.unban = async (message, content, lang, i18n) => {
+module.exports.ban.unban = async (message, content, lang, i18n, OpalBot) => {
     if (!content) {
         message.reply(i18n.msg('no-name', 'unban', lang));
         return;
@@ -91,7 +91,7 @@ module.exports.ban.unban = async (message, content, lang, i18n) => {
             message.channel.send(i18n.msg('success', 'unban', user.username, lang));
         }).catch(err => {
             message.channel.send(i18n.msg('failure', 'unban', username, err, lang));
-            console.log('Error (commands.admin.ban):', err);
+            OpalBot.util.log('Error (commands.admin.ban):', err);
         });
     } else {
         var users = [];

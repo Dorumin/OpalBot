@@ -2,6 +2,7 @@ const Discord  = require('discord.js');
 const Dropbox  = require('dropbox');
 const request  = require('request');
 const http     = require('http');
+const util     = require('util');
 const i18n     = require(`./i18n`);
 const client   = new Discord.Client();
 const database = new Dropbox({accessToken: process.env.dropbox_token});
@@ -19,7 +20,7 @@ client.on('ready', async () => {
         };
     }
     OpalBot.prefixes = (await OpalBot.db).data.prefixes;
-    console.log(i18n.msg('online', 'main', OpalBot.v, 'en'));
+    OpalBot.util.log(i18n.msg('online', 'main', OpalBot.v, 'en'));
     client.guilds
         .get('344422448403316748').channels
         .find(n => n.name == 'secret')
@@ -43,7 +44,7 @@ client.on('guildCreate', (guild) => {
 client.on('message', async (message) => {
     if (message.author.id == client.user.id || (!message.member && message.channel.type == 'text')) return;
     if (message.channel.type == 'dm' || message.channel.type == 'group') {
-        console.log(message.author.username + ': ' + message.content.trim());
+        OpalBot.util.log(message.author.username + ': ' + message.content.trim());
         message.reply('Add me on your server! <https://discordapp.com/oauth2/authorize?client_id=348233224293449729&scope=bot&permissions=60416>');
         return;
     }
@@ -57,7 +58,7 @@ client.on('message', async (message) => {
         permissions[key] = permissions[OpalBot.permissionAliases[key]];
     }
     if (!content) return;
-    console.log(name + ': ' + content + (message.channel.type == 'text' ? ' @ ' + message.guild.name : ''));
+    OpalBot.util.log(name + ': ' + content + (message.channel.type == 'text' ? ' @ ' + message.guild.name : ''));
     if (message.channel.type != 'text') return;
     while (i--) {
         if (content.startsWith(prefixes[i])) {
@@ -75,7 +76,7 @@ client.on('message', async (message) => {
                         command_fn(message, params, local, i18n, OpalBot);
                         break;
                     } catch(e) {
-                        console.log(`Uncaught error (command operator.${command}):`, e);
+                        OpalBot.util.log(`Uncaught error (command operator.${command}):`, e);
                     }
                 }
                 if (permissions[role] && OpalBot.commands[role].hasOwnProperty(command)) {
@@ -88,7 +89,7 @@ client.on('message', async (message) => {
                         command_fn(message, params, local, i18n, OpalBot);
                         break;
                     } catch(e) {
-                        console.log(`Uncaught error (command ${role}.${command}):`, e);
+                        OpalBot.util.log(`Uncaught error (command ${role}.${command}):`, e);
                     }
                 }
                 if (role == 'peasants' && OpalBot.commands.peasants.hasOwnProperty(command)) {
@@ -101,7 +102,7 @@ client.on('message', async (message) => {
                         command_fn(message, params, local, i18n, OpalBot);
                         break;
                     } catch(e) {
-                        console.log(`Uncaught error (command peasants.${command}):`, e);
+                        OpalBot.util.log(`Uncaught error (command peasants.${command}):`, e);
                     }
                 }
             }
@@ -112,7 +113,7 @@ client.on('message', async (message) => {
         var cases = (obj.triggers || [obj.trigger]).map(hopefully_str => String(hopefully_str)),
         users = obj.users || [obj.user].filter(Boolean);
         if (cases.length == 1 && cases[0] == undefined) {
-            console.log('Invalid unprefixed command: missing trigger');
+            OpalBot.util.log('Invalid unprefixed command: missing trigger');
             return;
         }
         if (obj.caseinsensitive) {
@@ -138,6 +139,8 @@ var OpalBot = {
     prefixes: [],
     unprefixed: [],
     v: '0.02',
+    log: 'Debug log for OpalBot v0.02\n',
+    log_count: 0,
     color: 0x2196f3,
     operators: ['155545848812535808', '195712766214930432'],
     util: {},
@@ -209,14 +212,12 @@ var OpalBot = {
         if (!obj.name) return;
         OpalBot._db[obj.name] = obj.value;
         if (OpalBot.timeouts.db[obj.name]) return;
-        //console.log('set db', JSON.stringify(OpalBot._db[obj.name]));
         OpalBot.timeouts.db[obj.name] = setTimeout(() => {
-            //console.log('updating database', JSON.stringify(OpalBot._db[obj.name]));
             database.filesUpload({
                 path: '/' + obj.name + '.json',
                 contents: Buffer.from(JSON.stringify(OpalBot._db[obj.name])).toString('base64'),
                 mode: 'overwrite'
-            }).catch(console.log);
+            }).catch(OpalBot.util.log);
             delete OpalBot.timeouts.db[obj.name];
         }, 10000);
     },
@@ -271,7 +272,7 @@ OpalBot.unprefixed.push = (...arr) => {     // It's hacky, but it works. Try not
                         obj.ontimeout();
                     }
                 } catch(e) {
-                    console.log('Error caught in unprefixed timeout callback', e);
+                    OpalBot.util.log('Error caught in unprefixed timeout callback', e);
                 }
             }, obj.timeout);
         }
@@ -321,6 +322,24 @@ OpalBot.unprefixed.expect = (obj) => {
         });
         if (blocked === true) {
             rej('blocked');
+        }
+    });
+};
+
+OpalBot.util.pad => (n) => {
+    if (typeof n != 'number') throw new TypeError('n must be a number');
+    return ('000' + n).slice(-4);
+};
+
+OpalBot.util.log = (...args) => {
+    console.log(...args);
+    var pad = OpalBot.util.pad;
+    args.forEach(arg => {
+        OpalBot.log_count++
+        if (typeof arg == 'object') {
+            OpalBot.log += '——————\n' + pad(OpalBot.log_count) + ': ' + util.inspect(arg) + '\n——————\n';
+        } else {
+            OpalBot.log += pad(OpalBot.log_count) + ': ' + arg + '\n';
         }
     });
 };
@@ -405,7 +424,7 @@ OpalBot.commands = {
 };
 
 OpalBot.server = http.createServer((req, res) => {
-  res.write('Hello, world!')
+  res.write(OpalBot.log)
   res.end();
 }).listen(process.env.PORT || 5000);
 

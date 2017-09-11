@@ -389,7 +389,7 @@ class Chess extends BasicChess {
                     p += obj.type;
                 }
             });
-            return `http://www.jinchess.com/chessboard/?p=${p}`;
+            return `http://www.jinchess.com/chessboard/?p=${p}&tm=${this.turn()}&ps=merida&cm=o`;
         }
     }
 }

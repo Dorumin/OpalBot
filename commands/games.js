@@ -645,7 +645,7 @@ module.exports.peasants.connect4 = async (message, content, lang, i18n, OpalBot)
 };
 
 module.exports.peasants.ch = 'chess';
-module.exports.peasants.chess = (message, content, i18n, lang, OpalBot) => {
+module.exports.peasants.chess = (message, content, lang, i18n, OpalBot) => {
     var sessions = OpalBot.storage.chess = OpalBot.storage.chess || {},
     id = message.author.id,
     chan_id = message.channel.id,

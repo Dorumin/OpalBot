@@ -1,5 +1,5 @@
 // You know that saying, "don't reinvent the wheel"?
-const BasicChess = require('chess.js');
+const BasicChess = require('chess.js').Chess;
 
 class TicTacToe {
     constructor(p1, p2, n1, n2) {

@@ -174,7 +174,7 @@
         "turn": "Player to move: $1",
         "winner": "$1 has won!",
         "draw": "It's a draw!",
-        "expired": "Time expired!"
+        "expired": "Time expired, $1 has won!"
     },
     "chess": {
         "blocked": "Cannot start a game due to another command expecting a response. Cancel it and try again!",
@@ -186,7 +186,9 @@
         "title": "$1 (:white_circle:) vs $2 (:black_circle:)",
         "turn": "Player to move: $1",
         "winner": "$1 has won!",
+        "stalemate": "Stalemate!",
+        "threefold-repetition": "Threefold repetition!",
         "draw": "It's a draw!",
-        "expired": "Time expired!"
+        "expired": "Time expired, $1 has won!"
     }
 }

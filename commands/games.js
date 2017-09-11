@@ -727,7 +727,7 @@ module.exports.peasants.chess = async (message, content, lang, i18n, OpalBot) =>
                 message.channel.send(i18n.msg('blocked', 'chess', lang));
                 return;
             } else { // Timeout
-                chess.winner = chess.player_to_move == 'blue' ? 'redt' : 'bluet';
+                chess.timeout = true;
                 break;
             }
         }
@@ -744,5 +744,30 @@ module.exports.peasants.chess = async (message, content, lang, i18n, OpalBot) =>
             setTimeout(() => message.delete(), 500);
         }
     }
-    message.channel.send('Endgame message');
+    var msg;
+    if (chess.timeout) {
+        msg = 'expired';
+        turn = (turn + 1) % 2;
+    } else if (chess.in_checkmate()) {
+        msg = 'winner';
+        turn = (turn + 1) % 2;
+    } else if (chess.in_stalemate()) {
+        msg = 'stalemate';
+    } else if (chess.in_threefold_repetition()) {
+        msg = 'threefold-repetition';
+    } else {
+        msg = 'draw';
+    }
+    message.channel.send({
+        embed: {
+            title: i18n.msg('title', 'chess', white, black, lang),
+            image: {
+                url: chess.get_board_url()
+            },
+            color: OpalBot.color,
+            footer: {
+                text: i18n.msg(msg, 'chess', names[turn], lang)
+            }
+        }
+    });
 };

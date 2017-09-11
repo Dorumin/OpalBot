@@ -692,11 +692,10 @@ module.exports.peasants.chess = async (message, content, lang, i18n, OpalBot) =>
     var chess = sessions[id] = sessions[host_id] = new Chess(),
     turn = Math.round(Math.random()), // 0 or 1
     players = [host_id, id],
-    names = [host_name, message.author.name],
+    names = [host_name, message.author.username],
     white = names[(turn + 1) % 2],
     black = names[turn];
     message.channel.send(`This command does nothing... for now. You can debug it with OpalBot.storage.chess[${id}].`);
-    message.channel.send(white + ' vs ' + black);
     while (!chess.game_over()) {
         turn = (turn + 1) % 2;
         try {
@@ -728,7 +727,10 @@ module.exports.peasants.chess = async (message, content, lang, i18n, OpalBot) =>
             }
         }
         var play = chess.move(message.content.replace(/\s+|-+/g), {sloppy: true});
-        if (!play) continue;
+        if (!play) {
+            turn = (turn + 1) % 2; // Invalid move; repeat it
+            continue;
+        }
         if (bot_message.deletable) {
             bot_message.delete();
         }

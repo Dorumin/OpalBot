@@ -696,6 +696,7 @@ module.exports.peasants.chess = async (message, content, lang, i18n, OpalBot) =>
     white = names[(turn + 1) % 2],
     black = names[turn];
     message.channel.send(`This command does nothing... for now. You can debug it with OpalBot.storage.chess[${id}].`);
+    message.channel.send(white + ' vs ' + black);
     while (!chess.game_over()) {
         turn = (turn + 1) % 2;
         try {

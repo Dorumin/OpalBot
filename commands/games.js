@@ -719,7 +719,7 @@ module.exports.peasants.chess = async (message, content, lang, i18n, OpalBot) =>
                 type: 'chess',
                 user: players[turn],
                 channel: message.channel.id,
-                timeout: 1800
+                timeout: 1800000
             });
         } catch(e) {
             if (e == 'blocked') {

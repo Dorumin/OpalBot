@@ -337,7 +337,7 @@ OpalBot.util.log = (...args) => {
     args.forEach(arg => {
         OpalBot.log_count++
         if (typeof arg == 'object') {
-            OpalBot.log += '——————\n' + pad(OpalBot.log_count) + ': ' + util.inspect(arg) + '\n——————\n';
+            OpalBot.log += '______\n' + pad(OpalBot.log_count) + ': ' + util.inspect(arg) + '\n______\n';
         } else {
             OpalBot.log += pad(OpalBot.log_count) + ': ' + arg + '\n';
         }

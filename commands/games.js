@@ -453,7 +453,7 @@ module.exports.peasants.ttt = async (message, content, lang, i18n, OpalBot) => {
         });
     };
     while (!session.is_draw()) {
-        turn = Math.abs(turn - 1);
+        turn = (turn + 1) % 2;
         try {
             var bot_message = await message.channel.send({
                 embed: {
@@ -569,14 +569,14 @@ module.exports.peasants.connect4 = async (message, content, lang, i18n, OpalBot)
     turn = Math.round(Math.random()), // 0 or 1
     players = c4.players,
     names = c4.player_names,
-    blue = names[Math.abs(turn - 1)],
+    blue = names[(turn + 1) % 2],
     red = names[turn];
     /*if (turn == 0) {
         players.push(players.shift());
         names.push(names.shift());
     }*/
     while (!c4.is_draw()) {
-        turn = Math.abs(turn - 1);
+        turn = (turn + 1) % 2;
         try {
             var bot_message = await message.channel.send({
                 embed: {
@@ -689,6 +689,51 @@ module.exports.peasants.chess = (message, content, lang, i18n, OpalBot) => {
         delete sessions['pending-' + chan_id];
     }
     clearTimeout(host[2]);
-    var session = sessions[id] = sessions[host_id] = new Chess();
-    message.channel.send(`This command does nothing... for now. You can debug it with OpalBot.storage.chess[${id}].`)
+    var chess = sessions[id] = sessions[host_id] = new Chess(),
+    turn = Math.round(Math.random()), // 0 or 1
+    players = [host_id, id],
+    names = [host_name, message.author.name],
+    white = names[(turn + 1) % 2],
+    black = names[turn];
+    message.channel.send(`This command does nothing... for now. You can debug it with OpalBot.storage.chess[${id}].`);
+    while (!chess.game_over()) {
+        turn = (turn + 1) % 2;
+        try {
+            var bot_message = await message.channel.send({
+                embed: {
+                    title: i18n.msg('title', 'chess', white, black, lang),
+                    image: {
+                        url: chess.get_board_url()
+                    },
+                    color: OpalBot.color,
+                    footer: {
+                        text: i18n.msg('turn', 'chess', names[turn], turn, lang)
+                    }
+                }
+            }),
+            {message, index} = await OpalBot.unprefixed.expect({
+                type: 'chess',
+                user: players[turn],
+                channel: message.channel.id,
+                timeout: 1800000
+            });
+        } catch(e) {
+            if (e == 'blocked') {
+                message.channel.send(i18n.msg('blocked', 'chess', lang));
+                return;
+            } else { // Timeout
+                chess.winner = chess.player_to_move == 'blue' ? 'redt' : 'bluet';
+                break;
+            }
+        }
+        var play = chess.move(message.content.replace(/\s+|-+/g), {sloppy: true});
+        if (!play) continue;
+        if (bot_message.deletable) {
+            bot_message.delete();
+        }
+        if (message.deletable) {
+            setTimeout(() => message.delete(), 500);
+        }
+    }
+    message.channel.send('Endgame message');
 };

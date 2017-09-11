@@ -174,7 +174,7 @@
         "turn": "Player to move: $1",
         "winner": "$1 has won!",
         "draw": "It's a draw!",
-        "expired": "Time expired, $1 has won!"
+        "expired": "Time expired!"
     },
     "chess": {
         "blocked": "Cannot start a game due to another command expecting a response. Cancel it and try again!",

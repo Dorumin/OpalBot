@@ -16,7 +16,6 @@
   },
   "dependencies": {
     "discord.js": "11.1.0",
-    "chess.js": "0.10.2",
     "dropbox": "2.5.7",
     "request": "2.81.0"
   },

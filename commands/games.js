@@ -694,24 +694,29 @@ module.exports.peasants.chess = async (message, content, lang, i18n, OpalBot) =>
     players = [host_id, id],
     names = [host_name, message.author.username],
     white = names[(turn + 1) % 2],
-    black = names[turn];
+    black = names[turn],
+    skip = false;
     message.channel.send(`This command does nothing... for now. You can debug it with OpalBot.storage.chess[${id}].`);
     while (!chess.game_over()) {
         turn = (turn + 1) % 2;
         try {
-            var bot_message = await message.channel.send({
-                embed: {
-                    title: i18n.msg('title', 'chess', white, black, lang),
-                    image: {
-                        url: chess.get_board_url()
-                    },
-                    color: OpalBot.color,
-                    footer: {
-                        text: i18n.msg('turn', 'chess', names[turn], turn, lang)
+            if (!skip) {
+                var bot_message = await message.channel.send({
+                    embed: {
+                        title: i18n.msg('title', 'chess', white, black, lang),
+                        image: {
+                            url: chess.get_board_url()
+                        },
+                        color: OpalBot.color,
+                        footer: {
+                            text: i18n.msg('turn', 'chess', names[turn], turn, lang)
+                        }
                     }
-                }
-            }),
-            {message, index} = await OpalBot.unprefixed.expect({
+                });
+            } else {
+                skip = false;
+            }
+            var {message, index} = await OpalBot.unprefixed.expect({
                 type: 'chess',
                 user: players[turn],
                 channel: message.channel.id,
@@ -726,9 +731,10 @@ module.exports.peasants.chess = async (message, content, lang, i18n, OpalBot) =>
                 break;
             }
         }
-        var play = chess.move(message.content.replace(/\s+|-+/g), {sloppy: true});
+        var play = chess.move(message.content.replace(/\s+|-+/g, ''), {sloppy: true});
         if (!play) {
             turn = (turn + 1) % 2; // Invalid move; repeat it
+            skip = true;
             continue;
         }
         if (bot_message.deletable) {

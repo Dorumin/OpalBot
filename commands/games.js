@@ -566,7 +566,8 @@ module.exports.peasants.connect4 = async (message, content, lang, i18n, OpalBot)
                 type: 'connect4',
                 triggers: c4.moves(),
                 user: players[turn],
-                channel: message.channel.id
+                channel: message.channel.id,
+                timeout: 18000
             });
         } catch(e) {
             if (e == 'blocked') {

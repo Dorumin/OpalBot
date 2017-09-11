@@ -110,18 +110,14 @@ client.on('message', async (message) => {
     }
     // Unprefixed triggers, usually used by confirm and cancel commands.
     OpalBot.unprefixed.forEach(function(obj, idx) {
-        var cases = (obj.triggers || [obj.trigger]).map(hopefully_str => String(hopefully_str)),
+        var cases = (obj.triggers || [obj.trigger]).filter(Boolean).map(hopefully_str => String(hopefully_str)),
         users = obj.users || [obj.user].filter(Boolean);
-        if (cases.length == 1 && cases[0] == undefined) {
-            OpalBot.util.log('Invalid unprefixed command: missing trigger');
-            return;
-        }
         if (obj.caseinsensitive) {
             cases = cases.map(str => str.toLowerCase());
             content = content.toLowerCase();
         }
         var index = cases.indexOf(content);
-        if (index == -1) return;
+        if (cases.length && index == -1) return;
         if (
             (users.length ? users.includes(message.author.id) : true) &&
             obj.channel == message.channel.id

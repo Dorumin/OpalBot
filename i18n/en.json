@@ -175,5 +175,18 @@
         "winner": "$1 has won!",
         "draw": "It's a draw!",
         "expired": "Time expired!"
+    },
+    "chess": {
+        "blocked": "Cannot start a game due to another command expecting a response. Cancel it and try again!",
+        "forever-alone": "you cannot start a game with yourself!",
+        "no-ai": "Sorry! I don't know how to play!",
+        "waiting": "Waiting for other players to join...",
+        "invited": "Waiting for $1 to join...",
+        "timeout": "No players joined! Use the command again to create another game.",
+        "title": "$1 (:large_blue_circle:) vs $2 (:red_circle:)",
+        "turn": "Player to move: $1",
+        "winner": "$1 has won!",
+        "draw": "It's a draw!",
+        "expired": "Time expired!"
     }
 }

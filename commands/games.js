@@ -1,3 +1,6 @@
+// You know that saying, "don't reinvent the wheel"?
+const BasicChess = require('chess.js');
+
 class TicTacToe {
     constructor(p1, p2, n1, n2) {
         this.matrix = [
@@ -368,6 +371,28 @@ class Connect4 {
     }
 }
 
+class Chess extends BasicChess {
+
+    constructor() {
+        super(); // Super!
+
+        this.get_board_url = () => {
+            var board = [].concat(...chess.board()), // get a 64-length array with all the positions
+            p = '';
+            board.forEach(obj => {
+                if (!obj) {
+                    p += '-';
+                } else if (obj.color == 'w') {
+                    p += obj.type.toUpperCase();
+                } else {
+                    p += obj.type;
+                }
+            });
+            return `http://www.jinchess.com/chessboard/?p=${p}`;
+        }
+    }
+}
+
 module.exports.peasants = {};
 
 module.exports.peasants.tictactoe = 'ttt';
@@ -617,4 +642,52 @@ module.exports.peasants.connect4 = async (message, content, lang, i18n, OpalBot)
     }
     delete sessions[id];
     delete sessions[host_id];
+};
+
+module.exports.peasants.ch = 'chess';
+module.exports.peasants.chess = (message, content, i18n, lang, OpalBot) => {
+    var sessions = OpalBot.storage.chess = OpalBot.storage.chess || {},
+    id = message.author.id,
+    chan_id = message.channel.id,
+    invite = sessions['invite-' + id],
+    pending = sessions['pending-' + chan_id],
+    invited = message.mentions.users.first();
+    if (invite) {
+        // Do nothing. Really! This is to skip all the other "else if"s
+    } else if (pending && pending[0] == id || invited && invited.id == id) {
+        message.reply(i18n.msg('forever-alone', 'chess', lang));
+        return;
+    } else if (invited && invited.id == OpalBot.client.user.id) {
+        message.channel.send(i18n.msg('no-ai', 'connect4', lang));
+        return;
+    } else if (sessions[id]) {
+        return; // You're already in a game. I won't try and give this a custom response since you can't possibly forget you're in a game in 60 seconds
+    } else if (!pending) {
+        var key = invited ? 'invite-' + invited.id : 'pending-' + chan_id;
+        sessions[key] = [
+            id,
+            message.author.username,
+            setTimeout(() => {
+                delete sessions[key];
+                message.channel.send(i18n.msg('timeout', 'chess', lang));
+            }, 60000)
+        ];
+        if (invited) {
+            message.channel.send(i18n.msg('invited', 'chess', invited.username, lang));
+        } else {
+            message.channel.send(i18n.msg('waiting', 'chess', lang));
+        }
+        return;
+    }
+    var host = invite || pending,
+    host_id = host[0],
+    host_name = host[1];
+    if (invite) {
+        delete sessions['invite-' + id];
+    } else {
+        delete sessions['pending-' + chan_id];
+    }
+    clearTimeout(host[2]);
+    var session = sessions[id] = sessions[host_id] = new Chess();
+    message.channel.send(`This command does nothing... for now. You can debug it with OpalBot.storage.chess[${id}].`)
 };

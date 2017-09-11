@@ -326,7 +326,7 @@ OpalBot.unprefixed.expect = (obj) => {
     });
 };
 
-OpalBot.util.pad => (n) => {
+OpalBot.util.pad = (n) => {
     if (typeof n != 'number') throw new TypeError('n must be a number');
     return ('000' + n).slice(-4);
 };

@@ -736,6 +736,10 @@ module.exports.peasants.chess = async (message, content, lang, i18n, OpalBot) =>
                 break;
             }
         }
+        if (message.content == i18n.msg('moves', 'chess', lang)) {
+            message.channel.send(i18n.msg('moves-response', 'chess', '`' + chess.moves().join('` `') + '`', lang));
+            continue;
+        }
         var play = chess.move(message.content.replace(/\s+|-+/g, ''), {sloppy: true});
         if (!play) {
             turn = (turn + 1) % 2; // Invalid move; repeat it

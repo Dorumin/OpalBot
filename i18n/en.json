@@ -183,6 +183,8 @@
         "waiting": "Waiting for other players to join...",
         "invited": "Waiting for $1 to join...",
         "timeout": "No players joined! Use the command again to create another game.",
+        "moves": "moves",
+        "moves-response": "These are the available moves: $1",
         "title": "$1 (:white_circle:) vs $2 (:black_circle:)",
         "turn": "Player to move: $1",
         "winner": "$1 has won!",

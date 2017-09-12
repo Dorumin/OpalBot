@@ -738,6 +738,7 @@ module.exports.peasants.chess = async (message, content, lang, i18n, OpalBot) =>
         }
         if (message.content == i18n.msg('moves', 'chess', lang)) {
             message.channel.send(i18n.msg('moves-response', 'chess', '`' + chess.moves().join('` `') + '`', lang));
+            turn = (turn + 1) % 2;
             skip = true;
             continue;
         }

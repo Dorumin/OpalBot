@@ -741,6 +741,7 @@ module.exports.peasants.chess = async (message, content, lang, i18n, OpalBot) =>
             }
         }
         if (i18n.msg('resign', 'chess', lang).split('|').includes(message.content)) {
+            message.channel.send(i18n.msg('resign-prompt', 'chess', lang) + '[' + i18n.msg('yesno', 'chess', lang) + ']');
             try {
                 var {message, index} = await OpalBot.unprefixed.expect({
                     type: 'chess',

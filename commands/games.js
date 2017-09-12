@@ -785,5 +785,5 @@ module.exports.peasants.chess = async (message, content, lang, i18n, OpalBot) =>
             }
         }
     });
-    message.channel.send('```' + chess.pgn({ max_width: 72 }) + '```');
+    message.channel.send('```' + chess.pgn({ max_width: 72 }).slice(0, -4) + '```');
 };

@@ -718,7 +718,7 @@ module.exports.peasants.chess = async (message, content, lang, i18n, OpalBot) =>
                         },
                         color: OpalBot.color,
                         footer: {
-                            text: i18n.msg('turn', 'chess', names[turn], turn, lang)
+                            text: i18n.msg(chess.in_check() ? 'turn-in-check' : 'turn', 'chess', names[turn], lang)
                         }
                     }
                 });
@@ -728,7 +728,7 @@ module.exports.peasants.chess = async (message, content, lang, i18n, OpalBot) =>
             var {message, index} = await OpalBot.unprefixed.expect({
                 type: 'chess',
                 user: players[turn],
-                channel: message.channel.id,
+                channel: chan_id,
                 timeout: 1800000
             });
         } catch(e) {
@@ -738,6 +738,31 @@ module.exports.peasants.chess = async (message, content, lang, i18n, OpalBot) =>
             } else { // Timeout
                 chess.timeout = true;
                 break;
+            }
+        }
+        if (i18n.msg('resign', 'chess', lang).split('|').includes(message.content)) {
+            try {
+                var {message, index} = await OpalBot.unprefixed.expect({
+                    type: 'chess',
+                    triggers: i18n.msg('yesno', 'chess', lang).split('/'),
+                    user: players[turn],
+                    channel: chan_id
+                });
+                if (index == 1) {
+                    if (bot_message.deletable) {
+                        bot_message.delete();
+                    }
+                    turn = (turn + 1) % 2;
+                    continue;
+                }
+                chess.resigned = true;
+                break;
+            } catch(e) {
+                if (bot_message.deletable) {
+                    bot_message.delete();
+                }
+                turn = (turn + 1) % 2;
+                continue;
             }
         }
         if (message.content == i18n.msg('moves', 'chess', lang)) {
@@ -764,6 +789,10 @@ module.exports.peasants.chess = async (message, content, lang, i18n, OpalBot) =>
         msg = 'expired';
         turn = (turn + 1) % 2;
         chess.header('Result', white == names[turn] ? '1-0' : '0-1');
+    } else if (chess.resigned) {
+        msg = 'resigned';
+        turn = (turn + 1) % 2;
+        chess.header('Result', white == names[turn] ? '1-0' : '0-1');
     } else if (chess.in_checkmate()) {
         msg = 'winner';
         chess.header('Result', white == names[turn] ? '1-0' : '0-1');
@@ -785,7 +814,7 @@ module.exports.peasants.chess = async (message, content, lang, i18n, OpalBot) =>
             },
             color: OpalBot.color,
             footer: {
-                text: i18n.msg(msg, 'chess', names[turn], lang)
+                text: i18n.msg(msg, 'chess', names[turn], names[(turn + 1) % 2], lang)
             }
         }
     });

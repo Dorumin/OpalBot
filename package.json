@@ -21,6 +21,7 @@
   },
   "keywords": [
     "Opal",
-    "Bot"
+    "Bot",
+    "discord.js"
   ]
 }

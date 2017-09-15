@@ -879,7 +879,7 @@ module.exports.peasants.quote = async (message, content, lang, i18n, OpalBot) =>
     while (quote.length < 100) {
         var {body} = await req('http://quotesondesign.com/wp-json/posts?filter[orderby]=rand&filter[posts_per_page]=1');
         quote = JSON.parse(body)[0].content
-            .replace(/&#\d+;/, str => {
+            .replace(/&#\d+;/g, str => {
                 return String.fromCharCode(str.slice(2, -1));
             })
             .replace(/<[a-z-\s\/]+>/gi, '');

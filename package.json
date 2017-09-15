@@ -17,7 +17,8 @@
   "dependencies": {
     "discord.js": "11.1.0",
     "dropbox": "2.5.7",
-    "request": "2.81.0"
+    "request": "2.81.0",
+    "canvas": "1.6.7"
   },
   "keywords": [
     "Opal",

@@ -1,5 +1,18 @@
 // You know that saying, "don't reinvent the wheel"?
-const BasicChess = require('../plugins/chess.js').Chess;
+const BasicChess = require('../plugins/chess.js').Chess,
+request = require('request'),
+req = (obj, POST) => {
+    return new Promise((res, rej) => {
+        (POST ? request.post : request)(obj, (e, r, body) => {
+            if (e || r.statusCode == '404') {
+                rej(e);
+                return;
+            }
+            res({res: r, body: body});
+        });
+    });
+};
+req.post = (obj) => req(obj, true);
 
 class TicTacToe {
     constructor(p1, p2, n1, n2) {
@@ -371,6 +384,45 @@ class Connect4 {
     }
 }
 
+/*class Battleship {
+
+    constructor(p1, p2, n1, n2) {
+        this.matrix = new Array(10).fill(undefined).map(() => new Array(10).fill(null));
+        this.players = [p1, p2];
+        this.player_names = [n1, n2];
+        this.player_to_move = 'blue';
+        this.winner = null;
+
+        var matrix = new Array(10).fill(undefined).map(() => new Array(10).fill(null)),
+        new_matrix = () => matrix.slice().map(arr => arr.slice());
+
+        this.history = [new_matrix(), new_matrix()];
+        this.boards  = [new_matrix(), new_matrix()];
+        this.placed = [[], []];
+
+        this.sizes = {
+            1: 2,
+            2: 3,
+            3: 3,
+            4: 4,
+            5: 5
+        };
+    }
+
+    place(type, coordinates, dir) {
+        if (type < 1 || type > 5) {
+            throw new TypeError('type must be an int between 1 and 5');
+        }
+        if (typeof coordinates != 'string') {
+            throw new TypeError('coordinates must be a string');
+        }
+        if (typeof dir != 'boolean') {
+            throw new TypeError('dir must be a boolean');
+        }
+        
+    }
+}*/
+
 class Chess extends BasicChess {
 
     constructor() {
@@ -740,7 +792,7 @@ module.exports.peasants.chess = async (message, content, lang, i18n, OpalBot) =>
                 break;
             }
         }
-        if (i18n.msg('resign', 'chess', lang).split('|').includes(message.content)) {
+        if (i18n.msg('resign', 'chess', lang).split('|').includes(message.content.toLowerCase())) {
             message.channel.send(i18n.msg('resign-prompt', 'chess', lang) + ' [' + i18n.msg('yesno', 'chess', lang) + ']');
             try {
                 var {message, index} = await OpalBot.unprefixed.expect({
@@ -766,7 +818,7 @@ module.exports.peasants.chess = async (message, content, lang, i18n, OpalBot) =>
                 continue;
             }
         }
-        if (message.content == i18n.msg('moves', 'chess', lang)) {
+        if (message.content.toLowerCase() == i18n.msg('moves', 'chess', lang)) {
             message.channel.send(i18n.msg('moves-response', 'chess', '`' + chess.moves().join('` `') + '`', lang));
             turn = (turn + 1) % 2;
             skip = true;
@@ -820,4 +872,17 @@ module.exports.peasants.chess = async (message, content, lang, i18n, OpalBot) =>
         }
     });
     message.channel.send('```' + chess.pgn({ max_width: 72 }).slice(0, -4) + '```');
+};
+
+module.exports.peasants.quote = async (message, content, lang, i18n, OpalBot) => {
+    var quote = '';
+    while (quote.length < 100) {
+        var {body} = await req('http://quotesondesign.com/wp-json/posts?filter[orderby]=rand&filter[posts_per_page]=1');
+        quote = JSON.parse(body)[0].content
+            .replace(/&#\d+;/, str => {
+                return String.fromCharCode(str.slice(2, -1));
+            })
+            .replace(/<[a-z-\s\/]+>/gi, '');
+    }
+    message.reply('```' + quote + '```');
 };

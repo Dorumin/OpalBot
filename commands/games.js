@@ -907,5 +907,5 @@ module.exports.peasants.quote = async (message, content, lang, i18n, OpalBot) =>
             }
         }
     }
-    message.reply('```' + quote.content + '```' + quote.title + '( ' + quote.link + ' )');
+    message.reply(`\`\`\`${quote.content}\n   - ${quote.title}\`\`\``);
 };

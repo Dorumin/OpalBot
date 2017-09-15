@@ -875,7 +875,7 @@ module.exports.peasants.chess = async (message, content, lang, i18n, OpalBot) =>
 };
 
 module.exports.peasants.quote = async (message, content, lang, i18n, OpalBot) => {
-    var quote = '',
+    var quote = null,
     fancy_characters = {
         '“': '"',
         '”': '"',
@@ -887,7 +887,7 @@ module.exports.peasants.quote = async (message, content, lang, i18n, OpalBot) =>
         '–': '-'
     },
     reg = new RegExp( Object.keys(fancy_characters).join('|'), 'g' );
-    while (quote.length < 150 || quote.indexOf('\n') != -1) {
+    while (!quote) {
         var {body} = await req('http://quotesondesign.com/wp-json/posts?filter[orderby]=rand&filter[posts_per_page]=40'),
         quotes = JSON.parse(body).map(obj => {
             obj.content = obj.content
@@ -902,10 +902,10 @@ module.exports.peasants.quote = async (message, content, lang, i18n, OpalBot) =>
         i = quotes.length;
         while (i--) {
             if (quotes[i].content.length > 150 && quotes[i].content.indexOf('\n') == -1) {
-                quote = quotes[i].content;
+                quote = quotes[i];
                 break;
             }
         }
     }
-    message.reply('```' + quote + '```');
+    message.reply('```' + quote.content + '```' + quote.title + '( ' + quote.link + ' )');
 };

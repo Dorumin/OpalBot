@@ -1053,6 +1053,7 @@ module.exports.peasants.typingcontest = async (message, content, lang, i18n, Opa
         message.channel.send({
             embed: {
                 title: i18n.msg('title', 'typingcontest', lang),
+                description: quote.content + ' - **' + quote.title + '**',
                 color: OpalBot.color,
                 fields: [
                     {

@@ -1,6 +1,6 @@
 {
   "name": "opalbot",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Discord bot",
   "engines": {
     "node": "8.4.0",

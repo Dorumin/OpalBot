@@ -1030,14 +1030,14 @@ module.exports.peasants.typingcontest = async (message, content, lang, i18n, Opa
             max = Math.max(split.length, original.length);
             players += '\n#' + monospace_char + ' ' + arr[0].username;
             while (i < max) {
-                if (original[i] == split[i]) {
+                if (original[cur_index] == split[i]) {
                     cur_index++;
                     correct_words++;
                 } else {
                     errors++;
-                    if (original[i + 1] == split[i]) {
+                    if (original[cur_index + 1] == split[i]) {
                         cur_index++;
-                    } else if (original[i - 1] == split[i]) {
+                    } else if (original[cur_index - 1] == split[i]) {
                         cur_index--;
                     }
                     cur_index++;

@@ -203,7 +203,7 @@
         "duration": "The next race will last for $1 seconds...",
         "countdown": "The typing contest will start in $1 ($1|second|seconds)...",
         "image-title": "Type the text in the image as fast as you can!",
-        "finished": "$1 has finished the race!",
+        "finished": "$1 has finished the race in $2 seconds!",
         "snails": "Nobody won the race, you bunch of snail typers!",
         "title": "Race results",
         "player": "Player",

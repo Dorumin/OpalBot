@@ -982,7 +982,7 @@ module.exports.peasants.typingcontest = async (message, content, lang, i18n, Opa
     await new Promise(res => {
         setTimeout(() => {
             res();
-        }, 2000);
+        }, 1000);
     });
     var start_timestamp = Date.now(),
     finished = {},
@@ -1010,7 +1010,7 @@ module.exports.peasants.typingcontest = async (message, content, lang, i18n, Opa
         if (lev_dist(quote.content, message.content) < Math.max(20, quote.content.length / 20)) {
             finished[message.author.id] = true;
             scores.push([message.author, Date.now(), message.content]);
-            message.channel.send(i18n.msg('finished', 'typingcontest', message.author.username, lang));
+            message.channel.send(i18n.msg('finished', 'typingcontest', message.author.username, ((start_timestamp - Date.now()) / 1000).toFixed(1), lang));
         }
     }
     if (!scores.length) {

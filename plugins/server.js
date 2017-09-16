@@ -32,7 +32,7 @@ function get_canvas_with_text(text, config) {
 
 module.exports.quote_image = (req, res, OpalBot) => {
     var storage = OpalBot.storage.quotes || {},
-    id = /\d+$/.match(req.url)[0];
+    id = req.url.match(/\d+$/)[0];
     if (!storage[id]) {
         res.end('Not found');
         return;

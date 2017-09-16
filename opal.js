@@ -424,7 +424,7 @@ OpalBot.server = http.createServer((req, res) => {
     OpalBot.util.log('Server request: ' + req.url);
     var path = req.url.slice(1).split('?')[0];
     if (OpalBot.serv_paths[path]) {
-        OpalBot.serv_paths[path](req, res);
+        OpalBot.serv_paths[path](req, res, OpalBot);
         return;
     }
     res.write(OpalBot.log);

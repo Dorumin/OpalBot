@@ -30,7 +30,7 @@ function get_canvas_with_text(text, config) {
     return resized_canvas.toDataURL();
 }
 
-module.exports.quote_image = (req, res) => {
+module.exports.quote_image = (req, res, OpalBot) => {
     var storage = OpalBot.storage.quotes || {},
     id = /\d+$/.match(req.url)[0];
     if (!storage[id]) {

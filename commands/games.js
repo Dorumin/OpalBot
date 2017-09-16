@@ -984,7 +984,7 @@ module.exports.peasants.typingcontest = async (message, content, lang, i18n, Opa
             res();
         }, 1000);
     });
-    var start_timestamp = Date.now(),
+    var start_timestamp = Date.now() + 3000,
     finished = {},
     i = 0;
     message.channel.send({
@@ -1010,7 +1010,7 @@ module.exports.peasants.typingcontest = async (message, content, lang, i18n, Opa
         if (lev_dist(quote.content, message.content) < Math.max(20, quote.content.length / 20)) {
             finished[message.author.id] = true;
             scores.push([message.author, Date.now(), message.content]);
-            message.channel.send(i18n.msg('finished', 'typingcontest', message.author.username, ((start_timestamp - Date.now()) / 1000).toFixed(1), lang));
+            message.channel.send(i18n.msg('finished', 'typingcontest', message.author.username, ((Date.now() - start_timestamp) / 1000).toFixed(1), lang));
         }
     }
     if (!scores.length) {

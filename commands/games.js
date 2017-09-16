@@ -915,10 +915,11 @@ module.exports.peasants.chess = async (message, content, lang, i18n, OpalBot) =>
     });
     message.channel.send('```' + chess.pgn({ max_width: 72 }).slice(0, -4) + '```');
 };
-module.exports.peasants.typestart = 'typingspeed';
-module.exports.peasants.typecontest = 'typingspeed';
-module.exports.peasants.typingcontest = 'typingspeed';
-module.exports.peasants.typingspeed = async (message, content, lang, i18n, OpalBot) => {
+module.exports.peasants.typestart = 'typingcontest';
+module.exports.peasants.typecontest = 'typingcontest';
+module.exports.peasants.typingspeed = 'typingcontest';
+module.exports.peasants.typingstart = 'typingcontest';
+module.exports.peasants.typingcontest = async (message, content, lang, i18n, OpalBot) => {
     var storage = OpalBot.storage.quotes = OpalBot.storage.quotes || {},
     quote = null,
     fancy_characters = {
@@ -946,18 +947,118 @@ module.exports.peasants.typingspeed = async (message, content, lang, i18n, OpalB
         }),
         i = quotes.length;
         while (i--) {
-            if (quotes[i].content.length > 150 && quotes[i].content.indexOf('\n') == -1) {
+            if (quotes[i].content.length > 150  && quotes[i].content.lengh < 800 && quotes[i].content.indexOf('\n') == -1) {
                 quote = quotes[i];
                 break;
             }
         }
     }
     storage[quote.ID] = quote;
+    var countdown = await message.channel.send(i18n.msg('countdown', 'typingcontest', 3, lang)),
+    scores = [];
+    setTimeout(() => {
+        countdown.edit(i18n.msg('countdown', 'typingcontest', 2, lang))
+    }, 1000);
+    setTimeout(() => {
+        countdown.edit(i18n.msg('countdown', 'typingcontest', 1, lang))
+    }, 2000);
+    setTimeout(() => {
+        if (countdown.deletable) {
+            countdown.delete();
+        }
+    }, 3000);
+    setTimeout(() => {
+        OpalBot.unprefixed.remove({
+            type: 'typingcontest',
+            channel: message.channel.id
+        });
+    }, quote.content.length / 3 + 3);
+    await new Promise(res => {
+        setTimeout(() => {
+            res();
+        }, 3000);
+    });
+    var start_timestamp = Date.now();
     message.channel.send({
         embed: {
+            color: OpalBot.color,
             image: {
-                url: 'http://opalbot.herokuapp.com/quote_image?id=' + quote.ID // Change this if you're self hosting
+                url: 'http://opalbot.herokuapp.com/quote_image?id=' + quote.ID // Change this if you're selfhosting
             }
         }
-    });
+    })
+    while (true) {
+        try {
+            var {message} = await OpalBot.unprefixed.expect({
+                type: 'typingcontest',
+                channel: message.channel.id,
+                timeout: quote.content.length / 3 + 10
+            });
+        } catch(e) {
+            if (e == 'cancel') {
+                break;
+            }
+        }
+        if (lev_dist(quote.content, message.content) < Math.max(20, quote.content.length / 20)) {
+            scores.push([message.author, Date.now(), message.content]);
+            message.channel.send(i18n.msg('finished', 'typingcontest', message.author.username, lang));
+        }
+    }
+    if (!scores.length) {
+        message.channel.send(i18n.msg('snails', 'typingcontest', lang));
+    } else {
+        var players = '',
+        wpm_scores = '',
+        incorrect_words = '';
+        scores.forEach((arr, idx) => {
+            var monospace_char = String.fromCharCode(55349) + String.fromCharCode(idx + 57335),
+            correct_words = 0,
+            errors = 0,
+            split = arr[2].split(' ').filter(Boolean),
+            original = quote.content.split(' ').filter(Boolean),
+            i = 0,
+            cur_index = 0,
+            max = Math.max(split.length, original.length);
+            players += '\n#' + monospace_char + ' ' + arr[0].username;
+            while (i < max) {
+                if (original[i] == split[i]) {
+                    cur_index++;
+                    correct_words++;
+                } else {
+                    errors++;
+                    if (original[i + 1] == split[i]) {
+                        cur_index++;
+                    }
+                    cur_index++;
+                }
+                i++;
+            }
+            var elapsed = arr[1] - start_timestamp,
+            secs = (elapsed / 1000).toFixed(1),
+            wpm = Math.ceil( correct_words * ( 60 / ( elapsed / 1000 ) ) );
+            wpm_scores += `${wpm} *${i18n.msg('secs', 'typingcontest', secs, lang)}*\n`;
+            incorrect_words += errors + '\n';
+        });
+        message.channel.send({
+            embed: {
+                title: i18n.msg('title', 'typingcontest', lang),
+                color: OpalBot.color,
+                fields: [
+                    {
+                        name: i18n.msg('player', 'typingcontest', lang),
+                        value: players,
+                        inline: true
+                    }, {
+                        name: i18n.msg('score', 'typingcontest', lang),
+                        value: wpm_scores,
+                        inline: true
+                    }, {
+                        name: i18n.msg('errors', 'typingcontest', lang),
+                        value: incorrect_words,
+                        inline: true
+                    }
+                ]
+            }
+        })
+    }
 };

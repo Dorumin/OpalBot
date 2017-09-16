@@ -197,5 +197,15 @@
         "threefold-repetition": "Threefold repetition!",
         "draw": "It's a draw!",
         "expired": "Time expired, $1 has won!"
+    },
+    "typingcontest": {
+        "countdown": "The typing contest will start in $1 ($1|second|seconds)...",
+        "finished": "$1 has finished the race!",
+        "snails": "Nobody won the race, you bunch of snail typers!",
+        "title": "Race results",
+        "player": "Player",
+        "score": "Score",
+        "errors": "Errors",
+        "secs": "[$1 secs]"
     }
 }

@@ -316,6 +316,7 @@ OpalBot.unprefixed.expect = (obj) => {
             ontimeout: () => {
                 rej('timeout');
             },
+            oncancel: () => rej('cancel'),
             ...obj
         });
         if (blocked === true) {

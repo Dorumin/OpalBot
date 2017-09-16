@@ -226,7 +226,6 @@ var OpalBot = {
     get Discord() {
         return Discord;
     },
-    test: Discord.Attachment,
     timeouts: {
         db: {}
     },
@@ -301,6 +300,9 @@ OpalBot.unprefixed.remove = (obj) => {
     var elem = OpalBot.unprefixed.splice(i, 1)[0]
     if (elem.__timeoutID) {
         clearTimeout(elem.__timeoutID);
+    }
+    if (elem.oncancel) {
+        elem.oncancel();
     }
     return elem;
 };

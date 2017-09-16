@@ -15,7 +15,7 @@ function get_canvas_with_text(text, config) {
     ctx.fillStyle = config.color || 'black';
     for (var i = 0; i < split.length; i++) {
         var measure = ctx.measureText(slice + split[i]);
-        if (measure.width > config.width - offsetX) {
+        if (measure.width > config.width - offsetX * 2) {
             ctx.fillText(slice.trim(), offsetX, offsetY);
             offsetY += config.line_height || parseInt(ctx.font) + 10;
             slice = '';
@@ -32,8 +32,8 @@ function get_canvas_with_text(text, config) {
 
 module.exports.quote_image = (req, res, OpalBot) => {
     var storage = OpalBot.storage.quotes || {},
-    id = req.url.match(/\d+$/)[0],
-    quote = storage[id];
+    id = req.url.match(/\d+$/),
+    quote = id ? storage[id[0]] : null;
     if (!quote) {
         res.end('Not found');
         return;

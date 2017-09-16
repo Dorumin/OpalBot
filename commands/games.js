@@ -954,6 +954,7 @@ module.exports.peasants.typingcontest = async (message, content, lang, i18n, Opa
         }
     }
     storage[quote.ID] = quote;
+    message.channel.reply(quote.content);
     var countdown = await message.channel.send(i18n.msg('countdown', 'typingcontest', 3, lang)),
     scores = [];
     setTimeout(() => {

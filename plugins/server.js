@@ -37,6 +37,8 @@ module.exports.quote_image = (req, res, OpalBot) => {
         res.end('Not found');
         return;
     }
+    OpalBot.util.log(storage[id]);
+    OpalBot.util.log(get_canvas_with_text(storage[id].content, { width: 450, background: 'white' }));
     var img = new Buffer( get_canvas_with_text(storage[id].content, { width: 450, background: 'white' }) , 'base64');
     
     res.writeHead(200, {

@@ -954,6 +954,7 @@ module.exports.peasants.typingcontest = async (message, content, lang, i18n, Opa
         }
     }
     storage[quote.ID] = quote;
+    message.channel.send(i18n.msg('duration', 'typingcontest', quote.content.length / 3 + 3, lang));
     var countdown = await message.channel.send(i18n.msg('countdown', 'typingcontest', 3, lang)),
     scores = [];
     setTimeout(() => {
@@ -976,7 +977,7 @@ module.exports.peasants.typingcontest = async (message, content, lang, i18n, Opa
     await new Promise(res => {
         setTimeout(() => {
             res();
-        }, 3000);
+        }, 2000);
     });
     var start_timestamp = Date.now(),
     finished = {},

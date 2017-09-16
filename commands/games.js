@@ -1037,6 +1037,8 @@ module.exports.peasants.typingcontest = async (message, content, lang, i18n, Opa
                     errors++;
                     if (original[i + 1] == split[i]) {
                         cur_index++;
+                    } else if (original[i - 1] == split[i]) {
+                        cur_index--;
                     }
                     cur_index++;
                 }

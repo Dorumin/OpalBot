@@ -39,7 +39,7 @@ module.exports.quote_image = (req, res, OpalBot) => {
     }
     OpalBot.util.log(storage[id]);
     OpalBot.util.log(get_canvas_with_text(storage[id].content, { width: 450, background: 'white' }));
-    var img = new Buffer( get_canvas_with_text(storage[id].content, { width: 450, background: 'white' }) , 'base64');
+    var img = new Buffer( get_canvas_with_text(storage[id].content, { width: 450, background: 'white' }).slice(22) , 'base64');
     
     res.writeHead(200, {
         'Content-Type': 'image/png',

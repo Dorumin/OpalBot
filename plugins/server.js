@@ -32,12 +32,15 @@ function get_canvas_with_text(text, config) {
 
 module.exports.quote_image = (req, res, OpalBot) => {
     var storage = OpalBot.storage.quotes || {},
-    id = req.url.match(/\d+$/)[0];
-    if (!storage[id]) {
+    id = req.url.match(/\d+$/)[0],
+    quote = storage[id];
+    if (!quote) {
         res.end('Not found');
         return;
     }
-    var img = new Buffer( get_canvas_with_text(storage[id].content, { width: 450, background: 'white' }).slice(22) , 'base64');
+    var base64 = quote.base64 || get_canvas_with_text(quote.content, { width: 450, background: 'white' }),
+    img = new Buffer( base64.slice(22) , 'base64');
+    quote.base64 = base64;
     
     res.writeHead(200, {
         'Content-Type': 'image/png',

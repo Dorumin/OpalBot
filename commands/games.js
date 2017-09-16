@@ -989,6 +989,7 @@ module.exports.peasants.typingcontest = async (message, content, lang, i18n, Opa
     i = 0;
     message.channel.send({
         embed: {
+            title: i18n.msg('image-title', 'typingcontest', lang),
             color: OpalBot.color,
             image: {
                 url: 'http://opalbot.herokuapp.com/quote_image?id=' + quote.ID // Change this if you're selfhosting
@@ -1044,7 +1045,7 @@ module.exports.peasants.typingcontest = async (message, content, lang, i18n, Opa
             var elapsed = arr[1] - start_timestamp,
             secs = (elapsed / 1000).toFixed(1),
             wpm = Math.ceil( correct_words * ( 60 / ( elapsed / 1000 ) ) );
-            wpm_scores += `${wpm} *${i18n.msg('secs', 'typingcontest', secs, lang)}*\n`;
+            wpm_scores += `${i18n.msg('score-format', 'typingcontest', wpm, secs, lang)}\n`;
             incorrect_words += errors + '\n';
         });
         message.channel.send({
@@ -1068,6 +1069,6 @@ module.exports.peasants.typingcontest = async (message, content, lang, i18n, Opa
                 ]
             }
         });
-        delete storage[message.channel.id];
     }
+    delete storage[message.channel.id];
 };

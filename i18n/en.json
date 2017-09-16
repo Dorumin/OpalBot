@@ -202,12 +202,13 @@
         "multiple": "Just one race at a time, please!",
         "duration": "The next race will last for $1 seconds...",
         "countdown": "The typing contest will start in $1 ($1|second|seconds)...",
+        "image-title": "Type the text in the image as fast as you can!",
         "finished": "$1 has finished the race!",
         "snails": "Nobody won the race, you bunch of snail typers!",
         "title": "Race results",
         "player": "Player",
         "score": "Score",
         "errors": "Errors",
-        "secs": "[$1 secs]"
+        "score-format": "$1 WPM *[$2 ($2|sec|secs)]*"
     }
 }

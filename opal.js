@@ -422,6 +422,11 @@ OpalBot.commands = {
 OpalBot.serv_paths = require('./plugins/server');
 OpalBot.server = http.createServer((req, res) => {
     OpalBot.util.log('Server request: ' + req.url);
+    var path = req.url.slice(1).split('?')[0];
+    if (OpalBot.serv_paths[path]) {
+        OpalBot.serv_paths[path](req, res);
+        return;
+    }
     res.write(OpalBot.log)
     res.end();
 }).listen(process.env.PORT || 5000);

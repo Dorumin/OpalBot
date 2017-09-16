@@ -912,7 +912,7 @@ module.exports.peasants.quote = async (message, content, lang, i18n, OpalBot) =>
     message.channel.send({
         embed: {
             image: {
-                url: 'http://opalbot.herokuapp.com/quote_images?id=' + quote.ID;
+                url: 'http://opalbot.herokuapp.com/quote_images?id=' + quote.ID
             }
         }
     });

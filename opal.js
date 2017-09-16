@@ -324,7 +324,7 @@ OpalBot.unprefixed.expect = (obj) => {
 
 OpalBot.util.pad = (n) => {
     if (typeof n != 'number') throw new TypeError('n must be a number');
-    return ('000' + n).slice(-4);
+    return ('0000' + n).slice(-4);
 };
 
 OpalBot.util.log = (...args) => {
@@ -427,7 +427,7 @@ OpalBot.server = http.createServer((req, res) => {
         OpalBot.serv_paths[path](req, res);
         return;
     }
-    res.write(OpalBot.log)
+    res.write(OpalBot.log);
     res.end();
 }).listen(process.env.PORT || 5000);
 

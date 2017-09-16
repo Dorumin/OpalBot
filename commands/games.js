@@ -875,7 +875,8 @@ module.exports.peasants.chess = async (message, content, lang, i18n, OpalBot) =>
 };
 
 module.exports.peasants.quote = async (message, content, lang, i18n, OpalBot) => {
-    var quote = null,
+    var storage = OpalBot.storage.quotes = OpalBot.storage.quotes || {},
+    quote = null,
     fancy_characters = {
         '“': '"',
         '”': '"',
@@ -907,5 +908,12 @@ module.exports.peasants.quote = async (message, content, lang, i18n, OpalBot) =>
             }
         }
     }
-    message.reply(`\`\`\`${quote.content}\n   - ${quote.title}\`\`\``);
+    storage[quote.ID] = quote;
+    message.channel.send({
+        embed: {
+            image: {
+                url: 'http://opalbot.herokuapp.com/quote_images?id=' + quote.ID;
+            }
+        }
+    });
 };

@@ -978,7 +978,9 @@ module.exports.peasants.typingcontest = async (message, content, lang, i18n, Opa
             res();
         }, 3000);
     });
-    var start_timestamp = Date.now();
+    var start_timestamp = Date.now(),
+    finished = {},
+    i = 0;
     message.channel.send({
         embed: {
             color: OpalBot.color,
@@ -995,11 +997,12 @@ module.exports.peasants.typingcontest = async (message, content, lang, i18n, Opa
                 timeout: quote.content.length / 3 + 10
             });
         } catch(e) {
-            if (e == 'cancel') {
-                break;
-            }
+            break;
         }
+        if (i++ < 30) OpalBot.util.log(message);
+        if (finished[message.author.id]) continue;
         if (lev_dist(quote.content, message.content) < Math.max(20, quote.content.length / 20)) {
+            finished[message.author.id] = true;
             scores.push([message.author, Date.now(), message.content]);
             message.channel.send(i18n.msg('finished', 'typingcontest', message.author.username, lang));
         }

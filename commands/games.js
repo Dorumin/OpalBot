@@ -972,7 +972,7 @@ module.exports.peasants.typingcontest = async (message, content, lang, i18n, Opa
             type: 'typingcontest',
             channel: message.channel.id
         });
-    }, quote.content.length / 3 + 3);
+    }, quote.content.length * 1000 / 3 + 3);
     await new Promise(res => {
         setTimeout(() => {
             res();
@@ -994,7 +994,7 @@ module.exports.peasants.typingcontest = async (message, content, lang, i18n, Opa
             var {message} = await OpalBot.unprefixed.expect({
                 type: 'typingcontest',
                 channel: message.channel.id,
-                timeout: quote.content.length / 3 + 10
+                timeout: quote.content.length * 1000 / 3 + 10
             });
         } catch(e) {
             break;

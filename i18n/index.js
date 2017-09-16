@@ -24,7 +24,7 @@ exports.msg = function(message, obj, ...vars) {
     if (!vars.length) return msg;
     return msg.replace(/\$(\d)/g, (s, n) => {
         return vars[n - 1] || s;
-    }).replace(/\((\d+?\|.+?\|.+?)\)/g, (s, match) => { // Plural markdown, (1|singular|plural) => "1 singular"; (4|singular|plural) => "4 plural"
+    }).replace(/\(([\d\.]+?\|.+?\|.+?)\)/g, (s, match) => { // Plural markdown, (1|singular|plural) => "1 singular"; (4|singular|plural) => "4 plural"
         var split = match.split('|');
         return split[0] == 1 ? split[1] : split[2];
     });

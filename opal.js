@@ -419,9 +419,11 @@ OpalBot.commands = {
     ...require('./commands')
 };
 
+OpalBot.serv_paths = require('./plugins/server');
 OpalBot.server = http.createServer((req, res) => {
-  res.write(OpalBot.log)
-  res.end();
+    OpalBot.util.log('Server request: ' + req.url);
+    res.write(OpalBot.log)
+    res.end();
 }).listen(process.env.PORT || 5000);
 
 client.login(process.env.token);

@@ -933,6 +933,11 @@ module.exports.peasants.typingcontest = async (message, content, lang, i18n, Opa
         '–': '-'
     },
     reg = new RegExp( Object.keys(fancy_characters).join('|'), 'g' );
+    if (storage[message.channel.id]) {
+        message.channel.send(i18n.msg('multiple', 'typingcontest', lang));
+        return;
+    }
+    storage[message.channel.id] = true;
     while (!quote) {
         var {body} = await req('http://quotesondesign.com/wp-json/posts?filter[orderby]=rand&filter[posts_per_page]=40'),
         quotes = JSON.parse(body).map(obj => {
@@ -954,7 +959,7 @@ module.exports.peasants.typingcontest = async (message, content, lang, i18n, Opa
         }
     }
     storage[quote.ID] = quote;
-    message.channel.send(i18n.msg('duration', 'typingcontest', quote.content.length / 3 + 3, lang));
+    message.channel.send(i18n.msg('duration', 'typingcontest', Math.ceil(quote.content.length / 3 + 3), lang));
     var countdown = await message.channel.send(i18n.msg('countdown', 'typingcontest', 3, lang)),
     scores = [];
     setTimeout(() => {
@@ -989,7 +994,7 @@ module.exports.peasants.typingcontest = async (message, content, lang, i18n, Opa
                 url: 'http://opalbot.herokuapp.com/quote_image?id=' + quote.ID // Change this if you're selfhosting
             }
         }
-    })
+    });
     while (true) {
         try {
             var {message} = await OpalBot.unprefixed.expect({
@@ -1000,7 +1005,6 @@ module.exports.peasants.typingcontest = async (message, content, lang, i18n, Opa
         } catch(e) {
             break;
         }
-        if (i++ < 30) OpalBot.util.log(message);
         if (finished[message.author.id]) continue;
         if (lev_dist(quote.content, message.content) < Math.max(20, quote.content.length / 20)) {
             finished[message.author.id] = true;
@@ -1063,6 +1067,7 @@ module.exports.peasants.typingcontest = async (message, content, lang, i18n, Opa
                     }
                 ]
             }
-        })
+        });
+        delete storage[message.channel.id];
     }
 };

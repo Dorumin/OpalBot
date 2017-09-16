@@ -947,14 +947,13 @@ module.exports.peasants.typingcontest = async (message, content, lang, i18n, Opa
         }),
         i = quotes.length;
         while (i--) {
-            if (quotes[i].content.length > 150  && quotes[i].content.lengh < 800 && quotes[i].content.indexOf('\n') == -1) {
+            if (quotes[i].content.length > 150  && quotes[i].content.length < 800 && quotes[i].content.indexOf('\n') == -1) {
                 quote = quotes[i];
                 break;
             }
         }
     }
     storage[quote.ID] = quote;
-    message.channel.reply(quote.content);
     var countdown = await message.channel.send(i18n.msg('countdown', 'typingcontest', 3, lang)),
     scores = [];
     setTimeout(() => {

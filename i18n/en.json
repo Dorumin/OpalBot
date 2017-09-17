@@ -133,7 +133,7 @@
     },
     "dice": {
         "result": "$1 rolled a **$2**!"
-    }
+    },
     "youtube": {
         "usage": "Usage: [Search query (required)]",
         "download-flags": "download|dl|mp3",

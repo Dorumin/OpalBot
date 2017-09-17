@@ -430,7 +430,9 @@ OpalBot.server = http.createServer((req, res) => {
         OpalBot.serv_paths[path](req, res, OpalBot);
         return;
     }
-    res.header("Content-Type", "text/plain; charset=utf-8");    
+    res.writeHead(200, {
+        'Content-Type': 'text/plain; charset=utf-8'
+    }); 
     res.write(OpalBot.log);
     res.end();
 }).listen(process.env.PORT || 5000);

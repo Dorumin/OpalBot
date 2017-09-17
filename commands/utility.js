@@ -106,7 +106,9 @@ module.exports.peasants.pick = (message, content, lang, i18n) => {
     }
     var reg = new RegExp('\\' + i18n.msg('delimiters', 'pick', lang).split(' ').join('|\\')),
     split = content.split(reg).filter(Boolean);
-    if (split.length == 1) {
+    if (!split.length) {
+        message.reply(i18n.msg('missing', 'pick', lang));
+    } else if (split.length == 1) {
         message.reply(i18n.msg('one', 'pick', lang));
     } else {
         var randum = split[Math.floor(Math.random() * split.length)].replace(/(\\\*)|\*/g, (s, c) => c ? s : '\\*');

@@ -111,7 +111,7 @@ module.exports.peasants.pick = (message, content, lang, i18n) => {
     } else if (split.length == 1) {
         message.reply(i18n.msg('one', 'pick', lang));
     } else {
-        var randum = split[Math.floor(Math.random() * split.length)].replace(/(\\\*)|\*/g, (s, c) => c ? s : '\\*');
+        var randum = split[Math.floor(Math.random() * split.length)].trim().replace(/(\\\*)|\*/g, (s, c) => c ? s : '\\*');
         message.reply(i18n.msg('result', 'pick', randum, lang));
     }
 };

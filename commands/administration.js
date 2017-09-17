@@ -155,7 +155,6 @@ module.exports.admin.purge = async (message, content, lang, i18n, OpalBot) => {
                     message.channel.send(i18n.msg('deleted', 'purge', messages.size, lang));
                 } catch(e) {
                     message.channel.send(i18n.msg('missing-permissions', 'purge', lang));
-                    console.log(e);
                 }
             } else { // cancel
                 message.channel.send(i18n.msg('cancelled', 'purge', lang));

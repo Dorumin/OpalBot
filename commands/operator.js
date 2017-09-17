@@ -25,7 +25,6 @@ module.exports.operator.destroy = (a, b, c, d, OpalBot) => {
 module.exports.operator.say = (message, content, lang, i18n, OpalBot) => {
     try {
         var r = eval(content);
-        console.log(r);
         if (r == null || !r.toString().trim()) throw r;
         message.channel.send(r.toString().trim());
     } catch(e) {

@@ -116,6 +116,13 @@ module.exports.peasants.pick = (message, content, lang, i18n) => {
     }
 };
 
+module.exports.peasants.d = 'dice';
+module.exports.peasants.dice = (message, content, lang, i18n) => {
+    var sides = parseInt(content) || 6,
+    result = Math.floor(Math.random() * sides);
+    message.channel.send(i18n.msg('result', 'dice', `<@${message.author.id}>`, result, lang));
+};
+
 module.exports.peasants.yt = 'youtube';
 module.exports.peasants.youtube = async (message, content, lang, i18n, OpalBot) => {
     if (!content) {
@@ -322,7 +329,7 @@ module.exports.peasants.mp3 = async (message, content, lang, i18n, OpalBot) => {
             if (s[0] == 'OK') {
                 break;
             } else if (s[0] == 'ERROR') {
-                OpalBot.log(body);
+                OpalBot.util.log(body);
                 if (s[1] != 'PENDING') throw new Error(); // Screw it, the server isn't giving us the link anytime soon
                 await new Promise((resolve) => {
                     setTimeout(() => resolve(), 1500);

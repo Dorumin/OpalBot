@@ -126,7 +126,7 @@
         "heads": "$1 flipped **heads**!"
     },
     "pick": {
-        "delimiter": ";",
+        "delimiters": "; |",
         "missing": "I don't pick anything!",
         "one": "Separate your options with `;`!",
         "result": "I pick **$1**!"

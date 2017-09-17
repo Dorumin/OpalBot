@@ -104,7 +104,8 @@ module.exports.peasants.pick = (message, content, lang, i18n) => {
         message.reply(i18n.msg('missing', 'pick', lang));
         return;
     }
-    var split = content.split(i18n.msg('delimiter', 'pick', lang));
+    var reg = new RegExp('\\' + i18n.msg('delimiters', 'pick', lang).split(' ').join('|\\')),
+    split = content.split(reg).filter(Boolean);
     if (split.length == 1) {
         message.reply(i18n.msg('one', 'pick', lang));
     } else {

@@ -446,6 +446,101 @@ class Chess extends BasicChess {
             }
             return url;
         }
+
+        function minimaxRoot(depth, game, isMaximisingPlayer) {
+        
+            var newGameMoves = game.ugly_moves();
+            var bestMove = -9999;
+            var bestMoveFound;
+        
+            for (var i = 0; i < newGameMoves.length; i++) {
+                var newGameMove = newGameMoves[i]
+                game.ugly_move(newGameMove);
+                var value = minimax(depth - 1, game, -10000, 10000, !isMaximisingPlayer);
+                game.undo();
+                if(value >= bestMove) {
+                    bestMove = value;
+                    bestMoveFound = newGameMove;
+                }
+            }
+            return bestMoveFound;
+        };
+        
+        function minimax(depth, game, alpha, beta, isMaximisingPlayer) {
+            positionCount++;
+            if (depth === 0) {
+                return -evaluateBoard(game.board());
+            }
+        
+            var newGameMoves = game.ugly_moves();
+        
+            if (isMaximisingPlayer) {
+                var bestMove = -9999;
+                for (var i = 0; i < newGameMoves.length; i++) {
+                    game.ugly_move(newGameMoves[i]);
+                    bestMove = Math.max(bestMove, minimax(depth - 1, game, alpha, beta, !isMaximisingPlayer));
+                    game.undo();
+                    alpha = Math.max(alpha, bestMove);
+                    if (beta <= alpha) {
+                        return bestMove;
+                    }
+                }
+                return bestMove;
+            } else {
+                var bestMove = 9999;
+                for (var i = 0; i < newGameMoves.length; i++) {
+                    game.ugly_move(newGameMoves[i]);
+                    bestMove = Math.min(bestMove, minimax(depth - 1, game, alpha, beta, !isMaximisingPlayer));
+                    game.undo();
+                    beta = Math.min(beta, bestMove);
+                    if (beta <= alpha) {
+                        return bestMove;
+                    }
+                }
+                return bestMove;
+            }
+        };
+        
+        function evaluateBoard(board) {
+            var totalEvaluation = 0;
+            for (var i = 0; i < 8; i++) {
+                for (var j = 0; j < 8; j++) {
+                    totalEvaluation = totalEvaluation + getPieceValue(board[i][j], i ,j);
+                }
+            }
+            return totalEvaluation;
+        };
+        
+        
+        
+        function getPieceValue(piece, x, y) {
+            if (piece === null) {
+                return 0;
+            }
+            var getAbsoluteValue = function (piece) {
+                if (piece.type === 'p') {
+                    return 10;
+                } else if (piece.type === 'r') {
+                    return 50;
+                } else if (piece.type === 'n') {
+                    return 30;
+                } else if (piece.type === 'b') {
+                    return 30;
+                } else if (piece.type === 'q') {
+                    return 90;
+                } else if (piece.type === 'k') {
+                    return 900;
+                }
+                throw "Unknown piece type: " + piece.type;
+            };
+        
+            var absoluteValue = getAbsoluteValue(piece);
+            return piece.color === 'w' ? absoluteValue : -absoluteValue;
+        };
+
+        this.get_best_move = (depth) => {
+            return minimaxRoot(depth, this, true);
+        };
     }
 }
 
@@ -756,8 +851,12 @@ module.exports.peasants.chess = async (message, content, lang, i18n, OpalBot) =>
         message.reply(i18n.msg('forever-alone', 'chess', lang));
         return;
     } else if (invited && invited.id == OpalBot.client.user.id) {
-        message.channel.send(i18n.msg('no-ai', 'connect4', lang));
-        return;
+        invite = [
+            id,
+            message.author.username,
+            -1
+        ];
+        id = OpalBot.client.user.id;
     } else if (sessions[id]) {
         return; // You're already in a game. I won't try and give this a custom response since you can't possibly forget you're in a game in 60 seconds
     } else if (!pending) {
@@ -787,7 +886,7 @@ module.exports.peasants.chess = async (message, content, lang, i18n, OpalBot) =>
     }
     clearTimeout(host[2]);
     var chess = sessions[id] = sessions[host_id] = new Chess(),
-    turn = Math.round(Math.random()), // 0 or 1
+    turn = id == OpalBot.client.user.id ? 1 : Math.round(Math.random()), // 0 or 1
     players = [host_id, id],
     names = [host_name, message.author.username],
     white = names[(turn + 1) % 2],
@@ -802,28 +901,34 @@ module.exports.peasants.chess = async (message, content, lang, i18n, OpalBot) =>
     while (!chess.game_over()) {
         turn = (turn + 1) % 2;
         try {
-            if (!skip) {
-                var bot_message = await message.channel.send({
-                    embed: {
-                        title: i18n.msg('title', 'chess', white, black, lang),
-                        image: {
-                            url: chess.get_board_url()
-                        },
-                        color: OpalBot.color,
-                        footer: {
-                            text: i18n.msg(chess.in_check() ? 'turn-in-check' : 'turn', 'chess', names[turn], lang)
-                        }
-                    }
-                });
+            if (players[turn] == OpalBot.client.user.id) {
+                message = {
+                    content: chess.get_best_move()
+                }
             } else {
-                skip = false;
+                if (!skip) {
+                    var bot_message = await message.channel.send({
+                        embed: {
+                            title: i18n.msg('title', 'chess', white, black, lang),
+                            image: {
+                                url: chess.get_board_url()
+                            },
+                            color: OpalBot.color,
+                            footer: {
+                                text: i18n.msg(chess.in_check() ? 'turn-in-check' : 'turn', 'chess', names[turn], lang)
+                            }
+                        }
+                    });
+                } else {
+                    skip = false;
+                }
+                var {message, index} = await OpalBot.unprefixed.expect({
+                    type: 'chess',
+                    user: players[turn],
+                    channel: chan_id,
+                    timeout: 1800000
+                });
             }
-            var {message, index} = await OpalBot.unprefixed.expect({
-                type: 'chess',
-                user: players[turn],
-                channel: chan_id,
-                timeout: 1800000
-            });
         } catch(e) {
             if (e == 'blocked') {
                 message.channel.send(i18n.msg('blocked', 'chess', lang));

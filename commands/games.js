@@ -901,9 +901,11 @@ module.exports.peasants.chess = async (message, content, lang, i18n, OpalBot) =>
     while (!chess.game_over()) {
         turn = (turn + 1) % 2;
         try {
+            message.channel.send(players[turn] + skip);
             if (players[turn] == OpalBot.client.user.id) {
                 var message = {
-                    content: chess.get_best_move()
+                    content: chess.get_best_move(),
+                    channel: message.channel
                 }
             } else {
                 if (!skip) {

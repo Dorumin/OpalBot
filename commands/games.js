@@ -467,7 +467,6 @@ class Chess extends BasicChess {
         };
         
         function minimax(depth, game, alpha, beta, isMaximisingPlayer) {
-            positionCount++;
             if (depth === 0) {
                 return -evaluateBoard(game.board());
             }

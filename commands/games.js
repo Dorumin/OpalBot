@@ -449,13 +449,13 @@ class Chess extends BasicChess {
 
         function minimaxRoot(depth, game, isMaximisingPlayer) {
         
-            var newGameMoves = game.ugly_moves();
+            var newGameMoves = game.moves();
             var bestMove = -9999;
             var bestMoveFound;
         
             for (var i = 0; i < newGameMoves.length; i++) {
                 var newGameMove = newGameMoves[i]
-                game.ugly_move(newGameMove);
+                game.move(newGameMove);
                 var value = minimax(depth - 1, game, -10000, 10000, !isMaximisingPlayer);
                 game.undo();
                 if(value >= bestMove) {
@@ -472,12 +472,12 @@ class Chess extends BasicChess {
                 return -evaluateBoard(game.board());
             }
         
-            var newGameMoves = game.ugly_moves();
+            var newGameMoves = game.moves();
         
             if (isMaximisingPlayer) {
                 var bestMove = -9999;
                 for (var i = 0; i < newGameMoves.length; i++) {
-                    game.ugly_move(newGameMoves[i]);
+                    game.move(newGameMoves[i]);
                     bestMove = Math.max(bestMove, minimax(depth - 1, game, alpha, beta, !isMaximisingPlayer));
                     game.undo();
                     alpha = Math.max(alpha, bestMove);
@@ -489,7 +489,7 @@ class Chess extends BasicChess {
             } else {
                 var bestMove = 9999;
                 for (var i = 0; i < newGameMoves.length; i++) {
-                    game.ugly_move(newGameMoves[i]);
+                    game.move(newGameMoves[i]);
                     bestMove = Math.min(bestMove, minimax(depth - 1, game, alpha, beta, !isMaximisingPlayer));
                     game.undo();
                     beta = Math.min(beta, bestMove);
@@ -902,7 +902,7 @@ module.exports.peasants.chess = async (message, content, lang, i18n, OpalBot) =>
         turn = (turn + 1) % 2;
         try {
             if (players[turn] == OpalBot.client.user.id) {
-                message = {
+                var message = {
                     content: chess.get_best_move()
                 }
             } else {

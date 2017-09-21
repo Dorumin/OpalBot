@@ -981,8 +981,8 @@ module.exports.peasants.chess = async (message, content, lang, i18n, OpalBot) =>
         if (bot_message.deletable) {
             bot_message.delete();
         }
-        if (message.deletable && typeof message.delete == 'function') {
-            setTimeout(() => message.delete(), 500);
+        if (message.deletable) {
+            message.delete();
         }
     }
     var msg;

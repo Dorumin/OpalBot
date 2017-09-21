@@ -856,6 +856,7 @@ module.exports.peasants.chess = async (message, content, lang, i18n, OpalBot) =>
             -1
         ];
         id = OpalBot.client.user.id;
+        message.author.username = OpalBot.client.user.username;
     } else if (sessions[id]) {
         return; // You're already in a game. I won't try and give this a custom response since you can't possibly forget you're in a game in 60 seconds
     } else if (!pending) {

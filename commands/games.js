@@ -534,7 +534,7 @@ class Chess extends BasicChess {
             };
         
             var absoluteValue = getAbsoluteValue(piece);
-            return piece.color === 'b' ? absoluteValue : -absoluteValue;
+            return piece.color === 'w' ? absoluteValue : -absoluteValue;
         };
 
         this.get_best_move = (depth) => {
@@ -971,7 +971,7 @@ module.exports.peasants.chess = async (message, content, lang, i18n, OpalBot) =>
             skip = true;
             continue;
         }
-        var play = chess.move(message.content.replace(/\s+|-+/g, ''), {sloppy: true});
+        var play = chess.move(message.content.replace(/\s+/g, ''), {sloppy: true});
         if (!play) {
             turn = (turn + 1) % 2; // Invalid move; repeat it
             skip = true;

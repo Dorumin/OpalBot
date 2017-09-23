@@ -534,7 +534,7 @@ class Chess extends BasicChess {
             };
         
             var absoluteValue = getAbsoluteValue(piece);
-            return piece.color === 'w' ? absoluteValue : -absoluteValue;
+            return piece.color === 'b' ? absoluteValue : -absoluteValue;
         };
 
         this.get_best_move = (depth) => {
@@ -901,7 +901,6 @@ module.exports.peasants.chess = async (message, content, lang, i18n, OpalBot) =>
     while (!chess.game_over()) {
         turn = (turn + 1) % 2;
         try {
-            message.channel.send(players[turn] + skip);
             if (players[turn] == OpalBot.client.user.id) {
                 var message = {
                     content: chess.get_best_move(3),

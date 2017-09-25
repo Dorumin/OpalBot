@@ -819,7 +819,6 @@ module.exports.peasants.connect4 = async (message, content, lang, i18n, OpalBot)
                     delete: () => {}
                 };
                 var index = c4.moves().indexOf(String(best));
-                message.channel.send(best + ' - ' + index)
             } else {
                 var {message, index} = await OpalBot.unprefixed.expect({
                     type: 'connect4',

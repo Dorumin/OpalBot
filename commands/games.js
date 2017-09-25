@@ -745,7 +745,8 @@ module.exports.peasants.connect4 = async (message, content, lang, i18n, OpalBot)
     chan_id = message.channel.id,
     invite = sessions['invite-' + id],
     pending = sessions['pending-' + chan_id],
-    invited = message.mentions.users.first();
+    invited = message.mentions.users.first(),
+    name = message.author.username;
     if (invite) {
         // Do nothing. Really! This is to skip all the other "else if"s
     } else if (pending && pending[0] == id || invited && invited.id == id) {
@@ -754,18 +755,18 @@ module.exports.peasants.connect4 = async (message, content, lang, i18n, OpalBot)
     } else if (invited && invited.id == OpalBot.client.user.id) {
         invite = [
             id,
-            message.author.username,
+            name,
             -1
         ];
         id = OpalBot.client.user.id;
-        message.author.username = OpalBot.client.user.username;
+        name = OpalBot.client.user.username;
     } else if (sessions[id]) {
         return; // You're already in a game. I won't try and give this a custom response since you can't possibly forget you're in a game in 60 seconds
     } else if (!pending) {
         var key = invited ? 'invite-' + invited.id : 'pending-' + chan_id;
         sessions[key] = [
             id,
-            message.author.username,
+            name,
             setTimeout(() => {
                 delete sessions[key];
                 message.channel.send(i18n.msg('timeout', 'connect4', lang)).catch(OpalBot.util.log);
@@ -787,7 +788,7 @@ module.exports.peasants.connect4 = async (message, content, lang, i18n, OpalBot)
         delete sessions['pending-' + chan_id];
     }
     clearTimeout(host[2]);
-    var c4 = sessions[id] = sessions[host_id] = new Connect4(host_id, id, host_name, message.author.username),
+    var c4 = sessions[id] = sessions[host_id] = new Connect4(host_id, id, host_name, name),
     turn = Math.round(Math.random()), // 0 or 1
     players = c4.players,
     names = c4.player_names,
@@ -885,7 +886,8 @@ module.exports.peasants.chess = async (message, content, lang, i18n, OpalBot) =>
     chan_id = message.channel.id,
     invite = sessions['invite-' + id],
     pending = sessions['pending-' + chan_id],
-    invited = message.mentions.users.first();
+    invited = message.mentions.users.first(),
+    name = message.author.username;
     if (invite) {
         // Do nothing. Really! This is to skip all the other "else if"s
     } else if (pending && pending[0] == id || invited && invited.id == id) {
@@ -894,18 +896,18 @@ module.exports.peasants.chess = async (message, content, lang, i18n, OpalBot) =>
     } else if (invited && invited.id == OpalBot.client.user.id) {
         invite = [
             id,
-            message.author.username,
+            name,
             -1
         ];
         id = OpalBot.client.user.id;
-        message.author.username = OpalBot.client.user.username;
+        name = OpalBot.client.user.username;
     } else if (sessions[id]) {
         return; // You're already in a game. I won't try and give this a custom response since you can't possibly forget you're in a game in 60 seconds
     } else if (!pending) {
         var key = invited ? 'invite-' + invited.id : 'pending-' + chan_id;
         sessions[key] = [
             id,
-            message.author.username,
+            name,
             setTimeout(() => {
                 delete sessions[key];
                 message.channel.send(i18n.msg('timeout', 'chess', lang)).catch(OpalBot.util.log);
@@ -930,7 +932,7 @@ module.exports.peasants.chess = async (message, content, lang, i18n, OpalBot) =>
     var chess = sessions[id] = sessions[host_id] = new Chess(),
     turn = id == OpalBot.client.user.id ? 1 : Math.round(Math.random()), // 0 or 1
     players = [host_id, id],
-    names = [host_name, message.author.username],
+    names = [host_name, name],
     white = names[(turn + 1) % 2],
     black = names[turn],
     skip = false,

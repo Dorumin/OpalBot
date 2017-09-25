@@ -376,8 +376,9 @@ class Connect4 {
         return new Promise(async (res, rej) => {
             try {
                 var {body} = await req('http://connect4.gamesolver.org/solve?pos=' + this.history),
-                best = JSON.parse(body).score.sort()[0];
-                res(best);
+                scores = JSON.parse(body).score,
+                best = scores.sort((a, b) => b - a)[0];
+                res(scores.indexOf(best) + 1);
             } catch(e) {
                 rej(e);
             }

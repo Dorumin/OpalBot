@@ -377,7 +377,7 @@ class Connect4 {
             try {
                 var {body} = await req('http://connect4.gamesolver.org/solve?pos=' + this.history),
                 best = JSON.parse(body).score.sort()[0];
-                return best;
+                res(best);
             } catch(e) {
                 rej(e);
             }

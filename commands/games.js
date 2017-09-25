@@ -749,6 +749,9 @@ module.exports.peasants.connect4 = async (message, content, lang, i18n, OpalBot)
     if (invite) {
         // Do nothing. Really! This is to skip all the other "else if"s
     } else if (pending && pending[0] == id || invited && invited.id == id) {
+        message.reply(i18n.msg('forever-alone', 'connect4', lang));
+        return;
+    } else if (invited && invited.id == OpalBot.client.user.id) {
         invite = [
             id,
             message.author.username,
@@ -756,9 +759,6 @@ module.exports.peasants.connect4 = async (message, content, lang, i18n, OpalBot)
         ];
         id = OpalBot.client.user.id;
         message.author.username = OpalBot.client.user.username;
-    } else if (invited && invited.id == OpalBot.client.user.id) {
-        message.channel.send(i18n.msg('no-ai', 'connect4', lang)).catch(OpalBot.util.log);
-        return;
     } else if (sessions[id]) {
         return; // You're already in a game. I won't try and give this a custom response since you can't possibly forget you're in a game in 60 seconds
     } else if (!pending) {

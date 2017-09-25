@@ -749,8 +749,13 @@ module.exports.peasants.connect4 = async (message, content, lang, i18n, OpalBot)
     if (invite) {
         // Do nothing. Really! This is to skip all the other "else if"s
     } else if (pending && pending[0] == id || invited && invited.id == id) {
-        message.reply(i18n.msg('forever-alone', 'connect4', lang));
-        return;
+        invite = [
+            id,
+            message.author.username,
+            -1
+        ];
+        id = OpalBot.client.user.id;
+        message.author.username = OpalBot.client.user.username;
     } else if (invited && invited.id == OpalBot.client.user.id) {
         message.channel.send(i18n.msg('no-ai', 'connect4', lang)).catch(OpalBot.util.log);
         return;
@@ -804,14 +809,22 @@ module.exports.peasants.connect4 = async (message, content, lang, i18n, OpalBot)
                         text: i18n.msg('turn', 'connect4', names[turn], turn, lang)
                     }
                 }
-            }).catch(OpalBot.util.log),
-            {message, index} = await OpalBot.unprefixed.expect({
-                type: 'connect4',
-                triggers: c4.moves(),
-                user: players[turn],
-                channel: message.channel.id,
-                timeout: 180000
-            });
+            }).catch(OpalBot.util.log);
+            if (players[turn] == OpalBot.client.user.id) {
+                var best = await c4.get_best_move();
+                message = {
+                    channel: message.channel,
+                    content: best
+                };
+            } else {
+                var {message, index} = await OpalBot.unprefixed.expect({
+                    type: 'connect4',
+                    triggers: c4.moves(),
+                    user: players[turn],
+                    channel: message.channel.id,
+                    timeout: 180000
+                });
+            }
         } catch(e) {
             if (e == 'blocked') {
                 message.channel.send(i18n.msg('blocked', 'connect4', lang)).catch(OpalBot.util.log);

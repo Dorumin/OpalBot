@@ -1047,7 +1047,10 @@ module.exports.peasants.chess = async (message, content, lang, i18n, OpalBot) =>
         }
     }).catch(OpalBot.util.log);
     message.channel.send('```' + chess.pgn({ max_width: 72 }).slice(0, -4) + '```').catch(OpalBot.util.log);
+    delete sessions[id];
+    delete sessions[host_id]
 };
+
 module.exports.peasants.typestart = 'typingcontest';
 module.exports.peasants.typecontest = 'typingcontest';
 module.exports.peasants.typingspeed = 'typingcontest';

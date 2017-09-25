@@ -813,11 +813,12 @@ module.exports.peasants.connect4 = async (message, content, lang, i18n, OpalBot)
             if (players[turn] == OpalBot.client.user.id) {
                 var best = await c4.get_best_move();
                 message.channel.send(best);
-                message = {
+                var message = {
                     channel: message.channel,
                     content: best,
                     delete: () => {}
                 };
+                var index = best - 1;
             } else {
                 var {message, index} = await OpalBot.unprefixed.expect({
                     type: 'connect4',

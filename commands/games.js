@@ -189,6 +189,7 @@ class Connect4 {
         this.player_names = [n1, n2];
         this.player_to_move = 'blue';
         this.winner = null;
+        this.history = '';
     }
 
     end_turn() {
@@ -263,6 +264,7 @@ class Connect4 {
         if (v == 'red' || v == 'blue') {
             this.winner = v;
         }
+        this.history += col;
         return v;
     }
 
@@ -370,6 +372,18 @@ class Connect4 {
         return true;
     }
 
+    get_best_move() {
+        return new Promise(async (res, rej) => {
+            try {
+                var {body} = await req('http://connect4.gamesolver.org/solve?pos=' + this.history),
+                best = JSON.parse(body).score.sort()[0];
+                return best;
+            } catch(e) {
+                rej(e);
+            }
+        });
+    }
+
     render() {
         var str = '',
         i = 6;
@@ -446,6 +460,17 @@ class Chess extends BasicChess {
             }
             return url;
         }
+
+        this.ascii_key = (char) => {
+            switch(char) {
+                case 'p': return '♟';
+                case 'r': return '♜';
+                case 'n': return '♞';
+                case 'b': return '♝';
+                case 'q': return '♛';
+                case 'k': return '♚';
+            }
+        };
 
         function minimaxRoot(depth, game, isMaximisingPlayer) {
         
@@ -599,7 +624,7 @@ module.exports.peasants.ttt = async (message, content, lang, i18n, OpalBot) => {
         message.reply(i18n.msg('forever-alone', 'tictactoe', lang));
         return;
     } else if (invited && invited.id == OpalBot.client.user.id) {
-        message.channel.send(i18n.msg('no-ai', 'tictactoe', lang));
+        message.channel.send(i18n.msg('no-ai', 'tictactoe', lang)).catch(OpalBot.util.log);
         return;
     } else if (pending && pending[3] && pending[3] != id) {
         return; // You're not invited. You're uninvited.
@@ -608,14 +633,14 @@ module.exports.peasants.ttt = async (message, content, lang, i18n, OpalBot) => {
     } else if (!pending) {
         sessions['pending-' + chan_id] = [id, message.author.username, setTimeout(() => { // Creating a new session
             delete sessions['pending-' + chan_id];
-            message.channel.send(i18n.msg('timeout', 'tictactoe', lang));
+            message.channel.send(i18n.msg('timeout', 'tictactoe', lang)).catch(OpalBot.util.log);
         }, 60000)];
         if (invited) {
             sessions['pending-' + chan_id].push(message.mentions.users.first().id);
-            message.channel.send(i18n.msg('invited', 'tictactoe', message.mentions.users.first().username, lang));
+            message.channel.send(i18n.msg('invited', 'tictactoe', message.mentions.users.first().username, lang)).catch(OpalBot.util.log);
             return;
         }
-        message.channel.send(i18n.msg('waiting', 'tictactoe', lang));
+        message.channel.send(i18n.msg('waiting', 'tictactoe', lang)).catch(OpalBot.util.log);
         return;
     }
     var host = pending,
@@ -655,7 +680,7 @@ module.exports.peasants.ttt = async (message, content, lang, i18n, OpalBot) => {
                         text: i18n.msg('turn', 'tictactoe', names[turn], lang)
                     }
                 }
-            }),
+            }).catch(OpalBot.util.log),
             {message, index} = await OpalBot.unprefixed.expect({
                 type: 'tictactoe',
                 triggers: session.moves(),
@@ -664,7 +689,7 @@ module.exports.peasants.ttt = async (message, content, lang, i18n, OpalBot) => {
             });
         } catch(e) {
             if (e == 'blocked') {
-                message.channel.send(i18n.msg('blocked', 'tictactoe', lang));
+                message.channel.send(i18n.msg('blocked', 'tictactoe', lang)).catch(OpalBot.util.log);
                 return;
             } else { // Timeout
                 session.winner = session.player_to_move == 'x' ? 'ot' : 'xt';
@@ -691,7 +716,7 @@ module.exports.peasants.ttt = async (message, content, lang, i18n, OpalBot) => {
                     text: i18n.msg('draw', 'tictactoe', lang)
                 }
             }
-        });
+        }).catch(OpalBot.util.log);
     } else {
         if (session.winner.charAt(1) == 't') {
             turn = turn == 1 ? 0 : 1;
@@ -706,7 +731,7 @@ module.exports.peasants.ttt = async (message, content, lang, i18n, OpalBot) => {
                     text: i18n.msg('winner', 'tictactoe', names[turn], lang)
                 }
             }
-        });
+        }).catch(OpalBot.util.log);
     }
     delete sessions[id];
     delete sessions[host_id];
@@ -726,7 +751,7 @@ module.exports.peasants.connect4 = async (message, content, lang, i18n, OpalBot)
         message.reply(i18n.msg('forever-alone', 'connect4', lang));
         return;
     } else if (invited && invited.id == OpalBot.client.user.id) {
-        message.channel.send(i18n.msg('no-ai', 'connect4', lang));
+        message.channel.send(i18n.msg('no-ai', 'connect4', lang)).catch(OpalBot.util.log);
         return;
     } else if (sessions[id]) {
         return; // You're already in a game. I won't try and give this a custom response since you can't possibly forget you're in a game in 60 seconds
@@ -737,13 +762,13 @@ module.exports.peasants.connect4 = async (message, content, lang, i18n, OpalBot)
             message.author.username,
             setTimeout(() => {
                 delete sessions[key];
-                message.channel.send(i18n.msg('timeout', 'connect4', lang));
+                message.channel.send(i18n.msg('timeout', 'connect4', lang)).catch(OpalBot.util.log);
             }, 60000)
         ];
         if (invited) {
-            message.channel.send(i18n.msg('invited', 'connect4', invited.username, lang));
+            message.channel.send(i18n.msg('invited', 'connect4', invited.username, lang)).catch(OpalBot.util.log);
         } else {
-            message.channel.send(i18n.msg('waiting', 'connect4', lang));
+            message.channel.send(i18n.msg('waiting', 'connect4', lang)).catch(OpalBot.util.log);
         }
         return;
     }
@@ -778,7 +803,7 @@ module.exports.peasants.connect4 = async (message, content, lang, i18n, OpalBot)
                         text: i18n.msg('turn', 'connect4', names[turn], turn, lang)
                     }
                 }
-            }),
+            }).catch(OpalBot.util.log),
             {message, index} = await OpalBot.unprefixed.expect({
                 type: 'connect4',
                 triggers: c4.moves(),
@@ -788,7 +813,7 @@ module.exports.peasants.connect4 = async (message, content, lang, i18n, OpalBot)
             });
         } catch(e) {
             if (e == 'blocked') {
-                message.channel.send(i18n.msg('blocked', 'connect4', lang));
+                message.channel.send(i18n.msg('blocked', 'connect4', lang)).catch(OpalBot.util.log);
                 return;
             } else { // Timeout
                 c4.winner = c4.player_to_move == 'blue' ? 'redt' : 'bluet';
@@ -815,7 +840,7 @@ module.exports.peasants.connect4 = async (message, content, lang, i18n, OpalBot)
                     text: i18n.msg('draw', 'connect4', lang)
                 }
             }
-        });
+        }).catch(OpalBot.util.log);
     } else {
         if (c4.winner.slice(-1) == 't') {
             turn = turn == 1 ? 0 : 1;
@@ -830,7 +855,7 @@ module.exports.peasants.connect4 = async (message, content, lang, i18n, OpalBot)
                     text: i18n.msg('winner', 'connect4', names[turn], lang)
                 }
             }
-        });
+        }).catch(OpalBot.util.log);
     }
     delete sessions[id];
     delete sessions[host_id];
@@ -866,13 +891,13 @@ module.exports.peasants.chess = async (message, content, lang, i18n, OpalBot) =>
             message.author.username,
             setTimeout(() => {
                 delete sessions[key];
-                message.channel.send(i18n.msg('timeout', 'chess', lang));
+                message.channel.send(i18n.msg('timeout', 'chess', lang)).catch(OpalBot.util.log);
             }, 60000)
         ];
         if (invited) {
-            message.channel.send(i18n.msg('invited', 'chess', invited.username, lang));
+            message.channel.send(i18n.msg('invited', 'chess', invited.username, lang)).catch(OpalBot.util.log);
         } else {
-            message.channel.send(i18n.msg('waiting', 'chess', lang));
+            message.channel.send(i18n.msg('waiting', 'chess', lang)).catch(OpalBot.util.log);
         }
         return;
     }
@@ -900,7 +925,22 @@ module.exports.peasants.chess = async (message, content, lang, i18n, OpalBot) =>
     chess.header('Date', `${pad(year)}.${pad(month)}.${pad(date)}`, 'White', white, 'Black', black);
     while (!chess.game_over()) {
         turn = (turn + 1) % 2;
+        var history = chess.history({ verbose: true }),
+        last_move = history[history.length - 1];
         try {
+            var bot_message = await message.channel.send({
+                embed: {
+                    title: i18n.msg('title', 'chess', white, black, lang),
+                    description: last_move ? i18n.msg(last_move.color, 'chess', lang) + ' ' + chess.ascii_key(last_move.piece) + ' ' + last_move.from + last_move.to : '',
+                    image: {
+                        url: chess.get_board_url()
+                    },
+                    color: OpalBot.color,
+                    footer: {
+                        text: i18n.msg(chess.in_check() ? 'turn-in-check' : 'turn', 'chess', names[turn], lang)
+                    }
+                }
+            }).catch(OpalBot.util.log);
             if (players[turn] == OpalBot.client.user.id) {
                 var message = {
                     content: chess.get_best_move(3),
@@ -908,18 +948,6 @@ module.exports.peasants.chess = async (message, content, lang, i18n, OpalBot) =>
                 }
             } else {
                 if (!skip) {
-                    var bot_message = await message.channel.send({
-                        embed: {
-                            title: i18n.msg('title', 'chess', white, black, lang),
-                            image: {
-                                url: chess.get_board_url()
-                            },
-                            color: OpalBot.color,
-                            footer: {
-                                text: i18n.msg(chess.in_check() ? 'turn-in-check' : 'turn', 'chess', names[turn], lang)
-                            }
-                        }
-                    });
                 } else {
                     skip = false;
                 }
@@ -932,7 +960,7 @@ module.exports.peasants.chess = async (message, content, lang, i18n, OpalBot) =>
             }
         } catch(e) {
             if (e == 'blocked') {
-                message.channel.send(i18n.msg('blocked', 'chess', lang));
+                message.channel.send(i18n.msg('blocked', 'chess', lang)).catch(OpalBot.util.log);
                 return;
             } else { // Timeout
                 chess.timeout = true;
@@ -940,7 +968,7 @@ module.exports.peasants.chess = async (message, content, lang, i18n, OpalBot) =>
             }
         }
         if (i18n.msg('resign', 'chess', lang).split('|').includes(message.content.toLowerCase())) {
-            message.channel.send(i18n.msg('resign-prompt', 'chess', lang) + ' [' + i18n.msg('yesno', 'chess', lang) + ']');
+            message.channel.send(i18n.msg('resign-prompt', 'chess', lang) + ' [' + i18n.msg('yesno', 'chess', lang) + ']').catch(OpalBot.util.log);
             try {
                 var {message, index} = await OpalBot.unprefixed.expect({
                     type: 'chess',
@@ -966,7 +994,7 @@ module.exports.peasants.chess = async (message, content, lang, i18n, OpalBot) =>
             }
         }
         if (message.content.toLowerCase() == i18n.msg('moves', 'chess', lang)) {
-            message.channel.send(i18n.msg('moves-response', 'chess', '`' + chess.moves().join('` `') + '`', lang));
+            message.channel.send(i18n.msg('moves-response', 'chess', '`' + chess.moves().join('` `') + '`', lang)).catch(OpalBot.util.log);
             turn = (turn + 1) % 2;
             skip = true;
             continue;
@@ -1017,8 +1045,8 @@ module.exports.peasants.chess = async (message, content, lang, i18n, OpalBot) =>
                 text: i18n.msg(msg, 'chess', names[turn], names[(turn + 1) % 2], lang)
             }
         }
-    });
-    message.channel.send('```' + chess.pgn({ max_width: 72 }).slice(0, -4) + '```');
+    }).catch(OpalBot.util.log);
+    message.channel.send('```' + chess.pgn({ max_width: 72 }).slice(0, -4) + '```').catch(OpalBot.util.log);
 };
 module.exports.peasants.typestart = 'typingcontest';
 module.exports.peasants.typecontest = 'typingcontest';
@@ -1039,7 +1067,7 @@ module.exports.peasants.typingcontest = async (message, content, lang, i18n, Opa
     },
     reg = new RegExp( Object.keys(fancy_characters).join('|'), 'g' );
     if (storage[message.channel.id]) {
-        message.channel.send(i18n.msg('multiple', 'typingcontest', lang));
+        message.channel.send(i18n.msg('multiple', 'typingcontest', lang)).catch(OpalBot.util.log);
         return;
     }
     storage[message.channel.id] = true;
@@ -1064,18 +1092,18 @@ module.exports.peasants.typingcontest = async (message, content, lang, i18n, Opa
         }
     }
     storage[quote.ID] = quote;
-    message.channel.send(i18n.msg('duration', 'typingcontest', Math.ceil(quote.content.length / 3 + 3), lang));
-    var countdown = await message.channel.send(i18n.msg('countdown', 'typingcontest', 3, lang)),
+    message.channel.send(i18n.msg('duration', 'typingcontest', Math.ceil(quote.content.length / 3 + 3), lang)).catch(OpalBot.util.log);
+    var countdown = await message.channel.send(i18n.msg('countdown', 'typingcontest', 3, lang)).catch(OpalBot.util.log),
     scores = [];
     setTimeout(() => {
-        countdown.edit(i18n.msg('countdown', 'typingcontest', 2, lang))
+        countdown.edit(i18n.msg('countdown', 'typingcontest', 2, lang)).catch(OpalBot.util.log)
     }, 1000);
     setTimeout(() => {
-        countdown.edit(i18n.msg('countdown', 'typingcontest', 1, lang))
+        countdown.edit(i18n.msg('countdown', 'typingcontest', 1, lang)).catch(OpalBot.util.log)
     }, 2000);
     setTimeout(() => {
         if (countdown.deletable) {
-            countdown.delete();
+            countdown.delete().catch(OpalBot.util.log);
         }
     }, 3000);
     setTimeout(() => {
@@ -1087,7 +1115,7 @@ module.exports.peasants.typingcontest = async (message, content, lang, i18n, Opa
     await new Promise(res => {
         setTimeout(() => {
             res();
-        }, 1000);
+        }, 2000);
     });
     var start_timestamp = Date.now() + 3000,
     finished = {},
@@ -1100,7 +1128,7 @@ module.exports.peasants.typingcontest = async (message, content, lang, i18n, Opa
                 url: 'http://opalbot.herokuapp.com/quote_image?id=' + quote.ID // Change this if you're selfhosting
             }
         }
-    });
+    }).catch(OpalBot.util.log);
     while (true) {
         try {
             var {message} = await OpalBot.unprefixed.expect({
@@ -1115,11 +1143,13 @@ module.exports.peasants.typingcontest = async (message, content, lang, i18n, Opa
         if (lev_dist(quote.content, message.content) < Math.max(20, quote.content.length / 20)) {
             finished[message.author.id] = true;
             scores.push([message.author, Date.now(), message.content]);
-            message.channel.send(i18n.msg('finished', 'typingcontest', message.author.username, ((Date.now() - start_timestamp) / 1000).toFixed(1), lang));
+            message.channel
+                .send(i18n.msg('finished', 'typingcontest', message.author.username, ((Date.now() - start_timestamp) / 1000).toFixed(1), lang))
+                .catch(OpalBot.util.log);
         }
     }
     if (!scores.length) {
-        message.channel.send(i18n.msg('snails', 'typingcontest', lang));
+        message.channel.send(i18n.msg('snails', 'typingcontest', lang)).catch(OpalBot.util.log);
     } else {
         var players = '',
         wpm_scores = '',
@@ -1176,7 +1206,7 @@ module.exports.peasants.typingcontest = async (message, content, lang, i18n, Opa
                     }
                 ]
             }
-        });
+        }).catch(OpalBot.util.log);
     }
     delete storage[message.channel.id];
 };

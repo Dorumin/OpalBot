@@ -186,6 +186,8 @@
         "waiting": "Waiting for other players to join...",
         "invited": "Waiting for $1 to join...",
         "timeout": "No players joined! Use the command again to create another game.",
+        "b": "Black",
+        "w": "White",
         "resign": "resign|forfeit",
         "resign-prompt": "Are you sure you want to resign?",
         "yesno": "yes/no",

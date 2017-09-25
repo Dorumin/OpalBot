@@ -377,7 +377,7 @@ class Connect4 {
             try {
                 var {body} = await req('http://connect4.gamesolver.org/solve?pos=' + this.history),
                 scores = JSON.parse(body).score,
-                best = scores.slice(0).sort((a, b) => b - a)[0];
+                best = scores.filter(n => n != 100).sort((a, b) => b - a)[0];
                 res(scores.indexOf(best) + 1);
             } catch(e) {
                 rej(e);
@@ -813,7 +813,6 @@ module.exports.peasants.connect4 = async (message, content, lang, i18n, OpalBot)
             }).catch(OpalBot.util.log);
             if (players[turn] == OpalBot.client.user.id) {
                 var best = await c4.get_best_move();
-                message.channel.send(best);
                 var message = {
                     channel: message.channel,
                     content: best,

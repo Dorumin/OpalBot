@@ -441,7 +441,8 @@ module.exports.peasants.mp3 = async (message, content, lang, i18n, OpalBot) => {
         if (typeof res != 'undefined' || obj.statusCode != '404') {
             var size = res.headers['content-length'],
             readable_size = parseFloat((size / 1024 / 1024).toFixed(2)) + 'mb',
-            title = res.headers['content-disposition'].split('filename="')[1] || 'INVALID.',
+            disp = res.headers['content-disposition'],
+            title = (disp || '').split('filename="')[1] || 'INVALID.',
             image = `https://img.youtube.com/vi/${id}/maxresdefault.jpg`,
             fields = [{
                 name: i18n.msg('size', 'mp3', lang),

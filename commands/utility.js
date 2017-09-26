@@ -325,6 +325,7 @@ module.exports.peasants.mp3 = async (message, content, lang, i18n, OpalBot) => {
                     h: Date.now()
                 }
             });
+            if (!body) continue;
             var s = body.split('|');
             if (s[0] == 'OK') {
                 break;

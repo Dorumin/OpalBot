@@ -448,6 +448,7 @@ module.exports.peasants.mp3 = async (message, content, lang, i18n, OpalBot) => {
                 name: i18n.msg('size', 'mp3', lang),
                 value: readable_size
             }];
+            if (!readable_size.slice(0, 3) == 'NaN') fields.pop();
             try {
                 var { body } = await req({
                     url: 'https://www.googleapis.com/youtube/v3/videos',

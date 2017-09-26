@@ -378,6 +378,7 @@ module.exports.peasants.mp3 = async (message, content, lang, i18n, OpalBot) => {
             var items = JSON.parse(body).items,
             pad = (str) => ('00' + str).slice(-2);
             if (items && items.length) {
+                OpalBot.util.log(items[0]);
                 var iso_duration = items[0].contentDetails.duration,
                 split = iso_duration.split(/\D+/).filter(Boolean),
                 duration = '';

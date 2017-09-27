@@ -118,7 +118,7 @@ module.exports.peasants.pick = (message, content, lang, i18n) => {
 
 module.exports.peasants.d = 'dice';
 module.exports.peasants.dice = (message, content, lang, i18n) => {
-    if (isNaN(content.charAt(0))) {
+    if (!content || isNaN(content.charAt(0))) {
         content = '6';
     }
     var params = content.match(/\d+/g);

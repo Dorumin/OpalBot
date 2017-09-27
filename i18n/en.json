@@ -132,7 +132,9 @@
         "result": "I pick **$1**!"
     },
     "dice": {
-        "result": "$1 rolled a **$2**!"
+        "result": "$1 rolled a **$2**!",
+        "results": "here are the results:",
+        "sum": "The sum of the results is **$1**!"
     },
     "youtube": {
         "usage": "Usage: [Search query (required)]",

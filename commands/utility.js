@@ -118,9 +118,31 @@ module.exports.peasants.pick = (message, content, lang, i18n) => {
 
 module.exports.peasants.d = 'dice';
 module.exports.peasants.dice = (message, content, lang, i18n) => {
-    var sides = parseInt(content) || 6,
-    result = Math.floor(Math.random() * sides);
-    message.channel.send(i18n.msg('result', 'dice', `<@${message.author.id}>`, result, lang));
+    if (isNaN(content.charAt(0))) {
+        content = '6';
+    }
+    var params = content.match(/\d+/g);
+    if (params.length == 1) {
+        params.unshift(1);
+    }
+    var [
+        dice,
+        sides
+    ] = params;
+    if (dice == 1) {
+        var result = Math.floor(Math.random() * sides);
+        message.channel.send(i18n.msg('result', 'dice', `<@${message.author.id}>`, result, lang));
+    } else {
+        var results = [],
+        sum = 0;
+        while (dice--) {
+            var r = Math.floor(Math.random() * sides);
+            results.push(r);
+            sum += r;
+        }
+        var message = i18n.msg('results', 'dice', lang) + '```js\n' + results.join(', ') + '```' + i18n.msg('sum', 'dice', sum, lang);
+        message.channel.reply(message);
+    }
 };
 
 module.exports.peasants.yt = 'youtube';

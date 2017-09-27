@@ -841,7 +841,7 @@ module.exports.peasants.connect4 = async (message, content, lang, i18n, OpalBot)
             bot_message.delete();
         }
         if (message.deletable) {
-            setTimeout(() => message.delete(), 500);
+            message.delete()
         }
         var move = ['1', '2', '3', '4', '5', '6', '7'].indexOf(c4.moves()[index]),
         consequence = c4.move(move + 1);
@@ -946,29 +946,29 @@ module.exports.peasants.chess = async (message, content, lang, i18n, OpalBot) =>
         var history = chess.history({ verbose: true }),
         last_move = history[history.length - 1];
         try {
-            var bot_message = await message.channel.send({
-                embed: {
-                    title: i18n.msg('title', 'chess', white, black, lang),
-                    description: last_move ? i18n.msg(last_move.color, 'chess', lang) + ' ' + chess.ascii_key(last_move.piece) + ' ' + last_move.from + last_move.to : '',
-                    image: {
-                        url: chess.get_board_url()
-                    },
-                    color: OpalBot.color,
-                    footer: {
-                        text: i18n.msg(chess.in_check() ? 'turn-in-check' : 'turn', 'chess', names[turn], lang)
+            if (!skip) {
+                var bot_message = await message.channel.send({
+                    embed: {
+                        title: i18n.msg('title', 'chess', white, black, lang),
+                        description: last_move ? i18n.msg(last_move.color, 'chess', lang) + ' ' + chess.ascii_key(last_move.piece) + ' ' + last_move.from + last_move.to : '',
+                        image: {
+                            url: chess.get_board_url()
+                        },
+                        color: OpalBot.color,
+                        footer: {
+                            text: i18n.msg(chess.in_check() ? 'turn-in-check' : 'turn', 'chess', names[turn], lang)
+                        }
                     }
-                }
-            }).catch(OpalBot.util.log);
+                }).catch(OpalBot.util.log);
+            } else {
+                skip = false;
+            }
             if (players[turn] == OpalBot.client.user.id) {
                 var message = {
                     content: chess.get_best_move(3),
                     channel: message.channel
                 }
             } else {
-                if (!skip) {
-                } else {
-                    skip = false;
-                }
                 var {message, index} = await OpalBot.unprefixed.expect({
                     type: 'chess',
                     user: players[turn],

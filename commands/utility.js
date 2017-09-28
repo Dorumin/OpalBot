@@ -129,7 +129,9 @@ module.exports.peasants.dice = (message, content, lang, i18n) => {
         dice,
         sides
     ] = params;
-    if (dice == 1) {
+    if (sides == 0) {
+        message.reply(i18n.msg('non-zero', 'dice', lang)).catch(OpalBot.util.log);
+    } else if (dice == 1) {
         var result = Math.ceil(Math.random() * sides);
         message.channel.send(i18n.msg('result', 'dice', `<@${message.author.id}>`, result, lang)).catch(OpalBot.util.log);
     } else {

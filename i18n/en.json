@@ -134,7 +134,8 @@
     "dice": {
         "result": "$1 rolled a **$2**!",
         "results": "here are the results:",
-        "sum": "The sum of the results is **$1**!"
+        "sum": "The sum of the results is **$1**!",
+        "too-long": "my message was too long and couldn't send!"
     },
     "youtube": {
         "usage": "Usage: [Search query (required)]",

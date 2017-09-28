@@ -19,13 +19,13 @@ module.exports.peasants.hey = 'hello';
 module.exports.peasants.hello = (message) => {
     switch (message.author.username + '#' + message.author.discriminator) {
         case 'Dorumin#0969':
-            message.reply('hello useless pile of goop!');
+            message.reply('hello useless pile of goop!').catch(OpalBot.util.log);
         break;
         case 'Oasis#4730':
-            message.reply('hello, loser!');
+            message.reply('hello, loser!').catch(OpalBot.util.log);
             break;
         default:
-            message.reply('hello!');
+            message.reply('hello!').catch(OpalBot.util.log);
     }
 };
 
@@ -42,12 +42,12 @@ module.exports.peasants.avatar = (message, content, lang, i18n, OpalBot) => {
             },
             description: i18n.msg('description', 'avatar', user.username, lang).replace(user.username.slice(0, -1) + "s's", user.username + "'")
         }
-    });
+    }).catch(OpalBot.util.log);
 };
 
 module.exports.peasants.lenny = 'me';
 module.exports.peasants.me = message => {
-    message.channel.send('( ͡° ͜ʖ ͡°)');
+    message.channel.send('( ͡° ͜ʖ ͡°)').catch(OpalBot.util.log);
 };
 
 module.exports.peasants.pong = 'ping';
@@ -58,11 +58,11 @@ module.exports.peasants.ping = (message, content, lang, i18n) => {
     message.reply(ping < pong ? i18n.msg('pong', 'ping', lang) : i18n.msg('ping', 'ping', lang)).then(msg => {
         var latency = Date.now() - d1;
         if (!msg.editable) {
-            message.channel.send(i18n.msg('result', 'ping', latency, lang));
+            message.channel.send(i18n.msg('result', 'ping', latency, lang)).catch(OpalBot.util.log);
             return;
         }
-        msg.edit(msg.content + '\n' + i18n.msg('result', 'ping', latency, lang));
-    });
+        msg.edit(msg.content + '\n' + i18n.msg('result', 'ping', latency, lang)).catch(OpalBot.util.log);
+    }).catch(OpalBot.util.log);
 };
 
 module.exports.peasants.runtime = (message, content, lang, i18n, OpalBot) => {
@@ -84,35 +84,35 @@ module.exports.peasants.runtime = (message, content, lang, i18n, OpalBot) => {
         ...a.map(n => o[n])
     ],
     str = i18n.msg(k, 'runtime', ...p, lang);
-    message.channel.send(str);
+    message.channel.send(str).catch(OpalBot.util.log);
 };
 
 module.exports.peasants.status = 'test';
 module.exports.peasants.test = (message, content, lang, i18n) => {
-    message.reply(i18n.msg('online', 'test', lang));
+    message.reply(i18n.msg('online', 'test', lang)).catch(OpalBot.util.log);
 };
 
 module.exports.peasants.coinflip = 'flip';
 module.exports.peasants.flip = (message, content, lang, i18n) => {
     var result = Math.round(Math.random()) == 1;
-    message.channel.send(i18n.msg(result ? 'heads' : 'tails', 'flip', `<@${message.author.id}>`, lang));
+    message.channel.send(i18n.msg(result ? 'heads' : 'tails', 'flip', `<@${message.author.id}>`, lang)).catch(OpalBot.util.log);
 };
 
 module.exports.peasants.choose = 'pick';
 module.exports.peasants.pick = (message, content, lang, i18n) => {
     if (!content) {
-        message.reply(i18n.msg('missing', 'pick', lang));
+        message.reply(i18n.msg('missing', 'pick', lang)).catch(OpalBot.util.log);
         return;
     }
     var reg = new RegExp('\\' + i18n.msg('delimiters', 'pick', lang).split(' ').join('|\\')),
     split = content.split(reg).filter(Boolean);
     if (!split.length) {
-        message.reply(i18n.msg('missing', 'pick', lang));
+        message.reply(i18n.msg('missing', 'pick', lang)).catch(OpalBot.util.log);
     } else if (split.length == 1) {
-        message.reply(i18n.msg('one', 'pick', lang));
+        message.reply(i18n.msg('one', 'pick', lang)).catch(OpalBot.util.log);
     } else {
         var randum = split[Math.floor(Math.random() * split.length)].trim().replace(/(\\\*)|\*/g, (s, c) => c ? s : '\\*');
-        message.reply(i18n.msg('result', 'pick', randum, lang));
+        message.reply(i18n.msg('result', 'pick', randum, lang)).catch(OpalBot.util.log);
     }
 };
 
@@ -131,7 +131,7 @@ module.exports.peasants.dice = (message, content, lang, i18n) => {
     ] = params;
     if (dice == 1) {
         var result = Math.ceil(Math.random() * sides);
-        message.channel.send(i18n.msg('result', 'dice', `<@${message.author.id}>`, result, lang));
+        message.channel.send(i18n.msg('result', 'dice', `<@${message.author.id}>`, result, lang)).catch(OpalBot.util.log);
     } else {
         var results = [],
         sum = 0;
@@ -141,14 +141,16 @@ module.exports.peasants.dice = (message, content, lang, i18n) => {
             sum += r;
         }
         var msg = i18n.msg('results', 'dice', lang) + '```js\n' + results.join(', ') + '```' + i18n.msg('sum', 'dice', sum, lang);
-        message.reply(msg);
+        message.reply(msg).catch(() => {
+            message.reply(i18n.msg('too-long', 'dice', lang)).catch(OpalBot.util.log);
+        });
     }
 };
 
 module.exports.peasants.yt = 'youtube';
 module.exports.peasants.youtube = async (message, content, lang, i18n, OpalBot) => {
     if (!content) {
-        message.channel.send(i18n.msg('usage', 'youtube', lang));
+        message.channel.send(i18n.msg('usage', 'youtube', lang)).catch(OpalBot.util.log);
         return;
     }
 
@@ -207,12 +209,12 @@ module.exports.peasants.youtube = async (message, content, lang, i18n, OpalBot) 
                     url: 'https://youtube.com/channel/' + video.snippet.channelId
                 }
             }
-        });
+        }).catch(OpalBot.util.log);
     }
     var r = JSON.parse(body).items,
     titles = r.map(obj => obj.snippet.title);
     if (!r.length) {
-        message.channel.send(i18n.msg('no-results', 'youtube', lang));
+        message.channel.send(i18n.msg('no-results', 'youtube', lang)).catch(OpalBot.util.log);
         return;
     }
     var bot_message = null,
@@ -232,7 +234,7 @@ module.exports.peasants.youtube = async (message, content, lang, i18n, OpalBot) 
         channel: message.channel.id,
         timeout: 20000,
         ontimeout: () => {
-            message.channel.send(i18n.msg('timed-out', 'youtube', lang));
+            message.channel.send(i18n.msg('timed-out', 'youtube', lang)).catch(OpalBot.util.log);
         }
     });
     if (blocked === true) {
@@ -242,7 +244,7 @@ module.exports.peasants.youtube = async (message, content, lang, i18n, OpalBot) 
         for (var i in titles) {
             list += `\n[${Number(i) + 1}] - ${titles[i]}`
         }
-        bot_message = await message.channel.send('```' + list.slice(1) + '```');
+        bot_message = await message.channel.send('```' + list.slice(1) + '```').catch(OpalBot.util.log);
     }
 };
 
@@ -261,7 +263,7 @@ module.exports.peasants.mp3 = async (message, content, lang, i18n, OpalBot) => {
         try {
             var token = body.match(/name="_token" type="hidden" value="([\d\w]+)"/)[1];
         } catch(e) {
-            message.channel.send(i18n.msg('sc-server-error-token', 'mp3', lang));
+            message.channel.send(i18n.msg('sc-server-error-token', 'mp3', lang)).catch(OpalBot.util.log);
             return;
         }
         try {
@@ -281,11 +283,11 @@ module.exports.peasants.mp3 = async (message, content, lang, i18n, OpalBot) => {
         duration = body.match(/<b>Length:<\/b>([\d:]+)/),
         img = body.match(/src="([^"]+)" alt="preview image"/);
         if (!dl) {
-            message.channel.send(i18n.msg('sc-server-error-download', 'mp3', lang));
+            message.channel.send(i18n.msg('sc-server-error-download', 'mp3', lang)).catch(OpalBot.util.log);
             return;
         }
         if (!title) {
-            message.channel.send(i18n.msg('sc-server-error-title', 'mp3', lang));
+            message.channel.send(i18n.msg('sc-server-error-title', 'mp3', lang)).catch(OpalBot.util.log);
             return;
         }
         
@@ -326,14 +328,14 @@ module.exports.peasants.mp3 = async (message, content, lang, i18n, OpalBot) => {
                 } : null,
                 fields: fields
             }
-        });
+        }).catch(OpalBot.util.log);
         return;
     }
 
     // YouTube
     var id = content.match(/[-_A-Za-z0-9]{11,}/g);
     if (!id) {
-        message.reply(i18n.msg('invalid', 'mp3', lang));
+        message.reply(i18n.msg('invalid', 'mp3', lang)).catch(OpalBot.util.log);
     }
     id = id[id.length - 1];
     var tries = 5;
@@ -373,7 +375,7 @@ module.exports.peasants.mp3 = async (message, content, lang, i18n, OpalBot) => {
             });
             if (!res || !res.headers || !res.headers['content-length']) throw new Error();
         } catch(e) {
-            message.channel.send(i18n.msg('size-404', 'mp3', lang));
+            message.channel.send(i18n.msg('size-404', 'mp3', lang)).catch(OpalBot.util.log);
             return;
         }
         var size = res.headers['content-length'],
@@ -450,7 +452,7 @@ module.exports.peasants.mp3 = async (message, content, lang, i18n, OpalBot) => {
                 } : null,
                 fields: fields
             }
-        });
+        }).catch(OpalBot.util.log);
     } else { // Main server is down, find a better one.
         var url = `http://www.youtubeinmp3.com/fetch/?video=https://www.youtube.com/watch?v=${id}`;
         try {
@@ -528,9 +530,9 @@ module.exports.peasants.mp3 = async (message, content, lang, i18n, OpalBot) => {
                     } : null,
                     fields: fields
                 }
-            });
+            }).catch(OpalBot.util.log);
         } else {
-            message.channel.send(i18n.msg('servers-down', 'mp3', lang));
+            message.channel.send(i18n.msg('servers-down', 'mp3', lang)).catch(OpalBot.util.log);
         }
     }
 };
@@ -548,18 +550,18 @@ module.exports.peasants.prefix = async (message, content, lang, i18n, OpalBot) =
     switch (mode) {
         case list:
             if (!prefixes.length) {
-                message.reply(i18n.msg('no-prefixes', 'prefix', lang));
+                message.reply(i18n.msg('no-prefixes', 'prefix', lang)).catch(OpalBot.util.log);
                 return;
             }
-            message.reply(i18n.msg('list-prefixes', 'prefix', '`' + prefixes.join('` `') + '`', lang));
+            message.reply(i18n.msg('list-prefixes', 'prefix', '`' + prefixes.join('` `') + '`', lang)).catch(OpalBot.util.log);
             break;
         case add:
             if (!message.member.permissions.serialize().ADMINISTRATOR) {
-                message.reply(i18n.msg('missing-permissions', 'prefix', lang));
+                message.reply(i18n.msg('missing-permissions', 'prefix', lang)).catch(OpalBot.util.log);
                 return;
             }
             if (!content.length) {
-                message.reply(i18n.msg('no-prefix-add', 'prefix', lang));
+                message.reply(i18n.msg('no-prefix-add', 'prefix', lang)).catch(OpalBot.util.log);
                 return;
             }
             if (!OpalBot.prefixes[message.guild.id]) {
@@ -578,7 +580,7 @@ module.exports.peasants.prefix = async (message, content, lang, i18n, OpalBot) =
             var arr = OpalBot.prefixes[message.guild.id],
             i = arr.indexOf(content);
             if (i != -1) {
-                message.reply(i18n.msg('prefix-already-in-use', 'prefix', lang));
+                message.reply(i18n.msg('prefix-already-in-use', 'prefix', lang)).catch(OpalBot.util.log);
                 return;
             }
             arr.push(content);
@@ -592,15 +594,15 @@ module.exports.peasants.prefix = async (message, content, lang, i18n, OpalBot) =
                     }
                 }
             }
-            message.reply(i18n.msg('prefix-added', 'prefix', content, lang));
+            message.reply(i18n.msg('prefix-added', 'prefix', content, lang)).catch(OpalBot.util.log);
             break;
         case remove:
             if (!message.member.permissions.serialize().ADMINISTRATOR) {
-                message.reply(i18n.msg('missing-permissions', 'prefix', lang));
+                message.reply(i18n.msg('missing-permissions', 'prefix', lang)).catch(OpalBot.util.log);
                 return;
             }
             if (!content.length) {
-                message.reply(i18n.msg('no-prefix-add', 'prefix', lang));
+                message.reply(i18n.msg('no-prefix-add', 'prefix', lang)).catch(OpalBot.util.log);
                 return;
             }
             if (!OpalBot.prefixes[message.guild.id]) {
@@ -619,7 +621,7 @@ module.exports.peasants.prefix = async (message, content, lang, i18n, OpalBot) =
             var arr = OpalBot.prefixes[message.guild.id],
             i = arr.indexOf(content);
             if (i == -1) {
-                message.reply(i18n.msg('no-prefix-found', 'prefix', lang));
+                message.reply(i18n.msg('no-prefix-found', 'prefix', lang)).catch(OpalBot.util.log);
                 return;
             }
             arr.splice(i, 1);
@@ -633,7 +635,7 @@ module.exports.peasants.prefix = async (message, content, lang, i18n, OpalBot) =
                     }
                 }
             }
-            message.reply(i18n.msg('prefix-removed', 'prefix', content, lang));
+            message.reply(i18n.msg('prefix-removed', 'prefix', content, lang)).catch(OpalBot.util.log);
             break;
     }
 };

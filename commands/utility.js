@@ -130,18 +130,18 @@ module.exports.peasants.dice = (message, content, lang, i18n) => {
         sides
     ] = params;
     if (dice == 1) {
-        var result = Math.floor(Math.random() * sides);
+        var result = Math.ceil(Math.random() * sides);
         message.channel.send(i18n.msg('result', 'dice', `<@${message.author.id}>`, result, lang));
     } else {
         var results = [],
         sum = 0;
         while (dice--) {
-            var r = Math.floor(Math.random() * sides);
+            var r = Math.ceil(Math.random() * sides);
             results.push(r);
             sum += r;
         }
-        var message = i18n.msg('results', 'dice', lang) + '```js\n' + results.join(', ') + '```' + i18n.msg('sum', 'dice', sum, lang);
-        message.channel.reply(message);
+        var msg = i18n.msg('results', 'dice', lang) + '```js\n' + results.join(', ') + '```' + i18n.msg('sum', 'dice', sum, lang);
+        message.reply(msg);
     }
 };
 

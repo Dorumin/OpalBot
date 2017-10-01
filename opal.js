@@ -439,7 +439,7 @@ OpalBot.server = http.createServer((req, res) => {
 
 // Set a selfping interval every 5 minutes
 setInterval(() => {
-    request('http://opalbot.herokuapp.com', console.log);
+    request('http://opalbot.herokuapp.com', () => {});
 }, 1000 * 60 * 5);
 
 client.login(process.env.token);

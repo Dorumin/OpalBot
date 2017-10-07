@@ -67,7 +67,7 @@ module.exports.peasants.ping = (message, content, lang, i18n) => {
 
 module.exports.peasants.runtime = (message, content, lang, i18n, OpalBot) => {
     var f = Math.floor,
-    s = f(OpalBot.uptime / 1000),
+    s = f((OpalBot.storage.last_downtime || OpalBot.uptime) / 1000),
     m = f(s / 60),
     h = f(m / 60),
     d = f(h / 24),

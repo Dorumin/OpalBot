@@ -560,7 +560,7 @@ class Chess extends BasicChess {
             };
         
             var absoluteValue = getAbsoluteValue(piece);
-            return piece.color === 'w' ? absoluteValue : -absoluteValue;
+            return piece.color === 'b' ? absoluteValue : -absoluteValue;
         };
 
         this.get_best_move = (depth) => {

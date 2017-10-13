@@ -376,7 +376,7 @@ module.exports.peasants.mp3 = async (message, content, lang, i18n, OpalBot) => {
                 method: 'HEAD',
                 followAllRedirects: true
             });
-            if (!res || !res.headers || !res.headers['content-length']) throw new Error(res);
+            if (!res || !res.headers || !res.headers['content-length']) throw res;
         } catch(e) {
             OpalBot.util.log(e);
             message.channel.send(i18n.msg('size-404', 'mp3', lang)).catch(OpalBot.util.log);

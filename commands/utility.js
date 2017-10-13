@@ -378,7 +378,7 @@ module.exports.peasants.mp3 = async (message, content, lang, i18n, OpalBot) => {
             var { res } = await req({
                 uri: url,
                 method: 'HEAD',
-                followAllRedirects: true
+                followAllRedirects: false
             });
             if (!res || !res.headers || !res.headers['content-length']) throw res;
         } catch(e) {

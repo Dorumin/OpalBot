@@ -369,6 +369,10 @@ module.exports.peasants.mp3 = async (message, content, lang, i18n, OpalBot) => {
         var [server, key, title] = body.split('|').slice(1),
         url = `http://dl${server}.downloader.space/dl.php?id=${key}`;
 
+        await new Promise((res) => {
+            setTimeout(() => res(), 1000);
+        });
+
         // Get file size
         try {
             var { res } = await req({

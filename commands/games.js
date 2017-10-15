@@ -978,6 +978,7 @@ module.exports.peasants.chess = async (message, content, lang, i18n, OpalBot) =>
                 });
             }
         } catch(e) {
+            OpalBot.util.log(e);
             if (e == 'blocked') {
                 message.channel.send(i18n.msg('blocked', 'chess', lang)).catch(OpalBot.util.log);
                 return;
@@ -985,7 +986,6 @@ module.exports.peasants.chess = async (message, content, lang, i18n, OpalBot) =>
                 chess.timeout = true;
                 break;
             }
-            OpalBot.util.log(e);
         }
         if (i18n.msg('resign', 'chess', lang).split('|').includes(message.content.toLowerCase())) {
             message.channel.send(i18n.msg('resign-prompt', 'chess', lang) + ' [' + i18n.msg('yesno', 'chess', lang) + ']').catch(OpalBot.util.log);

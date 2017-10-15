@@ -473,15 +473,15 @@ class Chess extends BasicChess {
             }
         };
 
-        function minimaxRoot(depth, game, isMaximisingPlayer) {
+        var minimaxRoot = (depth, game, isMaximisingPlayer) => {
         
-            var newGameMoves = game.moves();
+            var newGameMoves = game.ugly_moves();
             var bestMove = -9999;
             var bestMoveFound;
         
-            for (var i = 0; i < newGameMoves.length; i++) {
+            for(var i = 0; i < newGameMoves.length; i++) {
                 var newGameMove = newGameMoves[i]
-                game.move(newGameMove);
+                game.ugly_move(newGameMove);
                 var value = minimax(depth - 1, game, -10000, 10000, !isMaximisingPlayer);
                 game.undo();
                 if(value >= bestMove) {
@@ -492,17 +492,18 @@ class Chess extends BasicChess {
             return bestMoveFound;
         };
         
-        function minimax(depth, game, alpha, beta, isMaximisingPlayer) {
+        var minimax = (depth, game, alpha, beta, isMaximisingPlayer) => {
+            positionCount++;
             if (depth === 0) {
                 return -evaluateBoard(game.board());
             }
         
-            var newGameMoves = game.moves();
+            var newGameMoves = game.ugly_moves();
         
             if (isMaximisingPlayer) {
                 var bestMove = -9999;
                 for (var i = 0; i < newGameMoves.length; i++) {
-                    game.move(newGameMoves[i]);
+                    game.ugly_move(newGameMoves[i]);
                     bestMove = Math.max(bestMove, minimax(depth - 1, game, alpha, beta, !isMaximisingPlayer));
                     game.undo();
                     alpha = Math.max(alpha, bestMove);
@@ -514,7 +515,7 @@ class Chess extends BasicChess {
             } else {
                 var bestMove = 9999;
                 for (var i = 0; i < newGameMoves.length; i++) {
-                    game.move(newGameMoves[i]);
+                    game.ugly_move(newGameMoves[i]);
                     bestMove = Math.min(bestMove, minimax(depth - 1, game, alpha, beta, !isMaximisingPlayer));
                     game.undo();
                     beta = Math.min(beta, bestMove);
@@ -526,7 +527,7 @@ class Chess extends BasicChess {
             }
         };
         
-        function evaluateBoard(board) {
+        var evaluateBoard = (board) => {
             var totalEvaluation = 0;
             for (var i = 0; i < 8; i++) {
                 for (var j = 0; j < 8; j++) {
@@ -538,11 +539,11 @@ class Chess extends BasicChess {
         
         
         
-        function getPieceValue(piece, x, y) {
+        var getPieceValue = (piece, x, y) => {
             if (piece === null) {
                 return 0;
             }
-            var getAbsoluteValue = function (piece) {
+            var getAbsoluteValue = (piece) => {
                 if (piece.type === 'p') {
                     return 10;
                 } else if (piece.type === 'r') {
@@ -560,8 +561,8 @@ class Chess extends BasicChess {
             };
         
             var absoluteValue = getAbsoluteValue(piece);
-            return piece.color === 'b' ? absoluteValue : -absoluteValue;
-        };
+            return piece.color === (this.player_to_move == 'w' ? 'b' : 'w') ? absoluteValue : -absoluteValue;
+        }
 
         this.get_best_move = (depth) => {
             return minimaxRoot(depth, this, true);

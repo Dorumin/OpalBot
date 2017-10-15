@@ -965,7 +965,7 @@ module.exports.peasants.chess = async (message, content, lang, i18n, OpalBot) =>
             }
             if (players[turn] == OpalBot.client.user.id) {
                 var message = {
-                    content: chess.get_best_move(3),
+                    content: chess.get_best_move(4),
                     channel: message.channel
                 }
             } else {

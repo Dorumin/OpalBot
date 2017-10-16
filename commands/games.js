@@ -727,24 +727,7 @@ module.exports.peasants.ttt = async (message, content, lang, i18n, OpalBot) => {
     var session = sessions[id] = sessions[host_id] = new TicTacToe(host[0], id, host[1], message.author.username),
     turn = Math.round(Math.random()), // get a random number from 0 to 1
     players = session.players,
-    names = session.player_names,
-    ask = (obj) => {
-        return new Promise((res, rej) => {
-            var blocked = OpalBot.unprefixed.push({
-                type: 'tictactoe',
-                caseinsensitive: true,
-                callback: (message, index) => res({message: message, index: index}),
-                timeout: 60000,
-                ontimeout: () => {
-                    rej('timeout');
-                },
-                ...obj
-            });
-            if (blocked === true) {
-                rej('blocked');
-            }
-        });
-    };
+    names = session.player_names;
     while (!session.is_draw()) {
         turn = (turn + 1) % 2;
         try {
@@ -767,6 +750,8 @@ module.exports.peasants.ttt = async (message, content, lang, i18n, OpalBot) => {
         } catch(e) {
             if (e == 'blocked') {
                 message.channel.send(i18n.msg('blocked', 'tictactoe', lang)).catch(OpalBot.util.log);
+                delete sessions[id];
+                delete sessions[host_id]
                 return;
             } else { // Timeout
                 session.winner = session.player_to_move == 'x' ? 'ot' : 'xt';
@@ -907,6 +892,8 @@ module.exports.peasants.connect4 = async (message, content, lang, i18n, OpalBot)
         } catch(e) {
             if (e == 'blocked') {
                 message.channel.send(i18n.msg('blocked', 'connect4', lang)).catch(OpalBot.util.log);
+                delete sessions[id];
+                delete sessions[host_id]
                 return;
             } else { // Timeout
                 c4.winner = c4.player_to_move == 'blue' ? 'redt' : 'bluet';
@@ -1005,7 +992,7 @@ module.exports.peasants.chess = async (message, content, lang, i18n, OpalBot) =>
     }
     clearTimeout(host[2]);
     var chess = sessions[id] = sessions[host_id] = new Chess(),
-    turn = id == OpalBot.client.user.id ? 1 : Math.round(Math.random()), // 0 or 1
+    turn = Math.round(Math.random()), // 0 or 1
     players = [host_id, id],
     names = [host_name, name],
     white = names[(turn + 1) % 2],
@@ -1040,10 +1027,12 @@ module.exports.peasants.chess = async (message, content, lang, i18n, OpalBot) =>
                 skip = false;
             }
             if (players[turn] == OpalBot.client.user.id) {
+                message.channel.startTyping();
                 var message = {
                     content: chess.get_best_move(3),
                     channel: message.channel
-                }
+                };
+                message.channel.stopTyping();
             } else {
                 var {message, index} = await OpalBot.unprefixed.expect({
                     type: 'chess',
@@ -1056,6 +1045,8 @@ module.exports.peasants.chess = async (message, content, lang, i18n, OpalBot) =>
             OpalBot.util.log(e);
             if (e == 'blocked') {
                 message.channel.send(i18n.msg('blocked', 'chess', lang)).catch(OpalBot.util.log);
+                delete sessions[id];
+                delete sessions[host_id]
                 return;
             } else { // Timeout
                 chess.timeout = true;

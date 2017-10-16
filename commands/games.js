@@ -1027,12 +1027,10 @@ module.exports.peasants.chess = async (message, content, lang, i18n, OpalBot) =>
                 skip = false;
             }
             if (players[turn] == OpalBot.client.user.id) {
-                message.channel.startTyping();
                 var message = {
                     content: chess.get_best_move(3),
                     channel: message.channel
                 };
-                message.channel.stopTyping();
             } else {
                 var {message, index} = await OpalBot.unprefixed.expect({
                     type: 'chess',
@@ -1231,7 +1229,7 @@ module.exports.peasants.typingcontest = async (message, content, lang, i18n, Opa
         if (finished[message.author.id]) continue;
         if (lev_dist(quote.content, message.content) < Math.max(20, quote.content.length / 20)) {
             finished[message.author.id] = true;
-            scores.push([message.author, Date.now(), message.content]);
+            scores.push([message.author, Date.now(), message.content, message.author.typingDurationIn(message.channel)]);
             message.channel
                 .send(i18n.msg('finished', 'typingcontest', message.author.username, ((Date.now() - start_timestamp) / 1000).toFixed(1), lang))
                 .catch(OpalBot.util.log);
@@ -1268,9 +1266,15 @@ module.exports.peasants.typingcontest = async (message, content, lang, i18n, Opa
                 }
                 i++;
             }
-            var elapsed = arr[1] - start_timestamp,
+            var elapsed = arr[3],
             secs = (elapsed / 1000).toFixed(1),
             wpm = Math.ceil( correct_words * ( 60 / ( elapsed / 1000 ) ) );
+            if (wpm > 140) {
+                // too op - pls nerf
+                elapsed = arr[1] - start_timestamp;
+                secs = (elapsed / 1000).toFixed(1);
+                wpm = Math.ceil( correct_words * ( 60 / ( elapsed / 1000 ) ) );
+            }
             wpm_scores += `${i18n.msg('score-format', 'typingcontest', wpm, secs, lang)}\n`;
             incorrect_words += errors + '\n';
         });

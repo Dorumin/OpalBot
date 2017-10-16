@@ -1233,6 +1233,7 @@ module.exports.peasants.typingcontest = async (message, content, lang, i18n, Opa
             message.channel
                 .send(i18n.msg('finished', 'typingcontest', message.author.username, ((Date.now() - start_timestamp) / 1000).toFixed(1), lang))
                 .catch(OpalBot.util.log);
+            message.channel.send(scores[scores.length - 1][3]);
         }
     }
     if (!scores.length) {

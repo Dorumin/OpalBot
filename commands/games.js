@@ -1266,8 +1266,9 @@ module.exports.peasants.typingcontest = async (message, content, lang, i18n, Opa
                 }
                 i++;
             }
-            var elapsed = arr[3],
-            secs = (elapsed / 1000).toFixed(1),
+            var elapsed = arr[1] - start_timestamp;
+            elapsed = elapsed > arr[3] && arr[3] != -1 ? arr[3] : elapsed;
+            var secs = (elapsed / 1000).toFixed(1),
             wpm = Math.ceil( correct_words * ( 60 / ( elapsed / 1000 ) ) );
             if (wpm > 140) {
                 // too op - pls nerf

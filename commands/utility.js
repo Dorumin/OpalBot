@@ -382,7 +382,7 @@ module.exports.peasants.mp3 = async (message, content, lang, i18n, OpalBot) => {
                 method: 'HEAD',
                 followAllRedirects: false
             });
-            if (!res || !res.headers || !res.headers['content-length']) throw res;
+            if (!res || !res.headers) throw res;
         } catch(e) {
             OpalBot.util.log(e);
             message.channel.send(i18n.msg('size-404', 'mp3', lang)).catch(OpalBot.util.log);
@@ -391,10 +391,14 @@ module.exports.peasants.mp3 = async (message, content, lang, i18n, OpalBot) => {
         var size = res.headers['content-length'],
         readable_size = parseFloat((size / 1024 / 1024).toFixed(2)) + 'mb',
         image = `https://img.youtube.com/vi/${id}/maxresdefault.jpg`,
-        fields = [{
-            name: i18n.msg('size', 'mp3', lang),
-            value: readable_size
-        }];
+        fields = [];
+
+        if (size) {
+            fields.push({
+                name: i18n.msg('size', 'mp3', lang),
+                value: readable_size
+            });
+        }
         
         // Get video duration with the YT API
         try {

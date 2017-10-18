@@ -393,7 +393,7 @@ module.exports.peasants.mp3 = async (message, content, lang, i18n, OpalBot) => {
         image = `https://img.youtube.com/vi/${id}/maxresdefault.jpg`,
         fields = [];
 
-        if (readable_size.charAt(0) != '0') {
+        if (readable_size.charAt(0) != '0' && readable_size.charAt(0) != 'N') {
             fields.push({
                 name: i18n.msg('size', 'mp3', lang),
                 value: readable_size

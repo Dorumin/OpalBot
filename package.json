@@ -19,7 +19,8 @@
     "dropbox": "2.5.7",
     "request": "2.81.0",
     "canvas": "1.6.7",
-    "heroku-client": "3.0.3"
+    "heroku-client": "3.0.3",
+    "ytdl-core": "0.18.1"
   },
   "keywords": [
     "Opal",

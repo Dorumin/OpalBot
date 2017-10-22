@@ -1,3 +1,5 @@
+const request = require('request');
+
 module.exports.operator = {};
 
 module.exports.operator.run = 'eval';

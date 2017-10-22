@@ -1034,7 +1034,6 @@ module.exports.peasants.chess = async (message, content, lang, i18n, OpalBot) =>
             } else {
                 var {message, index} = await OpalBot.unprefixed.expect({
                     type: 'chess',
-                    user: players[turn],
                     channel: chan_id,
                     timeout: 1800000
                 });
@@ -1057,7 +1056,7 @@ module.exports.peasants.chess = async (message, content, lang, i18n, OpalBot) =>
                 var {message, index} = await OpalBot.unprefixed.expect({
                     type: 'chess',
                     triggers: i18n.msg('yesno', 'chess', lang).split('/'),
-                    user: players[turn],
+                    user: message.author.id,
                     channel: chan_id
                 });
                 if (index == 1) {
@@ -1077,8 +1076,45 @@ module.exports.peasants.chess = async (message, content, lang, i18n, OpalBot) =>
                 continue;
             }
         }
+        if (i18n.msg('takeback', 'chess', lang).split('|').includes(message.content.toLowerCase())) {
+            var i = players.indexOf(message.author.id),
+            other = players[(i + 1) % 2];
+            message.channel.send(i18n.msg('takeback-prompt', 'chess', other, lang) + ' [' + i18n.msg('yesno', 'chess', lang) + ']').catch(OpalBot.util.log);
+            try {
+                var {message, index} = await OpalBot.unprefixed.expect({
+                    type: 'chess',
+                    triggers: i18n.msg('yesno', 'chess', lang).split('/'),
+                    user: other,
+                    channel: chan_id,
+                    timeout: 30000
+                });
+                if (index == 1) {
+                    message.delete().catch(OpalBot.util.log);
+                    bot_message.delete().catch(OpalBot.util.log);
+                    message.channel.send(i18n.msg('takeback-rejected', 'chess', lang)).catch(OpalBot.util.log);
+                    turn = (turn + 1) % 2;
+                    continue;
+                }
+                chess.undo();
+                if (players[i] == players[turn]) {
+                    chess.undo();
+                }
+                break;
+            } catch(e) {
+                if (bot_message.deletable) {
+                    bot_message.delete().catch(OpalBot.util.log);
+                }
+                turn = (turn + 1) % 2;
+                continue;
+            }
+        }            
         if (message.content.toLowerCase() == i18n.msg('moves', 'chess', lang)) {
             message.channel.send(i18n.msg('moves-response', 'chess', '`' + chess.moves().join('` `') + '`', lang)).catch(OpalBot.util.log);
+            turn = (turn + 1) % 2;
+            skip = true;
+            continue;
+        }
+        if (message.author.id != players[turn]) {
             turn = (turn + 1) % 2;
             skip = true;
             continue;

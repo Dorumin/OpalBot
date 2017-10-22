@@ -636,7 +636,7 @@ class Chess extends BasicChess {
             };
         
             var absoluteValue = getAbsoluteValue(piece, piece.color === 'w', x, y);
-            return piece.color === (this.player_to_move == 'w' ? 'b' : 'w') ? absoluteValue : -absoluteValue;
+            return piece.color === this.player_to_move ? absoluteValue : -absoluteValue;
         };
 
         this.get_best_move = (depth) => {

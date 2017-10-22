@@ -1067,7 +1067,9 @@ module.exports.peasants.chess = async (message, content, lang, i18n, OpalBot) =>
                     continue;
                 }
                 chess.resigned = true;
-                if ()
+                if (players[players.indexOf(message.author.id)] == turn) {
+                    turn = (turn + 1) % 2;
+                }
                 break;
             } catch(e) {
                 if (bot_message.deletable) {

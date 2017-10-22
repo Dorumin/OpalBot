@@ -1172,7 +1172,7 @@ module.exports.peasants.typingcontest = async (message, content, lang, i18n, Opa
         }),
         i = quotes.length;
         while (i--) {
-            if (quotes[i].content.length > 150  && quotes[i].content.length < 800 && quotes[i].content.indexOf('\n') == -1) {
+            if (quotes[i].content.length > 150  && quotes[i].content.length < 400 && quotes[i].content.indexOf('\n') == -1) {
                 quote = quotes[i];
                 break;
             }

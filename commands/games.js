@@ -1078,8 +1078,9 @@ module.exports.peasants.chess = async (message, content, lang, i18n, OpalBot) =>
         }
         if (i18n.msg('takeback', 'chess', lang).split('|').includes(message.content.toLowerCase())) {
             var i = players.indexOf(message.author.id),
-            other = players[(i + 1) % 2];
-            message.channel.send(i18n.msg('takeback-prompt', 'chess', other, lang) + ' [' + i18n.msg('yesno', 'chess', lang) + ']').catch(OpalBot.util.log);
+            other = players[(i + 1) % 2],
+            other_name = player_names[(i + 1) % 2];
+            message.channel.send(i18n.msg('takeback-prompt', 'chess', other_name, lang) + ' [' + i18n.msg('yesno', 'chess', lang) + ']').catch(OpalBot.util.log);
             try {
                 var {message, index} = await OpalBot.unprefixed.expect({
                     type: 'chess',
@@ -1099,7 +1100,7 @@ module.exports.peasants.chess = async (message, content, lang, i18n, OpalBot) =>
                 if (players[i] == players[turn]) {
                     chess.undo();
                 }
-                break;
+                continue;
             } catch(e) {
                 if (bot_message.deletable) {
                     bot_message.delete().catch(OpalBot.util.log);

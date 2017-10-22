@@ -1029,7 +1029,8 @@ module.exports.peasants.chess = async (message, content, lang, i18n, OpalBot) =>
             if (players[turn] == OpalBot.client.user.id) {
                 var message = {
                     content: chess.get_best_move(3),
-                    channel: message.channel
+                    channel: message.channel,
+                    author: OpalBot.client.user
                 };
             } else {
                 var {message, index} = await OpalBot.unprefixed.expect({
@@ -1119,7 +1120,7 @@ module.exports.peasants.chess = async (message, content, lang, i18n, OpalBot) =>
             skip = true;
             continue;
         }
-        if (message.author.id != players[turn]) {
+        if (message.author && message.author.id != players[turn]) {
             turn = (turn + 1) % 2;
             skip = true;
             continue;

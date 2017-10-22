@@ -32,7 +32,7 @@ module.exports.operator.say = (message, content, lang, i18n, OpalBot) => {
     }
 };
 
-module.exports.operator.gist = (message, content) => {
+module.exports.operator.gist = (message, content, lang, i18n, OpalBot) => {
     var split = content.split('/');
     if (split.length == 1) {
         split.unshift('Dorumin'); // my GitHub follow ples

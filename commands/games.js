@@ -1102,6 +1102,7 @@ module.exports.peasants.chess = async (message, content, lang, i18n, OpalBot) =>
                 chess.undo();
                 if (players[i] == players[turn]) {
                     chess.undo();
+                    turn = (turn + 1) % 2;
                 }
                 continue;
             } catch(e) {

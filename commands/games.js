@@ -1260,12 +1260,6 @@ module.exports.peasants.typingcontest = async (message, content, lang, i18n, Opa
             }
         }
     }).catch(OpalBot.util.log);
-    if (!case_sensitive) {
-        quote.content = quote.content.toLowerCase();
-    }
-    if (!punctuation) {
-        quote.content = quote.content.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, '').replace(/\s{2,}/g," ");
-    }
     while (true) {
         try {
             var {message} = await OpalBot.unprefixed.expect({
@@ -1293,17 +1287,20 @@ module.exports.peasants.typingcontest = async (message, content, lang, i18n, Opa
         wpm_scores = '',
         incorrect_words = '';
         scores.forEach((arr, idx) => {
+            var q = quote.content;
             if (!case_sensitive) {
+                q = q.toLowerCase();
                 arr[2] = arr[2].toLowerCase();
             }
             if (!punctuation) {
-                arr[2] = arr[2].replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, '').replace(/\s{2,}/g," ");
+                q = q.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()?]/g, '').replace(/\s{2,}/g," ");
+                arr[2] = arr[2].replace(/[.,\/#!$%\^&\*;:{}=\-_`~()?]/g, '').replace(/\s{2,}/g," ");
             }
             var monospace_char = String.fromCharCode(55349) + String.fromCharCode(idx + 57335),
             correct_words = 0,
             errors = 0,
             split = arr[2].split(' ').filter(Boolean),
-            original = quote.content.split(' ').filter(Boolean),
+            original = q.split(' ').filter(Boolean),
             i = 0,
             cur_index = 0,
             max = Math.max(split.length, original.length);

@@ -1311,10 +1311,17 @@ module.exports.peasants.typingcontest = async (message, content, lang, i18n, Opa
                     correct_words++;
                 } else {
                     errors++;
+                    if (!correct_words--) { // don't reduce if it's already 0
+                        correct_words = 0;
+                    }
                     if (original[cur_index + 1] == split[i]) {
                         cur_index++;
                     } else if (original[cur_index - 1] == split[i]) {
                         cur_index--;
+                    } else if (original[cur_index + 2] == split[i]) {
+                        cur_index += 2;
+                    } else if (original[cur_index - 2] == split[i]) {
+                        cur_index -= 2;
                     }
                     cur_index++;
                 }

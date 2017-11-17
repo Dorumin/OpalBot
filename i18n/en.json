@@ -211,6 +211,8 @@
         "expired": "Time expired, $1 has won!"
     },
     "typingcontest": {
+        "punctuation-off": "--punctuation off",
+        "case-insensitive": "--caseinsensitive",
         "multiple": "Just one race at a time, please!",
         "duration": "The next race will last for $1 seconds...",
         "countdown": "The typing contest will start in $1 ($1|second|seconds)...",

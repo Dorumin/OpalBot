@@ -1248,7 +1248,9 @@ module.exports.peasants.typingcontest = async (message, content, lang, i18n, Opa
     });
     var start_timestamp = Date.now() + 3000,
     finished = {},
-    i = 0;
+    i = 0,
+    case_sensitive = !content.includes(i18n.msg('case-insensitive', 'typingcontest', lang)),
+    punctuation = !content.includes(i18n.msg('punctuation-off', 'typingcontest', lang));
     message.channel.send({
         embed: {
             title: i18n.msg('image-title', 'typingcontest', lang),
@@ -1258,6 +1260,12 @@ module.exports.peasants.typingcontest = async (message, content, lang, i18n, Opa
             }
         }
     }).catch(OpalBot.util.log);
+    if (!case_sensitive) {
+        quote.content = quote.content.toLowerCase();
+    }
+    if (!punctuation) {
+        quote.content = quote.content.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, '').replace(/\s{2,}/g," ");
+    }
     while (true) {
         try {
             var {message} = await OpalBot.unprefixed.expect({
@@ -1285,6 +1293,12 @@ module.exports.peasants.typingcontest = async (message, content, lang, i18n, Opa
         wpm_scores = '',
         incorrect_words = '';
         scores.forEach((arr, idx) => {
+            if (!case_sensitive) {
+                arr[2] = arr[2].toLowerCase();
+            }
+            if (!punctuation) {
+                arr[2] = arr[2].replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g, '').replace(/\s{2,}/g," ");
+            }
             var monospace_char = String.fromCharCode(55349) + String.fromCharCode(idx + 57335),
             correct_words = 0,
             errors = 0,

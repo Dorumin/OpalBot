@@ -1293,8 +1293,8 @@ module.exports.peasants.typingcontest = async (message, content, lang, i18n, Opa
                 arr[2] = arr[2].toLowerCase();
             }
             if (!punctuation) {
-                q = q.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()?]/g, '').replace(/\s{2,}/g," ");
-                arr[2] = arr[2].replace(/[.,\/#!$%\^&\*;:{}=\-_`~()?]/g, '').replace(/\s{2,}/g," ");
+                q = q.replace(/[\.,-\/#!$%\^&\*;:{}=\-_`~()@\+\?><\[\]\+']/g, '').replace(/\s{2,}/g," ");
+                arr[2] = arr[2].replace(/[\.,-\/#!$%\^&\*;:{}=\-_`~()@\+\?><\[\]\+']/g, '').replace(/\s{2,}/g," ");
             }
             var monospace_char = String.fromCharCode(55349) + String.fromCharCode(idx + 57335),
             correct_words = 0,

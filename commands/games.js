@@ -1271,13 +1271,22 @@ module.exports.peasants.typingcontest = async (message, content, lang, i18n, Opa
             break;
         }
         if (finished[message.author.id]) continue;
-        if (lev_dist(quote.content, message.content) < Math.max(20, quote.content.length / 20)) {
+        var q = quote.content,
+        c = message.content;
+        if (!case_sensitive) {
+            q = q.toLowerCase();
+            c = c.toLowerCase();
+        }
+        if (!punctuation) {
+            q = q.replace(/[\.,-\/#!$%\^&\*;:{}=\-_`~()@\+\?><\[\]\+']/g, '').replace(/\s{2,}/g," ");
+            c = c.replace(/[\.,-\/#!$%\^&\*;:{}=\-_`~()@\+\?><\[\]\+']/g, '').replace(/\s{2,}/g," ");
+        }
+        if (lev_dist(q, c) < Math.max(20, q.length / 20)) {
             finished[message.author.id] = true;
             scores.push([message.author, Date.now(), message.content, message.author.typingDurationIn(message.channel)]);
             message.channel
                 .send(i18n.msg('finished', 'typingcontest', message.author.username, ((Date.now() - start_timestamp) / 1000).toFixed(1), lang))
                 .catch(OpalBot.util.log);
-            message.channel.send(scores[scores.length - 1][3]);
         }
     }
     if (!scores.length) {

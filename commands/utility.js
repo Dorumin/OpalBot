@@ -51,7 +51,7 @@ module.exports.peasants.me = message => {
 };
 
 module.exports.peasants.pong = 'ping';
-module.exports.peasants.ping = (message, content, lang, i18n) => {
+module.exports.peasants.ping = (message, content, lang, i18n, OpalBot) => {
     var ping = message.content.indexOf('ping') + 1 || 1000,
     pong = message.content.indexOf('pong') + 1 || 1001,
     d1 = Date.now(); // Don't tell me to use message.createdTimestamp. That can return negative values.
@@ -89,18 +89,18 @@ module.exports.peasants.runtime = (message, content, lang, i18n, OpalBot) => {
 };
 
 module.exports.peasants.status = 'test';
-module.exports.peasants.test = (message, content, lang, i18n) => {
+module.exports.peasants.test = (message, content, lang, i18n, OpalBot) => {
     message.reply(i18n.msg('online', 'test', lang)).catch(OpalBot.util.log);
 };
 
 module.exports.peasants.coinflip = 'flip';
-module.exports.peasants.flip = (message, content, lang, i18n) => {
+module.exports.peasants.flip = (message, content, lang, i18n, OpalBot) => {
     var result = Math.round(Math.random()) == 1;
     message.channel.send(i18n.msg(result ? 'heads' : 'tails', 'flip', `<@${message.author.id}>`, lang)).catch(OpalBot.util.log);
 };
 
 module.exports.peasants.choose = 'pick';
-module.exports.peasants.pick = (message, content, lang, i18n) => {
+module.exports.peasants.pick = (message, content, lang, i18n, OpalBot) => {
     if (!content) {
         message.reply(i18n.msg('missing', 'pick', lang)).catch(OpalBot.util.log);
         return;
@@ -118,7 +118,7 @@ module.exports.peasants.pick = (message, content, lang, i18n) => {
 };
 
 module.exports.peasants.d = 'dice';
-module.exports.peasants.dice = (message, content, lang, i18n) => {
+module.exports.peasants.dice = (message, content, lang, i18n, OpalBot) => {
     if (!content || isNaN(content.charAt(0))) {
         content = '6';
     }

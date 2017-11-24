@@ -159,9 +159,11 @@ module.exports.peasants.seen = async (message, content, lang, i18n, OpalBot) => 
     var data = (await OpalBot.db).seen || {};
     if (['online', 'dnd'].includes(user.presence.status)) {
         message.channel.send(i18n.msg('online', 'seen', user.username, lang)).catch(OpalBot.util.log);
+        return;
     }
     if (!data[user.id]) {
         message.channel.send(i18n.msg('no-data', 'seen', user.username + user.discriminator, lang)).catch(OpalBot.util.log);
+        return;
     }
     
     var t = Date.now() - data[user.id],

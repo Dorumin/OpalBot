@@ -48,6 +48,20 @@ client.on('ready', async () => {
     }, 3600000);
 });
 
+client.on('presenceUpdate', async (old, newb) => {
+    var oldstat = old.presence.status,
+    newstat = newb.presence.status;
+    if (['idle', 'offline'].includes(newstat) && ['online', 'dnd'].includes(oldstat)) {
+        OpalBot.db = {
+            name: 'seen',
+            value: {
+                ...(await OpalBot.db).seen,
+                [newb.user.id]: Date.now()
+            }
+        }
+    }
+})
+
 client.on('guildCreate', (guild) => {
     client.guilds
         .get('344422448403316748').channels

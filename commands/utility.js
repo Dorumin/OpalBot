@@ -162,7 +162,7 @@ module.exports.peasants.seen = async (message, content, lang, i18n, OpalBot) => 
         return;
     }
     if (!data[user.id]) {
-        message.channel.send(i18n.msg('no-data', 'seen', user.username + user.discriminator, lang)).catch(OpalBot.util.log);
+        message.channel.send(i18n.msg('no-data', 'seen', user.username + '#' + user.discriminator, lang)).catch(OpalBot.util.log);
         return;
     }
     

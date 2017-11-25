@@ -136,7 +136,7 @@
         "result": "$1 rolled a **$2**!",
         "results": "here are the results:",
         "sum": "The sum of the results is **$1**!",
-        "too-long": "my message was too long and couldn't send!"
+        "too-long": "my message was too long and couldn't be sent!"
     },
     "youtube": {
         "usage": "Usage: [Search query (required)]",
@@ -226,7 +226,7 @@
         "score-format": "$1 WPM *[$2 ($2|sec|secs)]*"
     },
     "seen": {
-        "no-mentions": "Please mention an user to check!",
+        "no-mention": "Please mention an user to check!",
         "online": "$1 is already online!",
         "no-data": "I have no data $1! They've probably never been online for me to see.",
         "s": "$1: I last saw $2 $3 ($3|second|seconds) ago.",

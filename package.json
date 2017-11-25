@@ -15,9 +15,9 @@
     "url": "https://github.com/Dorumin/OpalBot"
   },
   "dependencies": {
-    "discord.js": "11.1.0",
-    "dropbox": "2.5.7",
-    "request": "2.81.0",
+    "discord.js": "11.2.1",
+    "dropbox": "2.5.12",
+    "request": "2.83.0",
     "canvas": "1.6.7",
     "heroku-client": "3.0.3",
     "ytdl-core": "0.18.1"

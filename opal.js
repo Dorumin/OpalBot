@@ -60,7 +60,7 @@ client.on('presenceUpdate', async (old, newb) => {
             }
         }
     }
-})
+});
 
 client.on('guildCreate', (guild) => {
     client.guilds

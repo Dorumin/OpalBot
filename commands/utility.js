@@ -2,7 +2,7 @@ const request = require('request'),
 ytdl = require('ytdl-core'),
 installer = require('@ffmpeg-installer/ffmpeg'),
 ffmpeg = require('fluent-ffmpeg'),
-sanitize = request('sanitize-filename'),
+sanitize = require('sanitize-filename'),
 req = (obj, POST) => {
     return new Promise((res, rej) => {
         (POST ? request.post : request)(obj, (e, r, body) => {

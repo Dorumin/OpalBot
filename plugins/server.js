@@ -51,7 +51,7 @@ module.exports.quote_image = (req, res, OpalBot) => {
 };
 
 module.exports.dl = (req, res, OpalBot) => {
-    var id = req.split('/').pop();
+    var id = req.url.split('/').pop();
     if (fs.existsSync(id + '.mp3')) {
         var stat = fs.statSync(id + '.mp3');
         res.writeHead(200, {

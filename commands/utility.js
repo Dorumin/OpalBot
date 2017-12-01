@@ -1,4 +1,7 @@
 const request = require('request'),
+ytdl = require('ytdl-core'),
+installer = require('@ffmpeg-installer/ffmpeg'),
+ffmpeg = require('ffmpeg'),
 req = (obj, POST) => {
     return new Promise((res, rej) => {
         (POST ? request.post : request)(obj, (e, r, body) => {
@@ -12,11 +15,13 @@ req = (obj, POST) => {
 };
 req.post = (obj) => req(obj, true);
 
+ffmpeg.setFfmpegPath(installer.path);
+
 module.exports.peasants = {};
 
 module.exports.peasants.hi = 'hello';
 module.exports.peasants.hey = 'hello';
-module.exports.peasants.hello = (message) => {
+module.exports.peasants.hello = (message, content, lang, i18n, OpalBot) => {
     switch (message.author.username + '#' + message.author.discriminator) {
         case 'Dorumin#0969':
             message.reply('hello useless pile of goop!').catch(OpalBot.util.log);
@@ -46,7 +51,7 @@ module.exports.peasants.avatar = (message, content, lang, i18n, OpalBot) => {
 };
 
 module.exports.peasants.lenny = 'me';
-module.exports.peasants.me = message => {
+module.exports.peasants.me = (message, content, lang, i18n, OpalBot) => {
     message.channel.send('( ͡° ͜ʖ ͡°)').catch(OpalBot.util.log);
 };
 
@@ -373,8 +378,66 @@ module.exports.peasants.mp3 = async (message, content, lang, i18n, OpalBot) => {
     var id = content.match(/[-_A-Za-z0-9]{11,}/g);
     if (!id) {
         message.reply(i18n.msg('invalid', 'mp3', lang)).catch(OpalBot.util.log);
+        return;
     }
     id = id[id.length - 1];
+    
+    var info = await ytdl.getInfo(id),
+    filename = sanitize(info.title) + '.mp3',
+    duration = ((s) => {
+        var f = n => ('0' + Math.floor(n)).slice(-2);
+        return [
+            f(s / 3600),
+            f(s / 60 % 60),
+            f(s % 60)
+        ].join(':').replace(/^(00:)+/g, '').replace(/^0+/, '');
+    })(info.length_seconds);
+    if (info.length_seconds > 5400) {
+        message.reply(i18n.msg('too-long', 'mp3', lang));
+        return;
+    }
+    ffmpeg({
+        source: ytdl(id, {
+            quality: 'lowest' // Doesn't affect audio quality (or, at least, audio filesize)
+        })
+    })
+    .noVideo()
+    .format('mp3')
+    .on('end', async () => {
+        var stats = fs.statSync(filename);
+        console.log(OpalBot.util.formatBytes(stats.size));
+        try { // See if the maxresdefault thumbnail is available.
+            var { res } = await req({
+                url: `https://img.youtube.com/vi/${id}/maxresdefault.jpg`,
+                method: 'HEAD',
+                followAllRedirects: true
+            });
+            if (res.statusCode == '404') throw new Error();
+            info.thumbnail_url = `https://img.youtube.com/vi/${id}/maxresdefault.jpg`;
+        } catch(e) {
+            info.thumbnail_url = `https://img.youtube.com/vi/${id}/0.jpg`;
+        }
+        message.channel.send({
+            embed: {
+                title: i18n.msg('download', 'mp3', lang),
+                description: info.title,
+                url: 'http://opalbot.herokuapp.com/dl/' + id,
+                color: OpalBot.color,
+                image: masked ? {
+                    url: image
+                } : null,
+                fields: [{
+                    name: i18n.msg('size', 'mp3', lang),
+                    value: OpalBot.formatBytes(stats.size)
+                }, {
+                    name: i18n.msg('duration', 'mp3', lang),
+                    value: duration
+                }]
+            }
+        }).catch(OpalBot.util.log);
+    })
+    .pipe(fs.createWriteStream(filename));
+
     var tries = 5;
     while (tries--) {
         try {

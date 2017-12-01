@@ -1,4 +1,7 @@
-const Canvas = require('canvas');
+import { fstat } from 'fs';
+
+const Canvas = require('canvas'),
+fs = require('fs');
 
 function get_canvas_with_text(text, config) {
     var canvas = new Canvas(config.width, config.height || 1500);
@@ -47,4 +50,20 @@ module.exports.quote_image = (req, res, OpalBot) => {
         'Content-Length': img.length
     });
     res.end(img);
+};
+
+module.exports.dl = (req, res, OpalBot) => {
+    var id = req.split('/').pop();
+    if (fs.existsSync(id + '.mp3')) {
+        var stat = fs.statSync(id + '.mp3');
+        res.writeHead(200, {
+            'Content-Length': stat.size,
+            'Content-Type': 'audio/mpeg'
+        });
+        fs
+            .createReadStream(id + '.mp3')
+            .pipe(res);
+    } else {
+        res.end('Not found');
+    }
 };

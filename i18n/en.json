@@ -147,6 +147,7 @@
     },
     "mp3": {
         "invalid": "please input a valid YouTube video URL or ID!",
+        "too-long": "videos longer than 1 hour and 30 minutes cannot be converted!",
         "servers-down": "Both servers used for MP3 conversion are down! Please try again at another time.",
         "server-error": "An error code has been returned by the server! This is most likely caused by an invalid video ID. Please check the bot logs for details.",
         "size-404": "Unable to fetch metadata (filesize) from the server!",

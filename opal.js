@@ -8,20 +8,6 @@ const client   = new Discord.Client();
 const database = new Dropbox({accessToken: process.env.dropbox_token});
 
 client.on('ready', async () => {
-    request({
-        url: 'https://uptimerobot.com/inc/pages/mainDashboard.php',
-        headers: {
-            Cookie: process.env.monitor_cookie
-        }
-    }, (err, r, body) => {
-        if (!body) return;
-        var downtime = body.match(/<div [^>]*id="accountLastDowntimeContent">[^>]*>/);
-        if (!downtime) return;
-        var d = downtime[0].match(/\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2}/);
-        if (!d) return;
-        d = new Date(d[0]);
-        OpalBot.storage.last_downtime = d.getTime();
-    });
     var storage = (await OpalBot.db).data;
     if (!storage) {
         OpalBot.db = {
@@ -370,6 +356,15 @@ OpalBot.util.log = (...args) => {
         }
     });
 };
+
+OpalBot.util.formatBytes = (bytes, decimals) => {
+    if(bytes == 0) return '0 Bytes';
+    var k = 1024,
+        dm = decimals || 2,
+        sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],
+        i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+ };
 
 OpalBot.util.getChannelMessages = async (channel, before, break_function) => { // break function MUST return true for the message querying to stop, truthy values don't do the trick
     before = before || Date.now() - 1209600000; // 2 weeks

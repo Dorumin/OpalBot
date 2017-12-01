@@ -17,7 +17,7 @@ exports.msg = function(message, obj, ...vars) {
     var msg = obj[message];
     if (!msg || typeof msg != 'string') {
         if (typeof ref == 'string') {
-            throw new ReferenceError('(i18n) No key <${message}> in object <i18n.${ref}> found.');
+            throw new ReferenceError(`(i18n) No key <${message}> in object <i18n.${ref}> found.`);
         }
         throw new ReferenceError(`(i18n) No key <${message}> found.`);
     }

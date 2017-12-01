@@ -430,7 +430,7 @@ module.exports.peasants.mp3 = async (message, content, lang, i18n, OpalBot) => {
                 } : null,
                 fields: [{
                     name: i18n.msg('size', 'mp3', lang),
-                    value: OpalBot.formatBytes(stats.size)
+                    value: OpalBot.util.formatBytes(stats.size)
                 }, {
                     name: i18n.msg('duration', 'mp3', lang),
                     value: duration

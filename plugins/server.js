@@ -1,5 +1,3 @@
-import { fstat } from 'fs';
-
 const Canvas = require('canvas'),
 fs = require('fs');
 

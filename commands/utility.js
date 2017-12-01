@@ -1,7 +1,7 @@
 const request = require('request'),
 ytdl = require('ytdl-core'),
 installer = require('@ffmpeg-installer/ffmpeg'),
-ffmpeg = require('ffmpeg'),
+ffmpeg = require('fluent-ffmpeg'),
 req = (obj, POST) => {
     return new Promise((res, rej) => {
         (POST ? request.post : request)(obj, (e, r, body) => {

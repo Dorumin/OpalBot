@@ -59,7 +59,7 @@ module.exports.dl = (req, res, OpalBot) => {
             'Content-Type': 'audio/mpeg'
         });
         fs
-            .createReadStream(id + '.mp3')
+            .createReadStream(id)
             .pipe(res);
     } else {
         res.end('Not found');

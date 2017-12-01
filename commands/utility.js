@@ -426,7 +426,7 @@ module.exports.peasants.mp3 = async (message, content, lang, i18n, OpalBot) => {
                 url: 'http://opalbot.herokuapp.com/dl/' + id,
                 color: OpalBot.color,
                 image: masked ? {
-                    url: image
+                    url: info.thumbnail_url
                 } : null,
                 fields: [{
                     name: i18n.msg('size', 'mp3', lang),

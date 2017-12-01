@@ -56,7 +56,8 @@ module.exports.dl = (req, res, OpalBot) => {
         var stat = fs.statSync(id);
         res.writeHead(200, {
             'Content-Length': stat.size,
-            'Content-Type': 'audio/mpeg'
+            'Content-Type': 'audio/mpeg',
+            'Content-Disposition': `attachment; filename=${id};`
         });
         fs
             .createReadStream(id)

@@ -423,7 +423,7 @@ module.exports.peasants.mp3 = async (message, content, lang, i18n, OpalBot) => {
             embed: {
                 title: i18n.msg('download', 'mp3', lang),
                 description: info.title,
-                url: 'http://opalbot.herokuapp.com/dl/' + filename,
+                url: 'http://opalbot.herokuapp.com/dl/' + encodeURIComponent(filename),
                 color: OpalBot.color,
                 image: masked ? {
                     url: info.thumbnail_url

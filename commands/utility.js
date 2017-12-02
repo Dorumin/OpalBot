@@ -399,7 +399,7 @@ module.exports.peasants.mp3 = async (message, content, lang, i18n, OpalBot) => {
         return;
     }
     var converting = await message.channel.send(i18n.msg('converting', 'mp3', lang));
-    message.channel.startTyping().catch(OpalBot.util.log);
+    message.channel.startTyping();
     ffmpeg({
         source: ytdl(id, {
             quality: 'lowest' // Doesn't affect audio quality (or, at least, audio filesize)
@@ -411,7 +411,7 @@ module.exports.peasants.mp3 = async (message, content, lang, i18n, OpalBot) => {
         var stats = fs.statSync(filename);
         console.log(OpalBot.util.formatBytes(stats.size));
         converting.delete().catch(OpalBot.util.log);
-        message.channel.stopTyping().catch(OpalBot.util.log);
+        message.channel.stopTyping();
         try { // See if the maxresdefault thumbnail is available.
             var { res } = await req({
                 url: `https://img.youtube.com/vi/${id}/maxresdefault.jpg`,

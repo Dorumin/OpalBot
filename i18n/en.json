@@ -154,6 +154,7 @@
         "sc-server-error-token": "Error while parsing SoundCloud API: Cannot find token",
         "sc-server-error-download": "Error while parsing SoundCloud API: Cannot find download URL",
         "sc-server-error-title": "Error while parsing SoundCloud API: Cannot find title",
+        "converting": "Converting video, please wait...",
         "download": "Download",
         "size": "Size",
         "duration": "Duration"

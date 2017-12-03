@@ -66,7 +66,7 @@ module.exports.operator.script = (message, content, lang, i18n, OpalBot) => {
 
 module.exports.operator.game = 'setgame';
 module.exports.operator.setgame = (message, content, lang, i18n, OpalBot) => {
-    var match = content.match(/(?:https?:\/\/)?twitch.tv\/(\w+)/),
+    var match = content.match(/(?:https?:\/\/)?(?:[\w-]+\.)?twitch.tv\/(\w+)/),
     twitch = null;
     if (match) {
         content = content.slice(0, match.index) + content.slice(match.index + match[0].length);

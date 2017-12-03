@@ -37,7 +37,7 @@
     "kick": {
         "no-mention": "No user mention found. Please @ the user you want to kick!",
         "masochist": "you cannot kick yourself!",
-        "hal-9000": "I'm sorry $1. I'm afraid I can't do that.",
+        "hal-9000": "I'm sorry, $1. I'm afraid I can't do that.",
         "cannot-kick": "Cannot kick $1: missing permissions.",
         "kicking": "Kicking $1...",
         "kicking-with-reason": "Kicking $1: $2...",
@@ -47,7 +47,7 @@
     "ban": {
         "no-mention": "No user mention found. Please @ the user you want to kick!",
         "masochist": "you cannot kick yourself!",
-        "hal-9000": "I'm sorry $1, I'm afraid I can't do that.",
+        "hal-9000": "I'm sorry, $1. I'm afraid I can't do that.",
         "cannot-ban": "Cannot ban $1: missing permissions.",
         "banning": "Banning $1...",
         "success": "Successfully banned $1!",

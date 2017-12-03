@@ -8,7 +8,7 @@ module.exports.kick.kick = (message, content, lang, i18n, OpalBot) => {
         return;
     }
     if (!user) { // Trying to kick the bot. So predictable.
-        message.channel.send(i18n.msg('hal-9000', 'kick', `<@${message.author.id}>`, lang));
+        message.channel.send(i18n.msg('hal-9000', 'kick', message.author, lang));
         return;
     }
     if (user.id == message.author.id) {
@@ -37,7 +37,7 @@ module.exports.ban.ban = (message, content, lang, i18n, OpalBot) => {
         return;
     }
     if (!user) {
-        message.channel.send(i18n.msg('hal-9000', 'ban', lang));
+        message.channel.send(i18n.msg('hal-9000', 'ban', message.author, lang));
         return;
     }
     if (user.id == message.author.id) {

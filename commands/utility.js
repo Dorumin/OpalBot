@@ -264,7 +264,7 @@ module.exports.peasants.youtube = async (message, content, lang, i18n, OpalBot) 
     var bot_message = null,
     blocked = OpalBot.unprefixed.push({
         type: 'youtube',
-        triggers: new Array(r.length).fill(undefined).map((n, i) => String(i + 1)),
+        triggers: Array(r.length).fill(undefined).map((n, i) => String(i + 1)),
         callback: (msg, index) => {
             result(r[index]);
             if (msg.deletable) {

@@ -23,14 +23,16 @@ client.on('ready', async () => {
     OpalBot.util.log(i18n.msg('online', 'main', OpalBot.v, 'en'));
     client.guilds
         .get('344422448403316748').channels
-        .find(n => n.name == 'secret')
-            .send(i18n.msg('online', 'main', OpalBot.v, 'en'));
+        .get('387039127083679753')
+            .send(i18n.msg('online', 'main', OpalBot.v, 'en'))
+                .catch(OpalBot.util.log);
     var i = 0;
     setInterval(n => {
         client.guilds
-            .find(n => n.id == 344422448403316748).channels
-                .find(n => n.name == 'secret')
-                    .send(`Bot has been up for ${++i} hours without idling or crashing!`);
+        .get('344422448403316748').channels
+        .get('387039127083679753')
+            .send(`Bot has been up for ${++i} hours without idling or crashing!`)
+                .catch(OpalBot.util.log);
     }, 3600000);
 });
 
@@ -40,7 +42,7 @@ client.on('presenceUpdate', async (old, newb) => {
     if (['idle', 'offline'].includes(newstat) && ['online', 'dnd'].includes(oldstat)) {
         OpalBot.db = {
             name: 'seen',
-            value: {
+            value: { // Much ES2017, wew
                 ...(await OpalBot.db).seen,
                 [newb.user.id]: Date.now()
             }

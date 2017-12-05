@@ -26,6 +26,7 @@ client.on('ready', async () => {
         .get('387039127083679753')
             .send(i18n.msg('online', 'main', OpalBot.v, 'en'))
                 .catch(OpalBot.util.log);
+    client.user.setGame(OpalBot.v);
     var i = 0;
     setInterval(n => {
         client.guilds
@@ -53,7 +54,7 @@ client.on('presenceUpdate', async (old, newb) => {
 client.on('guildCreate', (guild) => {
     client.guilds
         .get('344422448403316748').channels
-        .find(n => n.name == 'secret')
+        .get('387039127083679753')
             .send(`Joined guild ${guild} (${guild.id})`);
 });
 

@@ -26,7 +26,7 @@ client.on('ready', async () => {
         .get('387039127083679753')
             .send(i18n.msg('online', 'main', OpalBot.v, 'en'))
                 .catch(OpalBot.util.log);
-    client.user.setGame(OpalBot.v);
+    client.user.setGame('v' + OpalBot.v);
     var i = 0;
     setInterval(n => {
         client.guilds

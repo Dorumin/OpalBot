@@ -52,6 +52,21 @@ module.exports.peasants.avatar = (message, content, lang, i18n, OpalBot) => {
     }).catch(OpalBot.util.log);
 };
 
+module.exports.peasants.inspirational = 'inspiration';
+module.exports.peasants.quote = 'inspiration';
+module.exports.peasants.inspiration = (message, content, lang, i18n, OpalBot) => {
+    request('http://inspirobot.me/api?generate=true', (err, r, body) => {
+        message.channel.send({
+            embed: {
+                color: OpalBot.color,
+                image: {
+                    url: body
+                }
+            }
+        });
+    });
+};
+
 module.exports.peasants.lenny = 'me';
 module.exports.peasants.me = (message, content, lang, i18n, OpalBot) => {
     message.channel.send('( ͡° ͜ʖ ͡°)').catch(OpalBot.util.log);

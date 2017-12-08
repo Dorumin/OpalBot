@@ -21,7 +21,7 @@ module.exports.kick.kick = (message, content, lang, i18n, OpalBot) => {
         message.channel.send(i18n.msg('cannot-kick', 'kick', user.username, lang));
         return;
     }
-    message.channel.send(i18n.msg('kicking' + (reason ? 'with-reason' : ''), 'kick', user.username, reason, lang));
+    message.channel.send(i18n.msg('kicking' + (reason ? '-with-reason' : ''), 'kick', user.username, reason, lang));
     guild_user.kick(reason).then(() => {
         message.channel.send(i18n.msg('success', 'kick', user.username, lang));
     }).catch(err => {

@@ -457,7 +457,7 @@ module.exports.peasants.mp3 = async (message, content, lang, i18n, OpalBot) => {
             }
         }).catch(OpalBot.util.log);
     })
-    .output(fs.createWriteStream(filename));
+    .output(filename);
 };
 
 module.exports.peasants.prefixes = 'prefix';

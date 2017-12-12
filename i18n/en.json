@@ -155,6 +155,7 @@
         "sc-server-error-download": "Error while parsing SoundCloud API: Cannot find download URL",
         "sc-server-error-title": "Error while parsing SoundCloud API: Cannot find title",
         "converting": "Converting video, please wait...",
+        "failure": "Failed to convert video. Please try with another query instead.",
         "download": "Download",
         "size": "Size",
         "duration": "Duration"

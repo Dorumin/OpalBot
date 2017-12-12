@@ -242,33 +242,7 @@ module.exports.peasants.youtube = async (message, content, lang, i18n, OpalBot) 
             module.exports.peasants.mp3(message, video.id.videoId, lang, i18n, OpalBot);
             return;
         }
-        var id = video.id.videoId,
-        image = `https://img.youtube.com/vi/${id}/maxresdefault.jpg`;
-        try {
-            var { res } = await req({
-                url: image,
-                method: 'HEAD',
-                followAllRedirects: true
-            });
-            if (res.statusCode == '404') throw new Error();
-        } catch(e) {
-            image = `https://img.youtube.com/vi/${id}/0.jpg`;
-        }
-        message.channel.send({
-            embed: {
-                title: video.snippet.title,
-                url: `https://youtu.be/${video.id.videoId}`,
-                description: video.snippet.description,
-                color: OpalBot.color,
-                image: {
-                    url: image
-                },
-                author: {
-                    name: video.snippet.channelTitle,
-                    url: 'https://youtube.com/channel/' + video.snippet.channelId
-                }
-            }
-        }).catch(OpalBot.util.log);
+        message.channel.send(`https://youtu.be/${video.id.videoId}`).catch(OpalBot.util.log);
     }
     var r = JSON.parse(body).items,
     titles = r.map(obj => obj.snippet.title);
@@ -457,9 +431,12 @@ module.exports.peasants.mp3 = async (message, content, lang, i18n, OpalBot) => {
             }
         }).catch(OpalBot.util.log);
     })
-    .pipe(fs.createWriteStream(filename), {
-        end: true
-    });
+    .on('error', () => {
+        converting.delete().catch(OpalBot.util.log);
+        message.channel.stopTyping();
+        message.channel.send(i18n.msg('failure', 'mp3', lang)).catch(OpalBot.util.log);
+    })
+    .pipe(fs.createWriteStream(filename));
 };
 
 module.exports.peasants.prefixes = 'prefix';

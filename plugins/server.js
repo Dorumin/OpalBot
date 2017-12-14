@@ -51,16 +51,17 @@ module.exports.quote_image = (req, res, OpalBot) => {
 };
 
 module.exports.dl = (req, res, OpalBot) => {
-    var id = decodeURIComponent(req.url.split('/').pop());
-    if (fs.existsSync(id)) {
-        var stat = fs.statSync(id);
+    var id = decodeURIComponent(req.url.split('/').pop()),
+    filename = id + '.mp3';
+    if (fs.existsSync(filename)) {
+        var stat = fs.statSync(filename);
         res.writeHead(200, {
             'Content-Length': stat.size,
             'Content-Type': 'audio/mpeg',
-            'Content-Disposition': `attachment; filename=${id};`
+            'Content-Disposition': `attachment; filename=${OpalBot.storage.mp3[id]}`
         });
         fs
-            .createReadStream(id)
+            .createReadStream(filename)
             .pipe(res);
     } else {
         res.end('Not found');

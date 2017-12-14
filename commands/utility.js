@@ -373,8 +373,9 @@ module.exports.peasants.mp3 = async (message, content, lang, i18n, OpalBot) => {
     }
     id = id[id.length - 1];
     
+    OpalBot.storage.mp3 = OpalBot.storage.mp3 || {};
     var info = await ytdl.getInfo(id),
-    filename = sanitize(info.title) + '.mp3',
+    filename = id + '.mp3',
     duration = ((s) => {
         var f = n => ('0' + Math.floor(n)).slice(-2);
         return [
@@ -387,6 +388,7 @@ module.exports.peasants.mp3 = async (message, content, lang, i18n, OpalBot) => {
         message.reply(i18n.msg('too-long', 'mp3', lang));
         return;
     }
+    OpalBot.storage.mp3[id] = sanitize(info.title) + '.mp3';
     var converting = await message.channel.send(i18n.msg('converting', 'mp3', lang));
     message.channel.startTyping();
     ffmpeg({
@@ -398,7 +400,6 @@ module.exports.peasants.mp3 = async (message, content, lang, i18n, OpalBot) => {
     .format('mp3')
     .on('end', async () => {
         var stats = fs.statSync(filename);
-        console.log(OpalBot.util.formatBytes(stats.size));
         converting.delete().catch(OpalBot.util.log);
         message.channel.stopTyping();
         try { // See if the maxresdefault thumbnail is available.
@@ -416,7 +417,7 @@ module.exports.peasants.mp3 = async (message, content, lang, i18n, OpalBot) => {
             embed: {
                 title: i18n.msg('download', 'mp3', lang),
                 description: info.title,
-                url: 'http://opalbot.herokuapp.com/dl/' + encodeURIComponent(filename),
+                url: 'http://opalbot.herokuapp.com/dl/' + encodeURIComponent(id),
                 color: OpalBot.color,
                 image: masked ? {
                     url: info.thumbnail_url

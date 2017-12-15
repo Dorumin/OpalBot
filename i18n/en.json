@@ -3,7 +3,8 @@
         "prefix": "<@$1>, do",
         "online": "OpalBot v$1 is online!",
         "confirm": "confirm",
-        "cancel": "cancel"
+        "cancel": "cancel",
+        "on-enter": "Hello, thanks for adding me on your server!\nCurrent prefixes are: $1. To add a prefix, use opal!prefix add"
     },
     "runtime": {
         "s": "OpalBot v$1 has been running for $2 ($2|second|seconds).",

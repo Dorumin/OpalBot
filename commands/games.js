@@ -1313,7 +1313,6 @@ module.exports.peasants.typingcontest = async (message, content, lang, i18n, Opa
             i = 0,
             cur_index = 0,
             max = Math.max(split.length, original.length);
-            players += '\n#' + monospace_char + ' ' + arr[0].username;
             while (i < max) {
                 if (original[cur_index] == split[i]) {
                     cur_index++;
@@ -1346,8 +1345,18 @@ module.exports.peasants.typingcontest = async (message, content, lang, i18n, Opa
                 secs = (elapsed / 1000).toFixed(1);
                 wpm = Math.ceil( correct_words * ( 60 / ( elapsed / 1000 ) ) );
             }
-            wpm_scores += `${i18n.msg('score-format', 'typingcontest', wpm, secs, lang)}\n`;
-            incorrect_words += errors + '\n';
+            arr.wpm = `${i18n.msg('score-format', 'typingcontest', wpm, secs, lang)}\n`;
+            arr.errors = errors;
+        });
+
+        scores.sort((a, b) => {
+            return parseInt(b.wpm) - parseInt(a.wpm);
+        });
+        
+        scores.forEach((arr, idx) => {
+            players += '\n#' + monospace_char + ' ' + arr[0].username;
+            wpm_scores += arr.wpm;
+            incorrect_words += arr.errors + '\n';
         });
         message.channel.send({
             embed: {

@@ -56,6 +56,10 @@ client.on('guildCreate', (guild) => {
         .get('344422448403316748').channels
         .get('387039127083679753')
             .send(`Joined guild ${guild} (${guild.id})`);
+
+    var prefixes = OpalBot.prefixes[message.guild.id] || OpalBot.prefixes.default;
+
+    guild.defaultChannel.send(i18n.msg('on-enter', 'main', '`' + prefixes.join('`, `') + '`', 'en'));
 });
 
 client.on('message', async (message) => {

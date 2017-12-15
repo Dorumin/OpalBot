@@ -1305,8 +1305,7 @@ module.exports.peasants.typingcontest = async (message, content, lang, i18n, Opa
                 q = q.replace(/[\.,-\/#!$%\^&\*;:{}=\-_`~()@\+\?><\[\]\+']/g, '').replace(/\s{2,}/g," ");
                 arr[2] = arr[2].replace(/[\.,-\/#!$%\^&\*;:{}=\-_`~()@\+\?><\[\]\+']/g, '').replace(/\s{2,}/g," ");
             }
-            var monospace_char = String.fromCharCode(55349) + String.fromCharCode(idx + 57335),
-            correct_words = 0,
+            var correct_words = 0,
             errors = 0,
             split = arr[2].split(' ').filter(Boolean),
             original = q.split(' ').filter(Boolean),
@@ -1352,8 +1351,9 @@ module.exports.peasants.typingcontest = async (message, content, lang, i18n, Opa
         scores.sort((a, b) => {
             return parseInt(b.wpm) - parseInt(a.wpm);
         });
-        
+
         scores.forEach((arr, idx) => {
+            var monospace_char = String.fromCharCode(55349) + String.fromCharCode(idx + 57335);
             players += '\n#' + monospace_char + ' ' + arr[0].username;
             wpm_scores += arr.wpm;
             incorrect_words += arr.errors + '\n';

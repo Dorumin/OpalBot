@@ -215,6 +215,9 @@
         "expired": "Time expired, $1 has won!"
     },
     "typingcontest": {
+        "leaderboard": "leaderboard|top",
+        "no-leaderboard": "There is no leaderboard available!",
+        "leaderboard-title": "Leaderboard! :trophy:",
         "punctuation-off": "--punctuation off",
         "case-insensitive": "--caseinsensitive",
         "multiple": "Just one race at a time, please!",
@@ -226,8 +229,11 @@
         "title": "Race results",
         "player": "Player",
         "score": "Score",
+        "wpm": "WPM",
         "errors": "Errors",
-        "score-format": "$1 WPM *[$2 ($2|sec|secs)]*"
+        "date": "Date",
+        "score-format": "$1 WPM *[$2 ($2|sec|secs)]*",
+        "date-format": "dd/MM/yy"
     },
     "seen": {
         "no-mention": "Please mention an user to check!",

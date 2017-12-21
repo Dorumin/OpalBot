@@ -1194,7 +1194,48 @@ module.exports.peasants.typingcontest = async (message, content, lang, i18n, Opa
         '‒': '-',
         '–': '-'
     },
-    reg = new RegExp( Object.keys(fancy_characters).join('|'), 'g' );
+    reg = new RegExp( Object.keys(fancy_characters).join('|'), 'g' ),
+    leaderboard = i18n.msg('leaderboard', 'typingcontest', lang).includes(content.trim());
+    if (leaderboard) {
+        var db = await OpalBot.db,
+        games = db.games || {},
+        tc = games.typingcontest || [],
+        names = '',
+        scores = '',
+        dates = '';
+        if (!tc.length) {
+            message.channel.send(i18n.msg('no-leaderboard', 'typingcontest', lang)).catch(OpalBot.util.log);
+            return;
+        }
+        tc.forEach((obj, idx) => {
+            var monospace_char = String.fromCharCode(55349) + String.fromCharCode(idx + 57335);
+            names += `\n#${monospace_char} ${obj.name}`;
+            scores += `\n${obj.wpm}`;
+            dates += '\n' + OpalBot.util.formatDate(new Date(obj.date), i18n.msg('date-format', 'typingcontest', lang));
+        });
+        message.channel.send({
+            embed: {
+                color: OpalBot.color,
+                title: i18n.msg('leaderboard-title', 'typingcontest', lang),
+                fields: [
+                    {
+                        name: i18n.msg('player', 'typingcontest', lang),
+                        value: names,
+                        inline: true
+                    }, {
+                        name: i18n.msg('wpm', 'typingcontest', lang),
+                        value: scores,
+                        inline: true
+                    }, {
+                        name: i18n.msg('date', 'typingcontest', lang),
+                        value: dates,
+                        inline: true
+                    }
+                ]
+            }
+        }).catch(OpalBot.util.log);
+        return;
+    }
     if (storage[message.channel.id]) {
         message.channel.send(i18n.msg('multiple', 'typingcontest', lang)).catch(OpalBot.util.log);
         return;
@@ -1387,7 +1428,8 @@ module.exports.peasants.typingcontest = async (message, content, lang, i18n, Opa
             games.typingcontest.push({
                 id: arr[0].id,
                 name: arr[0].username,
-                wpm: wpm
+                wpm: wpm,
+                date: Date.now()
             });
             games.typingcontest = games.typingcontest.sort((a, b) => {
                 return b.wpm - a.wpm;

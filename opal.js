@@ -346,9 +346,9 @@ OpalBot.unprefixed.expect = (obj) => {
     });
 };
 
-OpalBot.util.pad = (n) => {
+OpalBot.util.pad = (n, l) => {
     if (typeof n != 'number') throw new TypeError('n must be a number');
-    return ('0000' + n).slice(-4);
+    return ('0000' + n).slice(-l || -4);
 };
 
 OpalBot.util.log = (...args) => {
@@ -372,6 +372,28 @@ OpalBot.util.formatBytes = (bytes, decimals) => {
         i = Math.floor(Math.log(bytes) / Math.log(k));
     return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
  };
+
+OpalBot.util.formatDate = (date, format, utc = true) => {
+    let table = OpalBot.util.formatDate.methodTable;
+    return format.replace(new RegExp(`(${Object.keys(table).join('|')})+`, 'g'), (s, type) => {
+        var method = table[type].replace('UTC', utc ? 'UTC' : ''),
+        value = date[method]();
+        if (method == 'getUTCMonth') { // BECAUSE JAVASCRIPT
+            value += 1;
+        }
+        return OpalBot.util.pad(value, s.length);
+    });
+};
+
+OpalBot.util.formatDate.methodTable = {
+    S: 'getUTCMilliseconds',
+    s: 'getUTCSeconds',
+    m: 'getUTCMinutes',
+    h: 'getUTCHours',
+    d: 'getUTCDate',
+    M: 'getUTCMonth',
+    y: 'getUTCFullYear'
+};
 
 OpalBot.util.getChannelMessages = async (channel, before, break_function) => { // break function MUST return true for the message querying to stop, truthy values don't do the trick
     before = before || Date.now() - 1209600000; // 2 weeks

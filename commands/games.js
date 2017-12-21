@@ -1392,7 +1392,7 @@ module.exports.peasants.typingcontest = async (message, content, lang, i18n, Opa
             games.typingcontest = games.typingcontest.sort((a, b) => {
                 return b.wpm - a.wpm;
             }).filter((score, index, scores) => {
-                return scores.findIndex(item => item.id == score.id) != index;
+                return scores.findIndex(item => item.id == score.id) == index;
             }).slice(0, 5);
             OpalBot.util.extendDatabase('games', games);
         });

@@ -414,6 +414,58 @@ OpalBot.util.getGuildLanguage = async (guild) => {
     }
 };
 
+OpalBot.util.isPlainObject = (obj) => { // https://stackoverflow.com/a/5878101
+    if (typeof obj == 'object' && obj !== null) {
+        
+        if (typeof Object.getPrototypeOf == 'function') {
+
+            var proto = Object.getPrototypeOf(obj);
+            return proto === Object.prototype || proto === null;
+        }
+
+        return Object.prototype.toString.call(obj) == '[object Object]';
+    }
+
+    return false;
+}
+
+OpalBot.util.mergeObjects = (obj1, obj2, soft) => {
+    for (let key in obj2) {
+        if (OpalBot.util.isPlainObject(obj2[key]) && OpalBot.util.isPlainObject(obj1[key])) {
+            obj2[key] = OpalBot.util.mergeObjects(obj1[key], obj2[key]);
+        }
+    }
+
+    if (soft) {
+        return {
+            ...obj2,
+            ...obj1
+        };
+    }
+
+    return {
+        ...obj1,
+        ...obj2
+    };
+};
+
+OpalBot.util.extendDatabase = (file, obj) => {
+    const db = await OpalBot.db,
+    value = db[file];
+    if (value) {
+        OpalBot.db = {
+            name: file,
+            value: OpalBot.util.mergeObjects(value, obj)
+        }
+    } else {
+        OpalBot.db = {
+            name: file,
+            value: obj
+        };
+    }
+    return db;
+};
+
 OpalBot.commands = {
     roles: {}, // role-specific commands. case-insensitive
     peasants: {}, // commands that everyone can use

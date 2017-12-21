@@ -1380,6 +1380,22 @@ module.exports.peasants.typingcontest = async (message, content, lang, i18n, Opa
                 ]
             }
         }).catch(OpalBot.util.log);
+        scores.forEach(async arr => {
+            var wpm = parseInt(arr.wpm),
+            games = (await OpalBot.db).games || {};
+            games.typingcontest = games.typingcontest || [];
+            games.typingcontest.push({
+                id: arr[0].id,
+                name: arr[0].username,
+                wpm: wpm
+            });
+            games.typingcontest = games.typingcontest.sort((a, b) => {
+                return b.wpm - a.wpm;
+            }).filter((score, index, scores) => {
+                return scores.findIndex(item => item.id == score.id) != index;
+            }).slice(0, 5);
+            OpalBot.util.extendDatabase('games', games);
+        });
     }
     delete storage[message.channel.id];
 };

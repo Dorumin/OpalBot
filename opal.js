@@ -449,7 +449,7 @@ OpalBot.util.mergeObjects = (obj1, obj2, soft) => {
     };
 };
 
-OpalBot.util.extendDatabase = (file, obj) => {
+OpalBot.util.extendDatabase = async (file, obj) => {
     const db = await OpalBot.db,
     value = db[file];
     if (value) {

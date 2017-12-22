@@ -1195,7 +1195,7 @@ module.exports.peasants.typingcontest = async (message, content, lang, i18n, Opa
         '–': '-'
     },
     reg = new RegExp( Object.keys(fancy_characters).join('|'), 'g' ),
-    leaderboard = i18n.msg('leaderboard', 'typingcontest', lang).includes(content.trim());
+    leaderboard = i18n.msg('leaderboard', 'typingcontest', lang).split('|').includes(content.trim());
     if (leaderboard) {
         var db = await OpalBot.db,
         games = db.games || {},

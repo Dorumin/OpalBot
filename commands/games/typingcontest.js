@@ -184,8 +184,6 @@ module.exports = (OpalBot) => {
             }
         }).catch(OpalBot.util.log);
         while (true) {
-            let _message = message,
-            message;
             try {
                 message = (await OpalBot.unprefixed.expect({
                     type: 'typingcontest',

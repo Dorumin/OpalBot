@@ -10,7 +10,7 @@ module.exports = (OpalBot) => {
             OpalBot.util.log('Server request: ' + req.url);
         }
     
-        var path = req.url.slice(1).split('?')[0].split('/')[0];
+        let path = req.url.slice(1).split('?')[0].split('/')[0];
         if (OpalBot.paths[path]) {
             OpalBot.paths[path](req, res, OpalBot);
             return;

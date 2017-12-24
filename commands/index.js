@@ -10,7 +10,6 @@ module.exports = (OpalBot) => {
         .forEach(file => {
             fs.readdirSync(path.join(c, file))
                 .forEach(command => {
-                    console.log(command);
                     let xport = require(path.join('.' + c, file, command))(OpalBot);
                     for (let key in xport) {
                         out[key] = out[key] || {};

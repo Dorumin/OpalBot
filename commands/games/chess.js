@@ -115,7 +115,6 @@ module.exports = (OpalBot) => {
                     delete sessions[host_id]
                     return;
                 } else { // Timeout
-                    console.log(e);
                     chess.timeout = true;
                     break;
                 }

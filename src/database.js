@@ -19,7 +19,7 @@ module.exports = (OpalBot) => {
                         res(OpalBot._db);
                         return;
                     }
-                    var promises = [];
+                    let promises = [];
                     files.entries.forEach(entry => {
                         promises.push(
                             database.filesDownload({
@@ -29,7 +29,7 @@ module.exports = (OpalBot) => {
                     });
                     Promise.all(promises).then(a => {
                         a.forEach(r => {
-                            var name = r.name;
+                            let name = r.name;
                             if (name.slice(-5) != '.json') return;
                             name = name.slice(0, -5);
                             OpalBot._db[name] = JSON.parse(Buffer.from(r.fileBinary, 'base64').toString());

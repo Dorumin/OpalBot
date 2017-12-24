@@ -5,7 +5,7 @@ fs.readdirSync('./i18n')
     .forEach(title => exports[title.slice(0, -5)] = require('./' + title));
 
 exports.msg = function(message, obj, ...vars) {
-    var i18n = this,
+    let i18n = this,
     local = exports[vars.pop()] || exports.en,
     ref = obj;
     if (typeof obj == 'string') {
@@ -14,7 +14,7 @@ exports.msg = function(message, obj, ...vars) {
     if (!obj) {
         obj = exports['en'][ref];
     }
-    var msg = obj[message];
+    let msg = obj[message];
     if (!msg || typeof msg != 'string') {
         if (typeof ref == 'string') {
             throw new ReferenceError(`(i18n) No key <${message}> in object <i18n.${ref}> found.`);
@@ -25,7 +25,7 @@ exports.msg = function(message, obj, ...vars) {
     return msg.replace(/\$(\d)/g, (s, n) => {
         return vars[n - 1] || s;
     }).replace(/\(([\d\.]+?\|.+?\|.+?)\)/g, (s, match) => { // Plural markdown, (1|singular|plural) => "1 singular"; (4|singular|plural) => "4 plural"
-        var split = match.split('|');
+        let split = match.split('|');
         return split[0] == 1 ? split[1] : split[2];
     });
 };

@@ -74,13 +74,13 @@ module.exports = (OpalBot) => {
     
     OpalBot.unprefixed.push = (...arr) => {     // It's hacky, but it works. Try not to access OpalBot.unprefixed by reference though. 
                                                 // And also try to always provide a timeout. This isn't supposed to be a replacement for commands.
-        for (var i in OpalBot.unprefixed) {
-            var original = OpalBot.unprefixed[i];
+        for (let i in OpalBot.unprefixed) {
+            let original = OpalBot.unprefixed[i];
             original.triggers = original.triggers || [original.trigger];
-            for (var k in arr) {
-                var item = arr[k];
+            for (let k in arr) {
+                let item = arr[k];
                 item.triggers = item.triggers || [item.trigger];
-                var conflicts = false,
+                let conflicts = false,
                 l = item.triggers.length;
                 while (l--) {
                     if (original.triggers.includes(item.triggers[i])) {
@@ -112,14 +112,14 @@ module.exports = (OpalBot) => {
                 }, obj.timeout);
             }
         });
-        var obj = {};
-        for (var i in OpalBot.unprefixed) { // Save methods
+        let obj = {};
+        for (let i in OpalBot.unprefixed) { // Save methods
             if (isNaN(i)) {
                 obj[i] = OpalBot.unprefixed[i];
             }
         }
         OpalBot.unprefixed = OpalBot.unprefixed.concat(arr);
-        for (var k in obj) { // Port methods
+        for (let k in obj) { // Port methods
             if (isNaN(k)) {
                 OpalBot.unprefixed[k] = obj[k];
             }
@@ -127,17 +127,17 @@ module.exports = (OpalBot) => {
     };
 
     OpalBot.unprefixed.remove = (obj) => {
-        var fn = typeof obj == 'function' ? obj : (el) => {
-            for (var i in obj) {
+        let fn = typeof obj == 'function' ? obj : (el) => {
+            for (let i in obj) {
                 if (obj[i] != el[i]) {
                     return false;
                 }
             }
             return true;
         };
-        var i = OpalBot.unprefixed.findIndex(fn);
+        let i = OpalBot.unprefixed.findIndex(fn);
         if (i == -1) return false;
-        var elem = OpalBot.unprefixed.splice(i, 1)[0]
+        let elem = OpalBot.unprefixed.splice(i, 1)[0]
         if (elem.__timeoutID) {
             clearTimeout(elem.__timeoutID);
         }
@@ -149,7 +149,7 @@ module.exports = (OpalBot) => {
 
     OpalBot.unprefixed.expect = (obj) => {
         return new Promise((res, rej) => {
-            var blocked = OpalBot.unprefixed.push({
+            let blocked = OpalBot.unprefixed.push({
                 caseinsensitive: true,
                 callback: (message, index) => res({message: message, index: index}),
                 timeout: 60000,

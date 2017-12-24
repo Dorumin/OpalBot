@@ -16,7 +16,7 @@ module.exports = (OpalBot) => {
                 .send(i18n.msg('online', 'main', OpalBot.v, 'en'))
                     .catch(OpalBot.util.log);
         client.user.setGame('v' + OpalBot.v);
-        var i = 0;
+        let i = 0;
         setInterval(n => {
             client.guilds
             .get('344422448403316748').channels
@@ -27,7 +27,7 @@ module.exports = (OpalBot) => {
     });
     
     client.on('presenceUpdate', async (old, newb) => {
-        var oldstat = old.presence.status,
+        let oldstat = old.presence.status,
         newstat = newb.presence.status;
         if (['idle', 'offline'].includes(newstat) && ['online', 'dnd'].includes(oldstat)) {
             OpalBot.util.extendDatabase('seen', {
@@ -42,7 +42,7 @@ module.exports = (OpalBot) => {
             .get('387039127083679753')
                 .send(`Joined guild ${guild} (${guild.id})`);
     
-        var prefixes = OpalBot.prefixes[message.guild.id] || OpalBot.prefixes.default;
+        let prefixes = OpalBot.prefixes[message.guild.id] || OpalBot.prefixes.default;
     
         guild.defaultChannel.send(i18n.msg('on-enter', 'main', '`' + prefixes.join('`, `') + '`', 'en'));
     });
@@ -54,13 +54,13 @@ module.exports = (OpalBot) => {
             message.reply('Add me on your server! <https://discordapp.com/oauth2/authorize?client_id=348233224293449729&scope=bot&permissions=60416>');
             return;
         }
-        var content = message.content.trim(),
+        let content = message.content.trim(),
         name = message.author.username,
         local = await OpalBot.util.getGuildLanguage(message.guild),
         prefixes = (OpalBot.prefixes[message.guild.id] || OpalBot.prefixes.default).concat([`<@${client.user.id}>`, i18n.msg('prefix', 'main', client.user.id, local)]),
         i = prefixes.length,
         permissions = message.member.permissions.serialize();
-        for (var key in OpalBot.permissionAliases) {
+        for (let key in OpalBot.permissionAliases) {
             permissions[key] = permissions[OpalBot.permissionAliases[key]];
         }
         if (!content) return;
@@ -68,13 +68,13 @@ module.exports = (OpalBot) => {
         if (message.channel.type != 'text') return;
         while (i--) {
             if (content.startsWith(prefixes[i])) {
-                var split = content.slice(prefixes[i].length).split(/\s/).filter(Boolean),
+                let split = content.slice(prefixes[i].length).split(/\s/).filter(Boolean),
                 command = split[0].toLowerCase(),
                 params = split.slice(1).join(' ');
-                for (var role in OpalBot.commands) {
+                for (let role in OpalBot.commands) {
                     if (role == 'operator' && OpalBot.operators.includes(message.author.id) && OpalBot.commands.operator.hasOwnProperty(command)) {
                         try {
-                            var command_fn = OpalBot.commands[role][command];
+                            let command_fn = OpalBot.commands[role][command];
                             if (command_fn.constructor === String) {
                                 OpalBot.commands[role][command_fn](message, params, local);
                                 return;
@@ -87,7 +87,7 @@ module.exports = (OpalBot) => {
                     }
                     if (permissions[role] && OpalBot.commands[role].hasOwnProperty(command)) {
                         try {
-                            var command_fn = OpalBot.commands[role][command];
+                            let command_fn = OpalBot.commands[role][command];
                             if (command_fn.constructor === String) {
                                 OpalBot.commands[role][command_fn](message, params, local);
                                 return;
@@ -100,7 +100,7 @@ module.exports = (OpalBot) => {
                     }
                     if (role == 'peasants' && OpalBot.commands.peasants.hasOwnProperty(command)) {
                         try {
-                            var command_fn = OpalBot.commands.peasants[command];
+                            let command_fn = OpalBot.commands.peasants[command];
                             if (command_fn.constructor === String) {
                                 OpalBot.commands.peasants[command_fn](message, params, local);
                                 return;
@@ -116,13 +116,13 @@ module.exports = (OpalBot) => {
         }
         // Unprefixed triggers, usually used by confirm and cancel commands.
         OpalBot.unprefixed.forEach(function(obj, idx) {
-            var cases = (obj.triggers || [obj.trigger]).filter(Boolean).map(hopefully_str => String(hopefully_str)),
+            let cases = (obj.triggers || [obj.trigger]).filter(Boolean).map(hopefully_str => String(hopefully_str)),
             users = obj.users || [obj.user].filter(Boolean);
             if (obj.caseinsensitive) {
                 cases = cases.map(str => str.toLowerCase());
                 content = content.toLowerCase();
             }
-            var index = cases.indexOf(content);
+            let index = cases.indexOf(content);
             if (cases.length && index == -1) return;
             if (
                 (users.length ? users.includes(message.author.id) : true) &&

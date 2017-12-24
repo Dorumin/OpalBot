@@ -31,39 +31,45 @@ function get_canvas_with_text(text, config) {
     return resized_canvas.toDataURL();
 }
 
-module.exports.quote_image = (req, res, OpalBot) => {
-    var storage = OpalBot.storage.quotes || {},
-    id = req.url.match(/\d+$/),
-    quote = id ? storage[id[0]] : null;
-    if (!quote) {
-        res.end('Not found');
-        return;
-    }
-    var base64 = quote.base64 || get_canvas_with_text(quote.content, { width: 450, background: 'white' }),
-    img = new Buffer( base64.slice(22) , 'base64');
-    quote.base64 = base64;
+module.exports = (OpalBot) => {
+    const out = {};
     
-    res.writeHead(200, {
-        'Content-Type': 'image/png',
-        'Content-Length': img.length
-    });
-    res.end(img);
-};
-
-module.exports.dl = (req, res, OpalBot) => {
-    var id = decodeURIComponent(req.url.split('/').pop()),
-    filename = id + '.mp3';
-    if (fs.existsSync(filename)) {
-        var stat = fs.statSync(filename);
+    out.quote_image = (req, res) => {
+        var storage = OpalBot.storage.quotes || {},
+        id = req.url.match(/\d+$/),
+        quote = id ? storage[id[0]] : null;
+        if (!quote) {
+            res.end('Not found');
+            return;
+        }
+        var base64 = quote.base64 || get_canvas_with_text(quote.content, { width: 450, background: 'white' }),
+        img = new Buffer( base64.slice(22) , 'base64');
+        quote.base64 = base64;
+        
         res.writeHead(200, {
-            'Content-Length': stat.size,
-            'Content-Type': 'audio/mpeg',
-            'Content-Disposition': `attachment; filename=${OpalBot.storage.mp3[id]}`
+            'Content-Type': 'image/png',
+            'Content-Length': img.length
         });
-        fs
-            .createReadStream(filename)
-            .pipe(res);
-    } else {
-        res.end('Not found');
-    }
+        res.end(img);
+    };
+
+    out.dl = (req, res) => {
+        var id = decodeURIComponent(req.url.split('/').pop()),
+        filename = id + '.mp3';
+        if (fs.existsSync(filename)) {
+            var stat = fs.statSync(filename);
+            res.writeHead(200, {
+                'Content-Length': stat.size,
+                'Content-Type': 'audio/mpeg',
+                'Content-Disposition': `attachment; filename=${OpalBot.storage.mp3[id]}`
+            });
+            fs
+                .createReadStream(filename)
+                .pipe(res);
+        } else {
+            res.end('Not found');
+        }
+    };
+
+    return out;
 };

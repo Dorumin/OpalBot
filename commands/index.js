@@ -1,14 +1,26 @@
-const fs = require('fs');
+const fs = require('fs'),
+path = require('path'),
+c = './commands';
 
-fs.readdirSync('./commands')
-    .filter(file => file != 'index.js')
-    .forEach(title => {
-        var commands = require('./' + title);
-        for (var key in commands) {
-            module.exports[key] = module.exports[key] || {};
-            module.exports[key] = {
-                ...module.exports[key],
-                ...commands[key]
-            };
-        }
-    });
+module.exports = (OpalBot) => {
+    const out = {};
+
+    fs.readdirSync(c)
+        .filter(file => !file.startsWith('.') && fs.statSync(path.join(c, file)).isDirectory())
+        .forEach(file => {
+            fs.readdirSync(path.join(c, file))
+                .forEach(command => {
+                    console.log(command);
+                    let xport = require(path.join('.' + c, file, command))(OpalBot);
+                    for (let key in xport) {
+                        out[key] = out[key] || {};
+                        out[key] = {
+                            ...out[key],
+                            ...xport[key]
+                        };
+                    }
+                });
+        });
+
+    return out;
+}

@@ -1,0 +1,6 @@
+{
+    "token": "discord bot token",
+    "dropbox_token": "dropbox api token",
+    "yt_token": "google API token",
+    "selfping_url": "http://opalbot.herokuapp.com"
+}

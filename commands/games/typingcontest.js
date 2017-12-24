@@ -187,7 +187,7 @@ module.exports = (OpalBot) => {
             try {
                 message = (await OpalBot.unprefixed.expect({
                     type: 'typingcontest',
-                    channel: _message.channel.id,
+                    channel: message.channel.id,
                     timeout: quote.content.length * 1000 / 3 + 10
                 })).message;
             } catch(e) {

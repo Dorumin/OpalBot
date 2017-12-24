@@ -66,14 +66,14 @@ module.exports = (OpalBot) => {
         pad = str => ('0' + str).slice(-2),
         year = d.getUTCFullYear(),
         month = d.getUTCMonth() + 1,
-        date = d.getUTCDate();
+        date = d.getUTCDate(),
+        bot_message,
+        index;
         chess.header('Date', `${pad(year)}.${pad(month)}.${pad(date)}`, 'White', white, 'Black', black);
         while (!chess.game_over()) {
             turn = (turn + 1) % 2;
             let history = chess.history({ verbose: true }),
-            last_move = history[history.length - 1],
-            bot_message,
-            index;
+            last_move = history[history.length - 1];
             try {
                 if (!skip) {
                     bot_message = await message.channel.send({

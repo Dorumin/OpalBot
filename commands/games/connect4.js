@@ -81,7 +81,7 @@ module.exports = (OpalBot) => {
                     }
                 }).catch(OpalBot.util.log);
                 if (players[turn] == OpalBot.client.user.id) {
-                    let best = await c4.get_best_move(),
+                    let best = await c4.get_best_move();
                     message = {
                         channel: message.channel,
                         content: best,

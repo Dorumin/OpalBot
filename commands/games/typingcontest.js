@@ -184,11 +184,12 @@ module.exports = (OpalBot) => {
             }
         }).catch(OpalBot.util.log);
         while (true) {
-            let message;
+            let _message = message,
+            message;
             try {
                 message = (await OpalBot.unprefixed.expect({
                     type: 'typingcontest',
-                    channel: message.channel.id,
+                    channel: _message.channel.id,
                     timeout: quote.content.length * 1000 / 3 + 10
                 })).message;
             } catch(e) {

@@ -1,4 +1,4 @@
-const Chess = require('../.classes/akinator.js');
+const Akinator = require('../.classes/akinator.js');
 
 module.exports = (OpalBot) => {
     const out = {},

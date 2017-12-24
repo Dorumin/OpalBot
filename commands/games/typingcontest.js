@@ -93,7 +93,7 @@ module.exports = (OpalBot) => {
                 let monospace_char = String.fromCharCode(55349) + String.fromCharCode(idx + 57335);
                 names += `\n#${monospace_char} ${obj.name}`;
                 scores += `\n${obj.wpm}`;
-                dates += '\n' + OpalBot.util.formatDate(new Date(obj.date), i18n.msg('date-format', 'typingcontest', lang));
+                dates += '\n' + OpalBot.util.formatDate(i18n.msg('date-format', 'typingcontest', lang), new Date(obj.date));
             });
             message.channel.send({
                 embed: {

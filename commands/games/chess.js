@@ -73,7 +73,6 @@ module.exports = (OpalBot) => {
             let history = chess.history({ verbose: true }),
             last_move = history[history.length - 1],
             bot_message,
-            message,
             index;
             try {
                 if (!skip) {

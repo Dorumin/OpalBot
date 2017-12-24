@@ -68,7 +68,6 @@ module.exports = (OpalBot) => {
         while (!c4.is_draw()) {
             turn = (turn + 1) % 2;
             let bot_message,
-            message,
             index;
             try {
                 bot_message = await message.channel.send({

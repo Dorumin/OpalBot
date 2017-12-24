@@ -107,6 +107,7 @@ module.exports = (OpalBot) => {
                     delete sessions[host_id]
                     return;
                 } else { // Timeout
+                    console.log(e);
                     c4.winner = c4.player_to_move == 'blue' ? 'redt' : 'bluet';
                     break;
                 }

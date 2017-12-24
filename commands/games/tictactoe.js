@@ -13,7 +13,7 @@ module.exports = (OpalBot) => {
         sessions = OpalBot.storage.tictactoe,
         pending = sessions['pending-' + chan_id],
         invited = message.mentions.users.first();
-        if (pending && pending[0] == id) {
+        if (pending && pending[0] == id || invited && invited.id == id) {
             message.reply(i18n.msg('forever-alone', 'tictactoe', lang));
             return;
         } else if (invited && invited.id == OpalBot.client.user.id) {

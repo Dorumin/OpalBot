@@ -53,7 +53,7 @@
         "banning": "Banning $1...",
         "success": "Successfully banned $1!",
         "failure": "Failed while banning $1: $2",
-        "deleted-since": "Deleted messages since $1 days ago.",
+        "deleted-since": "Deleted messages since $1 ($1|day|days) ago.",
         "reason": "Reason: $1"
     },
     "unban": {

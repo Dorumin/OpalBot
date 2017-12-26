@@ -1,6 +1,7 @@
 const request = require('request'),
 ytdl = require('ytdl-core'),
 installer = require('@ffmpeg-installer/ffmpeg'),
+config = require('../../src/config.js'),
 ffmpeg = require('fluent-ffmpeg'),
 sanitize = require('sanitize-filename'),
 fs = require('fs'),
@@ -97,6 +98,11 @@ module.exports = (OpalBot) => {
                     fields: fields
                 }
             }).catch(OpalBot.util.log);
+            return;
+        }
+
+        if (!config.selfping_url) {
+            console.log('Please set the selfping_url configuration variable or server-dependant functions will not run. mp3 aborted.');
             return;
         }
     

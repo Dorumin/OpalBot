@@ -1,4 +1,5 @@
 const request = require('request'),
+config = require('../../src/config.js'),
 req = (obj, POST) => {
     return new Promise((res, rej) => {
         (POST ? request.post : request)(obj, (e, r, body) => {
@@ -64,6 +65,10 @@ module.exports = (OpalBot) => {
     out.peasants.typingspeed = 'typingcontest';
     out.peasants.typingstart = 'typingcontest';
     out.peasants.typingcontest = async (message, content, lang) => {
+        if (!config.selfping_url) {
+            console.log('Please set the selfping_url configuration variable or server-dependant functions will not run. Typingcontest aborted.');
+            return;
+        }
         let storage = OpalBot.storage.quotes = OpalBot.storage.quotes || {},
         quote = null,
         fancy_characters = {
@@ -179,7 +184,7 @@ module.exports = (OpalBot) => {
                 title: i18n.msg('image-title', 'typingcontest', lang),
                 color: OpalBot.color,
                 image: {
-                    url: 'http://opalbot.herokuapp.com/quote_image?id=' + quote.ID // Change this if you're selfhosting
+                    url: config.selfping_url + '/quote_image?id=' + quote.ID // Change this if you're selfhosting
                 }
             }
         }).catch(OpalBot.util.log);

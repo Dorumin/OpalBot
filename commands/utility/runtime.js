@@ -23,9 +23,12 @@ module.exports = (OpalBot) => {
         p = [
             OpalBot.v,
             ...a.map(n => o[n])
-        ],
-        str = i18n.msg(k, 'runtime', ...p, lang);
-        message.channel.send(str).catch(OpalBot.util.log);
+        ];
+        if (p.length == 1 && !k) {
+            k = 's';
+            p.push('0');
+        }
+        message.channel.send(i18n.msg(k, 'runtime', ...p, lang)).catch(OpalBot.util.log);
     };
 
     return out;

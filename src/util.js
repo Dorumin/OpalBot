@@ -59,12 +59,13 @@ module.exports = (OpalBot) => {
     };
 
     out.formatDuration = (s) => {
-        let f = n => out.pad(Math.floor(n), 2, false);
+        let f = n => out.pad(Math.floor(n), 2, false),
+        split = s.toString().split('.')[1];
         return [
             f(s / 3600),
             f(s / 60 % 60),
             f(s % 60)
-        ].join(':').replace(/^(00:)+/g, '').replace(/^0+/, '');
+        ].join(':').replace(/^(00:)+/g, '').replace(/^0+/, '') + (split ? '.' + split : '');
     };
 
     out.readDuration = (str) => {

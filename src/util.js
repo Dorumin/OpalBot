@@ -69,6 +69,9 @@ module.exports = (OpalBot) => {
 
     out.readDuration = (str) => {
         if (!str) return 0;
+        if (!str.match && str[0] && str[0].match) {
+            str = str[0];
+        }
         let m = str.match(/\d+/g),
         s = 0;
         if (!m) return s;

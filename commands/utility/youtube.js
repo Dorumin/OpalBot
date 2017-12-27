@@ -26,7 +26,10 @@ module.exports = (OpalBot) => {
     
         let downloading = false,
         flags = i18n.msg('download-flags', 'youtube', lang).split('|')
-        i = flags.length;
+        i = flags.length,
+        start = content.match(new RegExp(i18n.msg('start-regex', 'mp3', lang), 'i')),
+        end = content.match(new RegExp(i18n.msg('end-regex', 'mp3', lang), 'i')),
+        add = ' ';
         while (i--) {
             if (
                 downloading = content.startsWith('--' + flags[i])
@@ -34,6 +37,16 @@ module.exports = (OpalBot) => {
                 content = content.slice(flags[i].length + 2);
                 break;
             }
+        }
+
+        if (start) {
+            add += start[0];
+            content = content.slice(0, start.index) + content.slice(start.index + start[0].length);
+        }
+
+        if (end) {
+            add += end[0];
+            content = content.slice(0, end.index) + content.slice(end.index + end[0].length);
         }
         
         let res,
@@ -52,13 +65,14 @@ module.exports = (OpalBot) => {
             body = re.body;
         } catch(e) { return; }
     
-        async function result(video) {
+        function result(video) {
             if (downloading) {
                 OpalBot.commands.peasants.mp3(message, video.id.videoId, lang, i18n, OpalBot);
                 return;
             }
             message.channel.send(`https://youtu.be/${video.id.videoId}`).catch(OpalBot.util.log);
         }
+
         let r = JSON.parse(body).items;
         if (!r.length) {
             message.channel.send(i18n.msg('no-results', 'youtube', lang)).catch(OpalBot.util.log);

@@ -61,7 +61,7 @@ get_all_ids = (config) => {
         get_ids(config.app_name, config.heroku_token),
         get_ids(config.backup_app_name, config.backup_heroku_token)
     ]);
-},s
+},
 
 scale = (ids, num, token) => {
     return new Promise((res, rej) => {

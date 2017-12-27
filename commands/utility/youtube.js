@@ -27,8 +27,6 @@ module.exports = (OpalBot) => {
         let downloading = false,
         flags = i18n.msg('download-flags', 'youtube', lang).split('|')
         i = flags.length,
-        start = content.match(new RegExp(i18n.msg('start-regex', 'mp3', lang), 'i')),
-        end = content.match(new RegExp(i18n.msg('end-regex', 'mp3', lang), 'i')),
         add = ' ';
         while (i--) {
             if (
@@ -39,11 +37,14 @@ module.exports = (OpalBot) => {
             }
         }
 
+        let start = content.match(new RegExp(i18n.msg('start-regex', 'mp3', lang), 'i'));
+
         if (start) {
             add += start[0];
             content = content.slice(0, start.index) + content.slice(start.index + start[0].length);
         }
 
+        let end = content.match(new RegExp(i18n.msg('end-regex', 'mp3', lang), 'i'));
         if (end) {
             add += end[0];
             content = content.slice(0, end.index) + content.slice(end.index + end[0].length);

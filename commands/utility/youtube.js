@@ -1,5 +1,5 @@
 const request = require('request'),
-config = require('../../config.js'),
+config = require('../../src/config.js'),
 req = (obj, POST) => {
     return new Promise((res, rej) => {
         (POST ? request.post : request)(obj, (e, r, body) => {

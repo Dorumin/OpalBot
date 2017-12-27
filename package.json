@@ -15,15 +15,15 @@
     "url": "https://github.com/Dorumin/OpalBot"
   },
   "dependencies": {
+    "@ffmpeg-installer/ffmpeg": "1.0.13",
+    "canvas": "1.6.7",
     "discord.js": "11.2.1",
     "dropbox": "2.5.12",
-    "request": "2.83.0",
     "express": "4.16.2",
-    "canvas": "1.6.7",
-    "ytdl-core": "0.18.1",
-    "@ffmpeg-installer/ffmpeg": "1.0.13",
     "fluent-ffmpeg": "2.1.2",
-    "sanitize-filename": "1.6.1"
+    "request": "^2.83.0",
+    "sanitize-filename": "1.6.1",
+    "ytdl-core": "0.18.1"
   },
   "keywords": [
     "Opal",

@@ -23,8 +23,18 @@ module.exports = (OpalBot) => {
     }).listen(config.PORT || 5000);
 
     // Set a selfping interval every 5 minutes
-    if (!config.selfping_url) return;
-    setInterval(() => {
-        request(config.selfping_url, () => {});
-    }, 1000 * 60 * 5);
+    if (config.selfping_url) {
+        setInterval(() => {
+            request(config.selfping_url, () => {});
+        }, 1000 * 60 * 5);
+    }
+
+    if (
+        config.heroku_token &&
+        config.backup_heroku_token &&
+        config.app_name && 
+        config.backup_app_name
+    ) {
+        require('./alwaysonline.js');
+    }
 };

@@ -59,7 +59,7 @@ module.exports = (OpalBot) => {
     };
 
     out.formatDuration = (s) => {
-        let f = n => out.pad('0' + Math.floor(n), 2, false);
+        let f = n => out.pad(Math.floor(n), 2, false);
         return [
             f(s / 3600),
             f(s / 60 % 60),

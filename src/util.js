@@ -44,15 +44,6 @@ module.exports = (OpalBot) => {
             return out.pad(value, s.length);
         });
     };
-
-    out.formatDuration = (s) => {
-        let f = n => out.pad('0' + Math.floor(n), 2, false);
-        return [
-            f(s / 3600),
-            f(s / 60 % 60),
-            f(s % 60)
-        ].join(':').replace(/^(00:)+/g, '').replace(/^0+/, '');
-    };
     
     out.formatDate.methodTable = {
         S: 'getUTCMilliseconds',
@@ -65,6 +56,29 @@ module.exports = (OpalBot) => {
         M: 'getUTCMonth',
         y: 'getUTCFullYear',
         Y: 'getUTCFullYear' // Alias
+    };
+
+    out.formatDuration = (s) => {
+        let f = n => out.pad('0' + Math.floor(n), 2, false);
+        return [
+            f(s / 3600),
+            f(s / 60 % 60),
+            f(s % 60)
+        ].join(':').replace(/^(00:)+/g, '').replace(/^0+/, '');
+    };
+
+    out.readDuration = (str) => {
+        if (!str) return 0;
+        let m = str.match(/\d+/g),
+        s = 0;
+        if (!m) return s;
+        m.reverse().map(Number).forEach((value, index) => {
+            while (index--) {
+                value = value * 60;
+            }
+            s += value;
+        });
+        return s;
     };
     
     out.getChannelMessages = async (channel, before, break_function) => { // break function MUST return true for the message querying to stop, truthy values don't do the trick

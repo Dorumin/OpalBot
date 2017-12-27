@@ -117,7 +117,8 @@ module.exports = (OpalBot) => {
         OpalBot.storage.mp3 = OpalBot.storage.mp3 || {};
         let info = await ytdl.getInfo(id),
         filename = id + '.mp3',
-        duration = OpalBot.util.formatDuration(info.length_seconds);
+        start = OpalBot.util.readDuration(content.match(new RegExp(i18n.msg('start-regex', 'typingcontest', lang), 'i'))),
+        end = OpalBot.util.readDuration(content.match(new RegExp(i18n.msg('end-regex', 'typingcontest', lang), 'i')));
         if (info.length_seconds > 5400) {
             message.reply(i18n.msg('too-long', 'mp3', lang));
             return;
@@ -131,9 +132,12 @@ module.exports = (OpalBot) => {
             })
         })
         .noVideo()
+        .setStartTime(start)
+        .setDuration((end || info.length_seconds) - start)
         .format('mp3')
         .on('end', async () => {
-            let stats = fs.statSync(filename);
+            let stats = fs.statSync(filename),
+            duration = OpalBot.util.formatDuration((end || info.length_seconds) - start);
             converting.delete().catch(OpalBot.util.log);
             message.channel.stopTyping();
             try { // See if the maxresdefault thumbnail is available.

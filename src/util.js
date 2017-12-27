@@ -3,8 +3,11 @@ const util = require('util');
 module.exports = (OpalBot) => {
     const out = {};
 
-    out.pad = (n, l) => {
+    out.pad = (n, l, force = true) => {
         if (typeof n != 'number') throw new TypeError('n must be a number');
+        if (!force && n.toString().length >= l) {
+            return n.toString();
+        }
         return ('0000' + n).slice(-l || -4);
     };
     
@@ -40,6 +43,15 @@ module.exports = (OpalBot) => {
             }
             return out.pad(value, s.length);
         });
+    };
+
+    out.formatDuration = (s) => {
+        let f = n => out.pad('0' + Math.floor(n), 2, false);
+        return [
+            f(s / 3600),
+            f(s / 60 % 60),
+            f(s % 60)
+        ].join(':').replace(/^(00:)+/g, '').replace(/^0+/, '');
     };
     
     out.formatDate.methodTable = {

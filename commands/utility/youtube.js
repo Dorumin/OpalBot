@@ -1,4 +1,5 @@
 const request = require('request'),
+config = require('../../config.js'),
 req = (obj, POST) => {
     return new Promise((res, rej) => {
         (POST ? request.post : request)(obj, (e, r, body) => {
@@ -43,7 +44,7 @@ module.exports = (OpalBot) => {
                 qs: {
                     part: 'snippet',
                     q: content,
-                    key: process.env.youtube_token,
+                    key: config.youtube_token,
                     type: 'video'
                 }
             });
@@ -58,8 +59,7 @@ module.exports = (OpalBot) => {
             }
             message.channel.send(`https://youtu.be/${video.id.videoId}`).catch(OpalBot.util.log);
         }
-        let r = JSON.parse(body).items,
-        titles = r.map(obj => obj.snippet.title);
+        let r = JSON.parse(body).items;
         if (!r.length) {
             message.channel.send(i18n.msg('no-results', 'youtube', lang)).catch(OpalBot.util.log);
             return;
@@ -88,8 +88,8 @@ module.exports = (OpalBot) => {
             result(r[0]);
         } else {
             let list = '';
-            for (let i in titles) {
-                list += `\n[${Number(i) + 1}] - ${titles[i]}`
+            for (let i in r) {
+                list += `\n[${Number(i) + 1}] - ${r[i].snippet.title}`
             }
             bot_message = await message.channel.send('```' + list.slice(1) + '```').catch(OpalBot.util.log);
         }

@@ -117,14 +117,7 @@ module.exports = (OpalBot) => {
         OpalBot.storage.mp3 = OpalBot.storage.mp3 || {};
         let info = await ytdl.getInfo(id),
         filename = id + '.mp3',
-        duration = ((s) => {
-            let f = n => ('0' + Math.floor(n)).slice(-2);
-            return [
-                f(s / 3600),
-                f(s / 60 % 60),
-                f(s % 60)
-            ].join(':').replace(/^(00:)+/g, '').replace(/^0+/, '');
-        })(info.length_seconds);
+        duration = OpalBot.util.formatDuration(info.length_seconds);
         if (info.length_seconds > 5400) {
             message.reply(i18n.msg('too-long', 'mp3', lang));
             return;

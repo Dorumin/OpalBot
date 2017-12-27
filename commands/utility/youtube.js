@@ -68,7 +68,7 @@ module.exports = (OpalBot) => {
     
         function result(video) {
             if (downloading) {
-                OpalBot.commands.peasants.mp3(message, video.id.videoId, lang, i18n, OpalBot);
+                OpalBot.commands.peasants.mp3(message, video.id.videoId + add, lang, i18n, OpalBot);
                 return;
             }
             message.channel.send(`https://youtu.be/${video.id.videoId}`).catch(OpalBot.util.log);

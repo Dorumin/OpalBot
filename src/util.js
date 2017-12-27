@@ -72,8 +72,14 @@ module.exports = (OpalBot) => {
         if (!str.match && str[0] && str[0].match) {
             str = str[0];
         }
-        let m = str.match(/\d+/g),
+        str = str.trim();
+        let ms = str.match(/\.\d+$/),
         s = 0;
+        if (ms) {
+            str = str.slice(0, ms.index);
+            s += Number(ms[0]);
+        }
+        let m = str.match(/\d+/g);
         if (!m) return s;
         m.reverse().map(Number).forEach((value, index) => {
             while (index--) {

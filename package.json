@@ -3,8 +3,8 @@
   "version": "0.0.3",
   "description": "Discord bot",
   "engines": {
-    "node": "8.4.0",
-    "npm": "5.3.0"
+    "node": "^8.4.0",
+    "npm": "^5.3.0"
   },
   "main": "opal.js",
   "scripts": {
@@ -15,15 +15,15 @@
     "url": "https://github.com/Dorumin/OpalBot"
   },
   "dependencies": {
-    "@ffmpeg-installer/ffmpeg": "1.0.13",
-    "canvas": "1.6.7",
-    "discord.js": "11.2.1",
-    "dropbox": "2.5.12",
-    "express": "4.16.2",
-    "fluent-ffmpeg": "2.1.2",
+    "@ffmpeg-installer/ffmpeg": "^1.0.13",
+    "canvas": "^1.6.7",
+    "discord.js": "^11.2.1",
+    "dropbox": "^2.5.12",
+    "express": "^4.16.2",
+    "fluent-ffmpeg": "^2.1.2",
     "request": "^2.83.0",
-    "sanitize-filename": "1.6.1",
-    "ytdl-core": "0.18.1"
+    "sanitize-filename": "^1.6.1",
+    "ytdl-core": "^0.18.1"
   },
   "keywords": [
     "Opal",

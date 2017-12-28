@@ -233,7 +233,7 @@
         "score": "Score",
         "wpm": "WPM",
         "errors": "Errors",
-        "date": "Date",
+        "date": "Date [dd/mm/yy]",
         "score-format": "$1 WPM *[$2 ($2|sec|secs)]*",
         "date-format": "dd/MM/yy"
     },

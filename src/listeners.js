@@ -1,3 +1,5 @@
+const config = require('./config.js');
+
 module.exports = (OpalBot) => {
     const client = OpalBot.client,
     i18n = OpalBot.i18n;
@@ -13,7 +15,9 @@ module.exports = (OpalBot) => {
         client.guilds
             .get('344422448403316748').channels
             .get('387039127083679753')
-                .send(i18n.msg('online', 'main', OpalBot.v, 'en'))
+                .send(i18n.msg('online', 'main', OpalBot.v, 'en') + ' unit: ' + (
+                    config.is_backup ? config.backup_app_name : config.app_name
+                ))
                     .catch(OpalBot.util.log);
         client.user.setGame('v' + OpalBot.v);
         let i = 0;

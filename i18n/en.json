@@ -1,6 +1,5 @@
 {
     "main": {
-        "prefix": "<@$1>, do",
         "online": "OpalBot v$1 is online!",
         "confirm": "confirm",
         "cancel": "cancel",

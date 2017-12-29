@@ -61,7 +61,7 @@ module.exports = (OpalBot) => {
         let content = message.content.trim(),
         name = message.author.username,
         local = await OpalBot.util.getGuildLanguage(message.guild),
-        prefixes = (OpalBot.prefixes[message.guild.id] || OpalBot.prefixes.default).concat([`<@${client.user.id}>`, i18n.msg('prefix', 'main', client.user.id, local)]),
+        prefixes = (OpalBot.prefixes[message.guild.id] || OpalBot.prefixes.default).concat([`<@${client.user.id}>`, `<@!${client.user.id}>, do`, `<@${client.user.id}>, do`]),
         i = prefixes.length,
         permissions = message.member.permissions.serialize();
         for (let key in OpalBot.permissionAliases) {

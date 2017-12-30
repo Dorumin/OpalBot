@@ -11,7 +11,7 @@ module.exports = (OpalBot) => {
         return ('0000' + n).slice(-l || -4);
     };
     
-    out.log = (...args) => {
+    out.log = (...args) => { // DO NOT LOG SENSITIVE INFORMATION WITH THIS, STUPID.
         let pad = out.pad;
         args.forEach(arg => {
             console.log(arg);

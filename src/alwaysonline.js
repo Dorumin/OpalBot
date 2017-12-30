@@ -1,12 +1,7 @@
 // This file isn't supposed to be pretty, or well coded, or maintainable. It's a hack.
 
 const request = require('request'),
-config = {
-    heroku_token: '644b5204-348e-493a-8511-35f4a5ff8a69',
-    backup_heroku_token: '6f6c23e6-7587-447c-95de-9aafc4b8277c',
-    app_name: 'opalbot',
-    backup_app_name: 'opalbot-loader'
-} || require('./config.js'),
+config = require('./config.js'),
 
 get_ms_until_next_swap = (d) => {
     if (
@@ -33,8 +28,6 @@ get_ids = (appname, token) => {
 
             body = JSON.parse(body);
 
-            console.log(body)
-
             request(`https://api.heroku.com/apps/${body.id}/formation`, {
                 headers: {
                     Authorization: 'Bearer ' + token,
@@ -45,8 +38,6 @@ get_ids = (appname, token) => {
                     rej(err);
                     return;
                 }
-
-                console.log(body);
 
                 body = JSON.parse(body)[0];
 
@@ -97,12 +88,12 @@ get_all_ids(config).then(arr => {
         scale( // turn on that other app
             config.is_backup ? app : backup,
             1,
-            config.is_backup ? app : backup
+            config.is_backup ? config.heroku_token : config.backup_heroku_token
         ).then(() => {
             scale( // turn off our app
                 config.is_backup ? backup : app,
                 0,
-                config.is_backup ? backup : app
+                config.is_backup ? config.backup_heroku_token : config.heroku_token
             )
         })
     }, Math.max(get_ms_until_next_swap, 0));

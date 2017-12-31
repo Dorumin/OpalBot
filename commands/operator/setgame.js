@@ -15,7 +15,7 @@ module.exports = (OpalBot) => {
             twitch = 'http://twitch.tv/' + match[1];
         }
         for (let i in types) {
-            if (content.startsWith(types[i])) {
+            if (content.toLowerCase().startsWith(types[i].toLowerCase())) {
                 type = i;
                 content = content.slice(types[i].length).trim();
                 break;

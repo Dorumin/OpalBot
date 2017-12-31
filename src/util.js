@@ -96,10 +96,11 @@ module.exports = (OpalBot) => {
         return new Promise(async (res, rej) => {
             let LIMIT = 50,
             last_id = null,
-            collection = null;
+            collection = null,
+            coll;
             while (LIMIT--) {
                 try {
-                    let coll = await channel.fetchMessages({
+                    coll = await channel.fetchMessages({
                         limit: 100,
                         ...last_id
                     });

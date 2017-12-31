@@ -19,4 +19,6 @@ module.exports = (OpalBot) => {
             }
         });
     };
+
+    return out;
 };

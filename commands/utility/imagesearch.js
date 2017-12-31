@@ -4,7 +4,7 @@ module.exports = (OpalBot) => {
     out.reverse = 'imagesearch';
     out.ris = 'imagesearch';
     out.reverseimage = 'imagesearch';
-    out.imagesearch = (message) => {
+    out.imagesearch = (message, content, lang) => {
         let user = message.mentions.users.first(),
         url = user ? user.displayAvatarURL : message;
 

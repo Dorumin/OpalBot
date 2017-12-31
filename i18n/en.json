@@ -34,6 +34,10 @@
         "title": "Result",
         "description": "$1's avatar:"
     },
+    "imagesearch": {
+        "title": "Result",
+        "description": "Click the above link to see search results."
+    },
     "kick": {
         "no-mention": "No user mention found. Please @ the user you want to kick!",
         "masochist": "you cannot kick yourself!",

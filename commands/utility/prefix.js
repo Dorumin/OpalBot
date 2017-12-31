@@ -84,7 +84,7 @@ module.exports = (OpalBot) => {
                 });
                 message.reply(i18n.msg('prefix-removed', 'prefix', content, lang)).catch(OpalBot.util.log);
                 if (!arr.length) {
-                    message.channel.send(i18n.msg('uh-oh', 'prefix', OpalBot.client.user.id, lang)).catch(OpalBot.util.log);
+                    message.channel.send(i18n.msg('uh-oh', 'prefix', OpalBot.client.user.username, lang)).catch(OpalBot.util.log);
                 }
                 break;
         }

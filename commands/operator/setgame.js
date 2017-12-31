@@ -13,6 +13,7 @@ module.exports = (OpalBot) => {
         if (match) {
             content = content.slice(0, match.index) + content.slice(match.index + match[0].length);
             twitch = 'http://twitch.tv/' + match[1];
+            type = 1;
         }
         for (let i in types) {
             if (content.toLowerCase().startsWith(types[i].toLowerCase())) {

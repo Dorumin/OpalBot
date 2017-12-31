@@ -7,7 +7,7 @@ module.exports = (OpalBot) => {
     out.operator.setpresence = 'setgame';
     out.operator.setgame = (message, content, lang) => {
         let match = content.match(/(?:https?:\/\/)?(?:[\w-]+\.)?twitch.tv\/(\w+)/),
-        twitch = null,
+        twitch = undefined,
         types = i18n.msg('types', 'setgame', lang).split('|'),
         type = 0;
         if (match) {

@@ -259,5 +259,8 @@
         "d-h-s": "$1: I last saw $2 $3 ($3|day|days), $4 ($4|hour|hours), and $5 ($5|second|seconds) ago.",
         "d-h-m": "$1: I last saw $2 $3 ($3|day|days), $4 ($4|hour|hours), and $5 ($5|minute|minutes) ago.",
         "d-h-m-s": "$1: I last saw $2 $3 ($3|day|days), $4 ($4|hour|hours), $5 ($5|minute|minutes), and $5 ($5|second|seconds) ago."
+    },
+    "setgame": {
+        "types": "PLAYING|STREAMING|LISTENING|WATCHING"
     }
 }

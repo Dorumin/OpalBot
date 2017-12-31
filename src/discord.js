@@ -16,19 +16,19 @@ module.exports = (OpalBot) => {
             
                 if (!game && this.presence.game) {
                     game = {
-                    name: this.presence.game.name,
-                    type: this.presence.game.type,
-                    url: this.presence.game.url,
+                        name: this.presence.game.name,
+                        type: this.presence.game.type,
+                        url: this.presence.game.url,
                     };
                 }
             
                 if (data.status) {
                     if (typeof data.status !== 'string') throw new TypeError('Status must be a string');
                     if (this.bot) {
-                    status = data.status;
+                        status = data.status;
                     } else {
-                    this.settings.update(Constants.UserSettingsMap.status, data.status);
-                    status = 'invisible';
+                        this.settings.update('status', data.status);
+                        status = 'invisible';
                     }
                 }
             

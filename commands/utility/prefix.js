@@ -32,16 +32,11 @@ module.exports = (OpalBot) => {
                     return;
                 }
                 if (!OpalBot.prefixes[message.guild.id]) {
-                    OpalBot.db = {
-                        name: 'data',
-                        value: {
-                            ...(await OpalBot.db).data,
-                            prefixes: {
-                                ...(await OpalBot.db).data.prefixes,
-                                [message.guild.id]: prefixes
-                            }
+                    OpalBot.util.extendDatabase('data', {
+                        prefixes: {
+                            [message.guild.id]: prefixes
                         }
-                    };
+                    });
                     OpalBot.prefixes[message.guild.id] = [...prefixes];
                 }
                 arr = OpalBot.prefixes[message.guild.id],
@@ -51,16 +46,11 @@ module.exports = (OpalBot) => {
                     return;
                 }
                 arr.push(content);
-                OpalBot.db = {
-                    name: 'data',
-                    value: {
-                        ...(await OpalBot.db).data,
-                        prefixes: {
-                            ...(await OpalBot.db).data.prefixes,
-                            [message.guild.id]: arr
-                        }
+                OpalBot.util.extendDatabase('data', {
+                    prefixes: {
+                        [message.guild.id]: arr
                     }
-                }
+                });
                 message.reply(i18n.msg('prefix-added', 'prefix', content, lang)).catch(OpalBot.util.log);
                 break;
             case remove:
@@ -73,16 +63,11 @@ module.exports = (OpalBot) => {
                     return;
                 }
                 if (!OpalBot.prefixes[message.guild.id]) {
-                    OpalBot.db = {
-                        name: 'data',
-                        value: {
-                            ...(await OpalBot.db).data,
-                            prefixes: {
-                                ...(await OpalBot.db).data.prefixes,
-                                [message.guild.id]: prefixes
-                            }
+                    OpalBot.util.extendDatabase('data', {
+                        prefixes: {
+                            [message.guild.id]: prefixes
                         }
-                    }
+                    });
                     OpalBot.prefixes[message.guild.id] = [...prefixes];
                 }
                 arr = OpalBot.prefixes[message.guild.id],
@@ -92,17 +77,15 @@ module.exports = (OpalBot) => {
                     return;
                 }
                 arr.splice(i, 1);
-                    OpalBot.db = {
-                    name: 'data',
-                    value: {
-                        ...(await OpalBot.db).data,
-                        prefixes: {
-                            ...(await OpalBot.db).data.prefixes,
-                            [message.guild.id]: arr
-                        }
+                OpalBot.util.extendDatabase('data', {
+                    prefixes: {
+                        [message.guild.id]: arr
                     }
-                }
+                });
                 message.reply(i18n.msg('prefix-removed', 'prefix', content, lang)).catch(OpalBot.util.log);
+                if (!arr.length) {
+                    message.reply(i18n.msg('uh-oh', 'prefix', OpalBot.client.user.id, lang)).catch(OpalBot.util.log);
+                }
                 break;
         }
     };

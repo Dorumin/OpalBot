@@ -79,7 +79,8 @@
         "prefix-already-in-use": "the prefix is already being used!",
         "no-prefix-found": "the prefix is not being used!",
         "prefix-added": "`$1` prefix has been successfully added for this guild!",
-        "prefix-removed": "`$1` prefix has been successfully removed from this guild!"
+        "prefix-removed": "`$1` prefix has been successfully removed from this guild!",
+        "uh-oh": "Uh-oh! You have removed all custom prefixes for this guild!\nWorry not, you can still use commands by using <@!$1> <command>"
     },
     "prune": {
         "invalid": "please input a valid number!",

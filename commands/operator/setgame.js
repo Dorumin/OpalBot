@@ -17,7 +17,7 @@ module.exports = (OpalBot) => {
         }
         for (let i in types) {
             if (content.toLowerCase().startsWith(types[i].toLowerCase())) {
-                type = i;
+                type = Number(i);
                 content = content.slice(types[i].length).trim();
                 break;
             }
@@ -28,7 +28,7 @@ module.exports = (OpalBot) => {
                 url: twitch,
                 type: type
             }
-        })
+        });
     };
 
     return out;

@@ -1,10 +1,12 @@
 module.exports = (OpalBot) => {
-    const out = {};
+    const out = {},
+    i18n = OpalBot.i18n;
 
-    out.reverse = 'imagesearch';
-    out.ris = 'imagesearch';
-    out.reverseimage = 'imagesearch';
-    out.imagesearch = (message, content, lang) => {
+    out.peasants = {};
+    out.peasants.reverse = 'imagesearch';
+    out.peasants.ris = 'imagesearch';
+    out.peasants.reverseimage = 'imagesearch';
+    out.peasants.imagesearch = (message, content, lang) => {
         let user = message.mentions.users.first(),
         url = user ? user.displayAvatarURL : message;
 

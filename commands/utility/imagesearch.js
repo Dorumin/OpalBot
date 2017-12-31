@@ -14,6 +14,7 @@ module.exports = (OpalBot) => {
             embed: {
                 color: OpalBot.color,
                 title: i18n.msg('title', 'imagesearch', lang),
+                url: 'https://www.google.com/searchbyimage?image_url=' + encodeURIComponent(url),
                 image: {
                     url: url
                 },

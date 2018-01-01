@@ -22,7 +22,7 @@ module.exports = (OpalBot) => {
         let reason = content.replace(/<@!?\d+>/g, '').trim() || undefined,
         i = users.length,
         name = i == 1 ? users[0] : i18n.msg('users', 'kick', i, lang),
-        unkick = users.find(user => user.kickable);
+        unkick = users.find(user => !user.kickable);
         if (unkick) {
             message.channel.send(i18n.msg('cannot-kick', 'kick', unkick.username, lang)).catch(OpalBot.util.log);
             return;

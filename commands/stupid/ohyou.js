@@ -49,6 +49,7 @@ module.exports = (OpalBot) => {
                     image.src = buff;
                     ctx.drawImage(image, coord.x, coord.y, coord.w, coord.w);
                 });
+                ctx.drawImage(img, 0, 0, img.width, img.height);
                 message.channel.send({
                     file: canvas.toBuffer()
                 });

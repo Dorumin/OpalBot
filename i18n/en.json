@@ -38,6 +38,9 @@
         "title": "Result",
         "description": "Click the above link to see search results."
     },
+    "ohyou": {
+        "error": "Oh no! Something has went horribly, horribly wrong! We cannot serve the image right now, sorry for the misunderstanding."
+    }
     "kick": {
         "no-mention": "No user mention found. Please @ the user you want to kick!",
         "masochist": "you cannot kick yourself!",

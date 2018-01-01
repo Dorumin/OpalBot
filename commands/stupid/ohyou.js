@@ -8,6 +8,7 @@ module.exports = (OpalBot) => {
     i18n = OpalBot.i18n;
     
     out.peasants = {};
+    out.peasants.ou = 'ohyou';
     out.peasants.ohyou = (message, content, lang) => {
         let iter = message.mentions.users.values(),
         users = [

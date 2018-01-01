@@ -3,13 +3,19 @@
 const request = require('request'),
 config = require('./config.js'),
 
-get_ms_until_next_swap = (d) => {
-    if (
-        d.getDate() < 15
-    ) {
-        return new Date(d.getFullYear(), d.getMonth(), 15).getTime() - Date.now();
+get_ms_until_next_swap = (d = new Date()) => {
+    if (config.is_backup) {
+        return (
+            d.getDate >= 15 ?
+            new Date(d.getFullYear(), d.getMonth() + 1, 1).getTime() :
+            0
+        ) - d.getTime()
     } else {
-        return new Date(d.getFullYear(), d.getMonth() + 1, 1).getTime() - Date.now();
+        return (
+            d.getDate < 15 ?
+            new Date(d.getFullYear(), d.getMonth(), 15).getTime() :
+            0
+        ) - d.getTime()
     }
 },
 
@@ -56,7 +62,7 @@ get_all_ids = (config) => {
 
 scale = (ids, num, token) => {
     return new Promise((res, rej) => {
-        request.patch(`https://api.heroku.com/apps/${ids[1]}/formation/${ids[0]}`, {
+        request.patch(`https://api.heroku.com/apps/${ids[0]}/formation/${ids[1]}`, {
             form: {
                 quantity: num,
                 size: 'Free',
@@ -96,5 +102,5 @@ get_all_ids(config).then(arr => {
                 config.is_backup ? config.backup_heroku_token : config.heroku_token
             )
         })
-    }, Math.max(get_ms_until_next_swap, 0));
+    }, Math.max(get_ms_until_next_swap(), 0));
 });

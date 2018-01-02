@@ -39,12 +39,12 @@ body {
 
 .header {
     padding: .5em;
+    cursor: pointer;
 }
 
 .name {
     overflow: hidden;
     height: 18px;
-    cursor: pointer;
 }
 
 .name:before {
@@ -64,6 +64,10 @@ body {
     overflow: hidden;
     transition: height .25s ease-out;
     height: 0;
+}
+
+.expanded .def {
+    height: inherit;
 }
 
 .def > div:first-child {

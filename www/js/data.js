@@ -45,7 +45,7 @@ window.data.en.commands.utility = [
         desc: 'Exactly what you think it does',
         aliases: ['status'],
         usage: 'opal!test',
-        description: 'Tests if the bot is online without other repercussion.'
+        description: 'Confirms the bot is online.'
     },
     {
         name: 'dice',

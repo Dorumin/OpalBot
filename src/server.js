@@ -6,20 +6,24 @@ module.exports = (OpalBot) => {
 
     OpalBot.paths = require('./paths.js')(OpalBot);
     OpalBot.server = http.createServer((req, res) => {
-        if (req.url.length - 1) {
-            OpalBot.util.log('Server request: ' + req.url);
-        }
-    
         let path = req.url.slice(1).split('?')[0].split('/')[0];
         if (OpalBot.paths[path]) {
-            OpalBot.paths[path](req, res, OpalBot);
+            OpalBot.paths[path](req, res);
             return;
         }
-        res.writeHead(200, {
-            'Content-Type': 'text/plain; charset=utf-8'
-        }); 
-        res.write(OpalBot.log);
-        res.end();
+        if (req.url.length == 1) {
+            req.url = '/index';
+        }
+        if (!req.url.includes('.')) {
+            req.url += '.html';
+        }
+        let stream = fs.createReadStream('www' + req.url);
+        stream.on('error', (err) => {
+            OpalBot.paths['404'](req, res);
+        });
+        stream.on('open', () => {
+            stream.pipe(res);
+        });
     }).listen(config.PORT || 5000);
 
     // Set a selfping interval every 5 minutes

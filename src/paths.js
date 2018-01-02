@@ -71,5 +71,21 @@ module.exports = (OpalBot) => {
         }
     };
 
+    out.debug = (req, res) => {
+        res.writeHead(200, {
+            'Content-Type': 'text/plain; charset=utf-8'
+        }); 
+        res.write(OpalBot.log);
+        res.end();
+    };
+
+    out['404'] = (req, res) => {
+        res.writeHead(200, {
+            'Content-Type': 'text/plain; charset=utf-8'
+        }); 
+        res.write('Not found.');
+        res.end();
+    };
+
     return out;
 };

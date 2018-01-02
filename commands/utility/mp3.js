@@ -124,12 +124,10 @@ module.exports = (OpalBot) => {
             message.reply(i18n.msg('too-long', 'mp3', lang));
             return;
         }
-        OpalBot.util.log(title);
         if (title) {
-            title = title[1];
+            title = title[1] || title[2];
         }
         OpalBot.storage.mp3[id] = (sanitize(title) || sanitize(info.title) || id) + '.mp3';
-        OpalBot.util.log(title);
         let converting = await message.channel.send(i18n.msg('converting', 'mp3', lang));
         message.channel.startTyping();
         ffmpeg({

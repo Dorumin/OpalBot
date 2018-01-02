@@ -8,7 +8,7 @@ module.exports = (OpalBot) => {
     out.peasants.reverseimage = 'imagesearch';
     out.peasants.imagesearch = (message, content, lang) => {
         let user = message.mentions.users.first(),
-        url = user ? user.displayAvatarURL : message;
+        url = user ? user.displayAvatarURL : content;
 
         message.channel.send({
             embed: {

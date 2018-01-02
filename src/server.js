@@ -1,4 +1,5 @@
 const http = require('http'),
+fs = require('fs'),
 request = require('request'),
 config = require('./config.js');
 

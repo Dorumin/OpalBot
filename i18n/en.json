@@ -36,7 +36,8 @@
     },
     "imagesearch": {
         "title": "Result",
-        "description": "Click the above link to see search results."
+        "description": "Click the above link to see search results.",
+        "invalid": "please provide a valid url!"
     },
     "ohyou": {
         "error": "Oh no! Something has went horribly, horribly wrong! We cannot serve the image right now, sorry for the misunderstanding."

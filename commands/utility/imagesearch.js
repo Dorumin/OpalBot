@@ -20,6 +20,8 @@ module.exports = (OpalBot) => {
                 },
                 description: i18n.msg('description', 'imagesearch', lang)
             }
+        }).catch(() => {
+            message.reply(i18n.msg('invalid', 'imagesearch', lang)).catch(OpalBot.util.log);
         });
     };
 

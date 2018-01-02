@@ -15,9 +15,9 @@ module.exports = (OpalBot) => {
         '.svg':  'image/svg+xml'
     };
     OpalBot.server = http.createServer((req, res) => {
-        let path = req.url.slice(1).split('?')[0].split('/')[0];
-        if (OpalBot.paths[path]) {
-            OpalBot.paths[path](req, res);
+        let p = req.url.slice(1).split('?')[0].split('/')[0];
+        if (OpalBot.paths[p]) {
+            OpalBot.paths[p](req, res);
             return;
         }
         if (req.url.length == 1) {

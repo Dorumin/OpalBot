@@ -81,3 +81,8 @@ body {
 .description {
     margin-bottom: .5em;
 }
+
+.optional {
+    color: green;
+    font-style: italic;
+}

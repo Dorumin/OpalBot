@@ -49,6 +49,12 @@ module.exports = (OpalBot) => {
             add += end[0];
             content = content.slice(0, end.index) + content.slice(end.index + end[0].length);
         }
+
+        let title = content.match(new RegExp(i18n.msg('title-regex', 'mp3', lang), 'i'));
+        if (title) {
+            add += title[0];
+            content = content.slice(0, title.index) + content.slice(title.index + title[0].length);
+        }
         
         let res,
         body;

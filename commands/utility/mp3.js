@@ -117,13 +117,17 @@ module.exports = (OpalBot) => {
         OpalBot.storage.mp3 = OpalBot.storage.mp3 || {};
         let info = await ytdl.getInfo(id),
         filename = id + '.mp3',
+        title = content.match(new RegExp(i18n.msg('start-regex', 'mp3', lang), 'i')),
         start = OpalBot.util.readDuration(content.match(new RegExp(i18n.msg('start-regex', 'mp3', lang), 'i'))),
         end = OpalBot.util.readDuration(content.match(new RegExp(i18n.msg('end-regex', 'mp3', lang), 'i')));
         if (info.length_seconds > 5400) {
             message.reply(i18n.msg('too-long', 'mp3', lang));
             return;
         }
-        OpalBot.storage.mp3[id] = sanitize(info.title) + '.mp3';
+        if (title) {
+            title = title[1];
+        }
+        OpalBot.storage.mp3[id] = (sanitize(title) || sanitize(info.title) || id) + '.mp3';
         let converting = await message.channel.send(i18n.msg('converting', 'mp3', lang));
         message.channel.startTyping();
         ffmpeg({

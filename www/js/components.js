@@ -57,7 +57,7 @@ function Command(obj) {
                             },
                             {
                                 tag: 'span',
-                                text: obj.usage
+                                html: util.format_usage(obj.usage)
                             }
                         ]
                     },

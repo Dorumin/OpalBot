@@ -49,10 +49,10 @@ window.data.en.commands.utility = [
     },
     {
         name: 'dice',
-        desc: 'Simulates a dice throw',
+        desc: 'Throws dice',
         aliases: ['d'],
         usage: 'opal!dice [sides<int>] [dice<int>]',
-        description: 'Throws dice. First argument decides how many sides the dice has, the second how many dice to throw.'
+        description: 'Simulates a dice throw. First argument decides how many sides the dice has, the second how many dice to throw.'
     },
     {
         name: 'choose',
@@ -79,8 +79,8 @@ window.data.en.commands.utility = [
         name: 'mp3',
         desc: 'Converts youtube videos to mp3',
         aliases: ['download', 'dl'],
-        usage: 'opal!mp3 <url|id>(required) [--start duration] [--end duration]',
-        description: 'Converts a youtube video to the mp3 format.\n\nOptionally, it takes start and end arguments to define where the file should begin and end playing.'
+        usage: 'opal!mp3 <url|id>(required) [--start duration] [--end duration] [--title "title"]',
+        description: 'Converts a youtube video to the mp3 format.\n\nOptionally, it takes start and end arguments to define where the file should begin and end playing.\n\nYou can set the file name by setting the title argument. It will always have the .mp3 extension.'
     },
     {
         name: 'seen',

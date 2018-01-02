@@ -117,7 +117,7 @@ module.exports = (OpalBot) => {
         OpalBot.storage.mp3 = OpalBot.storage.mp3 || {};
         let info = await ytdl.getInfo(id),
         filename = id + '.mp3',
-        title = content.match(new RegExp(i18n.msg('start-regex', 'mp3', lang), 'i')),
+        title = content.match(new RegExp(i18n.msg('title-regex', 'mp3', lang), 'i')) || '',
         start = OpalBot.util.readDuration(content.match(new RegExp(i18n.msg('start-regex', 'mp3', lang), 'i'))),
         end = OpalBot.util.readDuration(content.match(new RegExp(i18n.msg('end-regex', 'mp3', lang), 'i')));
         if (info.length_seconds > 5400) {

@@ -12,7 +12,8 @@ module.exports = (OpalBot) => {
         '.css':  'text/css',
         '.js':   'text/javascript',
         '.json': 'text/json',
-        '.svg':  'image/svg+xml'
+        '.svg':  'image/svg+xml',
+        '.ico': 'image/x-icon'
     };
     OpalBot.server = http.createServer((req, res) => {
         let p = req.url.slice(1).split('?')[0].split('/')[0];
@@ -31,9 +32,10 @@ module.exports = (OpalBot) => {
             OpalBot.paths['404'](req, res);
         });
         stream.on('open', () => {
-            res.writeHead(200, {
-                'Content-Type': OpalBot.contentTypes[path.extname(req.url)]
-            });
+            let ct = OpalBot.contentTypes[path.extname(req.url)];
+            res.writeHead(200, ct ? {
+                'Content-Type': ct
+            } : {});
             stream.pipe(res);
         });
     }).listen(config.PORT || 5000);

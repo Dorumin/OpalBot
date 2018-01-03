@@ -2,12 +2,6 @@ body {
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
-@media screen and (min-width: 480px) {
-    body {
-        margin: 1em 6em;
-    }
-}
-
 .command {
     border: 1px solid #ccc;
     background-color: #f5f5f5;
@@ -27,14 +21,15 @@ body {
     width: 0;
 }
 
-.command:hover .header:before {
-    width: 10%;
-    left: 45%;
-}
 
 .command.expanded .header:before {
     width: 100%;
     left: 0;
+}
+
+.command .header:hover:before {
+    width: 10%;
+    left: 45%;
 }
 
 .command.expanded .header:hover:before {
@@ -90,4 +85,44 @@ body {
 .optional {
     color: green;
     font-style: italic;
+}
+
+/* Media queries */
+@media (max-width: 320px) {
+    body {
+        margin: 1em 0;
+    }
+}
+
+@media (min-width: 321px) and (max-width: 480px) {
+    body {
+        margin: 1em 2em;
+    }
+}
+
+@media (min-width: 481px) {
+    body {
+        margin: 1em 4em;
+    }
+}
+
+@media (hover: none) {
+    .command .header:hover:before {
+        width: 0%;
+        left: 50%;
+    }
+
+    .command.expanded .header:hover:before {
+        width: 100%;
+        left: 0;
+    }
+    .command .header:active:before {
+        width: 10%;
+        left: 45%;
+    }
+
+    .command.expanded .header:active:before {
+        width: 90%;
+        left: 5%;
+    }
 }

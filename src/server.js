@@ -16,6 +16,7 @@ module.exports = (OpalBot) => {
         '.ico': 'image/x-icon'
     };
     OpalBot.server = http.createServer((req, res) => {
+        OpalBot.util.log('Server request: ' + req.url);
         let p = req.url.slice(1).split('?')[0].split('/')[0];
         if (OpalBot.paths[p]) {
             OpalBot.paths[p](req, res);

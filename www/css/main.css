@@ -74,6 +74,10 @@ body {
     white-space: pre-line;
 }
 
+.aliases, .usage {
+    font-size: 14px;
+}
+
 .aliases, .usage, .description {
     margin: 0 .5em;
 }
@@ -88,19 +92,19 @@ body {
 }
 
 /* Media queries */
-@media (max-width: 320px) {
+@media (max-width: 480px) {
     body {
         margin: 1em 0;
     }
 }
 
-@media (min-width: 321px) and (max-width: 480px) {
+@media (min-width: 481px) and (max-width: 640px) {
     body {
         margin: 1em 2em;
     }
 }
 
-@media (min-width: 481px) {
+@media (min-width: 641px) {
     body {
         margin: 1em 4em;
     }

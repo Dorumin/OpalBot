@@ -1,5 +1,5 @@
 window.data.en.commands.utility.forEach(function(cmd) {
-    document.body.appendChild(new Command(cmd));
+    document.querySelector('.content').appendChild(new Command(cmd));
 });
 
 window.addEventListener('resize', function() {

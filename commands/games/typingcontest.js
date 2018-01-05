@@ -60,10 +60,10 @@ module.exports = (OpalBot) => {
 
     out.peasants = {};
     
-    out.peasants.typestart = 'typingcontest';
-    out.peasants.typecontest = 'typingcontest';
-    out.peasants.typingspeed = 'typingcontest';
-    out.peasants.typingstart = 'typingcontest';
+    out.peasants.tc = 'typingcontest';
+    out.peasants.tr = 'typingcontest';
+    out.peasants.typeracer = 'typingcontest';
+    out.peasants.typingtest = 'typingcontest';
     out.peasants.typingcontest = async (message, content, lang) => {
         if (!config.selfping_url) {
             console.log('Please set the selfping_url configuration variable or server-dependant functions will not run. Typingcontest aborted.');
@@ -174,20 +174,35 @@ module.exports = (OpalBot) => {
                 res();
             }, 2000);
         });
-        let start_timestamp = Date.now() + 3000,
+        let starts = {
+            default: Date.now() + 3000
+        },
         finished = {},
         i = 0,
         case_sensitive = !content.includes(i18n.msg('case-insensitive', 'typingcontest', lang)),
-        punctuation = !content.includes(i18n.msg('punctuation-off', 'typingcontest', lang));
+        punctuation = !content.includes(i18n.msg('punctuation-off', 'typingcontest', lang)),
+        on_typing = (chan, user) => {
+            starts[user.id] = starts[user.id] || Date.now();
+            OpalBot.util.log(starts);
+        };
         message.channel.send({
             embed: {
                 title: i18n.msg('image-title', 'typingcontest', lang),
                 color: OpalBot.color,
                 image: {
-                    url: config.selfping_url + '/quote_image?id=' + quote.ID // Change this if you're selfhosting
+                    url: config.selfping_url + '/quote_image?id=' + quote.ID
                 }
             }
         }).catch(OpalBot.util.log);
+
+        OpalBot.handlers.typingStart = OpalBot.handlers.typingStart || [];
+        OpalBot.handlers.typingStart.push(on_typing);
+        OpalBot.storage.typingUsers = OpalBot.storage.typingUsers || {};
+        OpalBot.storage.typingUsers[message.channel.id] = OpalBot.storage.typingUsers[message.channel.id] || [];
+        OpalBot.storage.typingUsers[message.channel.id].forEach(user => {
+            starts[user.id] = Date.now();
+        });
+        OpalBot.util.log(starts);
         while (true) {
             try {
                 message = (await OpalBot.unprefixed.expect({
@@ -211,9 +226,9 @@ module.exports = (OpalBot) => {
             }
             if (lev_dist(q, c) < Math.max(20, q.length / 20)) {
                 finished[message.author.id] = true;
-                scores.push([message.author, Date.now(), message.content, message.author.typingDurationIn(message.channel)]);
+                scores.push([message.author, Date.now(), message.content]);
                 message.channel
-                    .send(i18n.msg('finished', 'typingcontest', message.author.username, ((Date.now() - start_timestamp) / 1000).toFixed(1), lang))
+                    .send(i18n.msg('finished', 'typingcontest', message.author.username, ((Date.now() - (starts[message.author.id] || starts.default)) / 1000).toFixed(1), lang))
                     .catch(OpalBot.util.log);
             }
         }
@@ -262,16 +277,9 @@ module.exports = (OpalBot) => {
                     }
                     i++;
                 }
-                let elapsed = arr[1] - start_timestamp;
-                elapsed = elapsed > arr[3] && arr[3] != -1 ? arr[3] : elapsed;
-                let secs = (elapsed / 1000).toFixed(1),
+                let elapsed = arr[1] - (starts[arr[0].id] || starts.default),
+                secs = (elapsed / 1000).toFixed(1),
                 wpm = Math.ceil( correct_words * ( 60 / ( elapsed / 1000 ) ) );
-                if (wpm > 140) {
-                    // too op - pls nerf
-                    elapsed = arr[1] - start_timestamp;
-                    secs = (elapsed / 1000).toFixed(1);
-                    wpm = Math.ceil( correct_words * ( 60 / ( elapsed / 1000 ) ) );
-                }
                 arr.wpm = `${i18n.msg('score-format', 'typingcontest', wpm, secs, lang)}\n`;
                 arr.errors = errors;
             });

@@ -1,11 +1,12 @@
 body {
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     margin: 0;
+    background-color: #f6f6f6;
 }
 
 .command {
     border: 1px solid #ccc;
-    background-color: #f5f5f5;
+    background-color: #f3f3f3;
     position: relative;
     margin-bottom: 1em;
 }
@@ -98,22 +99,39 @@ body {
     height: 3em;
 }
 
+.content {
+    background-color: white;
+    padding: 2em;
+}
+
 /* Media queries */
 @media (max-width: 480px) {
     .content {
-        padding: 1em 0;
+        padding: 1em;
     }
 }
 
 @media (min-width: 481px) and (max-width: 640px) {
     .content {
-        padding: 1em 2em;
+        margin: 0 1em;
     }
 }
 
 @media (min-width: 641px) {
     .content {
-        padding: 1em 4em;
+        margin: 0 2em;
+    }
+}
+
+@media (min-width: 801px) {
+    .content {
+        padding: 2em 3em;
+    }
+}
+
+@media (min-width: 641px) {
+    .content {
+        margin: 0 2em;
     }
 }
 

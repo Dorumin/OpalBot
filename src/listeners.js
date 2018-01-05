@@ -50,6 +50,27 @@ module.exports = (OpalBot) => {
     
         guild.defaultChannel.send(i18n.msg('on-enter', 'main', '`' + prefixes.join('`, `') + '`', 'en'));
     });
+
+    client.on('typingStart', (chan, user) => {
+        OpalBot.handlers.typingStart = OpalBot.handlers.typingStart || [];
+
+        OpalBot.handlers.typingStart.forEach(fn => fn(chan, user));
+
+        OpalBot.storage.typingUsers = OpalBot.storage.typingUsers || {};
+        if (!OpalBot.storage.typingUsers[chan.id]) {
+            OpalBot.storage.typingUsers[chan.id] = [user];
+        } else if (!OpalBot.storage.typingUsers[chan.id].includes(user)) {
+            OpalBot.storage.typingUsers[chan.id].push(user);
+        }
+    });
+    
+    client.on('typingStop', (chan, user) => {
+        if (!OpalBot.storage.typingUsers || !OpalBot.storage.typingUsers[chan.id]) return;
+        let i = OpalBot.storage.typingUsers[chan.id].indexOf(user);
+        if (i != -1) {
+            OpalBot.storage.typingUsers[chan.id].splice(i, 1);
+        }
+    });
     
     client.on('message', async (message) => {
         if (message.author.id == client.user.id || message.author.bot) return;

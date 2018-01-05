@@ -153,10 +153,10 @@ module.exports = (OpalBot) => {
         let count = 5,
         countdown = await message.channel.send(i18n.msg('countdown', 'typingcontest', count, lang)).catch(OpalBot.util.log),
         scores = {};
-        while (i--) {
+        while (count--) {
             await OpalBot.wait(1000);
-            if (i) {
-                countdown.edit(i18n.msg('countdown', 'typingcontest', i, lang)).catch(OpalBot.util.log);
+            if (count) {
+                countdown.edit(i18n.msg('countdown', 'typingcontest', count, lang)).catch(OpalBot.util.log);
             }
         }
         await countdown.delete().catch(OpalBot.util.log);

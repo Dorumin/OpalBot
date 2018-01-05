@@ -281,6 +281,7 @@ module.exports = (OpalBot) => {
                         }
                         cur++;
                     }
+                    i++;
                 }
                 let elapsed = score.time - (starts[score.user.id] || starts.default),
                 secs = (elapsed / 1000).toFixed(1),

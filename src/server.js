@@ -1,45 +1,22 @@
-const http = require('http'),
+const express = require('express'),
+cookie = require('cookie-parser'),
 path = require('path'),
 fs = require('fs'),
 request = require('request'),
-config = require('./config.js');
+config = require('./config.js'),
+root = path.dirname(require.main.filename);
 
 module.exports = (OpalBot) => {
 
-    OpalBot.paths = require('./paths.js')(OpalBot);
-    OpalBot.contentTypes = {
-        '.html': 'text/html',
-        '.css':  'text/css',
-        '.js':   'text/javascript',
-        '.json': 'text/json',
-        '.svg':  'image/svg+xml',
-        '.ico': 'image/x-icon'
-    };
-    OpalBot.server = http.createServer((req, res) => {
-        OpalBot.util.log('Server request: ' + req.url);
-        let p = req.url.slice(1).split('?')[0].split('/')[0];
-        if (OpalBot.paths[p]) {
-            OpalBot.paths[p](req, res);
-            return;
-        }
-        if (req.url.length == 1) {
-            req.url = '/index';
-        }
-        if (!req.url.includes('.')) {
-            req.url += '.html';
-        }
-        let stream = fs.createReadStream('www' + req.url);
-        stream.on('error', (err) => {
-            OpalBot.paths['404'](req, res);
-        });
-        stream.on('open', () => {
-            let ct = OpalBot.contentTypes[path.extname(req.url)];
-            res.writeHead(200, ct ? {
-                'Content-Type': ct
-            } : {});
-            stream.pipe(res);
-        });
-    }).listen(config.PORT || 5000);
+    const app = OpalBot.app = express()
+        .use(cookie())
+        .use(express.static(path.join(root, 'www')))
+        .set('views', path.join(root, 'www/views'))
+        .set('view engine', 'ejs');
+
+    require('./paths.js')(OpalBot);
+
+    app.listen(config.PORT, OpalBot.util.log);
 
     // Set a selfping interval every 5 minutes
     if (config.selfping_url) {

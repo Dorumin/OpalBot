@@ -1,5 +1,12 @@
-window.data.en.commands.utility.forEach(function(cmd) {
-    document.querySelector('.content').appendChild(new Command(cmd));
+var commands = document.querySelectorAll('.header');
+
+commands.forEach(function(command) {
+    command.addEventListener('click', function() {
+        var expanded = this.parentElement.classList.toggle('expanded'),
+        def = this.nextElementSibling;
+    
+        def.style.height = expanded ? def.scrollHeight + 'px' : '';
+    });
 });
 
 window.addEventListener('resize', function() {

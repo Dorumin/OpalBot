@@ -1,5 +1,29 @@
 const Canvas = require('canvas'),
-fs = require('fs');
+fs = require('fs'),
+data = require('../www/data.json'),
+util = {
+    escape_html: function(str) {
+        return str.replace(/['"<>&]/g, function (s) {
+            switch (s) {
+                case "'":
+                    return '&#039;';
+                case '"':
+                    return '&quot;';
+                case '<':
+                    return '&lt;';
+                case '>':
+                    return '&gt;';
+                case '&':
+                    return '&amp;';
+            }
+        })
+    },
+    format_usage: function(str) {
+    return util.escape_html(str)
+        .replace(/\(required\)/g, '<b>(required)</b>')
+        .replace(/\[.+\]/g, '<span class="optional">$&</span>');
+    }
+};
 
 function get_canvas_with_text(text, config) {
     let canvas = new Canvas(config.width, config.height || 1500);
@@ -32,9 +56,25 @@ function get_canvas_with_text(text, config) {
 }
 
 module.exports = (OpalBot) => {
-    const out = {};
+    const out = {},
+    app = OpalBot.app;
+
+    // Pages
+    app.get('/', (req, res) => res.render('pages/index'));
+
+    app.get('/commands', (req, res) => {
+        let langs = Object.keys(data),
+        lang = req.acceptsLanguages(...langs) || 'en';
+        res.render('pages/commands', {
+            data: data,
+            lang: lang,
+            commands: data[lang].commands,
+            format: util.format_usage
+        });
+    });
     
-    out.quote_image = (req, res) => {
+    // App services
+    app.get('/quote_image', (req, res) => {
         let storage = OpalBot.storage.quotes || {},
         id = req.url.match(/\d+$/),
         quote = id ? storage[id[0]] : null;
@@ -51,9 +91,9 @@ module.exports = (OpalBot) => {
             'Content-Length': img.length
         });
         res.end(img);
-    };
+    });
 
-    out.dl = (req, res) => {
+    app.get('/dl', (req, res) => {
         let id = decodeURIComponent(req.url.split('/').pop()),
         filename = id + '.mp3';
         if (fs.existsSync(filename)) {
@@ -69,23 +109,24 @@ module.exports = (OpalBot) => {
         } else {
             res.end('Not found');
         }
-    };
+    });
 
-    out.debug = (req, res) => {
+    // For testing
+    app.get('/debug', (req, res) => {
         res.writeHead(200, {
             'Content-Type': 'text/plain; charset=utf-8'
         }); 
         res.write(OpalBot.log);
         res.end();
-    };
+    });
 
-    out['404'] = (req, res) => {
-        res.writeHead(200, {
-            'Content-Type': 'text/plain; charset=utf-8'
-        }); 
-        res.write('Not found.');
-        res.end();
-    };
+    // 404
+    app.use((req, res) => {
+        res.statusCode = 404;
+        res.render('pages/index', {
+            notfound: true
+        });
+    });
 
     return out;
 };

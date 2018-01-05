@@ -59,11 +59,10 @@ module.exports = (OpalBot) => {
     i18n = OpalBot.i18n;
 
     out.peasants = {};
-    
+
     out.peasants.tc = 'typingcontest';
     out.peasants.tr = 'typingcontest';
     out.peasants.typeracer = 'typingcontest';
-    out.peasants.typetest = 'typingcontest';
     out.peasants.typingtest = 'typingcontest';
     out.peasants.typingrace = 'typingcontest';
     out.peasants.typingcontest = async (message, content, lang) => {

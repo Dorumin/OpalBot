@@ -241,7 +241,7 @@ module.exports = (OpalBot) => {
             results = '',
             incorrect = '',
             ordered = [];
-            for (var i in scores) {
+            for (let i in scores) {
                 let score = scores[i],
                 q = quote.content,
                 c = score.message.content;

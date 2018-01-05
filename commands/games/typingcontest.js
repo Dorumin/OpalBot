@@ -97,8 +97,8 @@ module.exports = (OpalBot) => {
                 return;
             }
             tc.forEach((obj, idx) => {
-                let monospace_char = String.fromCharCode(55349) + String.fromCharCode(idx + 57335);
-                names += `\n#${monospace_char} ${obj.name}`;
+                let cardinal = (i + 1) + (i == 1 ? '  ' : ' ');
+                names += `\n#${cardinal}${obj.name}`;
                 scores += `\n${obj.wpm}`;
                 dates += '\n' + OpalBot.util.formatDate(i18n.msg('date-format', 'typingcontest', lang), new Date(obj.date));
             });

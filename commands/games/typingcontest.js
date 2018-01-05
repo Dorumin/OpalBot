@@ -63,7 +63,9 @@ module.exports = (OpalBot) => {
     out.peasants.tc = 'typingcontest';
     out.peasants.tr = 'typingcontest';
     out.peasants.typeracer = 'typingcontest';
+    out.peasants.typetest = 'typingcontest';
     out.peasants.typingtest = 'typingcontest';
+    out.peasants.typingrace = 'typingcontest';
     out.peasants.typingcontest = async (message, content, lang) => {
         if (!config.selfping_url) {
             console.log('Please set the selfping_url configuration variable or server-dependant functions will not run. Typingcontest aborted.');
@@ -154,7 +156,7 @@ module.exports = (OpalBot) => {
         countdown = await message.channel.send(i18n.msg('countdown', 'typingcontest', count, lang)).catch(OpalBot.util.log),
         scores = {};
         while (count--) {
-            await OpalBot.wait(1000);
+            await OpalBot.util.wait(1000);
             if (count) {
                 countdown.edit(i18n.msg('countdown', 'typingcontest', count, lang)).catch(OpalBot.util.log);
             }

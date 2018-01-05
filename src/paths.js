@@ -87,7 +87,7 @@ module.exports = (OpalBot) => {
 
     app.get('/commands', (req, res) => {
         res.render('pages/commands', {
-            commands: data[lang].commands,
+            commands: data[req.lang].commands,
             format: util.format_usage
         });
     });

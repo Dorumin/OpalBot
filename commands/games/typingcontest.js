@@ -177,6 +177,7 @@ module.exports = (OpalBot) => {
         case_sensitive = !content.includes(i18n.msg('case-insensitive', 'typingcontest', lang)),
         punctuation = !content.includes(i18n.msg('punctuation-off', 'typingcontest', lang)),
         on_typing = (chan, user) => {
+            if (!chan.id != message.channel.id) return;
             starts[user.id] = starts[user.id] || Date.now();
             OpalBot.util.log(starts);
         },
@@ -242,7 +243,6 @@ module.exports = (OpalBot) => {
             incorrect = '',
             ordered = [];
             for (let key in scores) {
-                console.log(typeof key != 'undefined' ? key : 'undefined', scores);
                 let score = scores[key],
                 q = quote.content,
                 c = score.message.content;
@@ -285,7 +285,7 @@ module.exports = (OpalBot) => {
                 }
                 let elapsed = score.time - (starts[score.user.id] || starts.default),
                 secs = (elapsed / 1000).toFixed(1),
-                wpm = Math.ceil(correct * (60 / elapsed / 1000));
+                wpm = Math.ceil(correct * (60 / (elapsed / 1000)));
                 score.wpm = `${i18n.msg('score-format', 'typingcontest', wpm, secs, lang)}\n`;
                 score.errors = errors;
                 ordered.push(score);
@@ -295,8 +295,8 @@ module.exports = (OpalBot) => {
             ordered.sort((a, b) => {
                 return parseInt(b.wpm) - parseInt(a.wpm);
             }).forEach((score, i) => {
-                let cardinal = i + (i == 1 ? '  ' : ' ');
-                players += '\n#' + cardinal + ' ' + score.user.username;
+                let cardinal = (i + 1) + (i == 1 ? '  ' : ' ');
+                players += '\n#' + cardinal + score.user.username;
                 results += score.wpm;
                 incorrect += score.errors + '\n';
             });

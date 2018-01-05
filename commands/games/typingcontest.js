@@ -241,12 +241,8 @@ module.exports = (OpalBot) => {
             results = '',
             incorrect = '',
             ordered = [];
-            OpalBot.util.log(scores, Object.keys(scores));
-            for (let i in scores) {
-                OpalBot.util.log(typeof i);
-            }
-            for (let i in scores) {
-                let score = scores[i],
+            for (let key in scores) {
+                let score = scores[key],
                 q = quote.content,
                 c = score.message.content;
                 if (!case_sensitive) {

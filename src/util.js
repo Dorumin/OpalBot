@@ -185,6 +185,10 @@ module.exports = (OpalBot) => {
         return db;
     };
 
+    out.wait = (ms) => {
+        return new Promise(res => setTimeout(res, ms));
+    };
+
     OpalBot.util = out;
     return out;
 };

@@ -150,42 +150,18 @@ module.exports = (OpalBot) => {
         }
         storage[quote.ID] = quote;
         message.channel.send(i18n.msg('duration', 'typingcontest', Math.ceil(quote.content.length / 3 + 3), lang)).catch(OpalBot.util.log);
-        let countdown = await message.channel.send(i18n.msg('countdown', 'typingcontest', 3, lang)).catch(OpalBot.util.log),
-        scores = [];
-        setTimeout(() => {
-            countdown.edit(i18n.msg('countdown', 'typingcontest', 2, lang)).catch(OpalBot.util.log)
-        }, 1000);
-        setTimeout(() => {
-            countdown.edit(i18n.msg('countdown', 'typingcontest', 1, lang)).catch(OpalBot.util.log)
-        }, 2000);
-        setTimeout(() => {
-            if (countdown.deletable) {
-                countdown.delete().catch(OpalBot.util.log);
+        let count = 5,
+        countdown = await message.channel.send(i18n.msg('countdown', 'typingcontest', count, lang)).catch(OpalBot.util.log),
+        scores = {},
+        count = 3;
+        while (i--) {
+            await OpalBot.wait(1000);
+            if (i) {
+                countdown.edit(i18n.msg('countdown', 'typingcontest', i, lang)).catch(OpalBot.util.log);
             }
-        }, 3000);
-        setTimeout(() => {
-            OpalBot.unprefixed.remove({
-                type: 'typingcontest',
-                channel: message.channel.id
-            });
-        }, quote.content.length * 1000 / 3 + 3);
-        await new Promise(res => {
-            setTimeout(() => {
-                res();
-            }, 2000);
-        });
-        let starts = {
-            default: Date.now() + 3000
-        },
-        finished = {},
-        i = 0,
-        case_sensitive = !content.includes(i18n.msg('case-insensitive', 'typingcontest', lang)),
-        punctuation = !content.includes(i18n.msg('punctuation-off', 'typingcontest', lang)),
-        on_typing = (chan, user) => {
-            starts[user.id] = starts[user.id] || Date.now();
-            OpalBot.util.log(starts);
-        };
-        message.channel.send({
+        }
+        await countdown.delete().catch(OpalBot.util.log);
+        await message.channel.send({
             embed: {
                 title: i18n.msg('image-title', 'typingcontest', lang),
                 color: OpalBot.color,
@@ -194,6 +170,16 @@ module.exports = (OpalBot) => {
                 }
             }
         }).catch(OpalBot.util.log);
+        let starts = {
+            default: Date.now() + 3000
+        },
+        case_sensitive = !content.includes(i18n.msg('case-insensitive', 'typingcontest', lang)),
+        punctuation = !content.includes(i18n.msg('punctuation-off', 'typingcontest', lang)),
+        on_typing = (chan, user) => {
+            starts[user.id] = starts[user.id] || Date.now();
+            OpalBot.util.log(starts);
+        },
+        timeout = Date.now() + quote.content.length * 1000 / 3
 
         OpalBot.handlers.typingStart = OpalBot.handlers.typingStart || [];
         OpalBot.handlers.typingStart.push(on_typing);
@@ -203,97 +189,116 @@ module.exports = (OpalBot) => {
             starts[user.id] = Date.now();
         });
         OpalBot.util.log(starts);
-        while (true) {
-            try {
-                message = (await OpalBot.unprefixed.expect({
-                    type: 'typingcontest',
-                    channel: message.channel.id,
-                    timeout: quote.content.length * 1000 / 3 + 3000
-                })).message;
-            } catch(e) {
-                break;
-            }
-            if (finished[message.author.id]) continue;
-            let q = quote.content,
-            c = message.content;
-            if (!case_sensitive) {
-                q = q.toLowerCase();
-                c = c.toLowerCase();
-            }
-            if (!punctuation) {
-                q = q.replace(/[\.,-\/#!$%\^&\*;:{}=\-_`~()@\+\?><\[\]\+']/g, '').replace(/\s{2,}/g," ");
-                c = c.replace(/[\.,-\/#!$%\^&\*;:{}=\-_`~()@\+\?><\[\]\+']/g, '').replace(/\s{2,}/g," ");
-            }
-            if (lev_dist(q, c) < Math.max(20, q.length / 20)) {
-                finished[message.author.id] = true;
-                scores.push([message.author, Date.now(), message.content]);
-                message.channel
-                    .send(i18n.msg('finished', 'typingcontest', message.author.username, ((Date.now() - (starts[message.author.id] || starts.default)) / 1000).toFixed(1), lang))
-                    .catch(OpalBot.util.log);
-            }
-        }
-        if (!scores.length) {
-            message.channel.send(i18n.msg('snails', 'typingcontest', lang)).catch(OpalBot.util.log);
-        } else {
-            let players = '',
-            wpm_scores = '',
-            incorrect_words = '';
-            scores.forEach((arr, idx) => {
-                let q = quote.content;
+
+        const collector = message.channel.createMessageCollector(
+            m => {
+                let q = quote.content,
+                c = m.content;
                 if (!case_sensitive) {
                     q = q.toLowerCase();
-                    arr[2] = arr[2].toLowerCase();
+                    c = c.toLowerCase();
                 }
                 if (!punctuation) {
                     q = q.replace(/[\.,-\/#!$%\^&\*;:{}=\-_`~()@\+\?><\[\]\+']/g, '').replace(/\s{2,}/g," ");
-                    arr[2] = arr[2].replace(/[\.,-\/#!$%\^&\*;:{}=\-_`~()@\+\?><\[\]\+']/g, '').replace(/\s{2,}/g," ");
+                    c = c.replace(/[\.,-\/#!$%\^&\*;:{}=\-_`~()@\+\?><\[\]\+']/g, '').replace(/\s{2,}/g," ");
                 }
-                let correct_words = 0,
+                return !scores[m.author.id] && lev_dist(q, c) < Math.max(20, q.length / 20)
+            },
+            {
+                time: quote.content.length * 1000 / 3 + 20000 // Force timeout, but can end sooner
+            }
+        );
+
+        setTimeout(() => {
+            // End race if nobody is typing
+            if (OpalBot.storage.typingUsers[message.channel.id].length) {
+                collector.stop();
+            }
+        }, quote.content.length * 1000 / 3);
+
+        collector.on('collect', msg => {
+            scores[msg.author.id] = {
+                user: msg.author,
+                time: Date.now(),
+                message: msg
+            };
+            msg.channel
+                .send(i18n.msg('finished', 'typingcontest', msg.author.username, ((Date.now() - (starts[msg.author.id] || starts.default)) / 1000).toFixed(1), lang))
+                .catch(OpalBot.util.log);
+            // End race if nobody is typing, and race should have finished already
+            if (OpalBot.storage.typingUsers[message.channel.id].length && timeout < Date.now()) {
+                collector.stop();
+            }
+        });
+
+        collector.on('end', collection => {
+            if (!collection.size) {
+                delete storage[message.channel.id];
+                return message.channel.send(i18n.msg('snails', 'typingcontest', lang)).catch(OpalBot.util.log);
+            }
+            let players = '',
+            results = '',
+            incorrect = '',
+            ordered = [];
+            for (var i in scores) {
+                let score = scores[i],
+                q = quote.content,
+                c = score.message.content;
+                if (!case_sensitive) {
+                    q = q.toLowerCase();
+                    c = c.toLowerCase();
+                }
+                if (!punctuation) {
+                    q = q.replace(/[\.,-\/#!$%\^&\*;:{}=\-_`~()@\+\?><\[\]\+']/g, '').replace(/\s{2,}/g," ");
+                    c = c.replace(/[\.,-\/#!$%\^&\*;:{}=\-_`~()@\+\?><\[\]\+']/g, '').replace(/\s{2,}/g," ");
+                }
+                let correct = 0,
                 errors = 0,
-                split = arr[2].split(' ').filter(Boolean),
-                original = q.split(' ').filter(Boolean),
+                qs = q.split(' ').filter(Boolean),
+                cs = c.split(' ').filter(Boolean),
                 i = 0,
-                cur_index = 0,
-                max = Math.max(split.length, original.length);
+                cur = 0,
+                max = Math.max(qs.length, cs.length);
                 while (i < max) {
-                    if (original[cur_index] == split[i]) {
-                        cur_index++;
-                        correct_words++;
+                    if (qs[cur] == cs[i]) {
+                        cur++;
+                        correct++;
                     } else {
                         errors++;
-                        if (!correct_words--) { // don't reduce if it's already 0
-                            correct_words = 0;
+                        if (!correct--) { // don't reduce if it's already 0
+                            correct = 0;
                         }
-                        if (original[cur_index + 1] == split[i]) {
-                            cur_index++;
-                        } else if (original[cur_index - 1] == split[i]) {
-                            cur_index--;
-                        } else if (original[cur_index + 2] == split[i]) {
-                            cur_index += 2;
-                        } else if (original[cur_index - 2] == split[i]) {
-                            cur_index -= 2;
+                        if (qs[cur + 1] == cs[i]) {
+                            cur++;
+                        } else if (qs[cur - 1] == cs[i]) {
+                            cur--;
+                        } else if (qs[cur + 2] == cs[i]) {
+                            cur += 2;
+                        } else if (qs[cur - 2] == cs[i]) {
+                            cur -= 2;
                         }
-                        cur_index++;
+                        cur++;
                     }
-                    i++;
                 }
-                let elapsed = arr[1] - (starts[arr[0].id] || starts.default),
+                let elapsed = score.time - (starts[score.user.id] || starts.default),
                 secs = (elapsed / 1000).toFixed(1),
-                wpm = Math.ceil( correct_words * ( 60 / ( elapsed / 1000 ) ) );
-                arr.wpm = `${i18n.msg('score-format', 'typingcontest', wpm, secs, lang)}\n`;
-                arr.errors = errors;
-            });
-    
-            scores.sort((a, b) => {
+                wpm = Math.ceil(correct * (60 / elapsed / 1000));
+                score.wpm = `${i18n.msg('score-format', 'typingcontest', wpm, secs, lang)}\n`;
+                score.errors = errors;
+                ordered.push(score);
+            }
+
+            // Sort scores and add results to end table
+            ordered.sort((a, b) => {
                 return parseInt(b.wpm) - parseInt(a.wpm);
+            }).forEach((score, i) => {
+                let cardinal = i + (i == 1 ? '  ' : ' ');
+                players += '\n#' + cardinal + ' ' + score.user.username;
+                results += score.wpm;
+                incorrect += score.errors + '\n';
             });
-    
-            scores.forEach((arr, idx) => {
-                let monospace_char = String.fromCharCode(55349) + String.fromCharCode(idx + 57335);
-                players += '\n#' + monospace_char + ' ' + arr[0].username;
-                wpm_scores += arr.wpm;
-                incorrect_words += arr.errors + '\n';
-            });
+
+            // Post race results
             message.channel.send({
                 embed: {
                     title: i18n.msg('title', 'typingcontest', lang),
@@ -306,23 +311,25 @@ module.exports = (OpalBot) => {
                             inline: true
                         }, {
                             name: i18n.msg('score', 'typingcontest', lang),
-                            value: wpm_scores,
+                            value: results,
                             inline: true
                         }, {
                             name: i18n.msg('errors', 'typingcontest', lang),
-                            value: incorrect_words,
+                            value: incorrect,
                             inline: true
                         }
                     ]
                 }
             }).catch(OpalBot.util.log);
-            scores.forEach(async arr => {
-                let wpm = parseInt(arr.wpm),
+
+            // Update leaderboards
+            ordered.forEach(async score => {
+                let wpm = parseInt(score.wpm),
                 games = (await OpalBot.db).games || {};
                 games.typingcontest = games.typingcontest || [];
                 games.typingcontest.push({
-                    id: arr[0].id,
-                    name: arr[0].username,
+                    id: score.user.id,
+                    name: score.user.username,
                     wpm: wpm,
                     date: Date.now()
                 });
@@ -333,8 +340,10 @@ module.exports = (OpalBot) => {
                 }).slice(0, 5);
                 OpalBot.util.extendDatabase('games', games);
             });
-        }
-        delete storage[message.channel.id];
+
+            // Close session
+            delete storage[message.channel.id];
+        });
     };    
 
     return out;

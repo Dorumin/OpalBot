@@ -88,13 +88,20 @@ module.exports = (OpalBot) => {
         local = await OpalBot.util.getGuildLanguage(message.guild),
         prefixes = (OpalBot.prefixes[message.guild.id] || OpalBot.prefixes.default).concat([`<@${client.user.id}>`, `<@!${client.user.id}>`, `<@!${client.user.id}>, do`, `<@${client.user.id}>, do`]),
         i = prefixes.length,
-        permissions = message.member.permissions.serialize();
+        permissions = message.member.permissions.serialize(),
+        tu = OpalBot.storage.typingUsers;
         for (let key in OpalBot.permissionAliases) {
             permissions[key] = permissions[OpalBot.permissionAliases[key]];
         }
         if (!content) return;
         OpalBot.util.log(name + ': ' + content + (message.channel.type == 'text' ? ' @ ' + message.guild.name : ''));
         if (message.channel.type != 'text') return;
+        if (tu && tu[message.channel.id]) {
+            let idx = tu[message.channel.id].indexOf(message.author);
+            if (idx != -1) {
+                tu[message.channel.id].splice(idx, 1);
+            }
+        }
         while (i--) {
             if (content.startsWith(prefixes[i])) {
                 let split = content.slice(prefixes[i].length).split(/\s/).filter(Boolean),

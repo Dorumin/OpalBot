@@ -58,23 +58,35 @@ function get_canvas_with_text(text, config) {
 module.exports = (OpalBot) => {
     const out = {},
     app = OpalBot.app;
+    
+    // Middleware for language recognition
+    app.use((req, res, next) => {
+        let langs = Object.keys(data);
+        req.lang = req.acceptsLanguages(...langs) || 'en';
+        next();
+    });
+
+    // Middleware for not needing to add data and lang props to every render
+    app.use((req, res, next) => {
+        res._render = res.render;
+        res.render = (view, locale, cb) => {
+            locale = {
+                data: data,
+                lang: req.lang,
+                ...locale
+            };
+            return res._render(view, locale, cb);
+        };
+        next();
+    });
 
     // Pages
     app.get('/', (req, res) => {
-        let langs = Object.keys(data),
-        lang = req.acceptsLanguages(...langs) || 'en';
-        res.render('pages/index', {
-            data: data,
-            lang: lang
-        });
+        res.render('pages/index');
     });
 
     app.get('/commands', (req, res) => {
-        let langs = Object.keys(data),
-        lang = req.acceptsLanguages(...langs) || 'en';
         res.render('pages/commands', {
-            data: data,
-            lang: lang,
             commands: data[lang].commands,
             format: util.format_usage
         });

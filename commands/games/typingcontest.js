@@ -96,7 +96,7 @@ module.exports = (OpalBot) => {
                 message.channel.send(i18n.msg('no-leaderboard', 'typingcontest', lang)).catch(OpalBot.util.log);
                 return;
             }
-            tc.forEach((obj, idx) => {
+            tc.forEach((obj, i) => {
                 let cardinal = (i + 1) + (i == 1 ? '  ' : ' ');
                 names += `\n#${cardinal}${obj.name}`;
                 scores += `\n${obj.wpm}`;

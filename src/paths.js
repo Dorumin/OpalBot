@@ -60,7 +60,10 @@ module.exports = (OpalBot) => {
     app = OpalBot.app;
 
     // Pages
-    app.get('/', (req, res) => res.render('pages/index'));
+    app.get('/', (req, res) => res.render('pages/index', {
+        data: data,
+        lang: lang
+    }));
 
     app.get('/commands', (req, res) => {
         let langs = Object.keys(data),

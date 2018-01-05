@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <title>OpalBot! <%= data[lang].cmds %></title>
         <% include ../partials/header.ejs %>
     </head>
     <body>
@@ -18,7 +19,7 @@
                         </div>
                         <div class="def">
                             <div class="aliases"><b><%= data[lang].aliases %>: </b><span><%= command.aliases.join(', ') %></span></div>
-                            <div class="usage"><b><%= data[lang].usage %>: </b><span><%= format(command.usage) %></span></span>
+                            <div class="usage"><b><%= data[lang].usage %>: </b><span><%- format(command.usage) %></span></span>
                             </div><br>
                             <div class="description"><%= command.description %></div>
                         </div>

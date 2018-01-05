@@ -3,6 +3,8 @@
         "aliases": "Aliases",
         "usage": "Usage",
         "utility": "Utility commands",
+        "home": "Home",
+        "cmds": "Commands",
         "commands": {
             "utility": [
                 {

@@ -152,8 +152,7 @@ module.exports = (OpalBot) => {
         message.channel.send(i18n.msg('duration', 'typingcontest', Math.ceil(quote.content.length / 3 + 3), lang)).catch(OpalBot.util.log);
         let count = 5,
         countdown = await message.channel.send(i18n.msg('countdown', 'typingcontest', count, lang)).catch(OpalBot.util.log),
-        scores = {},
-        count = 3;
+        scores = {};
         while (i--) {
             await OpalBot.wait(1000);
             if (i) {

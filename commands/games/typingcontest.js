@@ -242,6 +242,7 @@ module.exports = (OpalBot) => {
             incorrect = '',
             ordered = [];
             for (let key in scores) {
+                console.log(typeof key != 'undefined' ? key : 'undefined', scores);
                 let score = scores[key],
                 q = quote.content,
                 c = score.message.content;

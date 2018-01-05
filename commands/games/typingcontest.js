@@ -97,7 +97,7 @@ module.exports = (OpalBot) => {
                 return;
             }
             tc.forEach((obj, i) => {
-                let cardinal = (i + 1) + (i == 1 ? '  ' : ' ');
+                let cardinal = (i + 1) + (i ? ' ' : '  ');
                 names += `\n#${cardinal}${obj.name}`;
                 scores += `\n${obj.wpm}`;
                 dates += '\n' + OpalBot.util.formatDate(i18n.msg('date-format', 'typingcontest', lang), new Date(obj.date));
@@ -295,7 +295,7 @@ module.exports = (OpalBot) => {
             ordered.sort((a, b) => {
                 return parseInt(b.wpm) - parseInt(a.wpm);
             }).forEach((score, i) => {
-                let cardinal = (i + 1) + (i == 1 ? '  ' : ' ');
+                let cardinal = (i + 1) + (i ? ' ' : '  ');
                 players += '\n#' + cardinal + score.user.username;
                 results += score.wpm;
                 incorrect += score.errors + '\n';

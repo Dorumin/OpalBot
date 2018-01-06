@@ -5,6 +5,8 @@
         "utility": "Utility commands",
         "home": "Home",
         "cmds": "Commands",
+        "not_found": "Not found",
+        "not_found_banner": "The page you requested could not be found.",
         "commands": {
             "utility": [
                 {

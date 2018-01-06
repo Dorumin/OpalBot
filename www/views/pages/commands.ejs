@@ -5,7 +5,7 @@
         <% include ../partials/header.ejs %>
     </head>
     <body>
-        <div class="navigation"></div>
+        <% include ../partials/navigation.ejs %>
         <div class="content">
             <% for (let category in commands) { %>
                 <h2><%= data[lang][category] %></h2>
@@ -27,6 +27,6 @@
                 <% } %>
             <% } %>
         </div>
-        <script type="text/javascript" src="js/init.js"></script>
+        <script type="text/javascript" src="/js/init.js"></script>
     </body>
 </html>

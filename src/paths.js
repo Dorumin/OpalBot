@@ -62,7 +62,7 @@ module.exports = (OpalBot) => {
     // Middleware for language recognition
     app.use((req, res, next) => {
         let langs = Object.keys(data);
-        req.lang = req.acceptsLanguages(...langs) || 'en';
+        req.lang = langs.includes(req.cookies.lang) ? req.cookies.lang : req.acceptsLanguages(...langs) || 'en';
         next();
     });
 
@@ -112,7 +112,7 @@ module.exports = (OpalBot) => {
         res.end(img);
     });
 
-    app.get('/dl', (req, res) => {
+    app.get('/dl/*', (req, res) => {
         let id = decodeURIComponent(req.url.split('/').pop()),
         filename = id + '.mp3';
         if (fs.existsSync(filename)) {

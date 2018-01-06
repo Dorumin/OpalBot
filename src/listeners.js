@@ -73,7 +73,7 @@ module.exports = (OpalBot) => {
     });
     
     client.on('message', async (message) => {
-        if (message.author.id == client.user.id || message.author.bot) return;
+        if (message.author.id == client.user.id || message.author.bot || !OpalBot.prefixes) return;
         if (message.channel.type == 'dm' || message.channel.type == 'group') {
             OpalBot.util.log(message.author.username + ': ' + message.content.trim());
             message.reply('Add me on your server! <https://discordapp.com/oauth2/authorize?client_id=348233224293449729&scope=bot&permissions=60416>');

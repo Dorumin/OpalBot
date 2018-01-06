@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>OpalBot! <%= data[lang].home %></title>
+        <title>OpalBot! <%= locals.notfound ? data[lang].not_found : [lang].home %></title>
         <% include ../partials/header.ejs %>
     </head>
     <body>
-        <div class="navigation"></div>
-        <% if (typeof notfound != 'undefined') { %>
-            <div class="not-found"></div>
+        <% include ../partials/navigation.ejs %>
+        <% if (locals.notfound) { %>
+            <div class="not-found"><%= data[lang].not_found_banner %></div>
         <% } %>
         <div class="content">TODO lol meanwhile see <a href="/commands">/commands</a></div>
-        <script type="text/javascript" src="js/init.js"></script>
+        <script type="text/javascript" src="/js/init.js"></script>
     </body>
 </html>

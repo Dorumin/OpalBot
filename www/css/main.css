@@ -99,9 +99,34 @@ body {
     height: 3em;
 }
 
+.logo {
+    display: inline-flex;
+    color: white;
+    height: 100%;
+    align-items: center;
+    padding: 0 .5em;
+    transition: all .5s ease;
+    cursor: pointer;
+    font-weight: bold;
+    font-family: monospace;
+    font-size: 20px;
+}
+
+.logo:hover {
+    background-color: rgba(255, 255, 255, .05);
+    text-shadow: white 0 0 3px;
+}
+
 .content {
     background-color: white;
     padding: 2em;
+}
+
+/* 404 */
+.not-found {
+    padding: 2em;
+    font-weight: bold;
+    text-align: center;
 }
 
 /* Media queries */

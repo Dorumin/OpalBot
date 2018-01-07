@@ -150,7 +150,9 @@ module.exports = (OpalBot) => {
             }
         }
         storage[quote.ID] = quote;
-        message.channel.send(i18n.msg('duration', 'typingcontest', Math.ceil(quote.content.length / 3 + 3), lang)).catch(OpalBot.util.log);
+        let stupid_chars = quote.content.match(/#%&"~-\/\(\)\^\$/g) || [],
+        timeout = quote.content.length * 1000 / 3 + 3 + stupid_chars.length;
+        message.channel.send(i18n.msg('duration', 'typingcontest', timeout, lang)).catch(OpalBot.util.log);
         let count = 5,
         countdown = await message.channel.send(i18n.msg('countdown', 'typingcontest', count, lang)).catch(OpalBot.util.log),
         scores = {};
@@ -180,7 +182,7 @@ module.exports = (OpalBot) => {
             starts[user.id] = starts[user.id] || Date.now();
             OpalBot.util.log(starts);
         },
-        timeout = Date.now() + quote.content.length * 1000 / 3
+        end = Date.now() + timeout;
 
         OpalBot.handlers.typingStart = OpalBot.handlers.typingStart || [];
         OpalBot.handlers.typingStart.push(on_typing);
@@ -206,7 +208,7 @@ module.exports = (OpalBot) => {
                 return !scores[m.author.id] && lev_dist(q, c) < Math.max(20, q.length / 20)
             },
             {
-                time: quote.content.length * 1000 / 3 + 23000 // Force timeout, but can end sooner
+                time: timeout + 20000 // Force timeout, but can end sooner
             }
         );
 
@@ -215,7 +217,7 @@ module.exports = (OpalBot) => {
             if (!OpalBot.storage.typingUsers[message.channel.id].length) {
                 collector.stop();
             }
-        }, quote.content.length * 1000 / 3 + 3);
+        }, timeout);
 
         collector.on('collect', msg => {
             scores[msg.author.id] = {
@@ -227,7 +229,7 @@ module.exports = (OpalBot) => {
                 .send(i18n.msg('finished', 'typingcontest', msg.author.username, ((Date.now() - (starts[msg.author.id] || starts.default)) / 1000).toFixed(1), lang))
                 .catch(OpalBot.util.log);
             // End race if nobody is typing, and race should have finished already
-            if (OpalBot.storage.typingUsers[message.channel.id].length && timeout < Date.now()) {
+            if (OpalBot.storage.typingUsers[message.channel.id].length && end < Date.now()) {
                 collector.stop();
             }
         });

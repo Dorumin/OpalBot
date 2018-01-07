@@ -206,16 +206,16 @@ module.exports = (OpalBot) => {
                 return !scores[m.author.id] && lev_dist(q, c) < Math.max(20, q.length / 20)
             },
             {
-                time: quote.content.length * 1000 / 3 + 20000 // Force timeout, but can end sooner
+                time: quote.content.length * 1000 / 3 + 23000 // Force timeout, but can end sooner
             }
         );
 
         setTimeout(() => {
             // End race if nobody is typing
-            if (OpalBot.storage.typingUsers[message.channel.id].length) {
+            if (!OpalBot.storage.typingUsers[message.channel.id].length) {
                 collector.stop();
             }
-        }, quote.content.length * 1000 / 3);
+        }, quote.content.length * 1000 / 3 + 3);
 
         collector.on('collect', msg => {
             scores[msg.author.id] = {

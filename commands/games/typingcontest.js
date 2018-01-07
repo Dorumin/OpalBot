@@ -152,7 +152,7 @@ module.exports = (OpalBot) => {
         storage[quote.ID] = quote;
         let stupid_chars = quote.content.match(/#%&"~-\/\(\)\^\$/g) || [],
         timeout = quote.content.length * 1000 / 3 + 3 + stupid_chars.length;
-        message.channel.send(i18n.msg('duration', 'typingcontest', timeout, lang)).catch(OpalBot.util.log);
+        message.channel.send(i18n.msg('duration', 'typingcontest', Math.ceil(timeout / 1000), lang)).catch(OpalBot.util.log);
         let count = 5,
         countdown = await message.channel.send(i18n.msg('countdown', 'typingcontest', count, lang)).catch(OpalBot.util.log),
         scores = {};

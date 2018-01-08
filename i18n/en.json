@@ -142,6 +142,7 @@
         "result": "I pick **$1**!"
     },
     "dice": {
+        "too-big": "Please input a number below the JavaScript max safe integer value (2^53 - 1)!",
         "non-zero": "please input a non-zero value!",
         "result": "$1 rolled a **$2**!",
         "results": "here are the results:",

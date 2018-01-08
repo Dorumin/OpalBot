@@ -4,6 +4,7 @@ body {
     background-color: #f6f6f6;
 }
 
+/* Commands */
 .command {
     border: 1px solid #ccc;
     background-color: #f3f3f3;
@@ -22,7 +23,6 @@ body {
     transition: all .25s ease-out;
     width: 0;
 }
-
 
 .command.expanded .header:before {
     width: 100%;
@@ -105,7 +105,7 @@ body {
     height: 100%;
     align-items: center;
     padding: 0 .5em;
-    transition: all .5s ease;
+    transition: all .2s ease;
     cursor: pointer;
     font-weight: bold;
     font-family: monospace;
@@ -160,6 +160,7 @@ body {
     }
 }
 
+/* For touch devices */
 @media (hover: none) {
     .command .header:hover:before {
         width: 0%;
@@ -178,5 +179,15 @@ body {
     .command.expanded .header:active:before {
         width: 90%;
         left: 5%;
+    }
+
+    .logo:hover {
+        background-color: inherit;
+        text-shadow: inherit;
+    }
+
+    .logo:active {
+        background-color: rgba(255, 255, 255, .05);
+        text-shadow: white 0 0 3px;
     }
 }

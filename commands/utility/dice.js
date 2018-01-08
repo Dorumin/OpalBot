@@ -5,17 +5,10 @@ module.exports = (OpalBot) => {
     out.peasants = {};
     out.peasants.d = 'dice';
     out.peasants.dice = (message, content, lang) => {
-        if (!content || isNaN(content.charAt(0))) {
-            content = '6';
-        }
-        let params = content.match(/\d+/g);
-        if (params.length == 1) {
-            params.unshift(1);
-        }
         let [
-            dice,
-            sides
-        ] = params;
+            sides = 6,
+            dice = 1
+        ] = (content.match(/\d/g) || []).map(Number);
         if (sides == 0 || dice == 0) {
             message.reply(i18n.msg('non-zero', 'dice', lang)).catch(OpalBot.util.log);
         } else if (dice == 1) {

@@ -189,7 +189,7 @@ module.exports = (OpalBot) => {
         OpalBot.storage.typingUsers = OpalBot.storage.typingUsers || {};
         OpalBot.storage.typingUsers[message.channel.id] = OpalBot.storage.typingUsers[message.channel.id] || [];
         OpalBot.storage.typingUsers[message.channel.id].forEach(user => {
-            starts[user.id] = Date.now();
+            starts[user.id] = Date.now() + 2000;
         });
         OpalBot.util.log(starts);
 

@@ -83,7 +83,7 @@
                     "name": "mp3",
                     "desc": "Converts youtube videos to mp3",
                     "aliases": ["download", "dl"],
-                    "usage": "opal!mp3 <url|id>(required) [--start duration] [--end duration] [--title \"title\"]",
+                    "usage": "opal!mp3 url|id(required) [--start duration] [--end duration] [--title \"title\"]",
                     "description": "Converts a youtube video to the mp3 format.\n\nOptionally, it takes start and end arguments to define where the file should begin and end playing.\n\nYou can set the file name by setting the title argument. It will always have the .mp3 extension."
                 },
                 {
@@ -97,7 +97,7 @@
                     "name": "imagesearch",
                     "desc": "Provides a link to google image search",
                     "aliases": ["ris", "reverseimagesearch", "reverse"],
-                    "usage": "opal!imagesearch <@user|url>(required)",
+                    "usage": "opal!imagesearch @user|url(required)",
                     "description": "Gives a link to a direct image search query with the mentioned user\"s avatar, or the url provided."
                 }
             ]

@@ -1,18 +1,23 @@
 const express = require('express'),
 cookie = require('cookie-parser'),
+compression = require('compression'),
+request = require('request'),
 path = require('path'),
 fs = require('fs'),
-request = require('request'),
 config = require('./config.js'),
 root = path.dirname(require.main.filename);
 
 module.exports = (OpalBot) => {
 
     const app = OpalBot.app = express()
+        .set('views', path.join(root, 'www/views'))
+        .set('view engine', 'ejs')
+        .set('view options', {
+            rmWhitespace: true
+        })
+        .use(compression())
         .use(cookie())
         .use(express.static(path.join(root, 'www')))
-        .set('views', path.join(root, 'www/views'))
-        .set('view engine', 'ejs');
 
     require('./paths.js')(OpalBot);
 

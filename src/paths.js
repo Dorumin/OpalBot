@@ -68,15 +68,9 @@ module.exports = (OpalBot) => {
 
     // Middleware for not needing to add data and lang props to every render
     app.use((req, res, next) => {
-        res._render = res.render;
-        res.render = (view, locale, cb) => {
-            locale = {
-                data: data,
-                lang: req.lang,
-                ...locale
-            };
-            return res._render(view, locale, cb);
-        };
+        res.locals.data = data;
+        res.locals.lang = req.lang;
+        res.locals.rmWhitespace = true;
         next();
     });
 

@@ -47,6 +47,11 @@ get_ids = (appname, token) => {
 
                 body = JSON.parse(body)[0];
 
+                if (!body) {
+                    rej();
+                    return;
+                }
+
                 res([body.app.id, body.id]);
             });
         });
@@ -100,7 +105,7 @@ get_all_ids(config).then(arr => {
                 config.IS_BACKUP ? backup : app,
                 0,
                 config.IS_BACKUP ? config.BACKUP_HEROKU_TOKEN : config.HEROKU_TOKEN
-            )
-        })
+            ).catch(console.log);
+        }).catch(console.log);
     }, Math.max(get_ms_until_next_swap(), 0));
-});
+}).catch(console.log);

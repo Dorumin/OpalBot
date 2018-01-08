@@ -101,8 +101,8 @@ module.exports = (OpalBot) => {
             return;
         }
 
-        if (!config.selfping_url) {
-            console.log('Please set the selfping_url configuration variable or server-dependant functions will not run. mp3 aborted.');
+        if (!config.SERVICE_URL) {
+            console.log('Please set the SERVICE_URL configuration variable or server-dependant functions will not run. mp3 aborted.');
             return;
         }
     

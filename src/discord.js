@@ -7,7 +7,7 @@ module.exports = (OpalBot) => {
 
     require('./listeners.js')(OpalBot);
 
-    client.login(config.token).then(() => {
+    client.login(config.TOKEN).then(() => {
         OpalBot.client.user.setPresence = function(data) {
             return new Promise(resolve => {
                 let status = this.localPresence.status || this.presence.status;

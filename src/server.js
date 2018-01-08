@@ -16,20 +16,20 @@ module.exports = (OpalBot) => {
 
     require('./paths.js')(OpalBot);
 
-    app.listen(config.PORT, OpalBot.util.log);
+    app.listen(config.PORT || 5000, OpalBot.util.log);
 
-    // Set a selfping interval every 5 minutes
-    if (config.selfping_url) {
+    // Set a self ping interval every 5 minutes
+    if (config.SERVICE_URL) {
         setInterval(() => {
-            request(config.selfping_url, () => {});
+            request(config.SERVICE_URL, () => {});
         }, 1000 * 60 * 5);
     }
 
     if (
-        config.heroku_token &&
-        config.backup_heroku_token &&
-        config.app_name && 
-        config.backup_app_name
+        config.HEROKU_TOKEN &&
+        config.BACKUP_HEROKU_TOKEN &&
+        config.APP_NAME &&
+        config.BACKUP_APP_NAME
     ) {
         require('./alwaysonline.js');
     }

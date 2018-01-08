@@ -1,6 +1,6 @@
 const config = require('./config.js'),
 Dropbox = require('dropbox'),
-database = new Dropbox({accessToken: config.dropbox_token});
+database = new Dropbox({accessToken: config.DROPBOX_TOKEN});
 
 module.exports = (OpalBot) => {
     OpalBot._db = {};

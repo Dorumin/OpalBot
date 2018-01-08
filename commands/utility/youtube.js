@@ -64,7 +64,7 @@ module.exports = (OpalBot) => {
                 qs: {
                     part: 'snippet',
                     q: content,
-                    key: config.youtube_token,
+                    key: config.YOUTUBE_TOKEN,
                     type: 'video'
                 }
             });

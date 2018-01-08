@@ -4,7 +4,7 @@ const request = require('request'),
 config = require('./config.js'),
 
 get_ms_until_next_swap = (d = new Date()) => {
-    if (config.is_backup) {
+    if (config.IS_BACKUP) {
         return (
             d.getDate() >= 15 ?
             new Date(d.getFullYear(), d.getMonth() + 1, 1).getTime() :
@@ -55,8 +55,8 @@ get_ids = (appname, token) => {
 
 get_all_ids = (config) => {
     return Promise.all([
-        get_ids(config.app_name, config.heroku_token),
-        get_ids(config.backup_app_name, config.backup_heroku_token)
+        get_ids(config.APP_NAME, config.HEROKU_TOKEN),
+        get_ids(config.BACKUP_APP_NAME, config.BACKUP_HEROKU_TOKEN)
     ]);
 },
 
@@ -92,14 +92,14 @@ get_all_ids(config).then(arr => {
 
     setTimeout(() => {
         scale( // turn on that other app
-            config.is_backup ? app : backup,
+            config.IS_BACKUP ? app : backup,
             1,
-            config.is_backup ? config.heroku_token : config.backup_heroku_token
+            config.IS_BACKUP ? config.HEROKU_TOKEN : config.BACKUP_HEROKU_TOKEN
         ).then(() => {
             scale( // turn off our app
-                config.is_backup ? backup : app,
+                config.IS_BACKUP ? backup : app,
                 0,
-                config.is_backup ? config.backup_heroku_token : config.heroku_token
+                config.IS_BACKUP ? config.BACKUP_HEROKU_TOKEN : config.HEROKU_TOKEN
             )
         })
     }, Math.max(get_ms_until_next_swap(), 0));

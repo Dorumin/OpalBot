@@ -66,8 +66,8 @@ module.exports = (OpalBot) => {
     out.peasants.typingtest = 'typingcontest';
     out.peasants.typingrace = 'typingcontest';
     out.peasants.typingcontest = async (message, content, lang) => {
-        if (!config.selfping_url) {
-            console.log('Please set the selfping_url configuration variable or server-dependant functions will not run. Typingcontest aborted.');
+        if (!config.SERVICE_URL) {
+            console.log('Please set the SERVICE_URL configuration variable or server-dependant functions will not run. Typingcontest aborted.');
             return;
         }
         let storage = OpalBot.storage.quotes = OpalBot.storage.quotes || {},
@@ -168,7 +168,7 @@ module.exports = (OpalBot) => {
                 title: i18n.msg('image-title', 'typingcontest', lang),
                 color: OpalBot.color,
                 image: {
-                    url: config.selfping_url + '/quote_image?id=' + quote.ID
+                    url: config.SERVICE_URL + '/quote_image?id=' + quote.ID
                 }
             }
         }).catch(OpalBot.util.log);

@@ -16,7 +16,7 @@ module.exports = (OpalBot) => {
             .get('344422448403316748').channels
             .get('387039127083679753')
                 .send(i18n.msg('online', 'main', OpalBot.v, 'en') + ' unit: ' + (
-                    config.is_backup ? config.backup_app_name : config.app_name
+                    config.IS_BACKUP ? config.BACKUP_APP_NAME : config.APP_NAME
                 ))
                     .catch(OpalBot.util.log);
         client.user.setGame('v' + OpalBot.v);

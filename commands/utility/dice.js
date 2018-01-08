@@ -11,8 +11,7 @@ module.exports = (OpalBot) => {
         ] = (content.match(/\d+/g) || []).map(Number);
         if (sides > Number.MAX_SAFE_INTEGER) {
             message.reply(i18n.msg('too-big', 'dice', lang)).catch(OpalBot.util.log);
-        }
-        if (sides == 0 || dice == 0) {
+        } else if (sides == 0 || dice == 0) {
             message.reply(i18n.msg('non-zero', 'dice', lang)).catch(OpalBot.util.log);
         } else if (dice == 1) {
             let result = Math.ceil(Math.random() * sides);

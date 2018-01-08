@@ -8,7 +8,7 @@ module.exports = (OpalBot) => {
         let [
             sides = 6,
             dice = 1
-        ] = (content.match(/\d/g) || []).map(Number);
+        ] = (content.match(/\d+/g) || []).map(Number);
         if (sides == 0 || dice == 0) {
             message.reply(i18n.msg('non-zero', 'dice', lang)).catch(OpalBot.util.log);
         } else if (dice == 1) {

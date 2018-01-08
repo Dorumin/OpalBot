@@ -80,7 +80,10 @@ module.exports = (OpalBot) => {
             return;
         }
         if (!message.member && message.channel.type == 'text') {
-            await message.guild.fetchMembers();
+            OpalBot.util.log(`Fetching user ${message.author.username}${message.author.discriminator}...`);
+            let d1 = Date.now();
+            message.member = await message.guild.fetchMember(message.author);
+            OpalBot.util.log(`Finished fetching ${message.author.username}! Time taken: ${Date.now() - d1}`);
             if (!message.member) return;
         }
         let content = message.content.trim(),

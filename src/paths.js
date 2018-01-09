@@ -58,6 +58,14 @@ function get_canvas_with_text(text, config) {
 module.exports = (OpalBot) => {
     const out = {},
     app = OpalBot.app;
+
+    // HTTPS-only middleware
+    app.use((req, res, next) => {
+        if (!req.secure && !req.host.includes('localhost')) {
+            return res.redirect(`https://${req.host + req.url}`);
+        }
+        next();
+    });
     
     // Middleware for language recognition
     app.use((req, res, next) => {
@@ -70,7 +78,6 @@ module.exports = (OpalBot) => {
     app.use((req, res, next) => {
         res.locals.data = data;
         res.locals.lang = req.lang;
-        res.locals.rmWhitespace = true;
         next();
     });
 

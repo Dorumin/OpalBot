@@ -61,9 +61,10 @@ module.exports = (OpalBot) => {
 
     // HTTPS-only middleware
     app.use((req, res, next) => {
-        if (!req.secure && !req.host.includes('localhost')) {
+        OpalBot.util.log(req.secure);
+        /*if (!req.secure && !req.host.includes('localhost')) {
             return res.redirect(`https://${req.host + req.url}`);
-        }
+        }*/
         next();
     });
     

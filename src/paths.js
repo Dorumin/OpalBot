@@ -64,7 +64,11 @@ module.exports = (OpalBot) => {
         if (!req.secure && !req.host.includes('localhost')) {
             return res.redirect(`https://${req.host + req.url}`);
         }
-        res.append('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
+        res
+            .append('Strict-Transport-Security', 'max-age=31536000; includeSubDomains')
+            .append('Content-Security-Policy', 'frame-ancestors "none"')
+            .append('X-Frame-Options', 'DENY');
+
         next();
     });
     

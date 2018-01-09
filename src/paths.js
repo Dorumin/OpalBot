@@ -59,15 +59,16 @@ module.exports = (OpalBot) => {
     const out = {},
     app = OpalBot.app;
 
-    // HTTPS-only middleware
+    // Security middleware
     app.use((req, res, next) => {
-        if (!req.secure && !req.host.includes('localhost')) {
+        if (!req.secure && !req.host.includes('localhost')) { // Redirect to HTTPS
             return res.redirect(`https://${req.host + req.url}`);
         }
         res
             .append('Strict-Transport-Security', 'max-age=31536000; includeSubDomains')
             .append('Content-Security-Policy', "default-src; object-src 'none'; base-uri 'none'; form-action 'self'; frame-ancestors 'none'")
             .append('X-XSS-Protection', '1; mode=block')
+            .append('X-Content-Type-Options', 'nosniff')
             .append('X-Frame-Options', 'DENY');
 
         next();

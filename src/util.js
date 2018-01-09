@@ -92,7 +92,7 @@ module.exports = (OpalBot) => {
     };
     
     out.getChannelMessages = async (channel, before, break_function) => { // break function MUST return true for the message querying to stop, truthy values don't do the trick
-        before = before || Date.now() - 1209600000; // 2 weeks
+        before = before || Date.now() - 31536000000; // 1 year
         return new Promise(async (res, rej) => {
             let LIMIT = 50,
             last_id = null,
@@ -107,7 +107,9 @@ module.exports = (OpalBot) => {
                 } catch(e) {
                     rej(e);
                 }
-                if (!collection) {
+                if (!coll.size) {
+                    break;
+                } else if (!collection) {
                     collection = coll;
                 } else {
                     collection = collection.concat(coll);

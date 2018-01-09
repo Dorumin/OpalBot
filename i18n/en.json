@@ -95,7 +95,7 @@
         "lonely": "there are no users to prune!",
         "blocked": "Cannot request for confirmation while another command is awaiting a response. Cancel it and try again!",
         "prompt": "This will kick $1 people! Type `confirm` if you're you want to proceed, or `cancel` to quit.",
-        "timed-out": "The server prune has been automatically cancelled after 30 seconds. Use the command again to try again.",
+        "timed-out": "The server prune has been automatically cancelled after 30 seconds. Use the command again to retry.",
         "cancelled": "Server prune cancelled!",
         "pruning": "Pruning...",
         "pruned": "Successfully pruned $1 ($1|user|users)!"

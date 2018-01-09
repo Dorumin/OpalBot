@@ -66,7 +66,7 @@ module.exports = (OpalBot) => {
         }
         res
             .append('Strict-Transport-Security', 'max-age=31536000; includeSubDomains')
-            .append('Content-Security-Policy', 'frame-ancestors "none"')
+            .append('Content-Security-Policy', "default-src; object-src 'none'; frame-ancestors 'none'")
             .append('X-Frame-Options', 'DENY');
 
         next();

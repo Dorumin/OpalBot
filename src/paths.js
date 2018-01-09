@@ -64,6 +64,7 @@ module.exports = (OpalBot) => {
         if (!req.secure && !req.host.includes('localhost')) {
             return res.redirect(`https://${req.host + req.url}`);
         }
+        res.append('Strict-Transport-Security', 'max-age=31536000; includeSubDomains; preload');
         next();
     });
     
@@ -106,11 +107,11 @@ module.exports = (OpalBot) => {
         img = new Buffer( base64.slice(22) , 'base64');
         quote.base64 = base64;
         
-        res.writeHead(200, {
-            'Content-Type': 'image/png',
-            'Content-Length': img.length
-        });
-        res.end(img);
+        res
+            .status(200)
+            .append('Content-Type', 'image/png')
+            .append('Content-Length', img.length)
+            .end(img);
     });
 
     app.get('/dl/*', (req, res) => {

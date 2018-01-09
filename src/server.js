@@ -10,6 +10,7 @@ root = path.dirname(require.main.filename);
 module.exports = (OpalBot) => {
 
     const app = OpalBot.app = express()
+        .set('trust proxy', true)
         .set('views', path.join(root, 'www/views'))
         .set('view engine', 'ejs')
         .set('view options', {

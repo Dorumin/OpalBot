@@ -1,5 +1,6 @@
 const express = require('express'),
 cookie = require('cookie-parser'),
+minify = require('express-minify'),
 compression = require('compression'),
 request = require('request'),
 path = require('path'),
@@ -17,6 +18,7 @@ module.exports = (OpalBot) => {
             rmWhitespace: true
         })
         .use(compression())
+        .use(minify())
         .use(cookie())
         .use(express.static(path.join(root, 'www')))
 

@@ -152,19 +152,19 @@ body {
     .content {
         padding: 1em;
     }
-
-    .navigation {
-        padding: 0 1em;
-    }
 }
 
 @media (min-width: 481px) and (max-width: 640px) {
     .content {
         margin: 0 1em;
     }
+
+    .navigation {
+        padding: 0 1em;
+    }
 }
 
-@media (min-width: 641px) {
+@media (min-width: 641px) and (max-width: 800px) {
     .content {
         margin: 0 2em;
     }

@@ -102,12 +102,12 @@ module.exports = (OpalBot) => {
     });
     
     // App services
-    app.get('/quote_image', (req, res) => {
+    app.get('/quote_image', (req, res, next) => {
         let storage = OpalBot.storage.quotes || {},
         id = req.url.match(/\d+$/),
         quote = id ? storage[id[0]] : null;
         if (!quote) {
-            res.end('Not found');
+            next();
             return;
         }
         let base64 = quote.base64 || get_canvas_with_text(quote.content, { width: 450, background: 'white' }),
@@ -121,7 +121,7 @@ module.exports = (OpalBot) => {
             .end(img);
     });
 
-    app.get('/dl/*', (req, res) => {
+    app.get('/dl/*', (req, res, next) => {
         let id = decodeURIComponent(req.url.split('/').pop()),
         filename = id + '.mp3';
         if (fs.existsSync(filename)) {
@@ -135,7 +135,7 @@ module.exports = (OpalBot) => {
                 .createReadStream(filename)
                 .pipe(res);
         } else {
-            res.end('Not found');
+            next();
         }
     });
 

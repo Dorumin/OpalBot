@@ -4,6 +4,7 @@ module.exports = (OpalBot) => {
     
     out.admin = {};
     out.admin.bulkdelete = 'purge';
+    out.admin.batchdelete = 'purge';
     out.admin.purge = async (message, content, lang) => {
         if (isNaN(parseInt(content, 10))) {
             message.reply(i18n.msg('usage', 'purge', lang));
@@ -44,7 +45,7 @@ module.exports = (OpalBot) => {
         messages.forEach(model => ids.add(model.author.id));
         let deletionStack = [],
         blocked = OpalBot.unprefixed.push({
-            type: 'akinator',
+            type: 'batchdelete',
             triggers: [
                 i18n.msg('confirm', 'main', lang),
                 i18n.msg('cancel', 'main', lang)
@@ -57,8 +58,9 @@ module.exports = (OpalBot) => {
                 if (index == 0) { // confirm
                     try {
                         deletionStack.push(message, await message.channel.send(i18n.msg('deleting', 'purge', lang)));
-                        for (let msg of messages.values()) {
-                            await msg.delete();
+                        let chunked = OpalBot.util.chunk(messages.array(), 100);
+                        for (let chunk of chunked) {
+                            await message.channel.bulkDelete(chunk);
                         }
                         deletionStack.forEach(msg => msg.delete());
                         message.channel.send(i18n.msg('deleted', 'purge', messages.size, lang));

@@ -167,6 +167,14 @@ module.exports = (OpalBot) => {
             ...obj2
         };
     };
+
+    out.chunk = (arr, size) => {
+        let r = [], i = 0, l = arr.length;
+        for (; i < l; i += size) {
+            r.push(arr.slice(i, i + size));
+        }
+        return r;
+    };
     
     out.extendDatabase = async (file, obj) => {
         const db = await OpalBot.db,

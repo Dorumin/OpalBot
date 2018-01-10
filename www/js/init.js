@@ -21,7 +21,7 @@
             def.style.transition = 'none';
             def.style.height = '';
             def.style.height = def.scrollHeight + 'px';
-            def.offsetHeight; /* trigger reflow (again) */
+            def.offsetHeight; /* trigger reflow  */
             def.style.transition = '';
         }
     }, {

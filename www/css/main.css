@@ -4,6 +4,10 @@ body {
     background-color: #f6f6f6;
 }
 
+h2 {
+    border-bottom: 1px solid #ccc;
+}
+
 /* Commands */
 .command {
     border: 1px solid #ccc;
@@ -97,6 +101,7 @@ body {
 .navigation {
     background-color: #794aa2;
     height: 3em;
+    overflow: hidden;
 }
 
 .nav-item {
@@ -155,11 +160,6 @@ body {
 }
 
 /* About */
-h2 {
-    border-bottom: 1px solid #ccc;
-    margin-right: 1em;
-}
-
 .avatar {
     height: 120px;
     border-radius: 50%;

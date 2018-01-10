@@ -110,7 +110,6 @@ body {
     font-weight: bold;
     text-decoration: none;
     float: right;
-    margin-top: 2px;
 }
 
 .nav-item:hover {
@@ -153,6 +152,54 @@ body {
     color: #888;
     text-align: right;
     font-size: 14px;
+}
+
+/* About */
+h2 {
+    border-bottom: 1px solid #ccc;
+    margin-right: 1em;
+}
+
+.avatar {
+    height: 120px;
+    border-radius: 50%;
+    border: 2px solid #794aa2;
+}
+
+.author {
+    float: right;
+}
+
+.author .avatar {
+    height: 80px;
+}
+
+.author .caption {
+    color: #999;
+    font-size: 14px;
+    text-align: center;
+    margin-top: 4px;
+}
+
+.username {
+    font-size: 20px;
+    margin-bottom: 4px;
+    display: block;
+}
+
+.username:after {
+    content: ' ♥';
+}
+
+.friend, .closure {
+    display: flex;
+    margin-top: 1em;
+    border-top: 1px solid #ccc;
+    padding-top: 1em;
+}
+
+.context {
+    margin-left: 1em;
 }
 
 /* 404 */

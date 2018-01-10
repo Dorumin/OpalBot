@@ -150,7 +150,7 @@ module.exports = (OpalBot) => {
         return false;
     }
     
-    out.mergeObjects = (obj1, obj2, soft) => {
+    out.mergeObjects = (obj1, obj2, soft) => { // Doesn't modify either object
         for (let key in obj2) {
             if (out.isPlainObject(obj2[key]) && out.isPlainObject(obj1[key])) {
                 obj2[key] = out.mergeObjects(obj1[key], obj2[key]);

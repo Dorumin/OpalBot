@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>OpalBot! About</title>
+        <% include ../partials/header.ejs %>
+    </head>
+    <body>
+        <% include ../partials/navigation.ejs %>
+        <div class="content">
+            <div class="author">
+                <img src="/img/doru.png" class="avatar">
+                <div class="caption">I made this.</div>
+            </div>
+            <h2>Why bot?</h2>
+            It's simple. One night, I decided that I would make a bot. And not any bot, I would make the most <i>kick ass bot Discord has ever seen.</i>
+            <br /><br />
+            I myself have made all of the code, but a couple of friends have helped me along the way. I would like to thank in particular:
+            <% for (var friend of data[lang].friends) {%>
+                <div class="friend">
+                    <img class="avatar" src="<%= friend.image %>">
+                    <div class="context">
+                        <div class="username"><%= friend.name %></div>
+                        <div class="caption"><%= friend.caption %></div>
+                    </div>
+                </div>
+            <% } %>
+            <div class="closure">I owe you guys big time, much love</div>
+        </div>
+        <% include ../partials/footer.ejs %>
+        <script type="text/javascript" src="/js/init.js"></script>
+    </body>
+</html>

@@ -101,6 +101,18 @@
                     "description": "Gives a link to a direct image search query with the mentioned user\"s avatar, or the url provided."
                 }
             ]
-        }
+        },
+        "friends": [
+            {
+                "name": "Sophie",
+                "caption": "For testing new features and just generally always being in the right place at the wrong time",
+                "image": "/img/sophie.png"
+            },
+            {
+                "name": "Robyn",
+                "caption": "For helping me keep my sanity (or, at least, some of it) while I was developing this thing with all of my free time",
+                "image": "/img/robyn.png"
+            }
+        ]
     }
 }

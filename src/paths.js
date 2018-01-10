@@ -1,6 +1,7 @@
 const Canvas = require('canvas'),
 fs = require('fs'),
 data = require('../www/data.json'),
+config = require('./config.js'),
 util = {
     escape_html: function(str) {
         return str.replace(/['"<>&]/g, function (s) {
@@ -61,7 +62,7 @@ module.exports = (OpalBot) => {
 
     // Security middleware
     app.use((req, res, next) => {
-        if (!req.secure && !req.host.includes('localhost')) { // Redirect to HTTPS
+        if (!req.secure && !req.hostname.includes('localhost')) { // Redirect to HTTPS
             return res.redirect(`https://${req.host + req.url}`);
         }
         res
@@ -84,8 +85,11 @@ module.exports = (OpalBot) => {
 
     // Middleware for not needing to add data and lang props to every render
     app.use((req, res, next) => {
-        res.locals.data = data;
-        res.locals.lang = req.lang;
+        res.locals = OpalBot.util.mergeObjects(res.locals, {
+            data: data,
+            lang: req.lang,
+            ...config
+        });
         next();
     });
 
@@ -99,6 +103,10 @@ module.exports = (OpalBot) => {
             commands: data[req.lang].commands,
             format: util.format_usage
         });
+    });
+
+    app.get('/about', (req, res) => {
+        res.render('pages/about');
     });
     
     // App services

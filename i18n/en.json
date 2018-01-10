@@ -54,13 +54,25 @@
         "failure": "Failed while kicking $1: $2"
     },
     "ban": {
-        "no-mention": "No user mention found. Please @ the user you want to kick!",
-        "masochist": "you cannot kick yourself!",
+        "no-mention": "No user mention found. Please @ the user you want to ban!",
+        "masochist": "you cannot ban yourself!",
         "hal-9000": "I'm sorry, $1. I'm afraid I can't do that.",
         "cannot-ban": "Cannot ban $1: missing permissions.",
         "banning": "Banning $1...",
         "success": "Successfully banned $1!",
         "failure": "Failed while banning $1: $2",
+        "deleted-since": "Deleted messages since $1 ($1|day|days) ago.",
+        "reason": "Reason: $1"
+    },
+    "softban": {
+        "no-mention": "No user mention found. Please @ the user you want to softban!",
+        "masochist": "you cannot softban yourself!",
+        "hal-9000": "I'm sorry, $1. I'm afraid I can't do that.",
+        "cannot-ban": "Cannot softban $1: missing permissions.",
+        "banning": "Softbanning $1...",
+        "success": "Successfully softbanned $1!",
+        "failure": "Failed while softbanning $1: $2",
+        "failure-unban": "Failed while unbanning $1: $2",
         "deleted-since": "Deleted messages since $1 ($1|day|days) ago.",
         "reason": "Reason: $1"
     },

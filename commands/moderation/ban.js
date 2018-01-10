@@ -15,7 +15,7 @@ module.exports = (OpalBot) => {
             return;
         }
         if (user.id == message.author.id) {
-            message.reply(i18n.msg('masochist', 'kick', lang)).catch(OpalBot.util.log);
+            message.reply(i18n.msg('masochist', 'ban', lang)).catch(OpalBot.util.log);
             return;
         }
         let guild_user = message.guild.members.find(member => member.user.id == user.id),

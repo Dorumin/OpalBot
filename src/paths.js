@@ -67,7 +67,7 @@ module.exports = (OpalBot) => {
         }
         res
             .append('Strict-Transport-Security', 'max-age=31536000; includeSubDomains')
-            .append('Content-Security-Policy', "default-src; script-src 'self'; style-src 'self'; img-src 'self'; form-action 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'")
+            .append('Content-Security-Policy', `default-src; script-src 'self'; style-src 'self'; img-src 'self'; form-action 'self'; object-src 'none'; base-uri 'none'; frame-ancestors ${config.APP_NAME}.herokuapp.com ${config.BACKUP_APP_NAME}.herokuapp.com`)
             .append('Referrer-Policy', 'same-origin')
             .append('X-XSS-Protection', '1; mode=block')
             .append('X-Content-Type-Options', 'nosniff')

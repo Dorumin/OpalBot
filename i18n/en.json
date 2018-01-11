@@ -34,6 +34,9 @@
         "title": "Result",
         "description": "$1's avatar:"
     },
+    "hello": {
+        "default": "Hello there, $1!"
+    },
     "imagesearch": {
         "title": "Result",
         "description": "Click the above link to see search results.",
@@ -143,9 +146,11 @@
         "victory": "Great! Guessed right one more time. I love playing with you!",
         "unknown-error": "Unknown error. Your session has been automatically closed."
     },
-    "flip": {
+    "coin": {
         "tails": "$1 flipped **tails**!",
-        "heads": "$1 flipped **heads**!"
+        "heads": "$1 flipped **heads**!",
+        "flipped": "$1 flipped a coin!",
+        "sideways": "... it landed sideways!"
     },
     "pick": {
         "delimiters": "; |",

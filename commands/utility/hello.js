@@ -14,7 +14,7 @@ module.exports = (OpalBot) => {
                 message.reply('hello, loser!').catch(OpalBot.util.log);
                 break;
             default:
-                message.reply('hello!').catch(OpalBot.util.log);
+                message.reply(i18n.msg(i18n.msg('default', 'hello', message.author, lang))).catch(OpalBot.util.log);
         }
     };
 

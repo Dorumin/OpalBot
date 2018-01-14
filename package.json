@@ -17,17 +17,17 @@
   "dependencies": {
     "@ffmpeg-installer/ffmpeg": "^1.0.13",
     "canvas": "^1.6.7",
+    "compression": "^1.7.1",
     "cookie-parser": "^1.4.3",
     "discord.js": "^11.2.1",
     "dropbox": "^2.5.12",
     "ejs": "^2.5.7",
     "express": "^4.16.2",
+    "express-minify": "^1.0.0",
     "fluent-ffmpeg": "^2.1.2",
     "request": "^2.83.0",
     "sanitize-filename": "^1.6.1",
-    "ytdl-core": "^0.18.7",
-    "compression": "^1.7.1",
-    "express-minify": "^1.0.0"
+    "ytdl-core": "^0.18.7"
   },
   "keywords": [
     "Opal",

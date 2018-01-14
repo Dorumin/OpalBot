@@ -115,7 +115,6 @@ module.exports = (OpalBot) => {
         id = id[id.length - 1];
         
         OpalBot.storage.mp3 = OpalBot.storage.mp3 || {};
-        console.log(id);
         let info = await ytdl.getInfo(id),
         filename = id + '.mp3',
         title = content.match(new RegExp(i18n.msg('title-regex', 'mp3', lang), 'i')) || '',

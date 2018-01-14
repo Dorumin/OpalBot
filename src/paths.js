@@ -75,6 +75,14 @@ module.exports = (OpalBot) => {
 
         next();
     });
+
+    // Cache assets
+    app.use((req, res, next) => {
+        if (req.method == 'GET' && req.url.startsWith('/img/')) {
+            res.append('Cache-Control', 'public, max-age=31557600');
+        }
+        next();
+    });
     
     // Middleware for language recognition
     app.use((req, res, next) => {
@@ -154,14 +162,6 @@ module.exports = (OpalBot) => {
         }); 
         res.write(OpalBot.log);
         res.end();
-    });
-
-    // 404
-    app.use((req, res) => {
-        res.statusCode = 404;
-        res.render('pages/index', {
-            notfound: true
-        });
     });
 
     return out;

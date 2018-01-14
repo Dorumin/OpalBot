@@ -20,9 +20,17 @@ module.exports = (OpalBot) => {
         .use(compression())
         .use(minify())
         .use(cookie())
-        .use(express.static(path.join(root, 'www')))
 
     require('./paths.js')(OpalBot);
+
+    app
+        .use(express.static(path.join(root, 'www')))
+        .use((req, res) => {
+            res.statusCode = 404;
+            res.render('pages/index', {
+                notfound: true
+            });
+        });
 
     app.listen(config.PORT || 5000, OpalBot.util.log);
 

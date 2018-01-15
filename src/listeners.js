@@ -1,4 +1,5 @@
-const config = require('./config.js');
+const config = require('./config.js'),
+start_activity = require('./activity.js');
 
 module.exports = (OpalBot) => {
     const client = OpalBot.client,
@@ -19,7 +20,6 @@ module.exports = (OpalBot) => {
                     config.IS_BACKUP ? config.BACKUP_APP_NAME : config.APP_NAME
                 ))
                     .catch(OpalBot.util.log);
-        client.user.setGame('v' + OpalBot.v);
         let i = 0;
         setInterval(n => {
             client.guilds
@@ -28,6 +28,8 @@ module.exports = (OpalBot) => {
                 .send(`Bot has been up for ${++i} hours without idling or crashing!`)
                     .catch(OpalBot.util.log);
         }, 3600000);
+
+        start_activity(OpalBot);
     });
     
     client.on('presenceUpdate', async (old, newb) => {

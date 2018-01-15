@@ -6,6 +6,7 @@ next_activity = (OpalBot, i = -1) => {
         i = 0;
     }
     const activity = activities[i];
+    OpalBot.util.log('SET ACTIVITY:', activity);
     OpalBot.client.user.setActivity(activity.name, {
         url: activity.url,
         type: activity.type

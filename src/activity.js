@@ -1,8 +1,8 @@
 const config = require('./config.js'),
 activities = typeof config.ACTIVITIES == 'string' ? JSON.parse(config.ACTIVITIES) : config.ACTIVITIES,
-next_activity = (OpalBot, i = 0) => {
+next_activity = (OpalBot, i = -1) => {
     if (!activities || !activities.length) return;
-    if (activities.length == i++) {
+    if (activities.length == ++i) {
         i = 0;
     }
     const activity = activities[i];

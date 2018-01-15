@@ -168,8 +168,8 @@ h2 {
 
 /* About */
 .avatar {
-    height: 120px;
-    width: 120px;
+    min-height: 120px;
+    min-width: 120px;
     border-radius: 50%;
     border: 2px solid #794aa2;
 }
@@ -179,8 +179,8 @@ h2 {
 }
 
 .author .avatar {
-    height: 80px;
-    width: 80px;
+    min-height: 80px;
+    min-width: 80px;
 }
 
 .author .caption {

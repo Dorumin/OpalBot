@@ -1,7 +1,11 @@
 const config = require('./config.js'),
-activities = typeof config.activities == 'string' ? JSON.parse(config.activities) : config.activities,
-next_activity = (OpalBot, i = -1) => {
-    const activity = activities[++i];
+activities = typeof config.ACTIVITIES == 'string' ? JSON.parse(config.ACTIVITIES) : config.ACTIVITIES,
+next_activity = (OpalBot, i = 0) => {
+    if (!activities || !activities.length) return;
+    if (activities.length == i++) {
+        i = 0;
+    }
+    const activity = activities[i];
     OpalBot.client.user.setActivity(activity.name, {
         url: activity.url,
         type: activity.type

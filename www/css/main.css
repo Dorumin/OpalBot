@@ -50,7 +50,9 @@ h2 {
 
 .name {
     overflow: hidden;
+    text-overflow: ellipsis;
     height: 18px;
+    display: flex;
 }
 
 .name:before {
@@ -64,6 +66,11 @@ h2 {
     color: #777;
     font-size: 12px;
     margin-top: 2px;
+    margin-left: auto;
+    padding-left: 1em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .def {
@@ -162,6 +169,7 @@ h2 {
 /* About */
 .avatar {
     height: 120px;
+    width: 120px;
     border-radius: 50%;
     border: 2px solid #794aa2;
 }
@@ -172,6 +180,7 @@ h2 {
 
 .author .avatar {
     height: 80px;
+    width: 80px;
 }
 
 .author .caption {

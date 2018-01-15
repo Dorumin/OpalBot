@@ -98,7 +98,7 @@
                     "desc": "Provides a link to google image search",
                     "aliases": ["ris", "reverseimagesearch", "reverse"],
                     "usage": "opal!imagesearch @user|url(required)",
-                    "description": "Gives a link to a direct image search query with the mentioned user\"s avatar, or the url provided."
+                    "description": "Gives a link to a direct image search query with the mentioned user's avatar, or the url provided."
                 }
             ]
         },

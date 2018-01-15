@@ -176,6 +176,7 @@ h2 {
 
 .author {
     float: right;
+    margin: 0 0 1em 1em;
 }
 
 .author .avatar {
@@ -202,6 +203,7 @@ h2 {
 
 .friend, .closure {
     display: flex;
+    align-items: flex-start;
     margin-top: 1em;
     border-top: 1px solid #ccc;
     padding-top: 1em;

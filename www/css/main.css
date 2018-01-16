@@ -8,6 +8,10 @@ h2 {
     border-bottom: 1px solid #ccc;
 }
 
+a {
+    text-decoration: none;
+}
+
 /* Commands */
 .command {
     border: 1px solid #ccc;
@@ -144,6 +148,7 @@ h2 {
     color: #794aa2;
     border: 1px solid #ccc;
     margin-left: .5em;
+    transition: none;
 }
 
 .content {
@@ -221,6 +226,20 @@ h2 {
 }
 
 /* Media queries */
+@media (max-width: 300px) {
+    .nav-item.add {
+        width: 10px;
+        color: white;
+        overflow: hidden;
+    }
+
+    .nav-item.add:before {
+        content: '+';
+        color: #794aa2;
+        padding-top: 3px;
+    }
+}
+
 @media (max-width: 480px) {
     .content {
         padding: 1em;

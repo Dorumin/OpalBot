@@ -1,10 +1,11 @@
 {
     "manifest_version": 2,
-    "name": "OpalBot",
+    "name": "OpalBot! Your Discord Bot",
+    "short_name": "OpalBot",
     "version": "0.0.3",
     "author": "Dorumin",
     "default_locale": "en",
-    "description": "The fun discord bot!",
+    "description": "Your personal discord bot!",
     "dir": "ltr",
     "icons": [
         {

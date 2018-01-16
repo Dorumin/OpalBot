@@ -1,0 +1,7 @@
+User-Agent: *
+Disallow: /dashboard
+Disallow: /login
+Disallow: /ajax
+
+User-Agent: 🤖
+Disallow: /humans.txt

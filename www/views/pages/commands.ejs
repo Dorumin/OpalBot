@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>OpalBot! <%= data[lang].cmds %></title>
+        <title>OpalBot! <%= $`cmds` %></title>
         <% include ../partials/header.ejs %>
     </head>
     <body>
@@ -9,8 +9,8 @@
         <div class="content">
             <% for (let category in commands) { %>
                 <h2><%= data[lang][category] %></h2>
-                <% 
-                    for (let cmd in commands[category]) { 
+                <%
+                    for (let cmd in commands[category]) {
                     let command = commands[category][cmd];
                 %>
                     <div class="command">
@@ -18,8 +18,8 @@
                             <div class="name"><b><%= command.name %></b><span class="desc"><%= command.desc %></span></div>
                         </div>
                         <div class="def">
-                            <div class="aliases"><b><%= data[lang].aliases %>: </b><span><%= command.aliases.join(', ') %></span></div>
-                            <div class="usage"><b><%= data[lang].usage %>: </b><span><%- format(command.usage) %></span></span>
+                            <div class="aliases"><b><%= $`aliases` %>: </b><span><%= command.aliases.join(', ') %></span></div>
+                            <div class="usage"><b><%= $`usage` %>: </b><span><%- format(command.usage) %></span></span>
                             </div><br>
                             <div class="description"><%= command.description %></div>
                         </div>

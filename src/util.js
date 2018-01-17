@@ -150,10 +150,10 @@ module.exports = (OpalBot) => {
         return false;
     }
     
-    out.mergeObjects = (obj1, obj2, soft) => { // Doesn't modify either object
+    out.recursiveAssign = (obj1, obj2, soft) => { // Doesn't modify either object
         for (let key in obj2) {
             if (out.isPlainObject(obj2[key]) && out.isPlainObject(obj1[key])) {
-                obj2[key] = out.mergeObjects(obj1[key], obj2[key]);
+                obj2[key] = out.recursiveAssign(obj1[key], obj2[key]);
             }
         }
     
@@ -184,7 +184,7 @@ module.exports = (OpalBot) => {
         if (value) {
             OpalBot.db = {
                 name: file,
-                value: out.mergeObjects(value, obj)
+                value: out.recursiveAssign(value, obj)
             }
         } else {
             OpalBot.db = {

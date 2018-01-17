@@ -56,6 +56,27 @@ function get_canvas_with_text(text, config) {
     return resized_canvas.toDataURL();
 }
 
+function i18n(msg, lang, ...args) {
+    const locale = (data[lang] || data.en).i18n,
+    message = locale[msg] || '';
+
+    return message.replace(/\$(\d)/g, (s, n) => {
+        return args[n - 1] || s;
+    }).replace(/\(([\d\.]+?\|.+?\|.+?)\)/g, (s, match) => {
+        let split = match.split('|');
+        return split[0] == 1 ? split[1] : split[2];
+    });
+}
+
+function local(lang) {
+    return function(msg, ...args) {
+        if (msg instanceof Array) {
+            msg = msg[0];
+        }
+        return i18n(msg, lang, ...args);
+    }
+}
+
 module.exports = (OpalBot) => {
     const out = {},
     app = OpalBot.app;
@@ -93,11 +114,12 @@ module.exports = (OpalBot) => {
 
     // Middleware for not needing to add data and lang props to every render
     app.use((req, res, next) => {
-        res.locals = OpalBot.util.mergeObjects(res.locals, {
+        Object.assign(res.locals, {
             data: data,
             lang: req.lang,
-            ...config
-        });
+            local: local(req.lang),
+            $: local(req.lang)
+        }, config);
         next();
     });
 

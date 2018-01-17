@@ -3,38 +3,38 @@
         href="/#"
         class="nav-item logo"
     >
-        OpalBot
+        OpalBot <!-- DONUT TRNSLATE -->
     </a>
     <a
         href="https://discordapp.com/oauth2/authorize?client_id=<%= CLIENT_ID %>&scope=bot&permissions=8206"
-        title="Add me to your server!"
+        title="<%= $`add-title` %>"
         target="_blank"
         rel="noopener"
         class="nav-item add"
     >
-        Add me!
+        <%= $`add-me` %>
     </a>
     <a
         href="https://discord.gg/<%= SUPPORT_INVITE %>"
-        title="Get help in our discord server!"
+        title="<%= $`support` %>"
         target="_blank"
         rel="noopener"
         class="nav-item support"
     >
-        Support
+       <%= $`support` %>
     </a>
     <a
-        title="See the list of commands!"
+        title="<%= $`commands-title` %>"
         href="/commands"
         class="nav-item commands"
     >
-        Commands
+        <%= $`commands` %>
     </a>
     <a
-        title="Learn more about our bot!"
+        title="<%= $`about-title` %>"
         href="/about"
         class="nav-item about"
     >
-        About
+        <%= $`about` %>
     </a>
 </div>

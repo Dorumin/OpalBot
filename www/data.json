@@ -1,13 +1,27 @@
 {
     "en": {
-        "aliases": "Aliases",
-        "usage": "Usage",
-        "utility": "Utility commands",
-        "home": "Home",
-        "cmds": "Commands",
-        "not_found": "Not found",
-        "not_found_banner": "The page you requested could not be found.",
-        "commands": {
+        "i18n": {
+            "about": "About",
+            "about-title": "Learn more about our bot!",
+            "add-me": "Add me!",
+            "add-title": "Add OpalBot to your server!",
+            "aliases": "Aliases",
+            "closure": "I owe you guys big time, much love",
+            "cmds": "Commands",
+            "commands": "Commands",
+            "commands-title": "See the list of commands!",
+            "copyright": "No copyright notice to be found... ;)",
+            "home": "Home",
+            "not-found": "Not found",
+            "not-found-banner": "The page you requested could not be found.",
+            "support": "Support",
+            "support-title": "Get help in our discord server!",
+            "usage": "Usage",
+            "utility": "Utility commands",
+            "why-bot": "Why bot?",
+            "why-bot-content": "It's simple. One night, I decided that I would make a bot. And not any bot, I would make the most <i>kick ass bot Discord has ever seen.</i><br /><br />I myself have made all of the code, but a couple of friends have helped me along the way. I would like to thank in particular:"
+        },
+        "commands": {  
             "utility": [
                 {
                     "name": "avatar",

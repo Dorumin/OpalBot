@@ -218,6 +218,7 @@ a {
     cursor: pointer;
     float: right;
     padding: 0;
+    user-select: none;
 }
 
 .hamburger span {
@@ -357,7 +358,7 @@ a {
     }
 }
 
-@media (max-width: 300px) {
+@media (max-width: 260px) {
     .nav-item.add {
         width: 10px;
         color: white;

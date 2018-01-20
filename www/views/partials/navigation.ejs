@@ -1,40 +1,74 @@
-<div class="navigation">
-    <a
-        href="/#"
-        class="nav-item logo"
-    >
-        OpalBot <!-- DONUT TRNSLATE -->
-    </a>
-    <a
-        href="https://discordapp.com/oauth2/authorize?client_id=<%= CLIENT_ID %>&scope=bot&permissions=8206"
-        title="<%= $`add-title` %>"
-        target="_blank"
-        rel="noopener"
-        class="nav-item add"
-    >
-        <%= $`add-me` %>
-    </a>
-    <a
-        href="https://discord.gg/<%= SUPPORT_INVITE %>"
-        title="<%= $`support` %>"
-        target="_blank"
-        rel="noopener"
-        class="nav-item support"
-    >
-       <%= $`support` %>
-    </a>
-    <a
-        title="<%= $`commands-title` %>"
-        href="/commands"
-        class="nav-item commands"
-    >
-        <%= $`commands` %>
-    </a>
-    <a
-        title="<%= $`about-title` %>"
-        href="/about"
-        class="nav-item about"
-    >
-        <%= $`about` %>
-    </a>
+<div class="navigation-container">
+    <div class="navigation">
+        <a
+            href="/#"
+            class="nav-item logo"
+        >
+            OpalBot <!-- DONUT TRNSLATE -->
+        </a>
+        <a
+            href="https://discordapp.com/oauth2/authorize?client_id=<%= CLIENT_ID %>&scope=bot&permissions=8206"
+            title="<%= $`add-title` %>"
+            target="_blank"
+            rel="noopener"
+            class="nav-item add"
+        >
+            <%= $`add-me` %>
+        </a>
+        <div
+            class="nav-item hamburger"
+        >
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <a
+            href="https://discord.gg/<%= SUPPORT_INVITE %>"
+            title="<%= $`support-title` %>"
+            target="_blank"
+            rel="noopener"
+            class="nav-item support"
+        >
+        <%= $`support` %>
+        </a>
+        <a
+            href="/commands"
+            title="<%= $`commands-title` %>"
+            class="nav-item commands"
+        >
+            <%= $`commands` %>
+        </a>
+        <a
+            title="<%= $`about-title` %>"
+            href="/about"
+            class="nav-item about"
+        >
+            <%= $`about` %>
+        </a>
+    </div>
+    <div class="dropdown-list">
+        <a
+            title="<%= $`about-title` %>"
+            href="/about"
+            class="about"
+        >
+            <%= $`about` %>
+        </a>
+        <a
+            href="/commands"
+            title="<%= $`commands-title` %>"
+            class="commands"
+        >
+            <%= $`commands` %>
+        </a>
+        <a
+            href="https://discord.gg/<%= SUPPORT_INVITE %>"
+            title="<%= $`support-title` %>"
+            target="_blank"
+            rel="noopener"
+            class="support"
+        >
+        <%= $`support` %>
+        </a>
+    </div>
 </div>

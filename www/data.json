@@ -17,7 +17,7 @@
             "support": "Support",
             "support-title": "Get help in our discord server!",
             "usage": "Usage",
-            "utility": "Utility commands",
+            "utility": "Utility",
             "why-bot": "Why bot?",
             "why-bot-content": "It's simple. One night, I decided that I would make a bot. And not any bot, I would make the most <i>kick ass bot Discord has ever seen.</i><br /><br />I myself have made all of the code, but a couple of friends have helped me along the way. I would like to thank in particular:"
         },
@@ -90,28 +90,28 @@
                     "name": "youtube",
                     "desc": "Searches youtube videos",
                     "aliases": ["yt"],
-                    "usage": "opal!youtube query(required)",
+                    "usage": "opal!youtube query",
                     "description": "Searches YouTube for videos with the specified query string.\n\nCan be prefixed with --dl to automatically convert it to mp3"
                 },
                 {
                     "name": "mp3",
                     "desc": "Converts youtube videos to mp3",
                     "aliases": ["download", "dl"],
-                    "usage": "opal!mp3 url|id(required) [--start duration] [--end duration] [--title \"title\"]",
+                    "usage": "opal!mp3 url|id [--start duration] [--end duration] [--title \"title\"]",
                     "description": "Converts a youtube video to the mp3 format.\n\nOptionally, it takes start and end arguments to define where the file should begin and end playing.\n\nYou can set the file name by setting the title argument. It will always have the .mp3 extension."
                 },
                 {
                     "name": "seen",
                     "desc": "Says last time someone was online",
                     "aliases": ["s"],
-                    "usage": "opal!seen @user(required)",
+                    "usage": "opal!seen @user",
                     "description": "Replies with the last time the supplied was seen by the bot."
                 },
                 {
                     "name": "imagesearch",
                     "desc": "Provides a link to google image search",
                     "aliases": ["ris", "reverseimagesearch", "reverse"],
-                    "usage": "opal!imagesearch @user|url(required)",
+                    "usage": "opal!imagesearch @user|url",
                     "description": "Gives a link to a direct image search query with the mentioned user's avatar, or the url provided."
                 }
             ]

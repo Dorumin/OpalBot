@@ -27,4 +27,9 @@
     }, {
         passive: true
     });
+
+    $('.nav-item.hamburger')[0].addEventListener('click', function() {
+        this.parentElement.parentElement.classList.toggle('open');
+        document.body.classList.toggle('noscroll');
+    })
 })();

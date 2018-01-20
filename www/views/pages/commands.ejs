@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="<%= lang %>">
     <head>
         <title>OpalBot! <%= $`cmds` %></title>
         <% include ../partials/header.ejs %>
@@ -8,7 +8,7 @@
         <% include ../partials/navigation.ejs %>
         <div class="content">
             <% for (let category in commands) { %>
-                <h2><%= data[lang][category] %></h2>
+                <h2><%= $(category) %></h2>
                 <%
                     for (let cmd in commands[category]) {
                     let command = commands[category][cmd];
@@ -28,6 +28,6 @@
             <% } %>
         </div>
         <% include ../partials/footer.ejs %>
-        <script type="text/javascript" src="/js/init.js" async></script>
+        <script type="text/javascript" src="/js/main.js" async></script>
     </body>
 </html>

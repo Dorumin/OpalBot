@@ -1,12 +1,13 @@
-const fs = require('fs');
+const fs = require('fs'),
+util = require('../src/util.js');
 
 fs.readdirSync('./i18n')
     .filter(file => file.endsWith('.json'))
     .forEach(title => exports[title.slice(0, -5)] = require('./' + title));
 
-exports.msg = function(message, obj, ...vars) {
+exports.msg = function(message, obj, ...args) {
     let i18n = this,
-    local = exports[vars.pop()] || exports.en,
+    local = exports[args.pop()] || exports.en,
     ref = obj;
     if (typeof obj == 'string') {
         obj = local[obj];
@@ -21,11 +22,6 @@ exports.msg = function(message, obj, ...vars) {
         }
         throw new ReferenceError(`(i18n) No key <${message}> found.`);
     }
-    if (!vars.length) return msg;
-    return msg.replace(/\$(\d)/g, (s, n) => {
-        return vars[n - 1] || s;
-    }).replace(/\(([\d\.]+?\|.+?\|.+?)\)/g, (s, match) => { // Plural markdown, (1|singular|plural) => "1 singular"; (4|singular|plural) => "4 plural"
-        let split = match.split('|');
-        return split[0] == 1 ? split[1] : split[2];
-    });
+    if (!args.length) return msg;
+    return util.format_message(msg, args);
 };

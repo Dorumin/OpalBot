@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="<%= lang %>">
     <head>
         <title>OpalBot! About</title>
         <% include ../partials/header.ejs %>
@@ -15,7 +15,7 @@
             <%- $`why-bot-content` %>
             <% for (var friend of data[lang].friends) {%>
                 <div class="friend">
-                    <img class="avatar" src="<%= friend.image %>">
+                    <img class="avatar" src="<%= friend.image %>" alt="<%= friend.name %>">
                     <div class="context">
                         <div class="username"><%= friend.name %></div>
                         <div class="caption"><%= friend.caption %></div>
@@ -25,6 +25,6 @@
             <div class="closure"><%= $`closure` %></div>
         </div>
         <% include ../partials/footer.ejs %>
-        <script type="text/javascript" src="/js/init.js" async></script>
+        <script type="text/javascript" src="/js/main.js" async></script>
     </body>
 </html>

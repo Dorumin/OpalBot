@@ -1,30 +1,9 @@
 const Canvas = require('canvas'),
 fs = require('fs'),
 data = require('../www/data.json'),
-config = require('./config.js'),
-util = {
-    escape_html: function(str) {
-        return str.replace(/['"<>&]/g, function (s) {
-            switch (s) {
-                case "'":
-                    return '&#039;';
-                case '"':
-                    return '&quot;';
-                case '<':
-                    return '&lt;';
-                case '>':
-                    return '&gt;';
-                case '&':
-                    return '&amp;';
-            }
-        })
-    },
-    format_usage: function(str) {
-    return util.escape_html(str)
-        .replace(/\(required\)/g, '<b>(required)</b>')
-        .replace(/\[.+\]/g, '<span class="optional">$&</span>');
-    }
-};
+config = require('./config.js');
+
+let util;
 
 function get_canvas_with_text(text, config) {
     let canvas = new Canvas(config.width, config.height || 1500);
@@ -60,12 +39,7 @@ function i18n(msg, lang, ...args) {
     const locale = (data[lang] || data.en).i18n,
     message = locale[msg] || '';
 
-    return message.replace(/\$(\d)/g, (s, n) => {
-        return args[n - 1] || s;
-    }).replace(/\(([\d\.]+?\|.+?\|.+?)\)/g, (s, match) => {
-        let split = match.split('|');
-        return split[0] == 1 ? split[1] : split[2];
-    });
+    return util.format_message(message, args);
 }
 
 function local(lang) {
@@ -80,6 +54,8 @@ function local(lang) {
 module.exports = (OpalBot) => {
     const out = {},
     app = OpalBot.app;
+
+    util = OpalBot.util;
 
     // Security middleware
     app.use((req, res, next) => {

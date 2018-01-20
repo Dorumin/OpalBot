@@ -199,6 +199,37 @@ module.exports = (OpalBot) => {
         return new Promise(res => setTimeout(res, ms));
     };
 
+    out.escape_html = (str) => {
+        return str.replace(/['"<>&]/g, function (s) {
+            switch (s) {
+                case "'":
+                    return '&#039;';
+                case '"':
+                    return '&quot;';
+                case '<':
+                    return '&lt;';
+                case '>':
+                    return '&gt;';
+                case '&':
+                    return '&amp;';
+            }
+        });
+    };
+
+    out.format_usage = (str) => {
+        return out.escape_html(str)
+            .replace(/\[.+\]/g, '<span class="optional">$&</span>');
+    };
+
+    out.format_message = (str, args) => {
+        return str.replace(/\$(\d)/g, (s, n) => {
+            return args[n - 1] || s;
+        }).replace(/\(([\d\.]+?\|.+?\|.+?)\)/g, (s, match) => { // Plural markdown, (1|singular|plural) => "1 singular"; (4|singular|plural) => "4 plural"
+            let split = match.split('|');
+            return split[0] == 1 ? split[1] : split[2];
+        });
+    };
+
     OpalBot.util = out;
     return out;
 };

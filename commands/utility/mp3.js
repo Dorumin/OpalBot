@@ -159,7 +159,7 @@ module.exports = (OpalBot) => {
                 embed: {
                     title: i18n.msg('download', 'mp3', lang),
                     description: info.title,
-                    url: 'http://opalbot.herokuapp.com/dl/' + encodeURIComponent(id),
+                    url: config.SERVICE_URL + '/dl/' + encodeURIComponent(id),
                     color: OpalBot.color,
                     image: masked ? {
                         url: info.thumbnail_url

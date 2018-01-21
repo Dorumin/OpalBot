@@ -161,6 +161,20 @@ a {
     transition: none;
 }
 
+.dashboard {
+    cursor: pointer;
+}
+
+.dashboard:after {
+    content: '';
+    height: 0;
+    width: 0;
+    margin-left: 6px;
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-top: 5px solid white;
+}
+
 .dashboard .avatar {
     min-height: 20px;
     min-width: 20px;
@@ -217,8 +231,8 @@ a {
 }
 
 .logout-icon {
-    height: 20px;
-    width: 20px;
+    height: 32px;
+    width: 32px;
 }
 
 /* Hamburgers */
@@ -318,6 +332,7 @@ a {
 .author {
     float: right;
     margin: 0 0 1em 1em;
+    background: white;
 }
 
 .author .avatar {
@@ -362,7 +377,7 @@ a {
 }
 
 /* Media queries */
-@media (max-width: 240px) {
+@media (max-width: 260px) {
     .nav-item.logo {
         width: 25px;
         color: #794aa2;
@@ -376,7 +391,7 @@ a {
     }
 }
 
-@media (max-width: 290px) {
+@media (max-width: 310px) {
     .nav-item.add {
         width: 10px;
         color: white;

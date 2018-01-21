@@ -1,5 +1,5 @@
 const fs = require('fs'),
-util = require('../src/util.js');
+util = require('../src/util.js')();
 
 fs.readdirSync('./i18n')
     .filter(file => file.endsWith('.json'))

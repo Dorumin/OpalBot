@@ -28,7 +28,8 @@ module.exports = (OpalBot) => {
         .use((req, res) => {
             res.statusCode = 404;
             res.render('pages/index', {
-                notfound: true
+                title: 'not-found',
+                banner: 'not-found-banner'
             });
         });
 

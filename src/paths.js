@@ -1,4 +1,5 @@
 const Canvas = require('canvas'),
+request = require('request'),
 fs = require('fs'),
 data = require('../www/data.json'),
 config = require('./config.js');
@@ -113,6 +114,32 @@ module.exports = (OpalBot) => {
 
     app.get('/about', (req, res) => {
         res.render('pages/about');
+    });
+
+    /* Auth */
+    app.get('/login', (req, res) => {
+        res.redirect(`https://discordapp.com/oauth2/authorize?response_type=code&client_id=${config.CLIENT_ID}&scope=identify&redirect_uri=${encodeURIComponent(config.SERVICE_URL)}%2Fauth`);
+    });
+
+    app.get('/auth', (req, res) => {
+        const code = req.query.code;
+        if (!code) {
+            res.render('pages/index', {
+                title: 'error',
+                banner: 'code-required-banner'
+            });
+        }
+        const data = {
+            client_id: config.CLIENT_ID,
+            client_secret: config.CLIENT_SECRET,
+            code: code,
+            redirect_uri: config.SERVICE_URL,
+            grant_type: 'authorization_code'
+        },
+        headers = {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        };
+
     });
     
     // App services

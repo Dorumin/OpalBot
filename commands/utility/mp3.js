@@ -127,7 +127,7 @@ module.exports = (OpalBot) => {
         if (title) {
             title = title[1] || title[2];
         }
-        OpalBot.storage.mp3[id] = (sanitize(title) || sanitize(info.title) || id) + '.mp3';
+        OpalBot.storage.mp3[id] = (sanitize(title) || sanitize(info.title) || id).replace(/,/g, '') + '.mp3';
         let converting = await message.channel.send(i18n.msg('converting', 'mp3', lang));
         message.channel.startTyping();
         ffmpeg({

@@ -117,6 +117,16 @@ module.exports = (OpalBot) => {
             next();
             return;
         }
+        if (req.url == '/') {
+            if (logins[session.access_token] === true) {
+                delete logins[session.access_token];
+                res.locals.banner = 'logged-in-banner';
+            } else if (logins[req.cookies.logout] === false) {
+                delete logins[req.cookies.logout];
+                res.locals.banner = 'logged-out-banner';
+                res.clearCookie('logout');
+            }
+        }
         request('https://discordapp.com/api/users/@me', {
             headers: {
                 Authorization: session.token_type + ' ' + session.access_token
@@ -129,10 +139,6 @@ module.exports = (OpalBot) => {
                     logged_in: true
                 });
                 sessions[session.access_token] = result;
-                if (logins[session.access_token] && req.url == '/') {
-                    delete logins[session.access_token];
-                    res.locals.banner = 'logged-in-banner';
-                }
             } catch(e) {
                 OpalBot.util.log(e);
             }
@@ -163,6 +169,23 @@ module.exports = (OpalBot) => {
     /* Auth */
     app.get('/login', (req, res) => {
         res.redirect(`https://discordapp.com/oauth2/authorize?response_type=code&client_id=${config.CLIENT_ID}&scope=identify&redirect_uri=${encodeURIComponent(config.SERVICE_URL)}%2Fauth`);
+    });
+
+    app.get('/logout', (req, res) => {
+        const sessions = OpalBot.storage.sessions = OpalBot.storage.sessions || {},
+        logins = OpalBot.storage.logins = OpalBot.storage.logins || {},
+        session = req.cookies.session;
+        if (session) {
+            delete sessions[session.access_token];
+            res.clearCookie('session', {
+                secure: true,
+                httpOnly: true
+            });
+            const rand = Math.random().toString();
+            res.cookie('logout', rand);
+            logins[rand] = false;
+        }
+        res.redirect('/');
     });
 
     app.get('/auth', (req, res) => {

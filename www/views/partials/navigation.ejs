@@ -26,7 +26,6 @@
             <a
                 href="/login"
                 title="<%= $`login-title` %>"
-                target="_blank"
                 class="nav-item login"
             >
                 <%= $`login` %>
@@ -38,10 +37,10 @@
                 class="nav-item dashboard"
             >
                 <img
-                    src="https://cdn.discordapp.com/avatars/<%= user.id %>/<%= user.avatar %>.png?size=20"
+                    src="https://cdn.discordapp.com/avatars/<%= user.id %>/<%= user.avatar %>.png?size=32"
                     class="avatar"
-                >
-                <%= user.username %>
+                />
+                <span class="username"><%= user.username %></span>
             </a>
         <% } %>
         <a
@@ -92,5 +91,25 @@
         >
             <%= $`support` %>
         </a>
+        <% if (!locals.logged_in) { %>
+            <a
+                href="/login"
+                title="<%= $`login-title` %>"
+                class="login"
+            >
+                <%= $`login` %>
+            </a>
+        <% }  else { %>
+            <a
+                href="/logout"
+                title="<%= $`logout-title` %>"
+                class="nav-item logout"
+            >
+                <img
+                    src="/img/logout.png"
+                    class="logout-icon"
+                />
+            </a>
+        <% } %>
     </div>
 </div>

@@ -164,6 +164,8 @@ a {
 .dashboard .avatar {
     min-height: 20px;
     min-width: 20px;
+    max-height: 20px;
+    max-width: 20px;
     margin-right: 5px;
 }
 
@@ -207,6 +209,16 @@ a {
 
 .dropdown-list a:hover {
     text-shadow: 0 0 1px #999;
+}
+
+.dropdown-list .logout {
+    float: right;
+    border-bottom: none;
+}
+
+.logout-icon {
+    height: 20px;
+    width: 20px;
 }
 
 /* Hamburgers */
@@ -320,13 +332,13 @@ a {
     margin-top: 4px;
 }
 
-.username {
+.content .username {
     font-size: 20px;
     margin-bottom: 4px;
     display: block;
 }
 
-.username:after {
+.content .username:after {
     content: ' ♥';
 }
 
@@ -350,7 +362,7 @@ a {
 }
 
 /* Media queries */
-@media (max-width: 200px) {
+@media (max-width: 240px) {
     .nav-item.logo {
         width: 25px;
         color: #794aa2;
@@ -364,7 +376,7 @@ a {
     }
 }
 
-@media (max-width: 260px) {
+@media (max-width: 290px) {
     .nav-item.add {
         width: 10px;
         color: white;
@@ -377,14 +389,22 @@ a {
     }
 }
 
+@media (max-width: 400px) {
+    .dashboard .username {
+        display: none;
+    }
+    .dashboard .avatar {
+        min-height: 32px;
+        min-width: 32px;
+        max-height: 20px;
+        max-width: 20px;
+        margin-right: 1em;
+    }
+}
+
 @media (max-width: 480px) {
     .content {
         padding: 1em;
-    }
-    .navigation .support,
-    .navigation .commands,
-    .navigation .about {
-        display: none
     }
 }
 
@@ -395,6 +415,18 @@ a {
     .navigation {
         padding: 0 1em;
     }
+}
+
+@media (max-width: 580px) {
+    .navigation .support,
+    .navigation .commands,
+    .navigation .about,
+    .navigation .login {
+        display: none
+    }
+}
+
+@media (min-width: 581px) {
     .nav-item.hamburger {
         display: none;
     }

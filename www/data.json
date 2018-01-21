@@ -15,7 +15,8 @@
             "error": "Error", 
             "error-banner": "An error occurred while processing your request. That's all we know.", 
             "home": "Home", 
-            "logged-in-banner": "You have been successfully logged in!", 
+            "logged-in-banner": "You have successfully logged in!",
+            "logged-out-banner": "You have been successfully logged out!",
             "not-found": "Not found", 
             "not-found-banner": "The page you requested could not be found.", 
             "support": "Support", 
@@ -26,6 +27,8 @@
             "why-bot-content": "It's simple. One night, I decided that I would make a bot. And not any bot, I would make the most <i>kick ass bot Discord has ever seen.</i><br /><br />I myself have made all of the code, but a couple of friends have helped me along the way. I would like to thank in particular:",
             "login": "Login",
             "login-title": "Login to use our website features",
+            "logout": "Logout",
+            "logout-title": "Log out of your account",
             "dashboard": "Dashboard",
             "dashboard-title": "Enter the ~dashboard~"
         },

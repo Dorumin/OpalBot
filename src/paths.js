@@ -110,7 +110,8 @@ module.exports = (OpalBot) => {
         const sessions = OpalBot.storage.sessions = OpalBot.storage.sessions || {},
         logins = OpalBot.storage.logins = OpalBot.storage.logins || {};
         if (sessions[session.access_token]) {
-            Object.assign(res.locals, sessions[session.access_token], {
+            Object.assign(res.locals, {
+                user: sessions[session.access_token],
                 logged_in: true
             });
             next();
@@ -128,7 +129,7 @@ module.exports = (OpalBot) => {
                     logged_in: true
                 });
                 sessions[session.access_token] = result;
-                if (logins[session.access_token]) {
+                if (logins[session.access_token] && req.url == '/') {
                     delete logins[session.access_token];
                     res.locals.banner = 'logged-in-banner';
                 }
@@ -145,7 +146,6 @@ module.exports = (OpalBot) => {
     });
 
     app.get('/commands', (req, res) => {
-        console.log(res.locals);
         res.render('pages/commands', {
             commands: data[req.lang].commands,
             format: util.format_usage
@@ -168,6 +168,7 @@ module.exports = (OpalBot) => {
                 title: 'error',
                 banner: 'code-required-banner'
             });
+            return;
         }
         const data = {
             client_id: config.CLIENT_ID,
@@ -185,7 +186,7 @@ module.exports = (OpalBot) => {
         }, (err, r, body) => {
             const result = JSON.parse(body);
             console.log(result);
-            if (result.error) {
+            if (result.error || result.error_description) {
                 res.render('pages/index', {
                     title: 'error',
                     banner: 'error-banner'

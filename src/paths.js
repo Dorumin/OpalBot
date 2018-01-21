@@ -107,7 +107,7 @@ module.exports = (OpalBot) => {
         sessions = OpalBot.storage.sessions = OpalBot.storage.sessions || {},
         logins = OpalBot.storage.logins = OpalBot.storage.logins || {};
         if (req.url == '/') {
-            if (logins[session.access_token] === true) {
+            if (session && logins[session.access_token] === true) {
                 delete logins[session.access_token];
                 res.locals.banner = 'logged-in-banner';
             } else if (logins[req.cookies.logout] === false) {

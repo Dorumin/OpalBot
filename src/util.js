@@ -230,6 +230,9 @@ module.exports = (OpalBot) => {
         });
     };
 
-    OpalBot.util = out;
+    if (OpalBot) {
+        OpalBot.util = out;
+    }
+
     return out;
 };

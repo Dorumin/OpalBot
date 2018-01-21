@@ -103,6 +103,16 @@ module.exports = (OpalBot) => {
 
     // Identification middleware
     app.use((req, res, next) => {
+        if (req.url == '/') {
+            if (logins[session.access_token] === true) {
+                delete logins[session.access_token];
+                res.locals.banner = 'logged-in-banner';
+            } else if (logins[req.cookies.logout] === false) {
+                delete logins[req.cookies.logout];
+                res.locals.banner = 'logged-out-banner';
+                res.clearCookie('logout');
+            }
+        }
         const session = req.cookies.session;
         if (!session) {
             return next();
@@ -116,16 +126,6 @@ module.exports = (OpalBot) => {
             });
             next();
             return;
-        }
-        if (req.url == '/') {
-            if (logins[session.access_token] === true) {
-                delete logins[session.access_token];
-                res.locals.banner = 'logged-in-banner';
-            } else if (logins[req.cookies.logout] === false) {
-                delete logins[req.cookies.logout];
-                res.locals.banner = 'logged-out-banner';
-                res.clearCookie('logout');
-            }
         }
         request('https://discordapp.com/api/users/@me', {
             headers: {

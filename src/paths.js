@@ -103,6 +103,9 @@ module.exports = (OpalBot) => {
 
     // Identification middleware
     app.use((req, res, next) => {
+        const session = req.cookies.session,
+        sessions = OpalBot.storage.sessions = OpalBot.storage.sessions || {},
+        logins = OpalBot.storage.logins = OpalBot.storage.logins || {};
         if (req.url == '/') {
             if (logins[session.access_token] === true) {
                 delete logins[session.access_token];
@@ -113,12 +116,9 @@ module.exports = (OpalBot) => {
                 res.clearCookie('logout');
             }
         }
-        const session = req.cookies.session;
         if (!session) {
             return next();
         }
-        const sessions = OpalBot.storage.sessions = OpalBot.storage.sessions || {},
-        logins = OpalBot.storage.logins = OpalBot.storage.logins || {};
         if (sessions[session.access_token]) {
             Object.assign(res.locals, {
                 user: sessions[session.access_token],

@@ -23,7 +23,11 @@
             "usage": "Usage", 
             "utility": "Utility", 
             "why-bot": "Why bot?", 
-            "why-bot-content": "It's simple. One night, I decided that I would make a bot. And not any bot, I would make the most <i>kick ass bot Discord has ever seen.</i><br /><br />I myself have made all of the code, but a couple of friends have helped me along the way. I would like to thank in particular:"
+            "why-bot-content": "It's simple. One night, I decided that I would make a bot. And not any bot, I would make the most <i>kick ass bot Discord has ever seen.</i><br /><br />I myself have made all of the code, but a couple of friends have helped me along the way. I would like to thank in particular:",
+            "login": "Login",
+            "login-title": "Login to use our website features",
+            "dashboard": "Dashboard",
+            "dashboard-title": "Enter the ~dashboard~"
         },
         "commands": {  
             "utility": [

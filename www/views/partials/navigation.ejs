@@ -22,6 +22,28 @@
             <span></span>
             <span></span>
         </div>
+        <% if (!locals.logged_in) { %>
+            <a
+                href="/login"
+                title="<%= $`login-title` %>"
+                target="_blank"
+                class="nav-item login"
+            >
+                <%= $`login` %>
+            </a>
+        <% }  else { %>
+            <a
+                href="/dashboard"
+                title="<%= $`dashboard-title` %>"
+                class="nav-item dashboard"
+            >
+                <img
+                    src="https://cdn.discordapp.com/avatars/<%= user.id %>/<%= user.avatar %>.png?size=20"
+                    class="avatar"
+                >
+                <%= user.username %>
+            </a>
+        <% } %>
         <a
             href="https://discord.gg/<%= SUPPORT_INVITE %>"
             title="<%= $`support-title` %>"
@@ -29,7 +51,7 @@
             rel="noopener"
             class="nav-item support"
         >
-        <%= $`support` %>
+            <%= $`support` %>
         </a>
         <a
             href="/commands"
@@ -68,7 +90,7 @@
             rel="noopener"
             class="support"
         >
-        <%= $`support` %>
+            <%= $`support` %>
         </a>
     </div>
 </div>

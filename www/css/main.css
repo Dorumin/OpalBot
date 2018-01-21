@@ -161,6 +161,12 @@ a {
     transition: none;
 }
 
+.dashboard .avatar {
+    min-height: 20px;
+    min-width: 20px;
+    margin-right: 5px;
+}
+
 .content {
     background-color: white;
     padding: 2em;

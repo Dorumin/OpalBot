@@ -84,6 +84,7 @@ module.exports = (OpalBot) => {
     
     // Middleware for language recognition
     app.use((req, res, next) => {
+        console.log(req.cookies);
         let langs = Object.keys(data);
         req.lang = langs.includes(req.cookies.lang) ? req.cookies.lang : req.acceptsLanguages(...langs) || 'en';
         next();
@@ -100,12 +101,51 @@ module.exports = (OpalBot) => {
         next();
     });
 
+    // Identification middleware
+    app.use((req, res, next) => {
+        const session = req.cookies.session;
+        if (!session) {
+            return next();
+        }
+        const sessions = OpalBot.storage.sessions = OpalBot.storage.sessions || {},
+        logins = OpalBot.storage.logins = OpalBot.storage.logins || {};
+        if (sessions[session.access_token]) {
+            Object.assign(res.locals, sessions[session.access_token], {
+                logged_in: true
+            });
+            next();
+            return;
+        }
+        request('https://discordapp.com/api/users/@me', {
+            headers: {
+                Authorization: session.token_type + ' ' + session.access_token
+            }
+        }, (err, r, body) => {
+            try {
+                const result = JSON.parse(body);
+                Object.assign(res.locals, {
+                    user: result,
+                    logged_in: true
+                });
+                sessions[session.access_token] = result;
+                if (logins[session.access_token]) {
+                    delete logins[session.access_token];
+                    res.locals.banner = 'logged-in-banner';
+                }
+            } catch(e) {
+                OpalBot.util.log(e);
+            }
+            next();
+        });
+    });
+
     // Pages
     app.get('/', (req, res) => {
         res.render('pages/index');
     });
 
     app.get('/commands', (req, res) => {
+        console.log(res.locals);
         res.render('pages/commands', {
             commands: data[req.lang].commands,
             format: util.format_usage
@@ -133,13 +173,34 @@ module.exports = (OpalBot) => {
             client_id: config.CLIENT_ID,
             client_secret: config.CLIENT_SECRET,
             code: code,
-            redirect_uri: config.SERVICE_URL,
+            redirect_uri: config.SERVICE_URL + '/auth',
             grant_type: 'authorization_code'
         },
         headers = {
             'Content-Type': 'application/x-www-form-urlencoded'
         };
-
+        request.post('https://discordapp.com/api/oauth2/token', {
+            form: data,
+            headers: headers
+        }, (err, r, body) => {
+            const result = JSON.parse(body);
+            console.log(result);
+            if (result.error) {
+                res.render('pages/index', {
+                    title: 'error',
+                    banner: 'error-banner'
+                });
+                return;
+            }
+            const logins = OpalBot.storage.logins = OpalBot.storage.logins || {};
+            logins[result.access_token] = true;
+            res.cookie('session', result, {
+                httpOnly: true,
+                secure: true,
+                maxAge: result.expires_in * 1000
+            });
+            res.redirect('/');
+        });
     });
     
     // App services

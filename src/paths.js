@@ -104,8 +104,7 @@ module.exports = (OpalBot) => {
     app.use((req, res, next) => {
         const session = req.cookies.session,
         sessions = OpalBot.storage.sessions = OpalBot.storage.sessions || {},
-        logins = OpalBot.storage.logins = OpalBot.storage.logins || {},
-        cached = sessions[session.access_token];
+        logins = OpalBot.storage.logins = OpalBot.storage.logins || {};
         if (req.url == '/') {
             if (session && logins[session.access_token] === true) {
                 delete logins[session.access_token];
@@ -119,6 +118,7 @@ module.exports = (OpalBot) => {
         if (!session) {
             return next();
         }
+        const cached = sessions[session.access_token];
         if (cached && cached instanceof Promise) {
             cached.then(user => {
                 console.log('CACHED', user);

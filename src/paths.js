@@ -152,9 +152,8 @@ module.exports = (OpalBot) => {
                         guilds: guilds,
                         mutual_guilds: guilds.filter(guild => OpalBot.client.guilds.get(guild.id))
                     });
-                    Object.assign(res.locals.user, result, {
-                        logged_in: true
-                    });
+                    Object.assign(res.locals.user, result);
+                    res.locals.logged_in = true;
                     sessions[session.access_token] = result;
                 } catch(e) {
                     OpalBot.util.log(e);

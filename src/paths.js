@@ -1,5 +1,5 @@
 const Canvas = require('canvas'),
-request = require('request'),
+request = require('request-promise-native'),
 fs = require('fs'),
 data = require('../www/data.json'),
 config = require('./config.js');
@@ -84,7 +84,6 @@ module.exports = (OpalBot) => {
     
     // Middleware for language recognition
     app.use((req, res, next) => {
-        console.log(req.cookies);
         let langs = Object.keys(data);
         req.lang = langs.includes(req.cookies.lang) ? req.cookies.lang : req.acceptsLanguages(...langs) || 'en';
         next();
@@ -105,7 +104,8 @@ module.exports = (OpalBot) => {
     app.use((req, res, next) => {
         const session = req.cookies.session,
         sessions = OpalBot.storage.sessions = OpalBot.storage.sessions || {},
-        logins = OpalBot.storage.logins = OpalBot.storage.logins || {};
+        logins = OpalBot.storage.logins = OpalBot.storage.logins || {},
+        cached = sessions[session.access_token];
         if (req.url == '/') {
             if (session && logins[session.access_token] === true) {
                 delete logins[session.access_token];
@@ -119,47 +119,48 @@ module.exports = (OpalBot) => {
         if (!session) {
             return next();
         }
-        if (sessions[session.access_token]) {
-            Object.assign(res.locals, {
-                user: sessions[session.access_token],
-                logged_in: true
+        if (cached && cached instanceof Promise) {
+            cached.then(user => {
+                console.log('CACHED', user);
+                Object.assign(res.locals, {
+                    user: user,
+                    logged_in: true
+                });
+                next();
             });
-            next();
             return;
         }
-        request('https://discordapp.com/api/users/@me', {
-            headers: {
-                Authorization: session.token_type + ' ' + session.access_token
-            }
-        }, (err, r, body) => {
-            let result;
-            try {
-                result = JSON.parse(body);
-                result.avatar_url = `https://cdn.discordapp.com/avatars/${result.id}/${result.avatar}.png`;
-            } catch(e) {
-                OpalBot.util.log(e);
-                next();
-                return;
-            }
+        sessions[session.access_token] = Promise.all([
+            request('https://discordapp.com/api/users/@me', {
+                headers: {
+                    Authorization: session.token_type + ' ' + session.access_token
+                }
+            }),
             request('https://discordapp.com/api/users/@me/guilds', {
                 headers: {
                     Authorization: session.token_type + ' ' + session.access_token
                 }
-            }, (err, r, body) => {
-                try {
-                    const guilds = JSON.parse(body);
-                    Object.assign(result, {
-                        guilds: guilds,
-                        mutual_guilds: guilds.filter(guild => OpalBot.client.guilds.get(guild.id))
-                    });
-                    Object.assign(res.locals.user, result);
-                    res.locals.logged_in = true;
-                    sessions[session.access_token] = result;
-                } catch(e) {
-                    OpalBot.util.log(e);
-                }
-                next();
-            });
+            })
+        ])
+        .then((arr) => arr.map(JSON.parse))
+        .then(([user, guilds]) => {
+            try {
+                user.avatar_url = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`;
+                user.guilds = guilds;
+                user.mutual_guilds = guilds.filter(guild => OpalBot.client.guilds.get(guild.id));
+                Object.assign(res.locals, {
+                    user: user,
+                    logged_in: true
+                });
+                console.log('FETCHED', user);
+            } catch(e) {
+                OpalBot.util.log(e);
+            }
+            next();
+            return user;
+        }).catch((err) => {
+            OpalBot.util.log(err);
+            next();
         });
     });
 
@@ -236,7 +237,7 @@ module.exports = (OpalBot) => {
         request.post('https://discordapp.com/api/oauth2/token', {
             form: data,
             headers: headers
-        }, (err, r, body) => {
+        }).then((body) => {
             const result = JSON.parse(body);
             console.log(result);
             if (result.error || result.error_description) {
@@ -254,6 +255,12 @@ module.exports = (OpalBot) => {
                 maxAge: result.expires_in * 1000
             });
             res.redirect('/');
+        }).catch((err) => {
+            OpalBot.util.log(err);
+            res.render('pages/index', {
+                title: 'error',
+                banner: 'error-banner'
+            });
         });
     });
     

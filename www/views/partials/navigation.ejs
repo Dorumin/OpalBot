@@ -7,7 +7,7 @@
             OpalBot <!-- DONUT TRNSLATE -->
         </a>
         <a
-            href="https://discordapp.com/oauth2/authorize?client_id=<%= CLIENT_ID %>&scope=bot&permissions=8206"
+            href="/invite"
             title="<%= $`add-title` %>"
             target="_blank"
             rel="noopener"
@@ -36,14 +36,14 @@
                 class="nav-item current-user"
             >
                 <img
-                    src="https://cdn.discordapp.com/avatars/<%= user.id %>/<%= user.avatar %>.png?size=32"
+                    src="<%= user.avatar_url %>?size=32"
                     class="avatar"
                 />
                 <span class="username"><%= user.username %></span>
             </a>
         <% } %>
         <a
-            href="https://discord.gg/<%= SUPPORT_INVITE %>"
+            href="/support"
             title="<%= $`support-title` %>"
             target="_blank"
             rel="noopener"
@@ -91,7 +91,7 @@
             <%= $`commands` %>
         </a>
         <a
-            href="https://discord.gg/<%= SUPPORT_INVITE %>"
+            href="/support"
             title="<%= $`support-title` %>"
             target="_blank"
             rel="noopener"
@@ -121,6 +121,14 @@
         <% } %>
     </div>
     <div class="user-dropdown">
+        <span class="dropdown-arrow"></span>
+        <div class="user-info">
+            <img class="avatar" src="<%= user.avatar_url %>?size=32">
+            <div class="stats">
+                <div class="username"><%= user.username %></div>
+                <div class="mutual-guilds"><%= $('mutual-guilds', user.mutual_guilds.length)%></div>
+            </div>
+        </div>
         <a
             href="/dashboard"
             class="ud-item dashboard"

@@ -31,7 +31,8 @@
             "logout-title": "Log out of your account",
             "dashboard": "Dashboard",
             "dashboard-title": "Enter the ~dashboard~",
-            "sign-out": "Sign out"
+            "sign-out": "Sign out",
+            "mutual-guilds": "$1 mutual ($1|guild|guilds)"
         },
         "commands": {  
             "utility": [

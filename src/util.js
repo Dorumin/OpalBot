@@ -222,6 +222,7 @@ module.exports = (OpalBot) => {
     };
 
     out.format_message = (str, args) => {
+        args = args.map(String);
         return str.replace(/\$(\d)/g, (s, n) => {
             return args[n - 1] || s;
         }).replace(/\(([\d\.]+?\|.+?\|.+?)\)/g, (s, match) => { // Plural markdown, (1|singular|plural) => "1 singular"; (4|singular|plural) => "4 plural"

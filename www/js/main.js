@@ -82,6 +82,11 @@
         if (document.body.scrollWidth > 680) {
             e.preventDefault();
             this.parentElement.parentElement.classList.toggle('ud-open');
+            var dropdown = document.querySelector('.user-dropdown'),
+            arrow = document.querySelector('.dropdown-arrow'),
+            avatar = this.firstElementChild;
+            dropdown.style.minWidth = this.offsetWidth + 'px';
+            arrow.style.right = (this.clientWidth - avatar.clientLeft - avatar.clientWidth / 2 * 3) + 'px';
         }
     });
 })();

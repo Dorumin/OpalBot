@@ -132,17 +132,37 @@ module.exports = (OpalBot) => {
                 Authorization: session.token_type + ' ' + session.access_token
             }
         }, (err, r, body) => {
+            let result;
             try {
-                const result = JSON.parse(body);
+                result = JSON.parse(body);
+                result.avatar_url = `https://cdn.discordapp.com/avatars/${result.id}/${result.avatar}.png`
                 Object.assign(res.locals, {
                     user: result,
                     logged_in: true
                 });
-                sessions[session.access_token] = result;
             } catch(e) {
                 OpalBot.util.log(e);
+                next();
+                return;
             }
-            next();
+            request('https://discordapp.com/api/users/@me/guilds', {
+                headers: {
+                    Authorization: session.token_type + ' ' + session.access_token
+                }
+            }, (err, r, body) => {
+                try {
+                    const guilds = JSON.parse(body);
+                    Object.assign(result, {
+                        guilds: guilds,
+                        mutual_guilds: guilds.filter(guild => OpalBot.client.guilds.get(guild.id))
+                    });
+                    Object.assign(res.locals.user, result);
+                    sessions[session.access_token] = result;
+                } catch(e) {
+                    OpalBot.util.log(e);
+                }
+                next();
+            });
         });
     });
 
@@ -166,9 +186,18 @@ module.exports = (OpalBot) => {
         res.render('pages/dashboard');
     });
 
+    /* Redirects */
+    app.get('/invite', (req, res) => {
+        res.redirect(`https://discordapp.com/oauth2/authorize?client_id=${config.CLIENT_ID}&scope=bot&permissions=8206`);
+    });
+
+    app.get('/support', (req, res) => {
+        res.redirect(`https://discord.gg/${config.SUPPORT_INVITE}`);
+    });
+
     /* Auth */
     app.get('/login', (req, res) => {
-        res.redirect(`https://discordapp.com/oauth2/authorize?response_type=code&client_id=${config.CLIENT_ID}&scope=identify&redirect_uri=${encodeURIComponent(config.SERVICE_URL)}%2Fauth`);
+        res.redirect(`https://discordapp.com/oauth2/authorize?response_type=code&client_id=${config.CLIENT_ID}&scope=identify+guilds&redirect_uri=${encodeURIComponent(config.SERVICE_URL)}%2Fauth`);
     });
 
     app.get('/logout', (req, res) => {

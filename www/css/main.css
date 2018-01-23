@@ -230,8 +230,7 @@ a {
     top: 3em;
     background: white;
     border: 1px solid #ccc;
-    padding: .2em 0;
-    min-width: 126px;
+    padding-bottom: .3em;
     display: none;
 }
 
@@ -239,17 +238,40 @@ a {
     display: block;
 }
 
-.user-dropdown:after {
+.dropdown-arrow {
     content: '';
     height: 0;
     width: 0;
     margin-left: 5px;
     border-left: 10px solid transparent;
     border-right: 10px solid transparent;
-    border-bottom: 10px solid #fff;
+    border-bottom: 10px solid #eee;
     position: absolute;
     top: -10px;
-    left: 9px;
+}
+
+.user-info {
+    display: flex;
+    align-items: flex-start;
+    background: #eee;
+    padding: .5em;
+    margin-bottom: .3em;
+}
+
+.stats {
+    padding: 0 .5em;
+    width: 100%;
+}
+
+.stats .username {
+    border-bottom: 1px solid #ccc;
+    padding: 2px;
+}
+
+.stats .mutual-guilds {
+    color: #666;
+    font-size: 12px;
+    padding: 2px;
 }
 
 .ud-item {
@@ -377,10 +399,13 @@ a {
 
 /* About */
 .avatar {
-    min-height: 120px;
-    min-width: 120px;
     border-radius: 50%;
     border: 2px solid #794aa2;
+}
+
+.friend .avatar {
+    min-height: 120px;
+    min-width: 120px;
 }
 
 .author {
@@ -492,7 +517,7 @@ a {
     .navigation .about,
     .navigation .login,
     .navigation .current-user:after,
-    .user-dropdown {
+    .ud-open .user-dropdown {
         display: none
     }
 }

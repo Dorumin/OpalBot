@@ -33,8 +33,7 @@
         <% }  else { %>
             <a
                 href="/dashboard"
-                title="<%= $`dashboard-title` %>"
-                class="nav-item dashboard"
+                class="nav-item current-user"
             >
                 <img
                     src="https://cdn.discordapp.com/avatars/<%= user.id %>/<%= user.avatar %>.png?size=32"
@@ -68,6 +67,15 @@
         </a>
     </div>
     <div class="dropdown-list">
+        <% if (locals.logged_in) { %>
+            <a
+                href="/dashboard"
+                title="<%= $`dashboard-title` %>"
+                class="dashboard"
+            >
+                <%= $`dashboard` %>
+            </a>
+        <% } %>
         <a
             title="<%= $`about-title` %>"
             href="/about"
@@ -99,7 +107,7 @@
             >
                 <%= $`login` %>
             </a>
-        <% }  else { %>
+        <% } else { %>
             <a
                 href="/logout"
                 title="<%= $`logout-title` %>"
@@ -111,5 +119,19 @@
                 />
             </a>
         <% } %>
+    </div>
+    <div class="user-dropdown">
+        <a
+            href="/dashboard"
+            class="ud-item dashboard"
+        >
+            <%= $`dashboard` %>
+        </a>
+        <a
+            href="/logout"
+            class="ud-item signout"
+        >
+            <%= $`sign-out` %>
+        </a>
     </div>
 </div>

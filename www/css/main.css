@@ -161,11 +161,11 @@ a {
     transition: none;
 }
 
-.dashboard {
+.current-user {
     cursor: pointer;
 }
 
-.dashboard:after {
+.current-user:after {
     content: '';
     height: 0;
     width: 0;
@@ -175,12 +175,26 @@ a {
     border-top: 5px solid white;
 }
 
-.dashboard .avatar {
+.ud-open .current-user:after {
+    margin-top: -5px;
+    border-top-color: transparent;
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-bottom: 5px solid #fff;
+}
+
+.current-user .avatar {
     min-height: 20px;
     min-width: 20px;
     max-height: 20px;
     max-width: 20px;
     margin-right: 5px;
+}
+
+.current-user .username {
+    max-width: 100px;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .content {
@@ -209,6 +223,46 @@ a {
 .open .navigation {
     position: fixed;
     z-index: 1;
+}
+
+.user-dropdown {
+    position: absolute;
+    top: 3em;
+    background: white;
+    border: 1px solid #ccc;
+    padding: .2em 0;
+    min-width: 126px;
+    display: none;
+}
+
+.ud-open .user-dropdown {
+    display: block;
+}
+
+.user-dropdown:after {
+    content: '';
+    height: 0;
+    width: 0;
+    margin-left: 5px;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-bottom: 10px solid #fff;
+    position: absolute;
+    top: -10px;
+    left: 9px;
+}
+
+.ud-item {
+    display: block;
+    padding: .5em;
+    margin: 0 .3em;
+    color: #39424d;
+    transition: all .2s ease;
+}
+
+.ud-item:hover {
+    background: rgba(0,183,224,.1);
+    color: #00b7e0;
 }
 
 .dropdown-list a {
@@ -404,11 +458,11 @@ a {
     }
 }
 
-@media (max-width: 400px) {
-    .dashboard .username {
+@media (max-width: 410px) {
+    .current-user .username {
         display: none;
     }
-    .dashboard .avatar {
+    .current-user .avatar {
         min-height: 32px;
         min-width: 32px;
         max-height: 20px;
@@ -432,30 +486,30 @@ a {
     }
 }
 
-@media (max-width: 580px) {
+@media (max-width: 680px) {
     .navigation .support,
     .navigation .commands,
     .navigation .about,
-    .navigation .login {
+    .navigation .login,
+    .navigation .current-user:after,
+    .user-dropdown {
         display: none
     }
 }
 
-@media (min-width: 581px) {
-    .nav-item.hamburger {
-        display: none;
-    }
-    .dropdown-list {
-        display: none;
-    }
-}
-
-@media (min-width: 641px) {
+@media (min-width: 681px) {
     .content, .footer {
         margin: 0 2em;
     }
     .navigation {
         padding: 0 2em;
+    }
+    .user-dropdown {
+        right: 2em;
+    }
+    .nav-item.hamburger,
+    .dropdown-list {
+        display: none;
     }
 }
 
@@ -468,6 +522,9 @@ a {
     }
     .navigation {
         padding: 0 3em;
+    }
+    .user-dropdown {
+        right: 3em;
     }
 }
 

@@ -178,7 +178,7 @@ module.exports = (OpalBot) => {
         if (session) {
             delete sessions[session.access_token];
             res.clearCookie('session', {
-                secure: true,
+                //secure: true,
                 httpOnly: true
             });
             const rand = Math.random().toString();
@@ -224,7 +224,7 @@ module.exports = (OpalBot) => {
             logins[result.access_token] = true;
             res.cookie('session', result, {
                 httpOnly: true,
-                secure: true,
+                //secure: true,
                 maxAge: result.expires_in * 1000
             });
             res.redirect('/');

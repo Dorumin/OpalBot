@@ -8,7 +8,7 @@
         <% include ../partials/navigation.ejs %>
         <div class="content">
             <% for (let category in commands) { %>
-                <h2><%= $(category) %></h2>
+                <h2 id="<%= category %>"><%= $(category) %></h2>
                 <%
                     for (let cmd in commands[category]) {
                     let command = commands[category][cmd];

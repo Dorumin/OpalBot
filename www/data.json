@@ -30,7 +30,8 @@
             "logout": "Logout",
             "logout-title": "Log out of your account",
             "dashboard": "Dashboard",
-            "dashboard-title": "Enter the ~dashboard~"
+            "dashboard-title": "Enter the ~dashboard~",
+            "sign-out": "Sign out"
         },
         "commands": {  
             "utility": [

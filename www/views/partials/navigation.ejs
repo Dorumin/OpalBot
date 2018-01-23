@@ -120,26 +120,28 @@
             </a>
         <% } %>
     </div>
-    <div class="user-dropdown">
-        <span class="dropdown-arrow"></span>
-        <div class="user-info">
-            <img class="avatar" src="<%= user.avatar_url %>?size=32">
-            <div class="stats">
-                <div class="username"><%= user.username %></div>
-                <div class="mutual-guilds"><%= $('mutual-guilds', user.mutual_guilds.length)%></div>
+    <% if (locals.logged_in) { %>
+        <div class="user-dropdown">
+            <span class="dropdown-arrow"></span>
+            <div class="user-info">
+                <img class="avatar" src="<%= user.avatar_url %>?size=32">
+                <div class="stats">
+                    <div class="username"><%= user.username %></div>
+                    <div class="mutual-guilds"><%= $('mutual-guilds', user.mutual_guilds.length)%></div>
+                </div>
             </div>
+            <a
+                href="/dashboard"
+                class="ud-item dashboard"
+            >
+                <%= $`dashboard` %>
+            </a>
+            <a
+                href="/logout"
+                class="ud-item signout"
+            >
+                <%= $`sign-out` %>
+            </a>
         </div>
-        <a
-            href="/dashboard"
-            class="ud-item dashboard"
-        >
-            <%= $`dashboard` %>
-        </a>
-        <a
-            href="/logout"
-            class="ud-item signout"
-        >
-            <%= $`sign-out` %>
-        </a>
-    </div>
+    <% } %>
 </div>

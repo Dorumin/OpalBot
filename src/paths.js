@@ -135,11 +135,7 @@ module.exports = (OpalBot) => {
             let result;
             try {
                 result = JSON.parse(body);
-                result.avatar_url = `https://cdn.discordapp.com/avatars/${result.id}/${result.avatar}.png`
-                Object.assign(res.locals, {
-                    user: result,
-                    logged_in: true
-                });
+                result.avatar_url = `https://cdn.discordapp.com/avatars/${result.id}/${result.avatar}.png`;
             } catch(e) {
                 OpalBot.util.log(e);
                 next();
@@ -156,7 +152,9 @@ module.exports = (OpalBot) => {
                         guilds: guilds,
                         mutual_guilds: guilds.filter(guild => OpalBot.client.guilds.get(guild.id))
                     });
-                    Object.assign(res.locals.user, result);
+                    Object.assign(res.locals.user, result, {
+                        logged_in: true
+                    });
                     sessions[session.access_token] = result;
                 } catch(e) {
                     OpalBot.util.log(e);
@@ -207,7 +205,7 @@ module.exports = (OpalBot) => {
         if (session) {
             delete sessions[session.access_token];
             res.clearCookie('session', {
-                //secure: true,
+                secure: true,
                 httpOnly: true
             });
             const rand = Math.random().toString();
@@ -253,7 +251,7 @@ module.exports = (OpalBot) => {
             logins[result.access_token] = true;
             res.cookie('session', result, {
                 httpOnly: true,
-                //secure: true,
+                secure: true,
                 maxAge: result.expires_in * 1000
             });
             res.redirect('/');

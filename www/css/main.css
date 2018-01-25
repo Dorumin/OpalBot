@@ -495,7 +495,7 @@ body .nopad {
     text-overflow: ellipsis;
     text-transform: uppercase;
     margin-bottom: 1em;
-    transition: border .2s ease;
+    transition: all .2s ease;
 }
 
 .guild-icon.missing {
@@ -505,6 +505,7 @@ body .nopad {
 
 .guild:hover .guild-icon {
     border-color: #00b7e0;
+    transform: scale(1.05);
 }
 
 .guild-header {
@@ -718,8 +719,10 @@ body .nopad {
     }      
     .guild:hover .guild-icon {
         border-color: #794aa2;
+        transform: none;
     }  
     .guild:active .guild-icon {
         border-color: #00b7e0;
+        transform: scale(1.05);
     }
 }

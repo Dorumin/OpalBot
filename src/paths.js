@@ -150,7 +150,6 @@ module.exports = (OpalBot) => {
             try {
                 guilds = guilds.map(guild => {
                     guild.acro = guild.name.split(' ').filter(Boolean).map(word => word.charAt(0)).join('').toUpperCase();
-                    guild.mutual = OpalBot.client.guilds.get(guild.id);
                     guild.admin = Boolean(guild.permissions & 8);
                     if (guild.icon) {
                         guild.icon_url = `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.png`;
@@ -213,8 +212,10 @@ module.exports = (OpalBot) => {
 
     app.get('/guilds/:id?', (req, res) => {
         if (req.params.id && res.locals.user) {
+            const guild = res.locals.user.guilds.find(g => g.id == req.params.id);
+            guild.mutual = OpalBot.client.guilds.get(guild.id);
             res.render('pages/guild', {
-                guild: res.locals.user.guilds.find(g => g.id == req.params.id)
+                guild: guild
             });
         } else {
             res.render('pages/guilds');

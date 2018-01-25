@@ -48,9 +48,15 @@ module.exports = (OpalBot) => {
             .get('387039127083679753')
                 .send(`Joined guild ${guild} (${guild.id})`);
     
-        let prefixes = OpalBot.prefixes[message.guild.id] || OpalBot.prefixes.default;
+        let prefixes = OpalBot.prefixes[guild.id] || OpalBot.prefixes.default,
+        channel = guild.channels.get(guild.id) ||
+            guild.channels.find("name", "general") ||
+            guild.channels
+            .filter(c => c.type === "text" && c.permissionsFor(guild.client.user).has("SEND_MESSAGES"))
+            .sort((a, b) => a.position - b.position || Number(a.id) - Number(b.id))
+            .first();
     
-        guild.defaultChannel.send(i18n.msg('on-enter', 'main', '`' + prefixes.join('`, `') + '`', 'en'));
+        channel.send(i18n.msg('on-enter', 'main', '`' + prefixes.join('`, `') + '`', 'en'));
     });
 
     client.on('typingStart', (chan, user) => {

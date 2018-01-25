@@ -31,7 +31,9 @@
                     <span class="not-admin"><%= $`not-admin` %></span>
                 <% } else { %>
                     <div class="guild-header">
-                        <div class="guild-header-image" style="background: linear-gradient(to right, rgba(240, 248, 255, 0) 50%, rgba(240, 248, 255, 1)), url(<%= guild.icon_url %>)"></div>
+                        <% if (guild.icon) { %>
+                            <div class="guild-header-image" style="background: linear-gradient(to right, rgba(240, 248, 255, 0) 50%, rgba(240, 248, 255, 1)), url(<%= guild.icon_url %>)"></div>
+                        <% } %>
                         <div class="guild-header-rest">
                             <div class="guild-header-info">
                                 <div class="guild-info-name"><%= guild.name %></div>

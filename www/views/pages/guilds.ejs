@@ -12,9 +12,21 @@
             <% } else if (!user.guilds.length) { %>
                 <span class="wtf"><%= $`strange-place` %></span>
             <% } else { %>
+                <h2><%= $`guilds-im-on` %></h2>
                 <div class="guilds">
-                    <% for (var i in user.guilds) {
-                        var guild = user.guilds[i];
+                    <% for (var i in user.mutual_guilds) {
+                        var guild = user.mutual_guilds[i];
+                    %>
+                        <a href="/guilds/<%= guild.id %>" class="guild<%= guild.admin ? ' admin' : '' %>">
+                            <img src="<%= guild.icon ? guild.icon_url + '?size=256' : '' %>" class="guild-icon<%= guild.icon ? '' : ' missing' %>" alt="<%= guild.acro %>">
+                            <span class="guild-name"><%= guild.name %></span>
+                        </a>
+                    <% } %>
+                </div>
+                <h2><%= $`your-guilds` %></h2>
+                <div class="guilds">
+                    <% for (var i in user.non_mutuals) {
+                        var guild = user.non_mutuals[i];
                     %>
                         <a href="/guilds/<%= guild.id %>" class="guild<%= guild.admin ? ' admin' : '' %>">
                             <img src="<%= guild.icon ? guild.icon_url + '?size=256' : '' %>" class="guild-icon<%= guild.icon ? '' : ' missing' %>" alt="<%= guild.acro %>">

@@ -6,14 +6,14 @@ config = require('./config.js'),
 get_ms_until_next_swap = (d = new Date()) => {
     if (config.IS_BACKUP) {
         return (
-            d.getDate() >= 15 ?
+            d.getDate() >= 20 ?
             new Date(d.getFullYear(), d.getMonth() + 1, 1).getTime() :
             0
         ) - d.getTime()
     } else {
         return (
-            d.getDate() < 15 ?
-            new Date(d.getFullYear(), d.getMonth(), 15).getTime() :
+            d.getDate() < 20 ?
+            new Date(d.getFullYear(), d.getMonth(), 20).getTime() :
             0
         ) - d.getTime()
     }

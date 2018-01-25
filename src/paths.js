@@ -122,7 +122,6 @@ module.exports = (OpalBot) => {
         const cached = sessions[session.access_token];
         if (cached && cached instanceof Promise) {
             cached.then(user => {
-                console.log('CACHED', user);
                 if (user) {
                     Object.assign(res.locals, {
                         user: user,
@@ -134,6 +133,7 @@ module.exports = (OpalBot) => {
             return;
         }
         sessions[session.access_token] = Promise.all([
+            OpalBot.ready,
             request('https://discordapp.com/api/users/@me', {
                 headers: {
                     Authorization: session.token_type + ' ' + session.access_token
@@ -145,7 +145,7 @@ module.exports = (OpalBot) => {
                 }
             })
         ])
-        .then((arr) => arr.map(JSON.parse))
+        .then((arr) => arr.slice(1).map(JSON.parse))
         .then(([user, guilds]) => {
             try {
                 guilds = guilds.map(guild => {
@@ -286,7 +286,6 @@ module.exports = (OpalBot) => {
             headers: headers
         }).then((body) => {
             const result = JSON.parse(body);
-            console.log(result);
             if (result.error || result.error_description) {
                 res.render('pages/index', {
                     title: 'error',

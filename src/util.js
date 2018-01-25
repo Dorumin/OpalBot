@@ -228,7 +228,7 @@ module.exports = (OpalBot) => {
         }).replace(/\(([\d\.]+?\|.+?\|.+?)\)/g, (s, match) => { // Plural markdown, (1|singular|plural) => "1 singular"; (4|singular|plural) => "4 plural"
             let split = match.split('|');
             return split[0] == 1 ? split[1] : split[2];
-        });
+        }).replace(/\[(.*?\/.+?)\]\((.+?)\)/g, '<a href="$1">$2</a>');
     };
 
     if (OpalBot) {

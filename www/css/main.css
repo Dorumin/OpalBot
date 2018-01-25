@@ -10,10 +10,15 @@ h2 {
 
 a {
     text-decoration: none;
+    color: #66f;
 }
 
 .noscroll {
     overflow: hidden;
+}
+
+body .nopad {
+    padding: 0;
 }
 
 /* Commands */
@@ -200,6 +205,7 @@ a {
 .content {
     background-color: white;
     padding: 2em;
+    overflow-wrap: break-word;
 }
 
 /* Dropdown */
@@ -225,6 +231,10 @@ a {
     z-index: 1;
 }
 
+.opened .dropdown-list {
+    overflow: auto;
+}
+
 .user-dropdown {
     position: absolute;
     top: 3em;
@@ -232,6 +242,7 @@ a {
     border: 1px solid #ccc;
     padding-bottom: .3em;
     display: none;
+    z-index: 1;
 }
 
 .ud-open .user-dropdown {
@@ -245,7 +256,7 @@ a {
     margin-left: 5px;
     border-left: 10px solid transparent;
     border-right: 10px solid transparent;
-    border-bottom: 10px solid #eee;
+    border-bottom: 10px solid #f8f8f8;
     position: absolute;
     top: -10px;
 }
@@ -253,7 +264,7 @@ a {
 .user-info {
     display: flex;
     align-items: flex-start;
-    background: #eee;
+    background: #f8f8f8;
     padding: .5em;
     margin-bottom: .3em;
 }
@@ -448,6 +459,112 @@ a {
     margin-left: 1em;
 }
 
+/* Guilds */
+.guilds {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+}
+
+.guild {
+    color: black;
+    font-weight: bold;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    align-items: center;
+    width: 128px;
+    padding: 2em;
+    text-align: center;
+    transition: background .2s ease;
+}
+
+.guild:hover {
+    background: aliceblue;
+}
+
+.guild-icon {
+    border-radius: 50%;
+    border: 2px solid #794aa2;
+    background-color: #f8f8f8;
+    height: 128px;
+    width: 128px;
+    line-height: 128px;
+    white-space: pre;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-transform: uppercase;
+    margin-bottom: 1em;
+    transition: border .2s ease;
+}
+
+.guild-icon.missing {
+    padding-right: 16px;
+    width: 112px;
+}
+
+.guild:hover .guild-icon {
+    border-color: #00b7e0;
+}
+
+.guild-header {
+    height: 128px;
+    background-color: aliceblue;
+    display: flex;
+}
+
+.guild-header-image {
+    height: 128px;
+    min-width: 128px;
+}
+
+.guild-header-rest {
+    padding: 1em;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-start;
+    overflow: hidden;
+}
+
+.guild-header-info {
+    white-space: nowrap;
+    overflow: hidden;
+    width: 100%;
+}
+
+.guild-info-name {
+    font-size: 1.2em;
+    font-weight: bold;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.guild-info-members {
+    color: #666;
+    font-size: 14px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.back-to-selection {
+    color: #6bbbff;
+    border: 2px solid #6bbbff;
+    background: white;
+    padding: 2px 4px;
+    font-weight: bold;
+    cursor: pointer;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 100%;
+}
+
+.go-away {
+    color: #aaa;
+}
+
 /* 404 */
 .not-found {
     padding: 2em;
@@ -496,13 +613,13 @@ a {
     }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 500px) {
     .content {
         padding: 1em;
     }
 }
 
-@media (min-width: 481px) {
+@media (min-width: 501px) {
     .content, .footer {
         margin: 0 1em;
     }
@@ -511,7 +628,7 @@ a {
     }
 }
 
-@media (max-width: 680px) {
+@media (max-width: 720px) {
     .navigation .support,
     .navigation .commands,
     .navigation .about,
@@ -522,7 +639,7 @@ a {
     }
 }
 
-@media (min-width: 681px) {
+@media (min-width: 721px) {
     .content, .footer {
         margin: 0 2em;
     }
@@ -553,7 +670,7 @@ a {
     }
 }
 
-/* For touch devices */
+/* For touch devices, mainly (totally) changing :hover to :active */
 @media (hover: none) {
     .command .header:hover:before {
         width: 0%;
@@ -584,5 +701,25 @@ a {
     }
     .dropdown-list a:active {
         text-shadow: 0 0 1px #999;
+    }
+    .ud-item:hover {
+        background: white;
+        color: #39424d;
+    }
+    .ud-item:active {
+        background: rgba(0,183,224,.1);
+        color: #00b7e0;
+    }
+    .guild:hover {
+        background: transparent;
+    }
+    .guild:active {
+        background: aliceblue;
+    }      
+    .guild:hover .guild-icon {
+        border-color: #794aa2;
+    }  
+    .guild:active .guild-icon {
+        border-color: #00b7e0;
     }
 }

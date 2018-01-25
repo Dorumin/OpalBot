@@ -1,6 +1,7 @@
 const Canvas = require('canvas'),
 request = require('request-promise-native'),
 fs = require('fs'),
+qs = require('querystring'),
 data = require('../www/data.json'),
 config = require('./config.js');
 
@@ -65,7 +66,7 @@ module.exports = (OpalBot) => {
         }
         res
             .append('Strict-Transport-Security', 'max-age=31536000; includeSubDomains')
-            .append('Content-Security-Policy', `default-src; manifest-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' https://cdn.discordapp.com; form-action 'self'; object-src 'none'; base-uri 'none'; frame-ancestors ${config.APP_NAME}.herokuapp.com ${config.BACKUP_APP_NAME}.herokuapp.com`)
+            .append('Content-Security-Policy', `default-src; manifest-src 'self'; script-src 'self'; style-src 'unsafe-inline' 'self'; img-src 'self' https://cdn.discordapp.com; form-action 'self'; object-src 'none'; base-uri 'none'; frame-ancestors ${config.APP_NAME}.herokuapp.com ${config.BACKUP_APP_NAME}.herokuapp.com`)
             .append('Referrer-Policy', 'same-origin')
             .append('X-XSS-Protection', '1; mode=block')
             .append('X-Content-Type-Options', 'nosniff')
@@ -122,10 +123,12 @@ module.exports = (OpalBot) => {
         if (cached && cached instanceof Promise) {
             cached.then(user => {
                 console.log('CACHED', user);
-                Object.assign(res.locals, {
-                    user: user,
-                    logged_in: true
-                });
+                if (user) {
+                    Object.assign(res.locals, {
+                        user: user,
+                        logged_in: true
+                    });
+                }
                 next();
             });
             return;
@@ -145,9 +148,33 @@ module.exports = (OpalBot) => {
         .then((arr) => arr.map(JSON.parse))
         .then(([user, guilds]) => {
             try {
+                guilds = guilds.map(guild => {
+                    guild.acro = guild.name.split(' ').filter(Boolean).map(word => word.charAt(0)).join('').toUpperCase();
+                    guild.mutual = OpalBot.client.guilds.get(guild.id);
+                    guild.admin = Boolean(guild.permissions & 8);
+                    if (guild.icon) {
+                        guild.icon_url = `https://cdn.discordapp.com/icons/${guild.id}/${guild.icon}.png`;
+                    } else {
+                        guild.icon_url = '';
+                    }
+                    return guild;
+                }).sort((a, b) => {
+                    if (a.owner) return -1;
+                    if (b.owner) return 1;
+                    if (a.admin) return -1;
+                    if (b.admin) return 1;
+                    return b.permissions - a.permissions;
+                });
                 user.avatar_url = `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png`;
                 user.guilds = guilds;
-                user.mutual_guilds = guilds.filter(guild => OpalBot.client.guilds.get(guild.id));
+                user.non_mutuals = [];
+                user.mutual_guilds = guilds.filter(guild => {
+                    const match = OpalBot.client.guilds.get(guild.id);
+                    if (!match) {
+                        user.non_mutuals.push(guild);
+                    }
+                    return match;
+                });
                 Object.assign(res.locals, {
                     user: user,
                     logged_in: true
@@ -184,13 +211,32 @@ module.exports = (OpalBot) => {
         res.render('pages/dashboard');
     });
 
+    app.get('/guilds/:id?', (req, res) => {
+        if (req.params.id && res.locals.user) {
+            res.render('pages/guild', {
+                guild: res.locals.user.guilds.find(g => g.id == req.params.id)
+            });
+        } else {
+            res.render('pages/guilds');
+        }
+    });
+
     /* Redirects */
     app.get('/invite', (req, res) => {
-        res.redirect(`https://discordapp.com/oauth2/authorize?client_id=${config.CLIENT_ID}&scope=bot&permissions=8206`);
+        res.redirect('https://discordapp.com/oauth2/authorize?' + qs.stringify({
+            client_id: config.CLIENT_ID,
+            scope: 'bot',
+            permissions: '8206',
+            ...req.query
+        }));
     });
 
     app.get('/support', (req, res) => {
         res.redirect(`https://discord.gg/${config.SUPPORT_INVITE}`);
+    });
+
+    app.get('/humans.txt', (req, res) => {
+        res.redirect('/about');
     });
 
     /* Auth */
@@ -205,7 +251,7 @@ module.exports = (OpalBot) => {
         if (session) {
             delete sessions[session.access_token];
             res.clearCookie('session', {
-                secure: true,
+                //secure: true,
                 httpOnly: true
             });
             const rand = Math.random().toString();
@@ -251,7 +297,7 @@ module.exports = (OpalBot) => {
             logins[result.access_token] = true;
             res.cookie('session', result, {
                 httpOnly: true,
-                secure: true,
+                //secure: true,
                 maxAge: result.expires_in * 1000
             });
             res.redirect('/');

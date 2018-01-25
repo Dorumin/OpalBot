@@ -32,11 +32,12 @@
             </a>
         <% }  else { %>
             <a
-                href="/dashboard"
+                href="/guilds"
                 class="nav-item current-user"
             >
                 <img
                     src="<%= user.avatar_url %>?size=32"
+                    alt="<%= $`avatar` %>"
                     class="avatar"
                 />
                 <span class="username"><%= user.username %></span>
@@ -111,10 +112,11 @@
             <a
                 href="/logout"
                 title="<%= $`logout-title` %>"
-                class="nav-item logout"
+                class="logout"
             >
                 <img
                     src="/img/logout.png"
+                    alt="<%= $`logout` %>"
                     class="logout-icon"
                 />
             </a>
@@ -127,7 +129,7 @@
                 <img class="avatar" src="<%= user.avatar_url %>?size=32">
                 <div class="stats">
                     <div class="username"><%= user.username %></div>
-                    <div class="mutual-guilds"><%= $('mutual-guilds', user.mutual_guilds.length)%></div>
+                    <a href="/guilds" class="mutual-guilds"><%= $('mutual-guilds', user.mutual_guilds.length) %></a>
                 </div>
             </div>
             <a

@@ -6,7 +6,7 @@
     </head>
     <body>
         <% include ../partials/navigation.ejs %>
-        <div class="content">
+        <div class="content" role="main">
             <% for (let category in commands) { %>
                 <h2 id="<%= category %>"><%= $(category) %></h2>
                 <%

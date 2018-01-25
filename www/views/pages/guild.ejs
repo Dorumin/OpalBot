@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="<%= lang %>">
+    <head>
+        <title>OpalBot! <%= (guild ? guild.name : '').trim() || $`guild` %></title>
+        <% include ../partials/header.ejs %>
+    </head>
+    <body>
+        <% include ../partials/navigation.ejs %>
+        <div class="content<%= guild && guild.mutual && guild.admin ? ' nopad' : '' %>" role="main">
+            <% if (!guild) {%>
+                <span class="no-guild">
+                    <%= $`no-guild` %>
+                    <span class="go-away"> <%= $`go-away` %></span>
+                </span>
+            <% } else if (!guild.mutual) { %>
+                <% if (guild.admin) { %>
+                    <span class="add-to-your-guild">
+                        <%- $('add-to-your-guild', guild.id) %>
+                    </span>
+                <% } else {%>
+                    <span class="forward-to-admins">
+                        <%- $('forward-to-admins', guild.id) %>
+                    </span>
+                <% } %>
+                <br /><br />
+                <span class="go-back">
+                    <%- $`or-back` %>
+                </span>
+            <% } else { %>
+                <% if (!guild.admin) { %>
+                    <span class="not-admin"><%= $`not-admin` %></span>
+                <% } else { %>
+                    <div class="guild-header">
+                        <div class="guild-header-image" style="background: linear-gradient(to right, rgba(240, 248, 255, 0) 50%, rgba(240, 248, 255, 1)), url(<%= guild.icon_url %>)"></div>
+                        <div class="guild-header-rest">
+                            <div class="guild-header-info">
+                                <div class="guild-info-name"><%= guild.name %></div>
+                                <% if (guild.mutual.memberCount) { %>
+                                    <div class="guild-info-members"><%= $('member-count', guild.mutual.memberCount) %></div>
+                                <% } %>
+                            </div>
+                            <div class="back-to-selection"><%= $`back-to-guild-select` %></div>
+                        </div>
+                    </div>
+                <% } %>
+            <% } %>
+        </div>
+        <% include ../partials/footer.ejs %>
+        <script type="text/javascript" src="/js/main.js" async></script>
+    </body>
+</html>

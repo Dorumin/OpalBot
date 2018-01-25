@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="<%= lang %>">
+    <head>
+        <title>OpalBot! <%= $`guilds` %></title>
+        <% include ../partials/header.ejs %>
+    </head>
+    <body>
+        <% include ../partials/navigation.ejs %>
+        <div class="content" role="main">
+            <% if (!locals.logged_in) { %>
+                <span class="login-required"><%- $`please-login` %></span>
+            <% } else if (!user.guilds.length) { %>
+                <span class="wtf"><%= $`strange-place` %></span>
+            <% } else { %>
+                <div class="guilds">
+                    <% for (var i in user.guilds) {
+                        var guild = user.guilds[i];
+                    %>
+                        <a href="/guilds/<%= guild.id %>" class="guild<%= guild.admin ? ' admin' : '' %>">
+                            <img src="<%= guild.icon ? guild.icon_url + '?size=256' : '' %>" class="guild-icon<%= guild.icon ? '' : ' missing' %>" alt="<%= guild.acro %>">
+                            <span class="guild-name"><%= guild.name %></span>
+                        </a>
+                    <% } %>
+                </div>
+            <% } %>
+        </div>
+        <% include ../partials/footer.ejs %>
+        <script type="text/javascript" src="/js/main.js" async></script>
+    </body>
+</html>

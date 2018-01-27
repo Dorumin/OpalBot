@@ -1,0 +1,8 @@
+{
+    "en": {
+        "leave-heading": "Are you sure?",
+        "leave-content": "This will remove the bot from your guild, but will not delete local configuration.",
+        "leave-cancel": "No, take me back!",
+        "leave-confirm": "Yes"
+    }
+}

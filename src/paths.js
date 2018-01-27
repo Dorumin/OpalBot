@@ -215,7 +215,9 @@ module.exports = (OpalBot) => {
     app.get('/guilds/:id?', (req, res) => {
         if (req.params.id && res.locals.user) {
             const guild = res.locals.user.guilds.find(g => g.id == req.params.id);
-            guild.mutual = OpalBot.client.guilds.get(guild.id);
+            if (guild) {
+                guild.mutual = OpalBot.client.guilds.get(guild.id);
+            }
             res.render('pages/guild', {
                 guild: guild
             });

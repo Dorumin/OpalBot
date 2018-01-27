@@ -49,12 +49,9 @@ module.exports = (OpalBot) => {
                 .send(`Joined guild ${guild} (${guild.id})`);
     
         let prefixes = OpalBot.prefixes[guild.id] || OpalBot.prefixes.default,
-        channel = guild.channels.get(guild.id) ||
-            guild.channels.find("name", "general") ||
-            guild.channels
-            .filter(c => c.type === "text" && c.permissionsFor(guild.client.user).has("SEND_MESSAGES"))
-            .sort((a, b) => a.position - b.position || Number(a.id) - Number(b.id))
-            .first();
+        channel = OpalBot.util.get_default_channel(guild);
+
+        if (!channel) return;
     
         channel.send(i18n.msg('on-enter', 'main', '`' + prefixes.join('`, `') + '`', 'en'));
     });

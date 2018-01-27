@@ -3,7 +3,8 @@ request = require('request-promise-native'),
 fs = require('fs'),
 qs = require('querystring'),
 data = require('../www/data.json'),
-config = require('./config.js');
+config = require('./config.js'),
+languages = require('../www/i18n.json');
 
 let util;
 
@@ -66,7 +67,7 @@ module.exports = (OpalBot) => {
         }
         res
             .append('Strict-Transport-Security', 'max-age=31536000; includeSubDomains')
-            .append('Content-Security-Policy', `default-src; manifest-src 'self'; script-src 'self'; style-src 'unsafe-inline' 'self'; img-src 'self' https://cdn.discordapp.com; form-action 'self'; object-src 'none'; base-uri 'none'; frame-ancestors ${config.APP_NAME}.herokuapp.com ${config.BACKUP_APP_NAME}.herokuapp.com`)
+            .append('Content-Security-Policy', `default-src; manifest-src 'self'; connect-src 'self'; script-src 'unsafe-inline' 'unsafe-eval' 'self'; style-src 'unsafe-inline' 'self'; img-src 'self' https://cdn.discordapp.com; form-action 'self'; object-src 'none'; base-uri 'none'; frame-ancestors ${config.APP_NAME}.herokuapp.com ${config.BACKUP_APP_NAME}.herokuapp.com`)
             .append('Referrer-Policy', 'same-origin')
             .append('X-XSS-Protection', '1; mode=block')
             .append('X-Content-Type-Options', 'nosniff')
@@ -96,7 +97,8 @@ module.exports = (OpalBot) => {
             data: data,
             lang: req.lang,
             local: local(req.lang),
-            $: local(req.lang)
+            $: local(req.lang),
+            i18n: languages[req.lang]
         }, config);
         next();
     });
@@ -345,6 +347,18 @@ module.exports = (OpalBot) => {
                 .pipe(res);
         } else {
             next();
+        }
+    });
+
+    // API
+    app.post('/ajax/:endpoint?', (req, res) => {
+        const endpoint = req.params.endpoint;
+        if (!endpoint) {
+            res.status(400).send('No endpoint provided.');
+        } else if (!OpalBot.endpoints[endpoint]) {
+            res.status(500).send('The endpoint provided was not found.');
+        } else {
+            OpalBot.endpoints[endpoint](req, res);
         }
     });
 

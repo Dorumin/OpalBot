@@ -3,6 +3,7 @@
     <head>
         <title>OpalBot! <%= (guild ? guild.name : '').trim() || $`guild` %></title>
         <% include ../partials/header.ejs %>
+        <script>window.i18n = <%- JSON.stringify(i18n) %></script>
     </head>
     <body>
         <% include ../partials/navigation.ejs %>
@@ -32,7 +33,14 @@
                 <% } else { %>
                     <div class="guild-header">
                         <% if (guild.icon) { %>
-                            <div class="guild-header-image" style="background: linear-gradient(to right, rgba(240, 248, 255, 0) 50%, rgba(240, 248, 255, 1)), url(<%= guild.icon_url %>)"></div>
+                            <div class="guild-header-image" style="background:
+                                linear-gradient(
+                                    to right,
+                                    rgba(240, 248, 255, 0) 30%,
+                                    rgba(240, 248, 255, 1)
+                                ),
+                                url(<%= guild.icon_url %>)
+                            "></div>
                         <% } %>
                         <div class="guild-header-rest">
                             <div class="guild-header-info">
@@ -41,8 +49,17 @@
                                     <div class="guild-info-members"><%= $('member-count', guild.mutual.memberCount) %></div>
                                 <% } %>
                             </div>
-                            <a href="/guilds" class="back-to-selection"><%= $`back-to-guild-select` %></a>
+                            <a href="/guilds" class="btn back-to-selection"><%= $`back-to-guild-select` %></a>
                         </div>
+                    </div>
+                    <div class="guild-dashboard">
+                        <div
+                            class="btn leave-guild api"
+                            data-endpoint="kill"
+                            data-guild="<%= guild.id %>"
+                            data-modal="leave"
+                            data-onload="location.reload()"
+                        ><%= $`leave-guild` %></div>
                     </div>
                 <% } %>
             <% } %>

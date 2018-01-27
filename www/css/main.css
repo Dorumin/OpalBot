@@ -148,6 +148,21 @@ body .nopad {
     text-shadow: white 0 0 3px;
 }
 
+.btn {
+    display: inline-block;
+    border-width: 2px;
+    border-style: solid;
+    padding: 2px 4px;
+    cursor: pointer;
+    font-weight: bold;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 100%;
+    background: #fff;
+    transition: all .2s ease;
+}
+
 .logo {
     font-family: monospace;
     font-size: 20px;
@@ -202,7 +217,7 @@ body .nopad {
     text-overflow: ellipsis;
 }
 
-.content {
+.content, .guild-dashboard {
     background-color: white;
     padding: 2em;
     overflow-wrap: break-word;
@@ -498,11 +513,6 @@ body .nopad {
     transition: all .2s ease;
 }
 
-.guild-icon.missing {
-    padding-right: 16px;
-    width: 112px;
-}
-
 .guild:hover .guild-icon {
     border-color: #00b7e0;
     -webkit-transform: scale(1.05);
@@ -552,21 +562,117 @@ body .nopad {
     text-overflow: ellipsis;
 }
 
+.guild-dashboard {
+    padding: 1em;
+}
+
 .back-to-selection {
     color: #6bbbff;
-    border: 2px solid #6bbbff;
-    background: white;
-    padding: 2px 4px;
-    font-weight: bold;
-    cursor: pointer;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    max-width: 100%;
+    border-color: #6bbbff;
+}
+
+.back-to-selection:hover {
+    color: white;
+    background-color: #6bbbff;
+}
+
+.leave-guild {
+    color: red;
+    border-color: red;
+    font-size: 14px;
+}
+
+.leave-guild:hover {
+    color: white;
+    background: red;
 }
 
 .go-away {
     color: #aaa;
+}
+
+/* Modals */
+.modal-wrapper {
+    position: fixed;
+    top: -150px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 1em;
+    transition: all .4s ease;
+}
+
+.modal-wrapper.on-screen {
+    background: rgba(0,0,0,.3);
+    top: 0;
+}
+
+.modal-wrapper.closing .modal {
+    margin-top: 50%;
+}
+
+.modal {
+    background: white;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 1em;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+    transition: all .4s ease;
+    opacity: 0;
+}
+
+.modal-wrapper.on-screen .modal {
+    opacity: 1;
+}
+
+.modal-heading {
+    margin-top: 0;
+    border-bottom: 1px solid #ccc;
+    margin-right: 2em;
+    font-weight: normal;
+    padding-bottom: .2em;
+}
+
+.modal-buttons {
+    display: flex;
+    justify-content: flex-end;
+    overflow: hidden;
+}
+
+.modal-button {
+    display: inline-block;
+    padding: 8px 12px;
+    margin-left: .5em;
+    color: white;
+    cursor: pointer;
+    transition: box-shadow .2s ease;
+}
+
+.modal-button:hover {
+    box-shadow: inset 0 0 10px rgba(0,0,0,.1);
+}
+
+.modal-button.red {
+    background: red;
+}
+
+.modal-button.lightblue {
+    background: #008cba;
+}
+
+.modal-close {
+    float: right;
+    padding: .4em .8em;
+    color: #ccc;
+    cursor: pointer;
+}
+
+.modal-close:hover {
+    color: #666;
+}
+
+.modal-content {
+    margin: 1em 0;
 }
 
 /* 404 */
@@ -617,13 +723,15 @@ body .nopad {
 }
 
 @media (max-width: 500px) {
-    .content {
+    .content,
+    .guild-dashboard {
         padding: 1em;
     }
 }
 
 @media (min-width: 501px) {
-    .content, .footer {
+    .content,
+    .footer {
         margin: 0 1em;
     }
     .navigation {
@@ -643,7 +751,8 @@ body .nopad {
 }
 
 @media (min-width: 721px) {
-    .content, .footer {
+    .content,
+    .footer {
         margin: 0 2em;
     }
     .navigation {
@@ -659,10 +768,12 @@ body .nopad {
 }
 
 @media (min-width: 801px) {
-    .content {
-        padding: 2em 3em;
+    .content,
+    .guild-dashboard {
+        padding: 2em;
     }
-    .content, .footer {
+    .content,
+    .footer {
         margin: 0 3em;
     }
     .navigation {
@@ -732,5 +843,13 @@ body .nopad {
         -moz-transform: scale(1.05);
         -o-transform: scale(1.05);
         transform: scale(1.05);
+    }
+    .leave-guild:hover {
+        color: red;
+        background: white;
+    }
+    .leave-guild:active {
+        color: white;
+        background: red;
     }
 }

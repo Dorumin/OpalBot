@@ -47,7 +47,8 @@
             "utility": "Utility",
             "why-bot": "Why bot?",
             "why-bot-content": "It's simple. One night, I decided that I would make a bot. And not any bot, I would make the most <i>kick ass bot Discord has ever seen.</i><br /><br />I myself have made all of the code, but a couple of friends have helped me along the way. I would like to thank in particular:",
-            "your-guilds": "Your guilds"
+            "your-guilds": "Your guilds",
+            "leave-guild": "Leave guild"
         },
         "commands": {  
             "utility": [

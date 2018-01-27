@@ -12,6 +12,16 @@ req = (obj, POST) => {
     });
 };
 
+function sanitize(str) {
+    const char_table = {
+        ';': '⍮',
+        '[': '⦋',
+        ']': '⦌'
+    },
+    keys = Object.keys(char_table);
+    return str.replace(new RegExp(keys.join('|\\'), 'g'), char => char_table[char]);
+}
+
 module.exports = (OpalBot) => {
     const out = {},
     i18n = OpalBot.i18n;
@@ -110,9 +120,9 @@ module.exports = (OpalBot) => {
         } else {
             let list = '';
             for (let i in r) {
-                list += `\n[${Number(i) + 1}] - ${r[i].snippet.title}`
+                list += `\n[${Number(i) + 1}] - ${sanitize(r[i].snippet.title)}`
             }
-            bot_message = await message.channel.send('```' + list.slice(1) + '```').catch(OpalBot.util.log);
+            bot_message = await message.channel.send('```ini' + list + '```').catch(OpalBot.util.log);
         }
     };
 

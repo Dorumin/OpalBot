@@ -65,6 +65,7 @@ module.exports = (OpalBot) => {
                         deletionStack.forEach(msg => msg.delete());
                         message.channel.send(i18n.msg('deleted', 'purge', messages.size, lang));
                     } catch(e) {
+                        console.log(e);
                         message.channel.send(i18n.msg('missing-permissions', 'purge', lang));
                     }
                 } else { // cancel

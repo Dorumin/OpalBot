@@ -19,7 +19,11 @@
                             var guild = user.mutual_guilds[i];
                         %>
                             <a href="/guilds/<%= guild.id %>" class="guild<%= guild.admin ? ' admin' : '' %>">
-                                <img src="<%= guild.icon ? guild.icon_url + '?size=256' : '' %>" class="guild-icon<%= guild.icon ? '' : ' missing' %>" alt="<%= guild.acro %>">
+                                <% if (guild.icon) {%>
+                                    <img src="<%= guild.icon_url %>" class="guild-icon" alt="<%= guild.acro %>">
+                                <% } else { %>
+                                    <div class="guild-icon missing"><%= guild.acro %></div>
+                                <% } %>
                                 <span class="guild-name"><%= guild.name %></span>
                             </a>
                         <% } %>
@@ -31,7 +35,11 @@
                         var guild = user.non_mutuals[i];
                     %>
                         <a href="/guilds/<%= guild.id %>" class="guild<%= guild.admin ? ' admin' : '' %>">
-                            <img src="<%= guild.icon ? guild.icon_url + '?size=256' : '' %>" class="guild-icon<%= guild.icon ? '' : ' missing' %>" alt="<%= guild.acro %>">
+                            <% if (guild.icon) {%>
+                                <img src="<%= guild.icon_url %>" class="guild-icon" alt="<%= guild.acro %>">
+                            <% } else { %>
+                                <div class="guild-icon missing"><%= guild.acro %></div>
+                            <% } %>
                             <span class="guild-name"><%= guild.name %></span>
                         </a>
                     <% } %>

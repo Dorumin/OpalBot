@@ -1,7 +1,7 @@
 User-Agent: *
 Disallow: /dashboard
 Disallow: /login
-Disallow: /ajax
+Disallow: /ajax/*
 
 User-Agent: 🤖
 Disallow: /humans.txt

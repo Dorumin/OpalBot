@@ -1,1 +1,1 @@
-module.exports = require('./src/startup.js');
+global.OpalBot = module.exports = require('./src/startup.js');

@@ -170,7 +170,7 @@ module.exports = (OpalBot) => {
                 user.guilds = guilds;
                 user.non_mutuals = [];
                 user.mutual_guilds = guilds.filter(guild => {
-                    const match = OpalBot.client.guilds.get(guild.id);
+                    const match = guild.mutual = OpalBot.client.guilds.get(guild.id);
                     if (!match) {
                         user.non_mutuals.push(guild);
                     }
@@ -214,12 +214,8 @@ module.exports = (OpalBot) => {
 
     app.get('/guilds/:id?', (req, res) => {
         if (req.params.id && res.locals.user) {
-            const guild = res.locals.user.guilds.find(g => g.id == req.params.id);
-            if (guild) {
-                guild.mutual = OpalBot.client.guilds.get(guild.id);
-            }
             res.render('pages/guild', {
-                guild: guild
+                guild: res.locals.user.guilds.find(g => g.id == req.params.id)
             });
         } else {
             res.render('pages/guilds');

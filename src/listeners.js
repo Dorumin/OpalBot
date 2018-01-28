@@ -2,6 +2,19 @@ const config = require('./config.js'),
 start_activity = require('./activity.js');
 
 module.exports = (OpalBot) => {
+    async function update_mutuals(sessions, key) {
+        const user = await sessions[key];
+        user.non_mutuals = [];
+        user.mutual_guilds = user.guilds.filter(guild => {
+            const match = guild.mutual = OpalBot.client.guilds.get(guild.id);
+            if (!match) {
+                user.non_mutuals.push(guild);
+            }
+            return match;
+        });
+        sessions[key] = Promise.resolve(user);
+    }
+
     const client = OpalBot.client,
     i18n = OpalBot.i18n;
 
@@ -42,19 +55,39 @@ module.exports = (OpalBot) => {
         }
     });
     
-    client.on('guildCreate', (guild) => {
+    client.on('guildCreate', async (guild) => {
         client.guilds
             .get('344422448403316748').channels
             .get('387039127083679753')
                 .send(`Joined guild ${guild} (${guild.id})`);
     
-        let prefixes = OpalBot.prefixes[guild.id] || OpalBot.prefixes.default,
+        const prefixes = OpalBot.prefixes[guild.id] || OpalBot.prefixes.default,
         channel = OpalBot.util.get_default_channel(guild);
 
-        if (!channel) return;
-    
-        channel.send(i18n.msg('on-enter', 'main', '`' + prefixes.join('`, `') + '`', 'en'));
+        if (channel) {    
+            channel.send(i18n.msg('on-enter', 'main', '`' + prefixes.join('`, `') + '`', 'en'));
+        }
+
+        const sessions = OpalBot.storage.sessions = OpalBot.storage.sessions || {};
+
+        for (var i in sessions) {
+            const session = await sessions[i];
+            if (session.non_mutuals.some(g => g.id == guild.id)) {
+                update_mutuals(sessions, i);
+            }
+        }
     });
+
+    client.on('guildDelete', async (guild) => {
+        const sessions = OpalBot.storage.sessions = OpalBot.storage.sessions || {};
+
+        for (var i in sessions) {
+            const session = await sessions[i];
+            if (session.mutual_guilds.some(g => g.id == guild.id)) {
+                update_mutuals(sessions, i);
+            }
+        }
+    })
 
     client.on('typingStart', (chan, user) => {
         OpalBot.handlers.typingStart = OpalBot.handlers.typingStart || [];

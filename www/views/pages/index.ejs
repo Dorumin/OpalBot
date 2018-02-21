@@ -3,6 +3,9 @@
     <head>
         <title>OpalBot! <%= locals.title ? $(title) : $`home` %></title>
         <% include ../partials/header.ejs %>
+        <% if (locals.GSV) { %>
+            <meta name="google-site-verification" content="<%= GSV %>" />
+        <% } %>
     </head>
     <body>
         <% include ../partials/navigation.ejs %>

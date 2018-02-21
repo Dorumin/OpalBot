@@ -7,7 +7,12 @@ module.exports = (OpalBot) => {
     out.peasants.seen = async (message, content, lang) => {
         let user = message.mentions.users.first();
         if (!user) {
-            message.channel.send(i18n.msg('no-mention', 'seen', lang)).catch(OpalBot.util.log);
+            user = message.content.match(/<@!?(\d+)>/);
+            user = user && OpalBot.client.users.get(user[1]);
+            if (!user) {
+                message.channel.send(i18n.msg('no-mention', 'seen', lang)).catch(OpalBot.util.log);
+                return;
+            }
         }
         let data = (await OpalBot.db).seen || {};
         if (['online', 'dnd'].includes(user.presence.status)) {

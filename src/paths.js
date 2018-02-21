@@ -96,7 +96,6 @@ module.exports = (OpalBot) => {
         Object.assign(res.locals, {
             data: data,
             lang: req.lang,
-            local: local(req.lang),
             $: local(req.lang),
             i18n: languages[req.lang]
         }, config);

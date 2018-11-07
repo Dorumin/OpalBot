@@ -12,7 +12,7 @@ module.exports = (OpalBot) => {
         encoded = encodeURIComponent(url),
         google = `https://www.google.com/searchbyimage?image_url=${encoded}`,
         tineye = `https://www.tineye.com/search?url=${encoded}`,
-        iqdb = `https://www.iqdb.com/?url=${encoded}`;
+        iqdb = `https://www.iqdb.org/?url=${encoded}`;
 
         message.channel.send({
             embed: {

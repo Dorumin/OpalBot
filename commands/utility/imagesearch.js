@@ -8,17 +8,21 @@ module.exports = (OpalBot) => {
     out.peasants.reverseimage = 'imagesearch';
     out.peasants.imagesearch = (message, content, lang) => {
         let user = message.mentions.users.first(),
-        url = user ? user.displayAvatarURL : content.trim().replace(/^<|>$/g, '');
+        url = user ? user.displayAvatarURL : content.trim().replace(/^<|>$/g, ''),
+        encoded = encodeURIComponent(url),
+        google = `https://www.google.com/searchbyimage?image_url=${encoded}`,
+        tineye = `https://www.tineye.com/search?url=${encoded}`,
+        iqdb = `https://www.iqdb.com/?url=${encoded}`;
 
         message.channel.send({
             embed: {
                 color: OpalBot.color,
                 title: i18n.msg('title', 'imagesearch', lang),
-                url: 'https://www.google.com/searchbyimage?image_url=' + encodeURIComponent(url),
+                url: google,
                 image: {
                     url: url
                 },
-                description: i18n.msg('description', 'imagesearch', lang)
+                description: i18n.msg('description', 'imagesearch', tineye, iqdb, lang)
             }
         }).catch(() => {
             message.reply(i18n.msg('invalid', 'imagesearch', lang)).catch(OpalBot.util.log);

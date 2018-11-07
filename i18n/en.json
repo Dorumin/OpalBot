@@ -40,7 +40,7 @@
     },
     "imagesearch": {
         "title": "Result",
-        "description": "Click the above link to see search results.",
+        "description": "[TinEye]($1) - [IQDB]($2)",
         "invalid": "please provide a valid url!"
     },
     "ohyou": {

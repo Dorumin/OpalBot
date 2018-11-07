@@ -228,14 +228,16 @@ module.exports = (OpalBot) => {
             .replace(/\[.+\]/g, '<span class="optional">$&</span>');
     };
 
-    out.format_message = (str, args) => {
+    out.format_message = (str, args, links = false) => {
         args = args.map(String);
         return str.replace(/\$(\d)/g, (s, n) => {
             return args[n - 1] || s;
-        }).replace(/\(([\d\.]+?\|.+?\|.+?)\)/g, (s, match) => { // Plural markdown, (1|singular|plural) => "1 singular"; (4|singular|plural) => "4 plural"
+        })
+        .replace(/\(([\d\.]+?\|.+?\|.+?)\)/g, (s, match) => { // Plural markdown, (1|singular|plural) => "1 singular"; (4|singular|plural) => "4 plural"
             let split = match.split('|');
             return split[0] == 1 ? split[1] : split[2];
-        }).replace(/\[(.*?\/.+?)\]\((.+?)\)/g, '<a href="$1">$2</a>');
+        })
+        .replace(/\[(.*?\/.+?)\]\((.+?)\)/g, links ? '<a href="$1">$2</a>' : '$&');
     };
 
     if (OpalBot) {

@@ -42,7 +42,7 @@ function i18n(msg, lang, ...args) {
     const locale = (data[lang] || data.en).i18n,
     message = locale[msg] || '';
 
-    return util.format_message(message, args);
+    return util.format_message(message, args, true);
 }
 
 function local(lang) {

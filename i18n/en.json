@@ -40,7 +40,7 @@
     },
     "imagesearch": {
         "title": "Google Images",
-        "description": "[TinEye]($1) - [IQDB]($2)",
+        "description": "[TinEye]($1) - [IQDB]($2) - [SauceNaoo]($3)",
         "invalid": "please provide a valid url!"
     },
     "ohyou": {

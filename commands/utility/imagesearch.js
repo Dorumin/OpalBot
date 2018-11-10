@@ -12,7 +12,8 @@ module.exports = (OpalBot) => {
         encoded = encodeURIComponent(url),
         google = `https://www.google.com/searchbyimage?image_url=${encoded}`,
         tineye = `https://www.tineye.com/search?url=${encoded}`,
-        iqdb = `https://www.iqdb.org/?url=${encoded}`;
+        iqdb = `https://www.iqdb.org/?url=${encoded}`,
+        saucenao = `https://saucenao.com/search.php?url=${encoded}`
 
         message.channel.send({
             embed: {
@@ -22,7 +23,7 @@ module.exports = (OpalBot) => {
                 image: {
                     url: url
                 },
-                description: i18n.msg('description', 'imagesearch', tineye, iqdb, lang)
+                description: i18n.msg('description', 'imagesearch', tineye, iqdb, saucenao, lang)
             }
         }).catch(() => {
             message.reply(i18n.msg('invalid', 'imagesearch', lang)).catch(OpalBot.util.log);

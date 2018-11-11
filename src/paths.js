@@ -314,6 +314,9 @@ module.exports = (OpalBot) => {
         let storage = OpalBot.storage.quotes || {},
         id = req.query.id,
         quote = id ? storage[id[0]] : null;
+
+        console.log(id, quote);
+        
         if (!quote) {
             next();
             return;

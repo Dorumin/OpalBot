@@ -128,7 +128,8 @@ module.exports = (OpalBot) => {
         if (quote) {
             quote = {
                 content: quote[1].trim(),
-                id: 'custom-' + Math.random()
+                id: 'custom-' + Math.random(),
+                title: message.author.username + '#' + message.author.discriminator
             };
         }
 

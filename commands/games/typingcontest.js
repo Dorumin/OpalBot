@@ -71,7 +71,7 @@ module.exports = (OpalBot) => {
             return;
         }
         let storage = OpalBot.storage.quotes = OpalBot.storage.quotes || {},
-        quote = null,
+        quote = content.match(/--text (.+?)(?:$|--)/i),
         fancy_characters = {
             '“': '"',
             '”': '"',
@@ -124,6 +124,11 @@ module.exports = (OpalBot) => {
             }).catch(OpalBot.util.log);
             return;
         }
+
+        if (quote) {
+            quote = quote[1].trim();
+        }
+
         if (storage[message.channel.id]) {
             message.channel.send(i18n.msg('multiple', 'typingcontest', lang)).catch(OpalBot.util.log);
             return;

@@ -126,7 +126,10 @@ module.exports = (OpalBot) => {
         }
 
         if (quote) {
-            quote = quote[1].trim();
+            quote = {
+                content: quote[1].trim(),
+                id: 'custom-' + Math.random()
+            };
         }
 
         if (storage[message.channel.id]) {

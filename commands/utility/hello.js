@@ -6,15 +6,15 @@ module.exports = (OpalBot) => {
     out.peasants.hi = 'hello';
     out.peasants.hey = 'hello';
     out.peasants.hello = (message, content, lang) => {
-        switch (message.author.username + '#' + message.author.discriminator) {
-            case 'Dorumin#0969':
+        switch (message.author.id) {
+            case '155545848812535808':
                 message.reply('hello useless pile of goop!').catch(OpalBot.util.log);
             break;
-            case 'Oasis#4730':
+            case '195712766214930432':
                 message.reply('hello, loser!').catch(OpalBot.util.log);
                 break;
             default:
-                message.reply(i18n.msg(i18n.msg('default', 'hello', message.author, lang))).catch(OpalBot.util.log);
+                message.reply(i18n.msg('default', 'hello', message.author, lang)).catch(OpalBot.util.log);
         }
     };
 

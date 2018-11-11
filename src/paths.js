@@ -312,7 +312,7 @@ module.exports = (OpalBot) => {
     // App services
     app.get('/quote_image', (req, res, next) => {
         let storage = OpalBot.storage.quotes || {},
-        id = req.url.match(/\d+$/),
+        id = req.query.id,
         quote = id ? storage[id[0]] : null;
         if (!quote) {
             next();

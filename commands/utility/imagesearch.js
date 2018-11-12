@@ -13,7 +13,7 @@ module.exports = (OpalBot) => {
         google = `https://www.google.com/searchbyimage?image_url=${encoded}`,
         tineye = `https://www.tineye.com/search?url=${encoded}`,
         iqdb = `https://www.iqdb.org/?url=${encoded}`,
-        saucenao = `https://saucenao.com/search.php?url=${encoded}`
+        saucenao = `https://saucenao.com/search.php?sort=size&order=desc&url=${encoded}`
 
         message.channel.send({
             embed: {

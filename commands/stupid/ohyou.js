@@ -1,5 +1,5 @@
-const //Canvas = require('canvas'),
-//Image = Canvas.Image,
+const Canvas = require('canvas'),
+Image = Canvas.Image,
 request = require('request').defaults({ encoding: null }),
 fs = require('fs');
 

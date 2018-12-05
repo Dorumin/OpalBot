@@ -1,4 +1,4 @@
-const Canvas = require('canvas'),
+const //Canvas = require('canvas'),
 request = require('request-promise-native'),
 fs = require('fs'),
 qs = require('querystring'),

@@ -8,7 +8,11 @@ module.exports = (OpalBot) => {
     out.peasants.reverseimage = 'imagesearch';
     out.peasants.imagesearch = (message, content, lang) => {
         let user = message.mentions.users.first(),
-        url = user ? user.displayAvatarURL : content.trim().replace(/^<|>$/g, ''),
+        url = message.attachments.size
+            ? message.attachments.first().url
+            : user
+                ? user.displayAvatarURL
+                : content.trim().replace(/^<|>$/g, ''),
         encoded = encodeURIComponent(url),
         google = `https://www.google.com/searchbyimage?image_url=${encoded}`,
         tineye = `https://www.tineye.com/search?url=${encoded}`,

@@ -100,6 +100,9 @@ module.exports = (OpalBot) => {
         } else if (!OpalBot.storage.typingUsers[chan.id].includes(user)) {
             OpalBot.storage.typingUsers[chan.id].push(user);
         }
+        OpalBot.util.extendDatabase('seen', {
+            [user.id]: Date.now()
+        });
     });
     
     client.on('typingStop', (chan, user) => {
@@ -124,6 +127,9 @@ module.exports = (OpalBot) => {
             OpalBot.util.log(`Finished fetching ${message.author.username}! Time taken: ${Date.now() - d1}`);
             if (!message.member) return;
         }
+        OpalBot.util.extendDatabase('seen', {
+            [message.author.id]: Date.now()ñ
+        });
         let content = message.content.trim(),
         name = message.author.username,
         local = await OpalBot.util.getGuildLanguage(message.guild),

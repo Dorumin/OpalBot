@@ -128,7 +128,7 @@ module.exports = (OpalBot) => {
             if (!message.member) return;
         }
         OpalBot.util.extendDatabase('seen', {
-            [message.author.id]: Date.now()ñ
+            [message.author.id]: Date.now()
         });
         let content = message.content.trim(),
         name = message.author.username,

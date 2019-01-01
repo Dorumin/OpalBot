@@ -83,6 +83,8 @@ module.exports = (OpalBot) => {
     const out = {},
     i18n = OpalBot.i18n;
     
+    return out;
+
     out.peasants = {};
     out.peasants.play = async (message, content, lang) => {
         const channel = message.member.voiceChannel,

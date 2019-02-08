@@ -2,10 +2,10 @@ module.exports = (OpalBot) => {
     const out = {}; 
     
     out.peasants = {};
-    out.peasants.google = 'lmgtfy';
-    out.peasants.lmgtfy = (message, content, lang) => {
+    out.peasants.google = 'search';
+    out.peasants.search = (message, content, lang) => {
         var encoded = encodeURIComponent(content).split('%20').join('+'),
-        link = `http://lmgtfy.com/?q=${encoded}`
+        link = `https://www.google.com/search?q=${encoded}`
         message.channel.send(link).catch(OpalBot.util.log);
     };
 

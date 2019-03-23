@@ -7,24 +7,30 @@ module.exports = (OpalBot) => {
     out.peasants.seen = async (message, content, lang) => {
         let user = message.mentions.users.first();
         if (!user) {
-            user = message.content.match(/<@!?(\d+)>/);
-            user = user && OpalBot.client.users.get(user[1]);
-            if (!user) {
+            if (/^\d+$/.test(content)) {
+                user = OpalBot.client.users.get(content);
+                if (!user) {
+                    user = content;
+                }
+            } else {
                 message.channel.send(i18n.msg('no-mention', 'seen', lang)).catch(OpalBot.util.log);
                 return;
             }
         }
         let data = (await OpalBot.db).seen || {};
-        if (['online', 'dnd'].includes(user.presence.status)) {
-            message.channel.send(i18n.msg('online', 'seen', user.username, lang)).catch(OpalBot.util.log);
-            return;
-        }
-        if (!data[user.id]) {
-            message.channel.send(i18n.msg('no-data', 'seen', user.username + '#' + user.discriminator, lang)).catch(OpalBot.util.log);
-            return;
+
+        if (user.presence) {
+            if (['online', 'dnd'].includes(user.presence.status)) {
+                message.channel.send(i18n.msg('online', 'seen', user.username, lang)).catch(OpalBot.util.log);
+                return;
+            }
+            if (!data[user.id]) {
+                message.channel.send(i18n.msg('no-data', 'seen', user.username + '#' + user.discriminator, lang)).catch(OpalBot.util.log);
+                return;
+            }
         }
         
-        let t = Date.now() - data[user.id],
+        let t = Date.now() - data[user.id || user],
         f = Math.floor,
         s = f(t / 1000),
         m = f(s / 60),
@@ -38,7 +44,7 @@ module.exports = (OpalBot) => {
         },
         a = Object.keys(o).filter(n => o[n]).reverse(),
         k = a.join('-'),
-        str = i18n.msg(k, 'seen', message.author, user.username, ...a.map(n => o[n]), lang);
+        str = i18n.msg(k, 'seen', message.author, user.username || user, ...a.map(n => o[n]), lang);
         message.channel.send(str).catch(OpalBot.util.log);
     };
 

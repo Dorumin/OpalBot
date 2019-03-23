@@ -44,7 +44,7 @@ module.exports = (OpalBot) => {
         },
         a = Object.keys(o).filter(n => o[n]).reverse(),
         k = a.join('-'),
-        str = i18n.msg(k, 'seen', message.author, user.username || user, ...a.map(n => o[n]), lang);
+        str = i18n.msg(k, 'seen', message.author, user.username || `<@${user}>`, ...a.map(n => o[n]), lang);
         message.channel.send(str).catch(OpalBot.util.log);
     };
 

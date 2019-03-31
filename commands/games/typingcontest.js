@@ -98,7 +98,7 @@ module.exports = (OpalBot) => {
             }
             tc.forEach((obj, i) => {
                 const user = OpalBot.client.users.get(obj.id);
-                if (!user) {
+                if (user) {
                     obj.name = user.username;
                     updated = true;
                 }

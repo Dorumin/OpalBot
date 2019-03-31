@@ -266,6 +266,7 @@ module.exports = (OpalBot) => {
                 }
                 let correct = 0,
                 errors = 0,
+                errorLength = 0,
                 qs = q.split(' ').filter(Boolean),
                 cs = c.split(' ').filter(Boolean),
                 i = 0,
@@ -277,6 +278,7 @@ module.exports = (OpalBot) => {
                         correct++;
                     } else {
                         errors++;
+                        errorLength += cs[i].length;
                         if (!correct--) { // don't reduce if it's already 0
                             correct = 0;
                         }
@@ -295,10 +297,14 @@ module.exports = (OpalBot) => {
                 }
                 let elapsed = score.time - (starts[score.user.id] || starts.default),
                 secs = (elapsed / 1000).toFixed(1),
-                wpm = Math.ceil(correct * (60 / (elapsed / 1000)));
+                // 1 word = 5 characters due to fluctuation in word length by quote
+                segments = c.length / 5,
+                correctSegments = segments - errorLength / 5,
+                wpm = Math.ceil(correctSegments * (60 / (elapsed / 1000)));
                 score.wpm = `${i18n.msg('score-format', 'typingcontest', wpm, secs, lang)}\n`;
                 score.errors = errors;
-                ordered.push(score);
+                // ordered.push(score);
+                message.channel.send('Leaderboard updates temporarily disabled');
             }
 
             // Sort scores and add results to end table

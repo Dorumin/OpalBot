@@ -303,8 +303,7 @@ module.exports = (OpalBot) => {
                 wpm = Math.ceil(correctSegments * (60 / (elapsed / 1000)));
                 score.wpm = `${i18n.msg('score-format', 'typingcontest', wpm, secs, lang)}\n`;
                 score.errors = errors;
-                // ordered.push(score);
-                message.channel.send('Leaderboard updates temporarily disabled');
+                ordered.push(score);
             }
 
             // Sort scores and add results to end table

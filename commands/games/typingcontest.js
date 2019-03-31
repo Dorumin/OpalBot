@@ -90,17 +90,26 @@ module.exports = (OpalBot) => {
             tc = games.typingcontest || [],
             names = '',
             scores = '',
-            dates = '';
+            dates = '',
+            updated = false;
             if (!tc.length) {
                 message.channel.send(i18n.msg('no-leaderboard', 'typingcontest', lang)).catch(OpalBot.util.log);
                 return;
             }
             tc.forEach((obj, i) => {
+                const user = OpalBot.client.users.get(obj.id);
+                if (!user) {
+                    obj.name = user.username;
+                    updated = true;
+                }
                 let cardinal = (i + 1) + (i ? ' ' : '  ');
                 names += `\n#${cardinal}${obj.name}`;
                 scores += `\n${obj.wpm}`;
                 dates += '\n' + OpalBot.util.formatDate(i18n.msg('date-format', 'typingcontest', lang), new Date(obj.date));
             });
+            if (updated) {
+                OpalBot.util.extendDatabase('games', games);
+            }
             message.channel.send({
                 embed: {
                     color: OpalBot.color,
@@ -356,11 +365,6 @@ module.exports = (OpalBot) => {
                 }).filter((score, index, scores) => {
                     return scores.findIndex(item => item.id == score.id) == index;
                 }).slice(0, 5);
-                games.typingcontest.foreach(score => {
-                    const user = OpalBot.client.users.get(score.id);
-                    if (!user) return;
-                    score.name = user.username;
-                });
                 OpalBot.util.extendDatabase('games', games);
             });
 

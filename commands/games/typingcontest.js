@@ -356,6 +356,11 @@ module.exports = (OpalBot) => {
                 }).filter((score, index, scores) => {
                     return scores.findIndex(item => item.id == score.id) == index;
                 }).slice(0, 5);
+                games.typingcontest.foreach(score => {
+                    const user = OpalBot.client.users.get(score.id);
+                    if (!user) return;
+                    score.name = user.username;
+                });
                 OpalBot.util.extendDatabase('games', games);
             });
 

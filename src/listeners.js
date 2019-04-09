@@ -15,6 +15,22 @@ module.exports = (OpalBot) => {
         sessions[key] = Promise.resolve(user);
     }
 
+    async function updateSeen(id, i) {
+        const { seen } = (await OpalBot.db);
+        const old = seen[id],
+        cur = [0, 0];
+        if (typeof old == 'number') {
+            cur[0] = old;
+        } else {
+            cur[0] = old[0];
+            cur[1] = old[1];
+        }
+        cur[i] = Date.now();
+        OpalBot.util.extendDatabase('seen', {
+            [id]: cur
+        });
+    }
+
     const client = OpalBot.client,
     i18n = OpalBot.i18n;
 
@@ -49,9 +65,7 @@ module.exports = (OpalBot) => {
         let oldstat = old.presence.status,
         newstat = newb.presence.status;
         if (['idle', 'offline'].includes(newstat) && ['online', 'dnd'].includes(oldstat)) {
-            OpalBot.util.extendDatabase('seen', {
-                [newb.user.id]: Date.now()
-            });
+            updateSeen(newb.user.id, 0);
         }
     });
     
@@ -127,9 +141,7 @@ module.exports = (OpalBot) => {
             OpalBot.util.log(`Finished fetching ${message.author.username}! Time taken: ${Date.now() - d1}`);
             if (!message.member) return;
         }
-        OpalBot.util.extendDatabase('seen', {
-            [message.author.id]: Date.now()
-        });
+        updateSeen(message.author.id, 1);
         let content = message.content.trim(),
         name = message.author.username,
         local = await OpalBot.util.getGuildLanguage(message.guild),

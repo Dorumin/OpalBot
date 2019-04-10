@@ -114,9 +114,7 @@ module.exports = (OpalBot) => {
         } else if (!OpalBot.storage.typingUsers[chan.id].includes(user)) {
             OpalBot.storage.typingUsers[chan.id].push(user);
         }
-        OpalBot.util.extendDatabase('seen', {
-            [user.id]: Date.now()
-        });
+        updateSeen(user.id, 1);
     });
     
     client.on('typingStop', (chan, user) => {

@@ -366,6 +366,7 @@ module.exports = (OpalBot) => {
             'Content-Type': 'text/plain; charset=utf-8'
         }); 
         res.write('Disabled due to abuse.');
+        res.write(config.bye);
         res.end();
         return;
         res.write(OpalBot.log);

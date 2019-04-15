@@ -120,10 +120,10 @@ module.exports = (OpalBot) => {
         title = content.match(new RegExp(i18n.msg('title-regex', 'mp3', lang), 'i')) || '',
         start = OpalBot.util.readDuration(content.match(new RegExp(i18n.msg('start-regex', 'mp3', lang), 'i'))),
         end = OpalBot.util.readDuration(content.match(new RegExp(i18n.msg('end-regex', 'mp3', lang), 'i')));
-        if (info.length_seconds > 5400) {
-            message.reply(i18n.msg('too-long', 'mp3', lang));
-            return;
-        }
+        // if (info.length_seconds > 5400) {
+        //     message.reply(i18n.msg('too-long', 'mp3', lang));
+        //     return;
+        // }
         if (title) {
             title = title[1] || title[2];
         }

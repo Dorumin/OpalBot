@@ -374,7 +374,7 @@ module.exports = (OpalBot) => {
     });
 
     app.get('/seen', async (req, res) => {
-        res.write((await OpalBot.db).seen);
+        res.write(JSON.stringify((await OpalBot.db).seen));
         res.end();
     })
 

@@ -374,9 +374,13 @@ module.exports = (OpalBot) => {
     });
 
     app.get('/seen', async (req, res) => {
+        res.writeHead(200, {
+            'Content-Type': 'text/plain; charset=utf-8'
+        }); 
+        return res.end('wtf');
         res.write(JSON.stringify((await OpalBot.db).seen));
         res.end();
-    })
+    });
 
     return out;
 };

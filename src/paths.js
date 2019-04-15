@@ -373,5 +373,10 @@ module.exports = (OpalBot) => {
         res.end();
     });
 
+    app.get('/seen', async (req, res) => {
+        res.write((await OpalBot.db).seen);
+        res.end();
+    })
+
     return out;
 };

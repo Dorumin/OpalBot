@@ -364,13 +364,14 @@ module.exports = (OpalBot) => {
     app.get('/debug', (req, res) => {
         res.writeHead(200, {
             'Content-Type': 'text/plain; charset=utf-8'
-        }); 
-        res.write('Disabled due to abuse.');
-        res.write(config.bye);
-        res.end();
-        return;
-        res.write(OpalBot.log);
-        res.end();
+        });
+        if (req.query.token !== OpalBot.client.token) {
+            res.write('Disabled due to abuse.');
+            res.end();
+        } else {
+            res.write(OpalBot.log);
+            res.end();
+        }
     });
 
     app.get('/seen', async (req, res) => {

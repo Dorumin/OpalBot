@@ -27,8 +27,6 @@ function chunk(arr, overhead = 0, jump = 1, max = 2000) {
 function formatLyrics(lyrics) {
     const split = lyrics.split('\n').map(line => line.trim());
 
-    console.log(lyrics, split);
-
     while (split[0].startsWith('[') || split[0] == '') {
         split.splice(0, 1);
     }
@@ -55,14 +53,11 @@ module.exports = (OpalBot) => {
                 if (same2) return 1;
             });
         
-        console.log(songs);
-
         const song = songs[0];
         const lyricsRes = await got(`https://genius.com${song.result.path}`);
         const $ = cheerio.load(lyricsRes.body);
         const title = song.result.title;
         const artist = song.result.primary_artist.name;
-        console.log($('.lyrics p').first().text());
         const lyrics = formatLyrics($('.lyrics p').first().text());
         const split = chunk(lyrics.split('\n'), 10, 1, 2000);
 

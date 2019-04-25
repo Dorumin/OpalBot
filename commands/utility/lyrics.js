@@ -5,11 +5,10 @@ cheerio = require('cheerio');
 function chunk(arr, overhead = 0, jump = 1, max = 2000) {
     const chunks = [];
     let len = overhead,
-    i = arr.length,
     current = 0;
 
     chunks[current] = [];
-    while (i--) {
+    for (let i = 0; i < arr.length; i++) {
         const item = arr[i];
         if (len + item.length > max) {
             len = 0;

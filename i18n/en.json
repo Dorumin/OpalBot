@@ -33,7 +33,8 @@
     },
     "avatar": {
         "title": "Result",
-        "description": "$1's avatar:"
+        "description": "$1's avatar:",
+        "own-description": "My avatar! Isn't it adorable?"
     },
     "hello": {
         "default": "Hello there, $1!"

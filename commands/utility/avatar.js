@@ -14,7 +14,14 @@ module.exports = (OpalBot) => {
                 image: {
                     url: user.displayAvatarURL
                 },
-                description: i18n.msg('description', 'avatar', user.username, lang).replace(user.username.slice(0, -1) + "s's", user.username + "'")
+                description: i18n.msg(
+                    user.id == OpalBot.client.user.id
+                        ? 'own-description'
+                        : 'description',
+                    'avatar',
+                    user.username,
+                    lang
+                ).replace(user.username.slice(0, -1) + "s's", user.username + "'")
             }
         }).catch(OpalBot.util.log);
     };

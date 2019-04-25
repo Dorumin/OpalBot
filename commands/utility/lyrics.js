@@ -25,11 +25,7 @@ function chunk(arr, overhead = 0, jump = 1, max = 2000) {
 }
 
 function formatLyrics(lyrics) {
-    const split = lyrics.split('\n').map(line => line.trim());
-
-    while (split[0].startsWith('[') || split[0] == '') {
-        split.splice(0, 1);
-    }
+    const split = lyrics.split('\n').map(line => line.trim()).filter(line => !line.startsWith('['));
 
     return split.join('\n').replace(/\n{2,}/g, '\n\n').replace(/\*/g, '\\*').trim();
 }

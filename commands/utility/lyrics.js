@@ -29,17 +29,19 @@ module.exports = (OpalBot) => {
 
     out.peasants = {};
     out.peasants.lyrics = async (message, content) => {
-        const res = await got(`https://search.azlyrics.com/search.php?q=${encodeURIComponent(content)}`);
+        const res = await got(`https://lyricsfa.com/?s=${encodeURIComponent(content)}&orderby=relevance&order=DESC`);
         const $ = cheerio.load(res.body);
-        const link = $('.text-left.visitedlyr').first().find('a').attr('href');
+        const link = $('.entry-title a.dark').first().find('a').attr('href');
         const lyricsRes = await got(link);
         const $l = cheerio.load(lyricsRes.body);
-        const title = $l('.ringtone + b').text();
-        const lyrics = $l('.ringtone + b + br + br + div').text().replace(/\n{2,}/g, '\n\n');
-        const split = chunk(lyrics.split('\n'), 10, 1, 2000);
+        const lyrics = $l('.entry.entry-single').text()
+            .replace(/\n{2,}/g, '\n\n')
+            .split('\n')
+            .map(line => line.trim());
+        const split = chunk(lyrics, 10, 1, 2000);
         
+        // await message.channel.send(`**${title}**`);
 
-        await message.channel.send(`**${title}**`);
         for (let i = 0; i < split.length; i++) {
             await message.channel.send(split[i]);
         }

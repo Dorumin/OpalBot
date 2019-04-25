@@ -37,9 +37,9 @@ module.exports = (OpalBot) => {
         const title = $l('.ringtone + b').text();
         const lyrics = $l('.ringtone + b + br + br + div').text().replace(/\n{2,}/g, '\n\n');
         const split = chunk(lyrics.split('\n'), 10, 1, 2000);
-        
 
         await message.channel.send(`**${title}**`);
+
         for (let i = 0; i < split.length; i++) {
             await message.channel.send(split[i]);
         }

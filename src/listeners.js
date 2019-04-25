@@ -155,7 +155,7 @@ module.exports = (OpalBot) => {
             permissions[key] = permissions[OpalBot.permissionAliases[key]];
         }
         if (!content) return;
-        OpalBot.util.log(name + ': ' + content + (message.channel.type == 'text' ? ' @ ' + message.guild.name : ''));
+        OpalBot.util.log(name + ': ' + content + (message.channel.type == 'text' ? ' @ ' + message.guild.name + '#' + message.channel.name : ''));
         if (message.channel.type != 'text') return;
         if (tu && tu[message.channel.id]) {
             let idx = tu[message.channel.id].indexOf(message.author);

@@ -36,6 +36,7 @@ module.exports = (OpalBot) => {
         const $l = cheerio.load(lyricsRes.body);
         const lyrics = $l('.entry.entry-single').text()
             .replace(/\n{2,}/g, '\n\n')
+            .replace(/\*/g, '\\*')
             .split('\n')
             .map(line => line.trim());
         const split = chunk(lyrics, 10, 1, 2000);

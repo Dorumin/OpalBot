@@ -454,7 +454,7 @@ module.exports = (OpalBot) => {
                 url,
                 description: `[\`${sha}\`](${url}) ${commit} - ${name}`,
                 author: {
-                    icon_url: message.author.displayAvatarURL,
+                    icon_url: user.user.displayAvatarURL,
                     name: name,
                 }
             }

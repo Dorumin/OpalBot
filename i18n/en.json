@@ -314,5 +314,8 @@
     "lyrics": {
         "for": "Song lyrics for **$1** by **$2**!",
         "footer": "Just for you, $1"
+    },
+    "fakegit": {
+        "title": "[$1] 1 new commit"
     }
 }

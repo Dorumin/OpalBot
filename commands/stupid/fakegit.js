@@ -444,7 +444,7 @@ module.exports = (OpalBot) => {
                 split.splice(0, 1);
             }
 
-            commit = split.join(' ');
+            commit = split.join(' ').trim() || commit;
         }
 
         message.channel.send({

@@ -431,7 +431,7 @@ module.exports = (OpalBot) => {
         const characters = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f'];
 		const sha = new Array(6).fill(null).map(() => characters[Math.floor(Math.random() * 16)]).join('');
 		const user = message.mentions.members.first() || message.member;
-        const name = user.nick || user.user.username;
+        const name = user.nickname || user.user.username;
         const url = 'https://github.com/Dorumin?tab=followers';
 
         if (content) {

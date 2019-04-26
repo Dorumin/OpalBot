@@ -60,6 +60,7 @@ module.exports = (OpalBot) => {
             await message.channel.send({
                 embed: {
                     color: OpalBot.color,
+                    url: `https://genius.com${song.result.path}`,
                     title: i == 0
                         ? OpalBot.i18n.msg('for', 'lyrics', title, artist, lang)
                         : undefined,

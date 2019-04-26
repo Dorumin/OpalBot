@@ -1,5 +1,10 @@
-const Canvas = require('canvas'),
-request = require('request-promise-native'),
+let Canvas;
+
+try {
+    Canvas = require('canvas');
+} catch(e) {}
+
+const request = require('request-promise-native'),
 fs = require('fs'),
 qs = require('querystring'),
 data = require('../www/data.json'),

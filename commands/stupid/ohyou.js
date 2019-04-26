@@ -1,6 +1,11 @@
-const Canvas = require('canvas'),
-Image = Canvas.Image,
-request = require('request').defaults({ encoding: null }),
+let Canvas,
+Image;
+try {
+    Canvas = require('canvas');
+    Image = Canvas.Image;
+} catch(e) {}
+
+const request = require('request').defaults({ encoding: null }),
 fs = require('fs');
 
 module.exports = (OpalBot) => {

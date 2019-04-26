@@ -432,7 +432,8 @@ module.exports = (OpalBot) => {
 		const sha = new Array(6).fill(null).map(() => characters[Math.floor(Math.random() * 16)]).join('');
 		const user = message.mentions.members.first() || message.member;
         const name = user.nickname || user.user.username;
-        const url = 'https://github.com/Dorumin?tab=followers';
+		const url = 'https://github.com/Dorumin?tab=followers';
+		content = content.replace(/<@!?\d+>/g, '').trim();
 
         if (content) {
             const split = content.split(' ');

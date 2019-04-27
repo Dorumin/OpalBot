@@ -312,6 +312,7 @@
         "no-content": "You need to specify a search query or a YouTube URL!"
     },
     "lyrics": {
+        "not-found": "Could not find song lyrics matching **$1**!",
         "for": "Song lyrics for **$1** by **$2**!",
         "footer": "Just for you, $1"
     },

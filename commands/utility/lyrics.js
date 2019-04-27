@@ -49,6 +49,12 @@ module.exports = (OpalBot) => {
             });
         
         const song = songs[0];
+
+        if (!song) {
+            message.channel.send(OpalBot.i18n.msg('not-found', 'lyrics', content, lang));
+            return;
+        }
+
         const lyricsRes = await got(`https://genius.com${song.result.path}`);
         const $ = cheerio.load(lyricsRes.body);
         const title = song.result.title;

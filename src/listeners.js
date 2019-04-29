@@ -150,12 +150,14 @@ module.exports = (OpalBot) => {
         prefixes = (OpalBot.prefixes[message.guild.id] || OpalBot.prefixes.default).concat([`<@${client.user.id}>`, `<@!${client.user.id}>`, `<@!${client.user.id}>, do`, `<@${client.user.id}>, do`]),
         i = prefixes.length,
         permissions = message.member.permissions.serialize(),
-        tu = OpalBot.storage.typingUsers;
+        tu = OpalBot.storage.typingUsers,
+        d = message.createdAt,
+        pad = n => ('0' + n).slice(-2);
         for (let key in OpalBot.permissionAliases) {
             permissions[key] = permissions[OpalBot.permissionAliases[key]];
         }
         if (!content) return;
-        OpalBot.util.log(name + ': ' + content + (message.channel.type == 'text' ? ' @ ' + message.guild.name + '#' + message.channel.name : ''));
+        OpalBot.util.log(name + ': ' + pad(d.getUTCHours()) + pad(d.getUTCMinutes()) + pad(d.getUTCSeconds()) + content + (message.channel.type == 'text' ? ' @ ' + message.guild.name + '#' + message.channel.name : '') + message.attachments.map(attachment => '\n' + attachment.url).join('\n'));
         if (message.channel.type != 'text') return;
         if (tu && tu[message.channel.id]) {
             let idx = tu[message.channel.id].indexOf(message.author);

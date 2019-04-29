@@ -6,7 +6,16 @@ module.exports = (OpalBot) => {
     out.peasants.a = 'avatar';
     out.peasants.avi = 'avatar';
     out.peasants.avatar = (message, content, lang) => {
-        let user = message.mentions.users.first() || message.author;
+        let user = message.mentions.users.first();
+        if (!user) {
+            let id = content.match(/\d{8,}/);
+            if (id) {
+                user = OpalBot.client.users.get(id);
+            }
+            if (!user) {
+                user = message.author;
+            }
+        }
         message.channel.send({
             embed: {
                 color: OpalBot.color,

@@ -1,4 +1,5 @@
 const request = require('request'),
+ytdl = require('ytdl-core'),
 config = require('../../src/config.js'),
 req = (obj, POST) => {
     return new Promise((res, rej) => {
@@ -11,16 +12,6 @@ req = (obj, POST) => {
         });
     });
 };
-
-function sanitize(str) {
-    const char_table = {
-        ';': '⍮',
-        '[': '⦋',
-        ']': '⦌'
-    },
-    keys = Object.keys(char_table);
-    return str.replace(new RegExp(keys.join('|\\'), 'g'), char => char_table[char]);
-}
 
 function pick_song(message, query) {
     return new Promise(async (resolve, reject) => {
@@ -46,72 +37,80 @@ function pick_song(message, query) {
             message.channel.send(i18n.msg('no-results', 'play', lang)).catch(OpalBot.util.log);
             return;
         }
-        let bot_message = null,
-        blocked = OpalBot.unprefixed.push({
-            type: 'youtube',
-            triggers: Array(r.length).fill(undefined).map((n, i) => String(i + 1)),
-            callback: (msg, index) => {
-                resolve(r[index]);
-                if (msg.deletable) {
-                    msg.delete();
-                }
-                if (bot_message && bot_message.deletable) {
-                    bot_message.delete();
-                }
-            },
-            user: message.author.id,
-            channel: message.channel.id,
-            timeout: 20000,
-            ontimeout: () => {
-                reject('timed-out');
-            }
-        });
-
-        if (blocked === true) {
-            resolve(r[0]);
-        } else {
-            let list = '';
-            for (let i in r) {
-                list += `\n[${Number(i) + 1}] - ${sanitize(r[i].snippet.title)}`
-            }
-            bot_message = await message.channel.send('```ini' + list + '```').catch(OpalBot.util.log);
-        }
+        resolve(r[0]);
     });
+}
+
+function find_music_channel(guild) {
+    const voices = guild.channels.filter(chan => chan.type == 'voice'),
+    music = voices.find(chan => chan.name.includes('music'));
+    return music;
 }
 
 module.exports = (OpalBot) => {
     const out = {},
     i18n = OpalBot.i18n;
     
-    return out;
-
     out.peasants = {};
     out.peasants.play = async (message, content, lang) => {
-        const channel = message.member.voiceChannel,
-        linkRegex = /https?:\/\/(?:www\.|m\.)?(?:youtu\.be\/|youtube\.com\/watch\?v=)([a-zA-Z0-9-_]{11})/g,
-        match = content.match(linkRegex);
-        let id = match ? match[1] : '';
+        const linkRegex = /https?:\/\/(?:www\.|m\.)?(?:youtu\.be\/|youtube\.com\/watch\?v=)([a-zA-Z0-9-_]{11})/g,
+        match = content.match(linkRegex),
+        storage = OpalBot.storage.music = OpalBot.storage.music || {};
+        let channel = message.member.voiceChannel,
+        id = match ? match[1] : content.length == 11 ? content : '',
+        video;
 
         if (!content.trim()) {
             message.channel.send(i18n.msg('no-content', 'play', lang));
             return;
         }
 
-        if (!channel) {
-            message.channel.send(i18n.msg('no-channel', 'play', lang));
-            return;
-        }
-
-        if (!id) {
-            try {
-                id = await pick_song(message, content);
-            } catch(e) {
-                message.channel.send(i18n.msg(e, 'play', lang));
+        if (message.guild.voiceConnection) {
+            if (!channel) {
+                message.channel.send(i18n.msg('join-channel', 'play', lang));
+                return;
+            }
+            if (message.guild.voiceConnection.channel !== channel) {
+                message.channel.send(i18n.msg('same-channel', 'play', lang));
+                return;
+            }
+        } else if (!channel) {
+            channel = find_music_channel(message.guild);
+            if (!channel) {
+                message.channel.send(i18n.msg('no-channel', 'play', lang));
                 return;
             }
         }
 
-        message.channel.send('test');
+        if (!channel.connection) {
+            try {
+                await channel.join();
+            } catch(e) {
+                console.log(e);
+                message.channel.send(i18n.msg('cant-connect', 'play', lang));
+                return;
+            }
+        }
+
+        if (!id) {
+            try {
+                video = await pick_song(message, content);
+                id = video.id.videoId;
+            } catch(e) {
+                message.channel.send(i18n.msg(e, 'play', lang));
+                return;
+            }
+        } else {
+            video = await pick_song(message, id);
+        }
+
+        console.log(video, id);
+
+        channel.connection.playStream(ytdl(id, {
+            audioonly: true
+        }));
+
+        message.channel.send(`Playing https://youtu.be/${id}`);
     };
 
     return out;

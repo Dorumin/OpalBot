@@ -10,7 +10,7 @@ module.exports = (OpalBot) => {
         if (!user) {
             let id = content.match(/\d{8,}/);
             if (id) {
-                user = OpalBot.client.users.get(id);
+                user = OpalBot.client.users.get(id[0]);
             }
             if (!user) {
                 user = message.author;

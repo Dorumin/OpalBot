@@ -86,7 +86,7 @@ module.exports = (OpalBot) => {
             try {
                 await channel.join();
             } catch(e) {
-                console.log(e);
+                console.log('error', e);
                 message.channel.send(i18n.msg('cant-connect', 'play', lang));
                 return;
             }

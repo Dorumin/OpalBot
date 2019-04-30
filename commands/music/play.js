@@ -1,6 +1,7 @@
 const request = require('request'),
 ytdl = require('ytdl-core'),
 config = require('../../src/config.js'),
+MusicController = require('./MusicController.js').MusicController,
 req = (obj, POST) => {
     return new Promise((res, rej) => {
         (POST ? request.post : request)(obj, (e, r, body) => {
@@ -42,9 +43,6 @@ function pick_song(message, query) {
 }
 
 function find_music_channel(guild) {
-    const voices = guild.channels.filter(chan => chan.type == 'voice'),
-    music = voices.find(chan => chan.name.includes('music'));
-    return music;
 }
 
 module.exports = (OpalBot) => {
@@ -52,12 +50,14 @@ module.exports = (OpalBot) => {
     i18n = OpalBot.i18n;
     
     out.peasants = {};
+    out.peasants.p = 'play';
     out.peasants.play = async (message, content, lang) => {
-        const linkRegex = /https?:\/\/(?:www\.|m\.)?(?:youtu\.be\/|youtube\.com\/watch\?v=)([a-zA-Z0-9-_]{11})/g,
-        match = content.match(linkRegex),
-        storage = OpalBot.storage.music = OpalBot.storage.music || {};
+        const storage = OpalBot.storage.music = OpalBot.storage.music || {},
+        controller = storage[message.guild.id] = storage[message.guild.id] || new MusicController({
+            lang,
+            i18n: OpalBot.i18n
+        });
         let channel = message.member.voiceChannel,
-        id = match ? match[1] : content.length == 11 ? content : '',
         video;
 
         if (!content.trim()) {
@@ -71,14 +71,16 @@ module.exports = (OpalBot) => {
                 return;
             }
             if (message.guild.voiceConnection.channel !== channel) {
-                message.channel.send(i18n.msg('same-channel', 'play', lang));
+                message.channel.send(i18n.msg('same-channel', 'play', message.guild.voiceConnection.channel.id, lang));
                 return;
             }
         } else if (!channel) {
-            channel = find_music_channel(message.guild);
+            channel = controller.findMusicChannel(message.guild);
             if (!channel) {
                 message.channel.send(i18n.msg('no-channel', 'play', lang));
                 return;
+            } else {
+                message.channel.send(i18n.msg('joined-channel', 'play', channel.id, lang));
             }
         }
 
@@ -92,28 +94,14 @@ module.exports = (OpalBot) => {
             }
         }
 
-        if (!id) {
-            try {
-                video = await pick_song(message, content);
-                id = video.id.videoId;
-            } catch(e) {
-                message.channel.send(i18n.msg(e, 'play', lang));
-                return;
-            }
-        } else {
-            video = await pick_song(message, id);
-        }
-
-        console.log(video, id);
-
-        channel.connection.playStream(ytdl(id, {
-            audioonly: true,
-            quality: 'highest'
-        }), {
-            passes: config.PASSES || 1
+        video = await controller.searchVideo(content, {
+            wait: true, // TODO: Make it not wait if it's not gonna play asap?
+            addedBy: message.author
         });
 
-        message.channel.send(`Playing https://youtu.be/${id}`);
+        controller.push(video);
+
+        controller.sendEmbed(message.channel);
     };
 
     return out;

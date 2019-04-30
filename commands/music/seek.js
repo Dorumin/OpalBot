@@ -1,0 +1,1 @@
+/* Seeks to a duration in the currently playing song */

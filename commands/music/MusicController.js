@@ -130,8 +130,7 @@ class MusicController {
     }
 
     play({
-        index,
-        video
+        index
     }) {
         const video = this.queue[index];
 

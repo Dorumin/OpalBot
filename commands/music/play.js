@@ -108,7 +108,9 @@ module.exports = (OpalBot) => {
 
         channel.connection.playStream(ytdl(id, {
             audioonly: true
-        }));
+        }), {
+            passes: 3
+        });
 
         message.channel.send(`Playing https://youtu.be/${id}`);
     };

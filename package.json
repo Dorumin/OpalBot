@@ -4,7 +4,7 @@
   "description": "Discord bot",
   "engines": {
     "node": "^11.14.0",
-    "npm": "^5.3.0"
+    "npm": "^6.7.0"
   },
   "main": "opal.js",
   "scripts": {

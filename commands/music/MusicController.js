@@ -107,7 +107,7 @@ class MusicController {
     }
 
     push(video) {
-        const index = this.queue.push(video);
+        const index = this.queue.push(video) - 1;
         this.refreshStreams();
         if (!this.playing) {
             this.currentIndex = index;
@@ -133,10 +133,14 @@ class MusicController {
         index
     }) {
         const video = this.queue[index];
+        console.log(this.queue, index, video);
 
         if (!video.stream) {
             console.log('wtf no stream');
             this.refreshStreams();
+            if (!video.stream) {
+                return;
+            }
         }
 
         this.dispatcher = this.connection.playStream(video.stream, {
@@ -144,11 +148,15 @@ class MusicController {
         });
     }
 
+    currentVideo() {
+        return this.queue[this.currentIndex] || null;
+    }
+
     buildPlayingEmbed() {
         const playing = this.playing,
-        current = this.queue[this.currentIndex];
+        current = this.currentVideo();
         return {
-            title: this.i18n.msg('playing-title', 'play', lang),
+            title: this.i18n.msg('playing-title', 'play', current.name, this.lang),
             description: this.buildDescription(current.duration, this.dispatcher.time)
         };
     }
@@ -158,8 +166,8 @@ class MusicController {
     }
 
     buildDescription(duration, playing) {
-        const end = Math.floor(duration / 60) + pad(duration % 60, 2),
-        cur = pad(playing / 1000 / 60, end.length - 3) + pad(playing / 1000, 2),
+        const end = Math.floor(duration / 60) + ':' + this.pad(duration % 60, 2),
+        cur = this.pad(playing / 1000 / 60, end.length - 3) + ':' + this.pad(playing / 1000, 2),
         bar = this.buildProgressBar(duration / playing * 1000, 20);
 
         return `${cur} [${bar}] ${end}`;

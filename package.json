@@ -17,6 +17,7 @@
   "dependencies": {
     "@ffmpeg-installer/ffmpeg": "^1.0.13",
     "canvas": "^1.6.7",
+    "cheerio": "^1.0.0-rc.3",
     "compression": "^1.7.1",
     "cookie-parser": "^1.4.3",
     "discord.js": "^11.3.0",
@@ -27,11 +28,10 @@
     "fast-json-stable-stringify": "^1.0.2",
     "fluent-ffmpeg": "^2.1.2",
     "got": "^9.6.0",
-    "cheerio": "^1.0.0-rc.3",
+    "node-opus": "^0.2.9",
     "request": "^2.83.0",
     "request-promise-native": "^1.0.5",
     "sanitize-filename": "^1.6.1",
-    "node-opus": "^0.2.1",
     "ytdl-core": "*"
   },
   "keywords": [

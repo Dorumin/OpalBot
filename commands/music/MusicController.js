@@ -380,7 +380,7 @@ class MusicController {
         fields.push({
             inline: true,
             name: this.i18n.msg('queue-position', 'play', this.lang),
-            value: index - this.currentIndex
+            value: index - this.currentIndex < 1
                 ? this.i18n.msg('relative-position', 'play', index + 1, index - this.currentIndex, this.lang)
                 : index + 1,
         });
@@ -455,6 +455,7 @@ class MusicController {
             this.sendEmbed(this.textChannel);
             return true;
         } else {
+            this.currentIndex = -1;
             this.playing = false;
             this.editEmbed();
             return false;

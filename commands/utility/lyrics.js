@@ -34,6 +34,23 @@ module.exports = (OpalBot) => {
 
     out.peasants = {};
     out.peasants.lyrics = async (message, content, lang) => {
+        if (!content.trim()) {
+            const storage = OpalBot.storage.music = OpalBot.storage.music || {},
+            controller = storage[message.guild.id];
+            if (controller) {
+                const current = controller.currentVideo();
+                if (current) {
+                    content = current.query;
+                }
+            }
+
+            if (!content.trim()) {
+                message.channel.send(OpalBot.i18n.msg('no-content', 'lyrics', lang));
+                return;
+            }
+            
+        }
+
         const res = await got(`https://genius.com/api/search/song?page=1&q=${encodeURIComponent(content)}`, {
             json: true
         });

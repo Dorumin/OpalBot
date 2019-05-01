@@ -1,9 +1,12 @@
 const got = require('got'),
 ytdl = require('ytdl-core'),
 config = require('../../src/config.js'),
+installer = require('@ffmpeg-installer/ffmpeg'),
+ffmpeg = require('fluent-ffmpeg'),
 videoIdRegex = /[a-zA-Z0-9-_]{11}$/,
 videoLinkRegex = /https?:\/\/(?:www\.|m\.)?(?:youtu\.be\/|youtube\.com\/watch\?v=)([a-zA-Z0-9-_]{11})/g;
 
+ffmpeg.setFfmpegPath(installer.path);
 class MusicController {
     constructor({
         lang,
@@ -131,10 +134,15 @@ class MusicController {
 
     refreshStreams() {
         this.queue.forEach((video, index) => {
-            if (Math.abs(index - this.currentIndex) == 0) {
-                video.stream = video.stream || ytdl(video.id, {
-                    quality: 'lowest'
-                });
+            if (Math.abs(index - this.currentIndex) < 2) {
+                // audioonly is unreliable
+                video.stream = video.stream || ffmpeg({
+                    source: ytdl(video.id, {
+                        quality: 'lowest'
+                    })
+                })
+                .noVideo()
+                .format('mp3');
             } else {
                 video.stream = null;
             }

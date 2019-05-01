@@ -427,6 +427,8 @@ class MusicController {
             }),
         });
 
+        if (playing) return;
+
         message.react('⏭');
 
         const results = message.awaitReactions(

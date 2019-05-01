@@ -162,7 +162,7 @@ class MusicController {
 
         this.dispatcher.on('end', () => {
             console.log('Ended dispatcher');
-            this.next();
+            // this.next();
         });
     }
 
@@ -332,7 +332,7 @@ class MusicController {
             name: this.i18n.msg('queue-position', 'play', this.lang),
             value: index - this.currentIndex
                 ? this.i18n.msg('relative-position', 'play', index + 1, index - this.currentIndex, this.lang)
-                : index,
+                : index + 1,
         });
 
         let description;

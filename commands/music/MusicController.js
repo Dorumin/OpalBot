@@ -434,8 +434,8 @@ class MusicController {
 
         message.react('⏭');
 
-        const results = message.awaitReactions(
-            (reaction, reactor) => reactor == user && reaction.emoji.name == '⏭',
+        const results = await message.awaitReactions(
+            (reaction, reactor) => reactor.id == user.id && reaction.emoji.name == '⏭',
             {
                 time: 60000,
                 max: 1,

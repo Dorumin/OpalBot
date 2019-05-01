@@ -55,7 +55,7 @@ module.exports = (OpalBot) => {
 
         const playing = controller.push(video);
 
-        controller.sendSongEmbed({
+        await controller.sendSongEmbed({
             channel: message.channel,
             video,
             user: message.author,

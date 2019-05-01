@@ -222,6 +222,7 @@ class MusicController {
                     ? this.i18n.msg('paused-title', 'play', current.title, this.lang)
                     : this.i18n.msg('playing-title', 'play', current.title, this.lang)
                 : this.i18n.msg('no-video-title', 'play', this.lang),
+            url: current.url,
             description: current
                 ? this.buildDescription(current.duration, this.dispatcher.time)
                 : this.buildDescription(last.duration, last.duration * 1000),
@@ -408,7 +409,7 @@ class MusicController {
 
         return {
             title: title || video.title,
-            url: `https://youtu.be/${video.id}`,
+            url: video.url,
             description,
             thumbnail: {
                 url: video.thumbnail
@@ -455,10 +456,21 @@ class MusicController {
         message.clearReactions();
 
         if (reactions.size) {
-            this.queue.splice(this.queue.indexOf(video), 1);
-            this.queue.splice(this.currentIndex + 1, 0, video);
-    
-            this.next();
+            const sorted = reactions.sort((a, b) => b.count - a.count).first(2);
+            if (sorted.first().count == sorted.last().count) return;
+            if (sorted.first().name == '⏭') {
+                this.queue.splice(this.queue.indexOf(video), 1);
+                this.queue.splice(this.currentIndex + 1, 0, video);
+                
+                this.next();
+            } else {
+                if (this.currentVideo !== video) {
+                    this.queue.splice(this.queue.indexOf(video), 1);
+                } else {
+                    message.delete();
+                    this.next();
+                }
+            }
         }
     }
 
@@ -482,8 +494,13 @@ class MusicController {
         }
     }
 
-    startTimeout() {
-        this.timeout = setTimeout(() => this.disconnect(), 30000);
+    startTimeout(fn, ms = 30000) {
+        this.timeout = setTimeout(() => {
+            if (fn) {
+                fn();
+            }
+            this.disconnect()
+        }, ms);
     }
 
     clearTimeout() {
@@ -510,6 +527,10 @@ class Video {
         this.channel = channel;
         this.query = query;
         this.stream = null;
+    }
+
+    get url() {
+        return `https://youtu.be/${this.id}`;
     }
 
     async tryFetchBetterThumbnail() {

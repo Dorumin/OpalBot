@@ -235,6 +235,7 @@ class MusicController {
     }
 
     buildProgressBar(percentage, length) {
+        percentage = Math.min(percentage, 100);
         const blocks = [
             '▏',
             '▎',

@@ -264,6 +264,7 @@ class MusicController {
     async sendEmbed(channel) {
         this.textChannel = channel;
         if (this.message) {
+            this.message.collector.stop();
             this.message.delete();
             this.message = null;
         }

@@ -21,7 +21,7 @@ module.exports = (OpalBot) => {
     }
     
     out.peasants = {};
-    out.peasants.s = 'seen';
+    // out.peasants.s = 'seen';
     out.peasants.seen = async (message, content, lang) => {
         let user = message.mentions.users.first();
         if (!user) {

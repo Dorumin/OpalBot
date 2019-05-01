@@ -314,7 +314,28 @@
         "cant-connect": "Couldn't connect to the channel!",
         "no-results": "No results found for your search query.",
         "no-content": "You need to specify a search query or a YouTube URL!",
-        "playing-title": "Playing $1"
+        "playing-title": ":musical_note: Playing $1",
+        "paused-title": ":pause_button: Paused - $1",
+        "no-video-title": "No video is playing",
+        "footer-requested-by": "Requested by $1",
+        "queued-title": "Queued: $1",
+        "jump-protip": "Pssst, protip, you can use !jump to skip to this song and not lose your position in the queue!",
+        "duration": "Duration",
+        "channel": "Channel",
+        "estimated-time": "Time until playback",
+        "right-now": "**Right now!**",
+        "queue-position": "Position in queue"
+    },
+    "skip": {
+        "not-playing": "I am not playing in that channel, are you... what are you playing at?",
+        "skipped": "Skipped!",
+        "random": "I didn't even like that one *that* much anyways",
+        "skipped-end": "Skipped! Now there are no more songs left in the queue, though :("
+    },
+    "jump": {
+        "not-playing": "Hey, I can't jump if I'm not playing music?",
+        "already-last": "I can't jump if we're playing the last track already!",
+        "jumping": "*Jumping into the future!*"
     },
     "lyrics": {
         "not-found": "Could not find song lyrics matching **$1**!",

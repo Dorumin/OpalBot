@@ -1,49 +1,4 @@
-const request = require('request'),
-ytdl = require('ytdl-core'),
-config = require('../../src/config.js'),
-MusicController = require('./MusicController.js').MusicController,
-req = (obj, POST) => {
-    return new Promise((res, rej) => {
-        (POST ? request.post : request)(obj, (e, r, body) => {
-            if (e || r.statusCode == '404') {
-                rej(e);
-                return;
-            }
-            res({res: r, body: body});
-        });
-    });
-};
-
-function pick_song(message, query) {
-    return new Promise(async (resolve, reject) => {
-        let res,
-        body;
-        try {
-            let re = await req({
-                url: 'https://www.googleapis.com/youtube/v3/search',
-                qs: {
-                    part: 'snippet',
-                    q: query,
-                    key: config.YOUTUBE_TOKEN,
-                    type: 'video'
-                }
-            });
-            res = re.res;
-            body = re.body;
-        } catch(e) { return; }
-
-        let r = JSON.parse(body).items;
-        if (!r.length) {
-            reject('no-results');
-            message.channel.send(i18n.msg('no-results', 'play', lang)).catch(OpalBot.util.log);
-            return;
-        }
-        resolve(r[0]);
-    });
-}
-
-function find_music_channel(guild) {
-}
+const MusicController = require('./MusicController.js').MusicController;
 
 module.exports = (OpalBot) => {
     const out = {},
@@ -97,9 +52,20 @@ module.exports = (OpalBot) => {
             addedBy: message.author
         });
 
-        controller.push(video);
+        const playing = controller.push(video);
 
-        controller.sendEmbed(message.channel);
+        message.channel.send({
+            embed: controller.buildSongEmbed({
+                video,
+                user: message.author,
+                title: i18n.msg('queued-title', 'play', video.title, lang),
+                playing
+            })
+        });
+
+        if (playing) {
+            controller.sendEmbed(message.channel);
+        }
     };
 
     return out;

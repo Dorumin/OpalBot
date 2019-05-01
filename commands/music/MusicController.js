@@ -19,7 +19,10 @@ class MusicController {
         this.channel = null;
         this.message = null;
         this.timeout = null;
+        this.editedEmbed = 0;
+        this.editing = false;
         this.playing = false;
+        this.protipped = false;
         this.loop = 0;
     }
 
@@ -33,6 +36,8 @@ class MusicController {
     disconnect() {
         if (!this.connection) return false;
         this.connection.disconnect();
+        this.connection = null;
+        this.channel = null;
         return true;
     }
 
@@ -56,11 +61,17 @@ class MusicController {
             info = await this.videoInfo(id);
         }
 
+        console.log(info);
+
         const video = new Video({
             id: info.video_id,
             title: info.title,
             duration: info.length_seconds,
-            live: info.player_response.videoDetails.isLiveContent
+            live: info.player_response.videoDetails.isLiveContent,
+            channel: new Channel({
+                name: info.author.name,
+                url: info.author.channel_url
+            })
         });
 
         if (wait) {
@@ -84,7 +95,7 @@ class MusicController {
                 part: 'snippet',
                 q: query,
                 key: config.YOUTUBE_TOKEN,
-                type: 'video'
+                type: 'video',
             }
         });
 
@@ -115,11 +126,12 @@ class MusicController {
                 index
             });
         }
+        return index == this.currentIndex;
     }
 
     refreshStreams() {
         this.queue.forEach((video, index) => {
-            if (Math.abs(index - this.currentIndex) < 2) {
+            if (Math.abs(index - this.currentIndex) == 0) {
                 video.stream = ytdl(video.id, {
                     audioonly: true
                 });
@@ -143,8 +155,15 @@ class MusicController {
             }
         }
 
+        this.playing = true;
+
         this.dispatcher = this.connection.playStream(video.stream, {
             passes: config.PASSES || 1
+        });
+
+        this.dispatcher.on('end', () => {
+            console.log('Ended dispatcher');
+            this.next();
         });
     }
 
@@ -152,12 +171,20 @@ class MusicController {
         return this.queue[this.currentIndex] || null;
     }
 
+    lastVideo() {
+        return this.queue[this.queue.length - 1] || null;
+    }
+
     buildPlayingEmbed() {
-        const playing = this.playing,
-        current = this.currentVideo();
+        const current = this.currentVideo(),
+        last = this.lastVideo();
         return {
-            title: this.i18n.msg('playing-title', 'play', current.name, this.lang),
-            description: this.buildDescription(current.duration, this.dispatcher.time)
+            title: current
+                ? this.i18n.msg('playing-title', 'play', current.title, this.lang)
+                : this.i18n.msg('no-video-title', 'play', this.lang),
+            description: current
+                ? this.buildDescription(current.duration, this.dispatcher.time)
+                : this.buildDescription(last.duration, last.duration * 1000),
         };
     }
 
@@ -166,11 +193,12 @@ class MusicController {
     }
 
     buildDescription(duration, playing) {
-        const end = Math.floor(duration / 60) + ':' + this.pad(duration % 60, 2),
-        cur = this.pad(playing / 1000 / 60, end.length - 3) + ':' + this.pad(playing / 1000, 2),
-        bar = this.buildProgressBar(duration / playing * 1000, 20);
+        console.log(duration, playing, playing / duration / 10)
+        const end = this.formatTime(duration),
+        cur = this.formatTime(playing / 1000, end.length - 2),
+        bar = this.buildProgressBar(playing / duration / 10, 30);
 
-        return `${cur} [${bar}] ${end}`;
+        return `\`${cur} ${bar} ${end}\``;
     }
 
     buildProgressBar(percentage, length) {
@@ -182,14 +210,20 @@ class MusicController {
             '▊',
             '▉',
         ],
-        empty = '┈',
+        empty = '—',
         percharacter = 100 / length,
         fulls = Math.floor(percentage / percharacter),
         leftover = (percentage / percharacter) % 1,
-        last = leftover ? blocks[Math.floor(leftover * blocks.length)] : empty,
-        bar = (new Array(fulls + 1).join(blocks[blocks.length - 1])
-            + last 
-            + new Array(length - fulls).join(empty)).slice(0, length);
+        last = leftover ? blocks[Math.floor(leftover * blocks.length)] : empty;
+
+        // const bar = (new Array(fulls + 1).join(blocks[blocks.length - 1])
+        //     + last 
+        //     + new Array(length - fulls).join(empty)).slice(0, length);
+        const bar = (
+            new Array(fulls + 1).join(empty)
+            + '🔘'
+            + new Array(length - fulls).join(empty)
+        ).slice(0, length)
 
         return bar;
     }
@@ -199,8 +233,137 @@ class MusicController {
         this.message = await channel.send({
             embed: this.buildPlayingEmbed()
         });
-        console.log(this.message);
+        this.startEditingInterval();
         return this.message;
+    }
+
+    startEditingInterval() {
+        if (this.interval) {
+            clearInterval(this.interval);
+        }
+        this.interval = setInterval(() => {
+            if (this.editedEmbed--) return;
+            this.editedEmbed++;
+            if (this.editing) return;
+            this.editEmbed();
+        }, 1500);
+    }
+
+    async editEmbed() {
+        if (!this.message) {
+            console.log('Called editEmbed() without sending a message');
+            return;
+        }
+
+        this.editing = true;
+
+        try {
+            await this.message.edit({
+                embed: this.buildPlayingEmbed()
+            });
+        } catch(e) {}
+
+        this.editing = false;
+    }
+
+    formatTime(s, pad) {
+        let m;
+        if (pad) {
+            m = this.pad(s / 60, pad);
+        } else {
+            m = Math.floor(s / 60);
+        }
+        s = this.pad(s % 60, 2);
+        return m + ':' + s;
+    }
+
+    timeUntil(video) {
+        let offset = 0,
+        current = this.currentVideo(),
+        i = this.currentIndex;
+
+        if (this.dispatcher && current) {
+            offset += current.duration - this.dispatcher.time / 1000;
+        }
+
+        while (i++) {
+            const v = this.queue[i];
+            if (!video || v == video) break;
+            offset += v.duration;
+        }
+
+        return offset;
+    }
+
+    buildSongEmbed({
+        video,
+        title,
+        user,
+        playing
+    }) {
+        const fields = [];
+        fields.push({
+            inline: true,
+            name: this.i18n.msg('channel', 'play', this.lang),
+            value: `[${video.channel.name}](${video.channel.url})`,
+        });
+
+        fields.push({
+            inline: true,
+            name: this.i18n.msg('duration', 'play', this.lang),
+            value: this.formatTime(video.duration),
+        });
+
+        fields.push({
+            inline: true,
+            name: this.i18n.msg('estimated-time', 'play', this.lang),
+            value: playing
+                ? this.i18n.msg('right-now', 'play', this.lang)
+                : this.formatTime(this.timeUntil(video)),
+        });
+
+        fields.push({
+            inline: true,
+            name: this.i18n.msg('queue-position', 'play', this.lang),
+            value: this.queue.indexOf(video) + 1,
+        });
+
+        let description;
+        if (!this.protipped && !playing) {
+            this.protipped = true;
+            description = this.i18n.msg('jump-protip', 'play', this.lang);
+        }
+
+        return {
+            title: title || video.title,
+            url: `https://youtu.be/${video.id}`,
+            description,
+            thumbnail: {
+                url: video.thumbnail
+            },
+            footer: {
+                icon_url: user.displayAvatarURL || undefined,
+                text: this.i18n.msg('footer-requested-by', 'play', user.username, this.lang)
+            },
+            fields,
+        }
+    }
+
+    next() {
+        this.currentIndex++;
+        if (this.interval) {
+            clearInterval(this.interval);
+        }
+        if (this.currentVideo()) {
+            this.play({
+                index: this.currentIndex
+            });
+            return true;
+        } else {
+            this.playing = false;
+            this.editEmbed();
+            return false;
+        }
     }
 }
 
@@ -209,13 +372,15 @@ class Video {
         id,
         title,
         duration,
-        live
+        live,
+        channel,
     }) {
         this.id = id;
         this.title = title;
         this.duration = Number(duration);
         this.live = live;
         this.thumbnail = `https://img.youtube.com/vi/${this.id}/0.jpg`;
+        this.channel = channel;
         this.stream = null;
     }
 
@@ -231,7 +396,18 @@ class Video {
     }
 }
 
+class Channel {
+    constructor({
+        name,
+        url
+    }) {
+        this.name = name;
+        this.url = url;
+    }
+}
+
 module.exports = {
     MusicController,
-    Video
+    Video,
+    Channel,
 };

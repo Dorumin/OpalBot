@@ -190,7 +190,7 @@ class MusicController {
         }
 
         const dispatcher = this.dispatcher = this.connection.playStream(video.stream, {
-            passes: config.PASSES || 1
+            passes: config.PASSES || 3
         });
 
         dispatcher.on('end', () => {
@@ -271,16 +271,16 @@ class MusicController {
             this.message = null;
         }
 
-        this.message = await channel.send({
+        const message = this.message = await channel.send({
             embed: this.buildPlayingEmbed()
         });
 
         if (!this.currentVideo()) return;
 
-        this.message.react('⏯');
+        message.react('⏯');
 
-        const collector = this.message.collector = this.message.createReactionCollector(
-            (reaction, user) => console.log(reaction) || user.id != this.message.author.id && reaction.emoji.name == '⏯',
+        const collector = message.collector = message.createReactionCollector(
+            (reaction, user) => user.id != this.message.author.id && reaction.emoji.name == '⏯',
             {
 
             }

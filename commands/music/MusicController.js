@@ -135,8 +135,11 @@ class MusicController {
     refreshStreams() {
         this.queue.forEach((video, index) => {
             if (Math.abs(index - this.currentIndex) < 2) {
+                video.stream = ytdl(video.id, {
+                    audioonly: true
+                });
                 // audioonly is unreliable
-                video.stream = video.stream || ffmpeg({
+                video._stream = video._stream || ffmpeg({
                     source: ytdl(video.id, {
                         quality: 'lowest'
                     })
@@ -145,6 +148,7 @@ class MusicController {
                 .format('mp3');
             } else {
                 video.stream = null;
+                video._stream = null;
             }
         });
     }

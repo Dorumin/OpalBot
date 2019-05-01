@@ -132,7 +132,7 @@ class MusicController {
     refreshStreams() {
         this.queue.forEach((video, index) => {
             if (Math.abs(index - this.currentIndex) == 0) {
-                video.stream = ytdl(video.id, {
+                video.stream = video.stream || ytdl(video.id, {
                     audioonly: true
                 });
             } else {    
@@ -145,7 +145,6 @@ class MusicController {
         index
     }) {
         const video = this.queue[index];
-        console.log(this.queue, index, video);
 
         if (!video.stream) {
             console.log('wtf no stream');
@@ -193,7 +192,7 @@ class MusicController {
     }
 
     buildDescription(duration, playing) {
-        console.log(duration, playing, playing / duration / 10)
+        console.log(duration, playing, playing / duration / 10);
         const end = this.formatTime(duration),
         cur = this.formatTime(playing / 1000, end.length - 2),
         bar = this.buildProgressBar(playing / duration / 10, 30);
@@ -305,7 +304,9 @@ class MusicController {
         user,
         playing
     }) {
-        const fields = [];
+        const fields = [],
+        index = this.queue.indexOf(video);
+
         fields.push({
             inline: true,
             name: this.i18n.msg('channel', 'play', this.lang),
@@ -329,7 +330,9 @@ class MusicController {
         fields.push({
             inline: true,
             name: this.i18n.msg('queue-position', 'play', this.lang),
-            value: this.i18n.msg('position', 'play', this.queue.indexOf(video) + 1, this.lang),
+            value: index - this.currentIndex
+                ? this.i18n.msg('relative-position', 'play', index + 1, index - this.currentIndex, this.lang)
+                : index,
         });
 
         let description;

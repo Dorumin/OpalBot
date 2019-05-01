@@ -435,7 +435,7 @@ class MusicController {
         message.react('⏭');
 
         const results = message.awaitReactions(
-            (reaction, user) => console.log(reaction) || user == user && reaction.emoji.name == '⏭',
+            (reaction, reactor) => reactor == user && reaction.emoji.name == '⏭',
             {
                 time: 60000,
                 max: 1,
@@ -445,6 +445,7 @@ class MusicController {
         console.log(results);
 
         message.clearReactions();
+
         if (results.size) {
             this.queue.splice(this.queue.indexOf(video), 1);
             this.queue.splice(this.currentIndex + 1, 0, video);

@@ -268,11 +268,13 @@ class MusicController {
             this.message.delete();
             this.message = null;
         }
+
         this.message = await channel.send({
             embed: this.buildPlayingEmbed()
         });
 
         this.message.react(':play_pause:');
+
         const collector = this.message.collector = this.message.createReactionCollector(
             (reaction, user) => console.log(reaction) || user != this.message.author && reaction.name == 'play_pause',
             {
@@ -412,7 +414,7 @@ class MusicController {
         user,
         playing,
     }) {
-        const message = channel.send({
+        const message = await channel.send({
             embed: this.buildSongEmbed({
                 video,
                 user,

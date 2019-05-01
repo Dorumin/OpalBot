@@ -21,9 +21,12 @@ module.exports = (OpalBot) => {
         cur = [0, 0];
         if (typeof old == 'number') {
             cur[0] = old;
-        } else {
+        } else if (old) {
             cur[0] = old[0];
             cur[1] = old[1];
+        } else {
+            cur[0] = Date.now();
+            cur[1] = Date.now();
         }
         cur[i] = Date.now();
         OpalBot.util.extendDatabase('seen', {

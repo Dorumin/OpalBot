@@ -299,7 +299,7 @@ class MusicController {
 
         while (i++) {
             const v = this.queue[i];
-            if (!video || v == video) break;
+            if (!v || v == video) break;
             offset += v.duration;
         }
 

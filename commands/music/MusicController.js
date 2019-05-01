@@ -222,7 +222,7 @@ class MusicController {
                     ? this.i18n.msg('paused-title', 'play', current.title, this.lang)
                     : this.i18n.msg('playing-title', 'play', current.title, this.lang)
                 : this.i18n.msg('no-video-title', 'play', this.lang),
-            url: current.url,
+            url: current ? current.url : undefined,
             description: current
                 ? this.buildDescription(current.duration, this.dispatcher.time)
                 : this.buildDescription(last.duration, last.duration * 1000),

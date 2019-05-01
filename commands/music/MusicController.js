@@ -439,21 +439,22 @@ class MusicController {
 
         if (playing) return;
 
-        message.react('⏭');
+        (async () => {
+            await message.react('⏭');;
+            message.react('❌');
+        })();
 
-        const results = await message.awaitReactions(
-            (reaction, reactor) => reactor.id == user.id && reaction.emoji.name == '⏭',
+        const reactions = await message.awaitReactions(
+            (reaction, reactor) => reactor.id == user.id && ['❌', '⏭'].includes(reaction.emoji.name),
             {
                 time: 60000,
                 max: 1,
             }
         );
 
-        console.log(results);
-
         message.clearReactions();
 
-        if (results.size) {
+        if (reactions.size) {
             this.queue.splice(this.queue.indexOf(video), 1);
             this.queue.splice(this.currentIndex + 1, 0, video);
     

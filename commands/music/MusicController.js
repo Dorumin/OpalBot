@@ -230,6 +230,10 @@ class MusicController {
 
     async sendEmbed(channel) {
         this.textChannel = channel;
+        if (this.message) {
+            this.message.delete();
+            this.message = null;
+        }
         this.message = await channel.send({
             embed: this.buildPlayingEmbed()
         });
@@ -325,7 +329,7 @@ class MusicController {
         fields.push({
             inline: true,
             name: this.i18n.msg('queue-position', 'play', this.lang),
-            value: this.queue.indexOf(video) + 1,
+            value: this.i18n.msg('position', 'play', this.queue.indexOf(video) + 1, this.lang),
         });
 
         let description;
@@ -355,6 +359,7 @@ class MusicController {
             clearInterval(this.interval);
         }
         if (this.currentVideo()) {
+            this.sendEmbed(this.textChannel);
             this.play({
                 index: this.currentIndex
             });

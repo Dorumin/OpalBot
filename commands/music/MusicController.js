@@ -51,7 +51,8 @@ class MusicController {
     }) {
         let match = query.match(videoLinkRegex) || query.match(videoIdRegex),
         id,
-        info;
+        info,
+        searched = false;
 
         if (match) {
             id = match[1] || match[0];
@@ -60,6 +61,7 @@ class MusicController {
         if (!id || !(info = await this.videoInfo(id))) {
             const body = await this.search(query);
 
+            searched = true;
             id = body.items[0].id.videoId;
             info = await this.videoInfo(id);
         }
@@ -74,7 +76,8 @@ class MusicController {
             channel: new Channel({
                 name: info.author.name,
                 url: info.author.channel_url
-            })
+            }),
+            query: searched ? query : info.title, // TODO: Something with media
         });
 
         if (wait) {
@@ -168,13 +171,19 @@ class MusicController {
 
         this.playing = true;
 
-        this.dispatcher = this.connection.playStream(video.stream, {
+        if (this.dispatcher) {
+            this.dispatcher.end();
+        }
+
+        const dispatcher = this.dispatcher = this.connection.playStream(video.stream, {
             passes: config.PASSES || 1
         });
 
-        this.dispatcher.on('end', () => {
+        dispatcher.on('end', () => {
             console.log('Ended dispatcher');
-            this.next();
+            if (!dispatcher.removed) {
+                this.next();
+            }
         });
     }
 
@@ -371,16 +380,52 @@ class MusicController {
         }
     }
 
+    async sendSongEmbed({
+        channel,
+        video,
+        title,
+        user,
+        playing,
+    }) {
+        const message = channel.send({
+            embed: controller.buildSongEmbed({
+                video,
+                user,
+                title,
+                playing,
+            }),
+        });
+
+        message.react(':track_next:');
+
+        const results = message.awaitReactions(
+            (reaction, user) => user == user && reaction.name == 'track_next',
+            {
+                time: 60000,
+                max: 1,
+            }
+        );
+
+        console.log(results);
+
+        if (results.size) {
+            this.queue.splice(this.queue.indexOf(video), 1);
+            this.queue.splice(controller.currentIndex + 1, 0, video);
+    
+            this.next();
+        }
+    }
+
     next() {
         this.currentIndex++;
         if (this.interval) {
             clearInterval(this.interval);
         }
         if (this.currentVideo()) {
-            this.sendEmbed(this.textChannel);
             this.play({
                 index: this.currentIndex
             });
+            this.sendEmbed(this.textChannel);
             return true;
         } else {
             this.playing = false;
@@ -397,6 +442,7 @@ class Video {
         duration,
         live,
         channel,
+        query
     }) {
         this.id = id;
         this.title = title;
@@ -404,6 +450,7 @@ class Video {
         this.live = live;
         this.thumbnail = `https://img.youtube.com/vi/${this.id}/0.jpg`;
         this.channel = channel;
+        this.query = query;
         this.stream = null;
     }
 

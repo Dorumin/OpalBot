@@ -55,14 +55,13 @@ module.exports = (OpalBot) => {
 
         const playing = controller.push(video);
 
-        message.channel.send({
-            embed: controller.buildSongEmbed({
-                video,
-                user: message.author,
-                title: i18n.msg('queued-title', 'play', video.title, lang),
-                playing
-            })
-        });
+        controller.sendSongEmbed({
+            channel: message.channel,
+            video,
+            user: message.author,
+            title: i18n.msg('queued-title', 'play', video.title, lang),
+            playing,
+        })
 
         if (playing) {
             controller.sendEmbed(message.channel);

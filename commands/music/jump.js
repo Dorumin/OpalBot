@@ -19,6 +19,8 @@ module.exports = (OpalBot) => {
 
         controller.queue.splice(controller.currentIndex + 1, 0, controller.queue.pop());
 
+        controller.next();
+
         message.channel.send(i18n.msg('jumping', 'jump', lang));
     };
 

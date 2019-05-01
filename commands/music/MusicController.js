@@ -182,6 +182,7 @@ class MusicController {
             }
         }
 
+        this.clearTimeout();
         this.playing = true;
 
         if (this.dispatcher) {
@@ -467,7 +468,18 @@ class MusicController {
             this.currentIndex = -1;
             this.playing = false;
             this.sendEmbed();
+            this.startTimeout();
             return false;
+        }
+    }
+
+    startTimeout() {
+        this.timeout = setTimeout(() => this.disconnect(), 30000);
+    }
+
+    clearTimeout() {
+        if (this.timeout) {
+            clearTimeout(this.timeout);
         }
     }
 }

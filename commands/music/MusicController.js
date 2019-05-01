@@ -274,6 +274,8 @@ class MusicController {
             embed: this.buildPlayingEmbed()
         });
 
+        if (!this.currentVideo()) return;
+
         this.message.react('⏯');
 
         const collector = this.message.collector = this.message.createReactionCollector(
@@ -464,7 +466,7 @@ class MusicController {
         } else {
             this.currentIndex = -1;
             this.playing = false;
-            this.editEmbed();
+            this.sendEmbed();
             return false;
         }
     }

@@ -273,10 +273,10 @@ class MusicController {
             embed: this.buildPlayingEmbed()
         });
 
-        this.message.react(':play_pause:');
+        this.message.react('⏯');
 
         const collector = this.message.collector = this.message.createReactionCollector(
-            (reaction, user) => console.log(reaction) || user != this.message.author && reaction.name == 'play_pause',
+            (reaction, user) => console.log(reaction) || user != this.message.author && reaction.emoji.name == '⏯',
             {
 
             }
@@ -423,10 +423,10 @@ class MusicController {
             }),
         });
 
-        message.react(':track_next:');
+        message.react('⏭');
 
         const results = message.awaitReactions(
-            (reaction, user) => console.log(reaction) || user == user && reaction.name == 'track_next',
+            (reaction, user) => console.log(reaction) || user == user && reaction.emoji.name == '⏭',
             {
                 time: 60000,
                 max: 1,

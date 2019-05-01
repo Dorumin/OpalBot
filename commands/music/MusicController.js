@@ -133,9 +133,9 @@ class MusicController {
         this.queue.forEach((video, index) => {
             if (Math.abs(index - this.currentIndex) == 0) {
                 video.stream = video.stream || ytdl(video.id, {
-                    audioonly: true
+                    quality: 'lowest'
                 });
-            } else {    
+            } else {
                 video.stream = null;
             }
         });
@@ -162,7 +162,7 @@ class MusicController {
 
         this.dispatcher.on('end', () => {
             console.log('Ended dispatcher');
-            // this.next();
+            this.next();
         });
     }
 
@@ -194,7 +194,7 @@ class MusicController {
     buildDescription(duration, playing) {
         console.log(duration, playing, playing / duration / 10);
         const end = this.formatTime(duration),
-        cur = this.formatTime(playing / 1000, end.length - 2),
+        cur = this.formatTime(playing / 1000, end.length - 3),
         bar = this.buildProgressBar(playing / duration / 10, 30);
 
         return `\`${cur} ${bar} ${end}\``;
@@ -295,6 +295,8 @@ class MusicController {
             offset += v.duration;
         }
 
+        console.log(offset);
+
         return offset;
     }
 
@@ -362,6 +364,7 @@ class MusicController {
             clearInterval(this.interval);
         }
         if (this.currentVideo()) {
+            this.dispatcher.time = 0;
             this.sendEmbed(this.textChannel);
             this.play({
                 index: this.currentIndex

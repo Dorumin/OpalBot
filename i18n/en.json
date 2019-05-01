@@ -329,9 +329,9 @@
     },
     "skip": {
         "not-playing": "I am not playing in that channel, are you... what are you playing at?",
-        "skipped": "Skipped!",
+        "skipped": ":next_track: Skipped!",
         "random": "I didn't even like that one *that* much anyways",
-        "skipped-end": "Skipped! Now there are no more songs left in the queue, though :("
+        "skipped-end": ":next_track: Skipped! Now there are no more songs left in the queue, though :("
     },
     "jump": {
         "not-playing": "Hey, I can't jump if I'm not playing music?",

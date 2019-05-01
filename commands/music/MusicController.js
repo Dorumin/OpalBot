@@ -387,7 +387,7 @@ class MusicController {
         fields.push({
             inline: true,
             name: this.i18n.msg('queue-position', 'play', this.lang),
-            value: index - this.currentIndex <= 1
+            value: index - this.currentIndex > 0
                 ? this.i18n.msg('relative-position', 'play', index + 1, index - this.currentIndex, this.lang)
                 : index + 1,
         });

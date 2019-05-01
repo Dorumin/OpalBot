@@ -457,8 +457,8 @@ class MusicController {
 
         if (reactions.size) {
             const sorted = reactions.sort((a, b) => b.count - a.count).first(2);
-            if (sorted.first().count == sorted.last().count) return;
-            if (sorted.first().name == '⏭') {
+            if (sorted[0].count == sorted[1].count) return;
+            if (sorted[0].name == '⏭') {
                 this.queue.splice(this.queue.indexOf(video), 1);
                 this.queue.splice(this.currentIndex + 1, 0, video);
                 

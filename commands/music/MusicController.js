@@ -280,14 +280,15 @@ class MusicController {
         this.message.react('⏯');
 
         const collector = this.message.collector = this.message.createReactionCollector(
-            (reaction, user) => console.log(reaction) || user != this.message.author && reaction.emoji.name == '⏯',
+            (reaction, user) => console.log(reaction) || user.id != this.message.author.id && reaction.emoji.name == '⏯',
             {
 
             }
         );
 
         collector.on('collect', (reaction) => {
-            reaction.remove();
+            console.log(reaction);
+            reaction.users.filter(user => user != message.author).forEach(user => reaction.remove(user));
             this.playPause();
         });
 

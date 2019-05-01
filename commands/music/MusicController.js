@@ -372,7 +372,6 @@ class MusicController {
             clearInterval(this.interval);
         }
         if (this.currentVideo()) {
-            this.dispatcher.time = 0;
             this.sendEmbed(this.textChannel);
             this.play({
                 index: this.currentIndex

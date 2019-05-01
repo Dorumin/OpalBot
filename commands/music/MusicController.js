@@ -210,11 +210,14 @@ class MusicController {
     }
 
     buildPlayingEmbed() {
-        const current = this.currentVideo(),
+        const paused = this.paused,
+        current = this.currentVideo(),
         last = this.lastVideo();
         return {
             title: current
-                ? this.i18n.msg('playing-title', 'play', current.title, this.lang)
+                ? paused
+                    ? this.i18n.msg('paused-title', 'play', current.title, this.lang)
+                    : this.i18n.msg('playing-title', 'play', current.title, this.lang)
                 : this.i18n.msg('no-video-title', 'play', this.lang),
             description: current
                 ? this.buildDescription(current.duration, this.dispatcher.time)
@@ -469,7 +472,7 @@ class MusicController {
         } else {
             this.currentIndex = -1;
             this.playing = false;
-            this.sendEmbed();
+            this.sendEmbed(this.textChannel);
             this.startTimeout();
             return false;
         }

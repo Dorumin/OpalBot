@@ -314,6 +314,7 @@
         "cant-connect": "Couldn't connect to the channel!",
         "no-results": "No results found for your search query.",
         "no-content": "You need to specify a search query or a YouTube URL!",
+        "paused-title": ":pause: Paused $1",
         "playing-title": ":notes: Playing $1",
         "paused-title": ":pause_button: Paused - $1",
         "no-video-title": "No video is playing",

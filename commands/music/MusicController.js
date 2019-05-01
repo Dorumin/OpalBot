@@ -197,7 +197,7 @@ class MusicController {
             console.log('Ended dispatcher');
             console.log('Time played: ' + dispatcher.time / 1000);
             console.log('Total song time: ' + this.currentVideo().duration);
-            console.log('Played %:' + playing / duration / 10)
+            console.log('Played %: ' + (dispatcher.time / this.currentVideo().duration / 10));
             if (!dispatcher.removed) {
                 this.next();
             }
@@ -456,9 +456,7 @@ class MusicController {
         message.clearReactions();
 
         if (reactions.size) {
-            const sorted = reactions.sort((a, b) => b.count - a.count).first(2);
-            if (sorted[0].count == sorted[1].count) return;
-            if (sorted[0].name == '⏭') {
+            if (reactions.first().name == '⏭') {
                 this.queue.splice(this.queue.indexOf(video), 1);
                 this.queue.splice(this.currentIndex + 1, 0, video);
                 

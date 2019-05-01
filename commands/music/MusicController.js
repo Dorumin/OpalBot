@@ -25,6 +25,7 @@ class MusicController {
         this.editedEmbed = 0;
         this.editing = false;
         this.playing = false;
+        this.paused = false;
         this.protipped = false;
         this.loop = 0;
     }
@@ -156,6 +157,18 @@ class MusicController {
         });
     }
 
+    playPause() {
+        if (this.dispatcher.paused) {
+            this.dispatcher.resume();
+            this.playing = true;
+            this.paused = false;
+        } else {
+            this.dispatcher.pause();
+            this.playing = false;
+            this.paused = true;
+        }
+    }
+
     play({
         index
     }) {
@@ -257,6 +270,17 @@ class MusicController {
         this.message = await channel.send({
             embed: this.buildPlayingEmbed()
         });
+
+        this.message.react(':play_pause:');
+        const collector = this.message.collector = this.message.createReactionCollector(
+            (reaction, user) => console.log(reaction) || user != this.message.author && reaction.name == 'play_pause',
+            {
+
+            }
+        );
+
+        collector.on('collect', () => this.playPause());
+
         this.startEditingInterval();
         return this.message;
     }
@@ -388,7 +412,7 @@ class MusicController {
         playing,
     }) {
         const message = channel.send({
-            embed: controller.buildSongEmbed({
+            embed: this.buildSongEmbed({
                 video,
                 user,
                 title,
@@ -399,7 +423,7 @@ class MusicController {
         message.react(':track_next:');
 
         const results = message.awaitReactions(
-            (reaction, user) => user == user && reaction.name == 'track_next',
+            (reaction, user) => console.log(reaction) || user == user && reaction.name == 'track_next',
             {
                 time: 60000,
                 max: 1,
@@ -410,7 +434,7 @@ class MusicController {
 
         if (results.size) {
             this.queue.splice(this.queue.indexOf(video), 1);
-            this.queue.splice(controller.currentIndex + 1, 0, video);
+            this.queue.splice(this.currentIndex + 1, 0, video);
     
             this.next();
         }

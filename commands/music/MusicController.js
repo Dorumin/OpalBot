@@ -350,6 +350,7 @@ class MusicController {
         });
 
         let description;
+
         if (!this.protipped && !playing) {
             this.protipped = true;
             description = this.i18n.msg('jump-protip', 'play', this.lang);

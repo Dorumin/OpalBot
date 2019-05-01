@@ -319,7 +319,7 @@
         "no-video-title": "No video is playing",
         "footer-requested-by": "Requested by $1",
         "queued-title": "Queued: $1",
-        "jump-protip": "Pssst, protip, you can use !jump to skip to this song and not lose your position in the queue!",
+        "jump-protip": "Pssst, **PROTIP:** you can use !jump to skip to this song and not lose your position in the queue!",
         "duration": "Duration",
         "channel": "Channel",
         "estimated-time": "Time until playback",

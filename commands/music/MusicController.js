@@ -282,7 +282,10 @@ class MusicController {
             }
         );
 
-        collector.on('collect', () => this.playPause());
+        collector.on('collect', (reaction) => {
+            reaction.remove();
+            this.playPause();
+        });
 
         this.startEditingInterval();
         return this.message;
@@ -380,7 +383,7 @@ class MusicController {
         fields.push({
             inline: true,
             name: this.i18n.msg('queue-position', 'play', this.lang),
-            value: index - this.currentIndex < 1
+            value: index - this.currentIndex <= 1
                 ? this.i18n.msg('relative-position', 'play', index + 1, index - this.currentIndex, this.lang)
                 : index + 1,
         });
@@ -435,6 +438,7 @@ class MusicController {
 
         console.log(results);
 
+        message.clearReactions();
         if (results.size) {
             this.queue.splice(this.queue.indexOf(video), 1);
             this.queue.splice(this.currentIndex + 1, 0, video);

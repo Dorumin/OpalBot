@@ -339,6 +339,9 @@
         "already-last": "I can't jump if we're playing the last track already!",
         "jumping": "*Jumping into the future!*"
     },
+    "leave": {
+        "not-playing": "I don't have anywhere to leave from?"
+    },
     "lyrics": {
         "no-content": "You need to specify a song title!",
         "not-found": "Could not find song lyrics matching **$1**!",

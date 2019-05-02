@@ -294,7 +294,7 @@ class MusicController {
         this.react(message, ['⏯', '🔄']);
 
         const collector = message.collector = message.createReactionCollector(
-            (reaction, user) => user.id != this.message.author.id && reaction.emoji.name == '⏯',
+            (reaction, user) => user.id != this.message.author.id && ['⏯', '🔄'].includes(reaction.emoji.name),
             {
 
             }

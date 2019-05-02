@@ -142,14 +142,14 @@ class MusicController {
         return index == this.currentIndex;
     }
 
-    refreshStreams() {
+    refreshStreams(force) {
         this.queue.forEach((video, index) => {
             if (Math.abs(index - this.currentIndex) < 2) {
-                video.stream = ytdl(video.id, {
+                video.stream = (!force && video.stream) || ytdl(video.id, {
                     audioonly: true
                 });
                 // audioonly is unreliable
-                video._stream = video._stream || ffmpeg({
+                video._stream = (!force && video._stream) || ffmpeg({
                     source: ytdl(video.id, {
                         quality: 'lowest'
                     })
@@ -209,6 +209,7 @@ class MusicController {
             }
             if (!dispatcher.removed) {
                 if (this.loop == 1) {
+                    this.refreshStreams(true);
                     this.play({
                         index: this.currentIndex
                     });

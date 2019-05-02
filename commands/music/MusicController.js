@@ -15,7 +15,7 @@ class MusicController {
         this.lang = lang;
         this.i18n = i18n;
         this.queue = [];
-        this.volume = 0;
+        this.volume = 1;
         this.currentIndex = -1;
         this.textChannel = null;
         this.dispatcher = null;
@@ -116,9 +116,9 @@ class MusicController {
 
         res.body.items.sort((a, b) => {
             const lyrics = [
-                'lyric',
-                'letra',
                 'audio',
+                'letra',
+                'lyric',
             ];
             return this.includesAny(b.snippet.title, lyrics) - this.includesAny(a.snippet.title, lyrics);
         });

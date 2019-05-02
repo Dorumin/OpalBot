@@ -191,7 +191,8 @@ class MusicController {
         }
 
         const dispatcher = this.dispatcher = this.connection.playStream(video.stream, {
-            passes: config.PASSES || 3
+            passes: config.PASSES || 3,
+            bitrate: 'auto'
         });
 
         dispatcher.on('end', () => {

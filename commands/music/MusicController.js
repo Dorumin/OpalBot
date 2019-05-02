@@ -108,8 +108,8 @@ class MusicController {
             json: true,
             query: {
                 part: 'snippet',
-                q: 'luck pusher',
-                key: 'AIzaSyCuF3kLU6XgWTIJ5oUaGgoSW25zFfwhlLE',
+                q: query,
+                key: config.YOUTUBE_TOKEN,
                 type: 'video',
             }
         });

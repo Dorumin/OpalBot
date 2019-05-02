@@ -107,8 +107,8 @@ class MusicController {
             json: true,
             query: {
                 part: 'snippet',
-                q: query,
-                key: config.YOUTUBE_TOKEN,
+                q: 'luck pusher',
+                key: 'AIzaSyCuF3kLU6XgWTIJ5oUaGgoSW25zFfwhlLE',
                 type: 'video',
             }
         });
@@ -118,7 +118,7 @@ class MusicController {
                 'lyric',
                 'letra',
             ];
-            return this.includesAny(b.title, lyrics) - this.includesAny(a.title, lyrics);
+            return this.includesAny(b.snippet.title, lyrics) - this.includesAny(a.snippet.title, lyrics);
         });
 
         return res.body;

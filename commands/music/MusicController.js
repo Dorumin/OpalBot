@@ -75,7 +75,7 @@ class MusicController {
             info = await this.videoInfo(id);
         }
 
-        console.log(info);
+        // console.log(info);
 
         const video = new Video({
             id: info.video_id,
@@ -155,13 +155,15 @@ class MusicController {
     push(video) {
         const index = this.queue.push(video) - 1;
         this.refreshStreams();
-        console.log('called push', video, !this.playing);
+        console.log('called push', !this.playing);
+
         if (!this.playing) {
             this.currentIndex = index;
             this.play({
                 index,
             });
         }
+
         return index == this.currentIndex;
     }
 
@@ -220,6 +222,7 @@ class MusicController {
         this.paused = false;
 
         if (this.dispatcher) {
+            this.dispatcher.removed = true;
             this.dispatcher.end();
         }
 

@@ -46,12 +46,14 @@ module.exports = (OpalBot) => {
             }
         }
 
-        try {
-            await controller.connect(channel);
-        } catch(e) {
-            console.log('error', e);
-            message.channel.send(i18n.msg('cant-connect', 'play', lang));
-            return;
+        if (!controller.connection) {
+            try {
+                await controller.connect(channel);
+            } catch(e) {
+                console.log('error', e);
+                message.channel.send(i18n.msg('cant-connect', 'play', lang));
+                return;
+            }
         }
 
         video = await controller.searchVideo(content, {

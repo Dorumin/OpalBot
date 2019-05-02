@@ -118,7 +118,7 @@ class MusicController {
                 'lyric',
                 'letra',
             ];
-            return this.includesAny(b, lyrics) - this.includesAny(a, lyrics);
+            return this.includesAny(b.title, lyrics) - this.includesAny(a.title, lyrics);
         });
 
         return res.body;

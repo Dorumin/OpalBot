@@ -23,6 +23,7 @@ class MusicController {
         this.message = null;
         this.timeout = null;
         this.editedEmbed = 0;
+        this.sendingEmbed = false;
         this.editing = false;
         this.playing = false;
         this.paused = false;
@@ -278,6 +279,9 @@ class MusicController {
     }
 
     async sendEmbed(channel) {
+        if (this.sendingEmbed) return;
+
+        this.sendingEmbed = true;
         this.textChannel = channel;
         if (this.message) {
             if (this.message.collector) {
@@ -291,7 +295,9 @@ class MusicController {
             embed: this.buildPlayingEmbed()
         });
 
-        if (!this.currentVideo()) return;
+        this.sendingEmbed = false;
+
+        if (!this.currentVideo()) return this.message;
 
         this.react(message, ['⏯', '🔄']);
 

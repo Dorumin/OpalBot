@@ -316,7 +316,7 @@
         "no-content": "You need to specify a search query or a YouTube URL!",
         "playing-title": ":notes: Playing - $1",
         "paused-title": ":pause_button: Paused - $1",
-        "looping-title": ":arrows_counterclockwise: Looping - $1",
+        "looping-title": ":repeat_one: Looping - $1",
         "no-video-title": "No video is playing",
         "footer-requested-by": "Requested by $1",
         "footer-paused-by": "Paused by $1",

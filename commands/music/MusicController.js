@@ -286,7 +286,7 @@ class MusicController {
                 : this.buildDescription(last.duration, last.duration * 1000),
             footer: this.pausedBy
                 ? {
-                    text: this.pausedBy.username,
+                    text: this.i18n.msg('footer-paused-by', 'play', this.pausedBy.username, this.lang),
                     icon_url: this.pausedBy.displayAvatarURL || undefined
                 }
                 : undefined
@@ -546,7 +546,7 @@ class MusicController {
         message.clearReactions();
 
         if (reactions.size) {
-            if (reactions.first().name == '⏭') {
+            if (reactions.first().emoji.name == '⏭') {
                 this.queue.splice(this.queue.indexOf(video), 1);
                 this.queue.splice(this.currentIndex + 1, 0, video);
                 

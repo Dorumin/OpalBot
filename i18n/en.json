@@ -341,6 +341,10 @@
         "looping-1": ":repeat_one: Looping individual songs!",
         "looping-2": ":repeat: Looping queue!"
     },
+    "playing": {
+        "not-connected": "I'm not connected to a music channel!",
+        "not-playing": "Nothing is being played right now!"
+    },
     "jump": {
         "not-playing": "Hey, I can't jump if I'm not playing music?",
         "already-last": "I can't jump if we're playing the last track already!",

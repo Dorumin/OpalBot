@@ -416,7 +416,8 @@ class MusicController {
         video,
         title,
         user,
-        playing
+        playing,
+        addEstimation
     }) {
         const fields = [],
         index = this.queue.indexOf(video);
@@ -433,13 +434,15 @@ class MusicController {
             value: this.formatTime(video.duration),
         });
 
-        fields.push({
-            inline: true,
-            name: this.i18n.msg('estimated-time', 'play', this.lang),
-            value: playing
-                ? this.i18n.msg('right-now', 'play', this.lang)
-                : this.formatTime(this.timeUntil(video)),
-        });
+        if (addEstimation !== false) {
+            fields.push({
+                inline: true,
+                name: this.i18n.msg('estimated-time', 'play', this.lang),
+                value: playing
+                    ? this.i18n.msg('right-now', 'play', this.lang)
+                    : this.formatTime(this.timeUntil(video)),
+            });
+        }
 
         fields.push({
             inline: true,
@@ -477,6 +480,7 @@ class MusicController {
         title,
         user,
         playing,
+        addEstimation,
     }) {
         const message = await channel.send({
             embed: this.buildSongEmbed({
@@ -484,6 +488,7 @@ class MusicController {
                 user,
                 title,
                 playing,
+                addEstimation,
             }),
         });
 

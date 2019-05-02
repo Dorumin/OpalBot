@@ -204,7 +204,13 @@ class MusicController {
                 console.log('Played %: ' + (dispatcher.time / this.currentVideo().duration / 10));
             }
             if (!dispatcher.removed) {
-                this.next();
+                if (this.loop == 1) {
+                    this.play({
+                        index: this.currentIndex
+                    });
+                } else {
+                    this.next();
+                }
             }
         });
     }
@@ -503,7 +509,7 @@ class MusicController {
             this.sendEmbed(this.textChannel);
             return true;
         } else {
-            this.currentIndex = -1;
+            // this.currentIndex = -1;
             this.playing = false;
             this.sendEmbed(this.textChannel);
             this.startTimeout();

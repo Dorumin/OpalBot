@@ -503,7 +503,7 @@ class MusicController {
         }
     }
 
-    startTimeout(fn, ms = 30000) {
+    startTimeout(fn, ms = 300000) {
         this.timeout = setTimeout(() => {
             if (fn) {
                 fn();

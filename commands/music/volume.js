@@ -25,7 +25,7 @@ module.exports = (OpalBot) => {
 
         const vol = num < 50
             ? 'low'
-            : vol < 80
+            : num < 80
                 ? 'medium'
                 : 'high';
 

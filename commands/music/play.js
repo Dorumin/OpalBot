@@ -53,6 +53,11 @@ module.exports = (OpalBot) => {
             addedBy: message.author
         });
 
+        if (!video) {
+            message.channel.send(i18n.msg('no-results', 'play', lang));
+            return;
+        }
+
         const playing = controller.push(video);
 
         await controller.sendSongEmbed({

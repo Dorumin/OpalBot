@@ -63,6 +63,8 @@ class MusicController {
 
         if (!id || !(info = await this.videoInfo(id))) {
             const body = await this.search(query);
+            
+            if (!body.items[0]) return null;
 
             searched = true;
             id = body.items[0].id.videoId;

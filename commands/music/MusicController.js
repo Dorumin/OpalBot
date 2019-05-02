@@ -134,10 +134,11 @@ class MusicController {
     push(video) {
         const index = this.queue.push(video) - 1;
         this.refreshStreams();
+        console.log('called push', video, !this.playing);
         if (!this.playing) {
             this.currentIndex = index;
             this.play({
-                index
+                index,
             });
         }
         return index == this.currentIndex;

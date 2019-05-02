@@ -32,7 +32,7 @@ class MusicController {
     }
 
     async connect(channel) {
-        if (channe && channel.connection) {
+        if (channel && channel.connection) {
             channel.connection.disconnect();
         }
         this.channel = channel;

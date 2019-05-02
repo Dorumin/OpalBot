@@ -120,18 +120,25 @@ class MusicController {
                 'letra',
                 'lyric',
             ];
-            return this.includesAny(b.snippet.title, lyrics) - this.includesAny(a.snippet.title, lyrics);
+            return this.includesAny(b.snippet.title, lyrics, query) - this.includesAny(a.snippet.title, lyrics, query);
         });
 
         return res.body;
     }
 
-    includesAny(string, substrings) {
+    includesAny(string, substrings, query) {
         string = string.toLowerCase();
-        let i = substrings.length;
+        let i = substrings.length,
+        split = query.split(' '),
+        offset = 0;
+
+        if (split.every(elem => string.includes(elem))) {
+            offset = substrings.length;
+        }
+
         while (i--) {
             if (string.includes(substrings[i])) {
-                return i;
+                return i + offset;
             }
         }
         return -1;
@@ -561,6 +568,7 @@ class MusicController {
             clearInterval(this.interval);
         }
         if (this.loop == 2 && this.currentIndex == this.queue.length) {
+            this.refreshStreams(true);
             this.currentIndex = 0;
         }
         if (this.currentVideo()) {

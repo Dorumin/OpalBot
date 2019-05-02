@@ -113,7 +113,26 @@ class MusicController {
             }
         });
 
+        res.body.items.sort((a, b) => {
+            const lyrics = [
+                'lyric',
+                'letra',
+            ];
+            return this.includesAny(b, lyrics) - this.includesAny(a, lyrics);
+        });
+
         return res.body;
+    }
+
+    includesAny(string, substrings) {
+        string = string.toLowerCase();
+        let i = substrings.length;
+        while (i--) {
+            if (string.includes(substrings[i])) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     async videoInfo(id) {

@@ -338,8 +338,8 @@
     "loop": {
         "not-playing": "I'm not in that channel, what the hell?",
         "looping-0": ":arrow_forward: Not looping!",
-        "looping-1": ":arrows_counterclockwise: Looping individual songs!",
-        "looping-2": ":arrows_counterclockwise: Looping queue!"
+        "looping-1": ":repeat_one: Looping individual songs!",
+        "looping-2": ":repeat: Looping queue!"
     },
     "jump": {
         "not-playing": "Hey, I can't jump if I'm not playing music?",

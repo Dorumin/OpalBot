@@ -215,7 +215,7 @@ class MusicController {
 
     buildPlayingEmbed() {
         const paused = this.paused,
-        looping = this.looping,
+        looping = this.loop,
         current = this.currentVideo(),
         last = this.lastVideo();
         return {
@@ -525,7 +525,7 @@ class MusicController {
     }
 
     toggleLooping() {
-        this.looping = this.looping == 1 ? 0 : 1;
+        this.loop = this.loop == 0 ? 1 : 0;
         this.editEmbed();
     }
 }

@@ -195,6 +195,7 @@ class MusicController {
 
         this.clearTimeout();
         this.playing = true;
+        this.paused = false;
 
         if (this.dispatcher) {
             this.dispatcher.end();
@@ -521,6 +522,9 @@ class MusicController {
         this.currentIndex++;
         if (this.interval) {
             clearInterval(this.interval);
+        }
+        if (this.loop == 2 && this.currentIndex == this.queue.length) {
+            this.currentIndex = 0;
         }
         if (this.currentVideo()) {
             this.play({

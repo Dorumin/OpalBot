@@ -39,6 +39,7 @@ class MusicController {
 
     disconnect() {
         if (!this.connection) return false;
+        this.channel.leave();
         this.connection.disconnect();
         this.connection = null;
         this.channel = null;
@@ -214,13 +215,16 @@ class MusicController {
 
     buildPlayingEmbed() {
         const paused = this.paused,
+        looping = this.looping,
         current = this.currentVideo(),
         last = this.lastVideo();
         return {
             title: current
                 ? paused
                     ? this.i18n.msg('paused-title', 'play', current.title, this.lang)
-                    : this.i18n.msg('playing-title', 'play', current.title, this.lang)
+                    : looping == 1
+                        ? this.i18n.msg('looping-title', 'play', current.title, this.lang)
+                        : this.i18n.msg('playing-title', 'play', current.title, this.lang)
                 : this.i18n.msg('no-video-title', 'play', this.lang),
             url: current ? current.url : undefined,
             description: current
@@ -284,7 +288,7 @@ class MusicController {
 
         if (!this.currentVideo()) return;
 
-        message.react('⏯');
+        this.react(message, ['⏯', '🔄']);
 
         const collector = message.collector = message.createReactionCollector(
             (reaction, user) => user.id != this.message.author.id && reaction.emoji.name == '⏯',
@@ -294,9 +298,17 @@ class MusicController {
         );
 
         collector.on('collect', (reaction) => {
-            console.log(reaction);
-            reaction.users.filter(user => user != message.author).forEach(user => reaction.remove(user));
-            this.playPause();
+            console.log(reaction.name);
+            switch (reaction.name) {
+                case '⏯':
+                    reaction.users.filter(user => user != message.author).forEach(user => reaction.remove(user));
+                    this.playPause();
+                    break;
+                case '🔄':
+                    reaction.users.filter(user => user != message.author).forEach(user => reaction.remove(user));
+                    this.toggleLooping();
+                    break;
+            }
         });
 
         this.startEditingInterval();
@@ -440,10 +452,7 @@ class MusicController {
 
         if (playing) return;
 
-        (async () => {
-            await message.react('⏭');;
-            message.react('❌');
-        })();
+        this.react(message, ['⏭', '❌'])
 
         const reactions = await message.awaitReactions(
             (reaction, reactor) => reactor.id == user.id && ['❌', '⏭'].includes(reaction.emoji.name),
@@ -462,10 +471,10 @@ class MusicController {
                 
                 this.next();
             } else {
+                message.delete();
                 if (this.currentVideo !== video) {
                     this.queue.splice(this.queue.indexOf(video), 1);
                 } else {
-                    message.delete();
                     this.next();
                 }
             }
@@ -505,6 +514,17 @@ class MusicController {
         if (this.timeout) {
             clearTimeout(this.timeout);
         }
+    }
+
+    async react(message, emojis) {
+        for (let i = 0; i < emojis.length; i++) {
+            await message.react(emojis[i]);
+        }
+    }
+
+    toggleLooping() {
+        this.looping = this.looping == 1 ? 0 : 1;
+        this.editEmbed();
     }
 }
 

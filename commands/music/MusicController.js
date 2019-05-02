@@ -28,6 +28,7 @@ class MusicController {
         this.playing = false;
         this.paused = false;
         this.protipped = false;
+        this.pausedBy = null;
         this.loop = 0;
     }
 
@@ -163,15 +164,19 @@ class MusicController {
         });
     }
 
-    playPause() {
+    playPause(user) {
         if (this.dispatcher.paused) {
             this.dispatcher.resume();
             this.playing = true;
             this.paused = false;
+            this.pausedBy = null;
         } else {
             this.dispatcher.pause();
             this.playing = false;
             this.paused = true;
+            if (user) {
+                this.pausedBy = user;
+            }
         }
     }
 
@@ -245,6 +250,12 @@ class MusicController {
             description: current
                 ? this.buildDescription(current.duration, this.dispatcher.time)
                 : this.buildDescription(last.duration, last.duration * 1000),
+            footer: this.pausedBy
+                ? {
+                    text: this.pausedBy.username,
+                    icon_url: this.pausedBy.displayAvatarURL || undefined
+                }
+                : undefined
         };
     }
 
@@ -322,8 +333,12 @@ class MusicController {
         collector.on('collect', (reaction) => {
             switch (reaction.emoji.name) {
                 case '⏯':
-                    reaction.users.filter(user => user != message.author).forEach(user => reaction.remove(user));
-                    this.playPause();
+                    let user;
+                    reaction.users.filter(user => user != message.author).forEach(reactor => {
+                        user = reactor;
+                        reaction.remove(user);
+                    });
+                    this.playPause(user);
                     break;
                 case '🔄':
                     reaction.users.filter(user => user != message.author).forEach(user => reaction.remove(user));

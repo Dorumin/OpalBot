@@ -7,6 +7,7 @@ module.exports = (OpalBot) => {
     out.peasants = {};
     out.peasants.p = 'play';
     out.peasants.add = 'play';
+    out.peasants.pause = 'play';
     out.peasants.play = async (message, content, lang) => {
         const storage = OpalBot.storage.music = OpalBot.storage.music || {},
         controller = storage[message.guild.id] = storage[message.guild.id] || new MusicController({
@@ -17,6 +18,11 @@ module.exports = (OpalBot) => {
         video;
 
         if (!content.trim()) {
+            if (controller) {
+                controller.playPause(message.author);
+                controller.sendEmbed();
+                return;
+            }
             message.channel.send(i18n.msg('no-content', 'play', lang));
             return;
         }

@@ -196,10 +196,12 @@ class MusicController {
         });
 
         dispatcher.on('end', () => {
-            console.log('Ended dispatcher');
-            console.log('Time played: ' + dispatcher.time / 1000);
-            console.log('Total song time: ' + this.currentVideo().duration);
-            console.log('Played %: ' + (dispatcher.time / this.currentVideo().duration / 10));
+            if (this.currentVideo()) {
+                console.log('Ended dispatcher');
+                console.log('Time played: ' + dispatcher.time / 1000);
+                console.log('Total song time: ' + this.currentVideo().duration);
+                console.log('Played %: ' + (dispatcher.time / this.currentVideo().duration / 10));
+            }
             if (!dispatcher.removed) {
                 this.next();
             }

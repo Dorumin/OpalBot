@@ -417,7 +417,8 @@ class MusicController {
         title,
         user,
         playing,
-        addEstimation
+        addEstimation,
+        bigImage,
     }) {
         const fields = [],
         index = this.queue.indexOf(video);
@@ -463,9 +464,12 @@ class MusicController {
             title: title || video.title,
             url: video.url,
             description,
-            thumbnail: {
+            thumbnail: bigImage ? undefined : {
                 url: video.thumbnail
             },
+            image: bigImage ? {
+                url: video.thumbnail
+            } : undefined,
             footer: {
                 icon_url: user.displayAvatarURL || undefined,
                 text: this.i18n.msg('footer-requested-by', 'play', user.username, this.lang)
@@ -481,6 +485,7 @@ class MusicController {
         user,
         playing,
         addEstimation,
+        bigImage,
     }) {
         const message = await channel.send({
             embed: this.buildSongEmbed({
@@ -489,6 +494,7 @@ class MusicController {
                 title,
                 playing,
                 addEstimation,
+                bigImage,
             }),
         });
 

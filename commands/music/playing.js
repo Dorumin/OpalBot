@@ -27,6 +27,7 @@ module.exports = (OpalBot) => {
             title: video.title,
             video,
             addEstimation: false,
+            bigImage: true,
         })
     };
 

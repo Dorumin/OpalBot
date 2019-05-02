@@ -345,6 +345,13 @@
         "not-connected": "I'm not connected to a music channel!",
         "not-playing": "Nothing is being played right now!"
     },
+    "volume": {
+        "not-connected": "I can't change the volume if I'm not playing anything!",
+        "invalid": "You need to enter a number between 1 and 200!",
+        "volume-set-low": ":speaker: Alright! Volume set to **$1%**",
+        "volume-set-medium": ":sound: Alright! Volume set to **$1%**",
+        "volume-set-high": ":loud_sound: Alright! Volume set to **$1%**"
+    },
     "jump": {
         "not-playing": "Hey, I can't jump if I'm not playing music?",
         "already-last": "I can't jump if we're playing the last track already!",

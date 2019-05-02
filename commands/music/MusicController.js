@@ -15,6 +15,7 @@ class MusicController {
         this.lang = lang;
         this.i18n = i18n;
         this.queue = [];
+        this.volume = 0;
         this.currentIndex = -1;
         this.textChannel = null;
         this.dispatcher = null;
@@ -117,6 +118,7 @@ class MusicController {
             const lyrics = [
                 'lyric',
                 'letra',
+                'audio',
             ];
             return this.includesAny(b.snippet.title, lyrics) - this.includesAny(a.snippet.title, lyrics);
         });
@@ -223,6 +225,7 @@ class MusicController {
 
         const dispatcher = this.dispatcher = this.connection.playStream(video.stream, {
             passes: config.PASSES || 3,
+            volume: this.volume,
             bitrate: 'auto'
         });
 
@@ -304,7 +307,7 @@ class MusicController {
             '▉',
         ],
         empty = '—',
-        percharacter = 100 / length,
+        percharacter = 100 / (length - 1),
         fulls = Math.floor(percentage / percharacter),
         leftover = (percentage / percharacter) % 1,
         last = leftover ? blocks[Math.floor(leftover * blocks.length)] : empty;
@@ -315,8 +318,8 @@ class MusicController {
         const bar = (
             new Array(fulls + 1).join(empty)
             + '🔘'
-            + new Array(length - fulls).join(empty)
-        ).slice(0, length)
+            + new Array(Math.max(length - 1 - fulls, 0)).join(empty)
+        );
 
         return bar;
     }
@@ -596,6 +599,13 @@ class MusicController {
     toggleLooping() {
         this.loop = this.loop == 0 ? 1 : 0;
         this.editEmbed();
+    }
+
+    setVolume(percentage) {
+        this.volume = percentage / 100;
+        if (this.dispatcher) {
+            this.dispatcher.setVolume(this.volume);
+        }
     }
 }
 

@@ -300,8 +300,7 @@ class MusicController {
         );
 
         collector.on('collect', (reaction) => {
-            console.log(reaction.name);
-            switch (reaction.name) {
+            switch (reaction.emoji.name) {
                 case '⏯':
                     reaction.users.filter(user => user != message.author).forEach(user => reaction.remove(user));
                     this.playPause();

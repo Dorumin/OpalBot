@@ -16,7 +16,7 @@ module.exports = (OpalBot) => {
 
         const video = controller.currentVideo();
 
-        if (!controller.playing() || !video) {
+        if (!controller.playing || !video) {
             message.channel.send(i18n.msg('not-playing', 'playing', lang));
         }
 

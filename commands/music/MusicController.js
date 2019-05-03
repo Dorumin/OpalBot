@@ -477,6 +477,7 @@ class MusicController {
         playing,
         addEstimation,
         bigImage,
+        progressBar,
     }) {
         const fields = [],
         index = this.queue.indexOf(video);

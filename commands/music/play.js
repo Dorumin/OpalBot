@@ -72,7 +72,7 @@ module.exports = (OpalBot) => {
             channel: message.channel,
             video,
             user: message.author,
-            title: i18n.msg('queued-title', 'play', video.title, lang),
+            title: i18n.msg('queued-title', 'play', video.cleanTitle, lang),
             playing,
         })
 

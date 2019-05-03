@@ -24,7 +24,7 @@ module.exports = (OpalBot) => {
             channel: message.channel,
             playing: true,
             user: message.author,
-            title: video.title,
+            title: video.cleanTitle,
             video,
             addEstimation: false,
             bigImage: true,

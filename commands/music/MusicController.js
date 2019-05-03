@@ -177,17 +177,18 @@ class MusicController {
     refreshStreams(force) {
         this.queue.forEach((video, index) => {
             if (Math.abs(index - this.currentIndex) < 2) {
-                video.stream = (!force && video.stream) || ytdl(video.id, {
-                    audioonly: true
-                });
                 // audioonly is unreliable
-                video.backupStream = (!force && video.backupStream) || ffmpeg({
+                video.stream = (!force && video.stream) || ffmpeg({
                     source: ytdl(video.id, {
                         quality: 'lowest'
                     })
                 })
                 .noVideo()
                 .format('mp3');
+                // only use as backup
+                video.backupStream = (!force && video.backupStream) || ytdl(video.id, {
+                    audioonly: true
+                });
             } else {
                 video.stream = null;
                 video.backupStream = null;
@@ -234,14 +235,14 @@ class MusicController {
             this.dispatcher.end();
         }
 
-        const dispatcher = this.dispatcher = this.connection.playStream(backup ? video.stream : video.backupStream, {
+        const dispatcher = this.dispatcher = this.connection.playStream(backup ? video.backupStream : video.stream, {
             passes: config.PASSES || 3,
             volume: this.volume,
             bitrate: 'auto'
         });
         
         if (!backup) {
-            video.backupStream.on('error', () => {
+            video.stream.on('error', () => {
                 console.log('Stream failed');
                 dispatcher.removed = true;
                 this.play({

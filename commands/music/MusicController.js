@@ -242,13 +242,19 @@ class MusicController {
         });
         
         if (!backup) {
-            video.stream.on('error', () => {
-                console.log('Stream failed');
+            video.stream.on('error', (e) => {
+                console.log('Stream failed', e);
                 dispatcher.removed = true;
                 this.play({
                     index,
                     backup: true
                 });
+            });
+        } else {
+            video.backupStream.on('error', (e) => {
+                console.log('Backup stream failed', e);
+                this.dispatcher.removed = true;
+                this.next();
             });
         }
 

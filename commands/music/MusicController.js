@@ -252,7 +252,8 @@ class MusicController {
             });
         }
 
-        dispatcher.on('end', () => {
+        dispatcher.on('end', async () => {
+            await this.wait(100);
             if (this.currentVideo()) {
                 console.log('Ended dispatcher');
                 console.log('Time played: ' + dispatcher.time / 1000);
@@ -271,6 +272,10 @@ class MusicController {
                 }
             }
         });
+    }
+
+    wait(ms) {
+        return new Promise(res => setTimeout(res, ms));
     }
 
     currentVideo() {
@@ -350,7 +355,7 @@ class MusicController {
 
     async sendEmbed(channel) {
         if (this.sendingEmbed) {
-            console.log('Caught sending embed twice', channel);
+            console.log('Caught sending embed twice');
             return;
         }
 

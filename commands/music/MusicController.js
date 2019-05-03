@@ -346,6 +346,7 @@ class MusicController {
             if (this.message.collector) {
                 this.message.collector.stop();
             }
+
             this.message.delete();
             this.message = null;
         }
@@ -358,10 +359,10 @@ class MusicController {
 
         if (!this.currentVideo()) {
             if (this.queue.length) {
-                this.react(message, ['🔂'])
+                this.react(message, ['🔁'])
 
                 const collector = message.collector = message.createReactionCollector(
-                    (reaction, user) => reaction.emoji.name == '🔂',
+                    (reaction, user) => reaction.emoji.name == '🔁',
                     {
 
                     }

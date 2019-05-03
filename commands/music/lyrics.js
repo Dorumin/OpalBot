@@ -37,6 +37,7 @@ module.exports = (OpalBot) => {
         if (!content.trim()) {
             const storage = OpalBot.storage.music = OpalBot.storage.music || {},
             controller = storage[message.guild.id];
+
             if (controller) {
                 const current = controller.currentVideo();
                 if (current) {
@@ -48,7 +49,6 @@ module.exports = (OpalBot) => {
                 message.channel.send(OpalBot.i18n.msg('no-content', 'lyrics', lang));
                 return;
             }
-            
         }
 
         const res = await got(`https://genius.com/api/search/song?page=1&q=${encodeURIComponent(content)}`, {
@@ -76,6 +76,7 @@ module.exports = (OpalBot) => {
         const $ = cheerio.load(lyricsRes.body);
         const title = song.result.title;
         const artist = song.result.primary_artist.name;
+        const thumb = song.result.song_art_image_thumbnail_url;
         const lyrics = formatLyrics($('.lyrics p').first().text());
         const split = chunk(lyrics.split('\n'), 10, 1, 2000);
 
@@ -86,6 +87,11 @@ module.exports = (OpalBot) => {
                     url: `https://genius.com${song.result.path}`,
                     title: i == 0
                         ? OpalBot.i18n.msg('for', 'lyrics', title, artist, lang)
+                        : undefined,
+                    thumbnail: i == 0
+                        ? {
+                            icon_url: thumb,
+                        }
                         : undefined,
                     description: split[i].join('\n'),
                     footer: i == split.length - 1

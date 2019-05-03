@@ -633,6 +633,10 @@ class MusicController {
 
     next() {
         this.currentIndex++;
+        if (this.dispatcher) {
+            this.dispatcher.removed = true;
+            this.dispatcher.end();
+        }
         if (this.interval) {
             clearInterval(this.interval);
         }

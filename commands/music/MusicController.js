@@ -241,7 +241,13 @@ class MusicController {
             bitrate: 'auto'
         });
         
-        if (!backup) {
+        if (backup) {
+            video.backupStream.on('error', (e) => {
+                console.log('Backup stream failed', e);
+                this.dispatcher.removed = true;
+                this.next();
+            });
+        } else {
             video.stream.on('error', (e) => {
                 console.log('Stream failed', e);
                 dispatcher.removed = true;
@@ -249,12 +255,6 @@ class MusicController {
                     index,
                     backup: true
                 });
-            });
-        } else {
-            video.backupStream.on('error', (e) => {
-                console.log('Backup stream failed', e);
-                this.dispatcher.removed = true;
-                this.next();
             });
         }
 

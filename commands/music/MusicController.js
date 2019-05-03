@@ -114,14 +114,14 @@ class MusicController {
             }
         });
 
-        res.body.items.sort((a, b) => {
-            const lyrics = [
-                'audio',
-                'letra',
-                'lyric',
-            ];
-            return this.includesAny(b.snippet.title, lyrics, query) - this.includesAny(a.snippet.title, lyrics, query);
-        });
+        // res.body.items.sort((a, b) => {
+        //     const lyrics = [
+        //         'audio',
+        //         'letra',
+        //         'lyric',
+        //     ];
+        //     return this.includesAny(b.snippet.title, lyrics, query) - this.includesAny(a.snippet.title, lyrics, query);
+        // });
 
         return res.body;
     }

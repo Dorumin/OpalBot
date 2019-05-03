@@ -359,18 +359,19 @@ class MusicController {
 
         if (!this.currentVideo()) {
             if (this.queue.length) {
-                this.react(message, ['🔁'])
+                this.react(message, ['🔁']);
 
                 const collector = message.collector = message.createReactionCollector(
-                    (reaction, user) => reaction.emoji.name == '🔁',
+                    (reaction, user) => user !== message.author && reaction.emoji.name == '🔁',
                     {
-
+                        max: 1,
                     }
                 );
         
                 collector.on('collect', (reaction) => {
                     collector.stop();
                     this.currentIndex = 0;
+                    this.refreshStreams(true);
                     this.play({
                         index: 0
                     });

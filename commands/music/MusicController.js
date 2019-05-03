@@ -418,25 +418,22 @@ class MusicController {
         );
 
         collector.on('collect', (reaction) => {
+            const reactors = reaction.users.filter(user => user != message.author);
             switch (reaction.emoji.name) {
                 case '⏯':
-                    let user;
-                    reaction.users.filter(user => user != message.author).forEach(reactor => {
-                        user = reactor;
-                        reaction.remove(user);
-                    });
-                    this.playPause(user);
+                    reactors.forEach(user => reaction.remove(user));
+                    this.playPause(reactors.first());
                     break;
                 case '🔂':
-                    reaction.users.filter(user => user != message.author).forEach(user => reaction.remove(user));
+                    reactors.forEach(user => reaction.remove(user));
                     this.toggleLooping();
                     break;
                 case '⏭':
-                    this.textChannel.send(this.i18n.msg('action-skipped', 'play', this.lang));
+                    this.textChannel.send(this.i18n.msg('action-skipped', 'play', reactors.first().username, this.lang));
                     this.next();
                     break;
                 case '❌':
-                    this.textChannel.send(this.i18n.msg('action-removed', 'play', this.lang));
+                    this.textChannel.send(this.i18n.msg('action-removed', 'play', reactors.first().username, this.lang));
                     this.queue.splice(this.currentIndex, 1);
                     this.currentIndex--;
                     this.next();

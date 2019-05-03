@@ -335,7 +335,10 @@ class MusicController {
     }
 
     async sendEmbed(channel) {
-        if (this.sendingEmbed) return;
+        if (this.sendingEmbed) {
+            console.log('Caught sending embed twice', channel);
+            return;
+        }
 
         this.sendingEmbed = true;
         this.textChannel = channel;

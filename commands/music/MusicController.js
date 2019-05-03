@@ -408,10 +408,10 @@ class MusicController {
             return this.message;
         }
 
-        this.react(message, ['⏯', '🔂']);
+        this.react(message, ['⏯', '🔂', '⏭', '❌']);
 
         const collector = message.collector = message.createReactionCollector(
-            (reaction, user) => user.id != this.message.author.id && ['⏯', '🔂'].includes(reaction.emoji.name),
+            (reaction, user) => user.id != this.message.author.id && ['⏯', '🔂', '⏭', '❌'].includes(reaction.emoji.name),
             {
 
             }
@@ -430,6 +430,16 @@ class MusicController {
                 case '🔂':
                     reaction.users.filter(user => user != message.author).forEach(user => reaction.remove(user));
                     this.toggleLooping();
+                    break;
+                case '⏭':
+                    this.textChannel.send(this.i18n.msg('action-skipped', 'play', this.lang));
+                    this.next();
+                    break;
+                case '❌':
+                    this.textChannel.send(this.i18n.msg('action-removed', 'play', this.lang));
+                    this.queue.splice(this.currentIndex, 1);
+                    this.currentIndex--;
+                    this.next();
                     break;
             }
         });
@@ -611,7 +621,7 @@ class MusicController {
                 this.next();
             } else {
                 message.delete();
-                if (this.currentVideo !== video) {
+                if (this.currentVideo() !== video) {
                     this.queue.splice(this.queue.indexOf(video), 1);
                 } else {
                     this.next();

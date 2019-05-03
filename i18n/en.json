@@ -327,7 +327,9 @@
         "estimated-time": "Time until playback",
         "right-now": "**Right now!**",
         "queue-position": "Position in queue",
-        "relative-position": "$1 (($2|up next|$2 from current))"
+        "relative-position": "$1 (($2|up next|$2 from current))",
+        "action-skipped": "$1 skipped the current track!",
+        "action-removed": "$1 removed the current track!"
     },
     "skip": {
         "not-playing": "I am not playing in that channel, are you... what are you playing at?",

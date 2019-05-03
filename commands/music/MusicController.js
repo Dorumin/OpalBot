@@ -212,7 +212,8 @@ class MusicController {
     }
 
     play({
-        index
+        index,
+        backup,
     }) {
         const video = this.queue[index];
 
@@ -233,11 +234,22 @@ class MusicController {
             this.dispatcher.end();
         }
 
-        const dispatcher = this.dispatcher = this.connection.playStream(video.stream, {
+        const dispatcher = this.dispatcher = this.connection.playStream(backup ? video.stream : video.backupStream, {
             passes: config.PASSES || 3,
             volume: this.volume,
             bitrate: 'auto'
         });
+        
+        if (!backup) {
+            video.backupStream.on('error', () => {
+                console.log('Stream failed');
+                dispatcher.removed = true;
+                this.play({
+                    index,
+                    backup: true
+                });
+            });
+        }
 
         dispatcher.on('end', () => {
             if (this.currentVideo()) {

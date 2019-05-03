@@ -317,7 +317,7 @@
         "playing-title": ":notes: Playing - $1",
         "paused-title": ":pause_button: Paused - $1",
         "looping-title": ":repeat_one: Looping - $1",
-        "no-video-title": "No video is playing",
+        "no-video-title": "No song is playing",
         "footer-requested-by": "Requested by $1",
         "footer-paused-by": "Paused by $1",
         "queued-title": "Queued: $1",

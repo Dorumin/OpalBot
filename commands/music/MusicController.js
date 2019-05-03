@@ -264,6 +264,7 @@ class MusicController {
                     this.play({
                         index: this.currentIndex
                     });
+                    this.sendEmbed(this.textChannel);
                 } else {
                     this.next();
                 }
@@ -387,6 +388,7 @@ class MusicController {
                     this.play({
                         index: 0
                     });
+                    this.sendEmbed(this.textChannel);
                 });
             }
 

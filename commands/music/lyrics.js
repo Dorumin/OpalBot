@@ -90,7 +90,7 @@ module.exports = (OpalBot) => {
                         : undefined,
                     thumbnail: i == 0
                         ? {
-                            icon_url: thumb,
+                            url: thumb,
                         }
                         : undefined,
                     description: split[i].join('\n'),

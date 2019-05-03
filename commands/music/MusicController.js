@@ -353,7 +353,28 @@ class MusicController {
 
         this.sendingEmbed = false;
 
-        if (!this.currentVideo()) return this.message;
+        if (!this.currentVideo()) {
+            if (this.queue.length) {
+                this.react(message, ['🔂'])
+
+                const collector = message.collector = message.createReactionCollector(
+                    (reaction, user) => reaction.emoji.name == '🔂',
+                    {
+
+                    }
+                );
+        
+                collector.on('collect', (reaction) => {
+                    collector.end();
+                    this.currentIndex = 0;
+                    this.play({
+                        index: 0
+                    });
+                });
+            }
+
+            return this.message;
+        }
 
         this.react(message, ['⏯', '🔂']);
 

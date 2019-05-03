@@ -275,10 +275,10 @@ class MusicController {
         return {
             title: current
                 ? paused
-                    ? this.i18n.msg('paused-title', 'play', current.title, this.lang)
+                    ? this.i18n.msg('paused-title', 'play', current.cleanTitle, this.lang)
                     : looping == 1
-                        ? this.i18n.msg('looping-title', 'play', current.title, this.lang)
-                        : this.i18n.msg('playing-title', 'play', current.title, this.lang)
+                        ? this.i18n.msg('looping-title', 'play', current.cleanTitle, this.lang)
+                        : this.i18n.msg('playing-title', 'play', current.cleanTitle, this.lang)
                 : this.i18n.msg('no-video-title', 'play', this.lang),
             url: current ? current.url : undefined,
             description: current
@@ -494,7 +494,7 @@ class MusicController {
         }
 
         return {
-            title: title || video.title,
+            title: title || video.cleanTitle,
             url: video.url,
             description,
             thumbnail: bigImage ? undefined : {
@@ -641,6 +641,14 @@ class Video {
 
     get url() {
         return `https://youtu.be/${this.id}`;
+    }
+
+    get cleanTitle() {
+        return this.title
+            .replace(/\(.+?\)|\[.+?]/g, '')
+            .replace(/,.+?-/g, ' -')
+            .replace(/\s+/g, ' ')
+            .trim();
     }
 
     async tryFetchBetterThumbnail() {

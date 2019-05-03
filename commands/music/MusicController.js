@@ -369,7 +369,7 @@ class MusicController {
                 );
         
                 collector.on('collect', (reaction) => {
-                    collector.end();
+                    collector.stop();
                     this.currentIndex = 0;
                     this.play({
                         index: 0

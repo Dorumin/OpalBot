@@ -258,6 +258,10 @@ class MusicController {
             });
         }
 
+        dispatcher.on('error', () => {
+            console.log('dispatcher error?');
+        });
+
         dispatcher.on('end', async () => {
             await this.wait(100);
             if (this.currentVideo()) {

@@ -28,6 +28,7 @@ module.exports = (OpalBot) => {
             video,
             addEstimation: false,
             bigImage: true,
+            progressBar: true,
         })
     };
 

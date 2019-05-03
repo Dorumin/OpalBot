@@ -488,7 +488,9 @@ class MusicController {
 
         let description;
 
-        if (!this.protipped && !playing) {
+        if (progressBar && this.dispatcher) {
+            description = this.buildDescription(video.duration, this.dispatcher.time);
+        } else if (!this.protipped && !playing) {
             this.protipped = true;
             description = this.i18n.msg('jump-protip', 'play', this.lang);
         }
@@ -519,6 +521,7 @@ class MusicController {
         playing,
         addEstimation,
         bigImage,
+        progressBar,
     }) {
         const message = await channel.send({
             embed: this.buildSongEmbed({
@@ -528,6 +531,7 @@ class MusicController {
                 playing,
                 addEstimation,
                 bigImage,
+                progressBar,
             }),
         });
 

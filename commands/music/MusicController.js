@@ -259,6 +259,7 @@ class MusicController {
                 console.log('Time played: ' + dispatcher.time / 1000);
                 console.log('Total song time: ' + this.currentVideo().duration);
                 console.log('Played %: ' + (dispatcher.time / this.currentVideo().duration / 10));
+                console.log('Removed: ' + dispatcher.removed);
             }
             if (!dispatcher.removed) {
                 if (this.loop == 1) {

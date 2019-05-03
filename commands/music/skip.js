@@ -20,7 +20,15 @@ module.exports = (OpalBot) => {
                 await message.channel.send(i18n.msg('random', 'skip', lang));
             }
         } else {
-            await message.channel.send(i18n.msg('skipped-end', 'skip', lang));
+            await message.channel.send(
+                i18n.msg(
+                    controller.loop == 2
+                        ? 'skipped-loop'
+                        : 'skipped-end',
+                    'skip',
+                    lang
+                )
+            );
         }
 
         controller.next();

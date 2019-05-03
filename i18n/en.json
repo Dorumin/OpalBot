@@ -333,7 +333,8 @@
         "not-playing": "I am not playing in that channel, are you... what are you playing at?",
         "skipped": ":next_track: Skipped!",
         "random": "I didn't even like that one *that* much anyways",
-        "skipped-end": ":next_track: Skipped! Now there are no more songs left in the queue, though :("
+        "skipped-end": ":next_track: Skipped! Now there are no more songs left in the queue, though :(",
+        "skipped-loop": ":next_track: Skipped, and looping around to the first song in the queue!"
     },
     "loop": {
         "not-playing": "I'm not in that channel, what the hell?",

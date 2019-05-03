@@ -20,7 +20,7 @@ module.exports = (OpalBot) => {
         if (!content.trim()) {
             if (controller) {
                 controller.playPause(message.author);
-                controller.sendEmbed();
+                controller.sendEmbed(message.channel);
                 return;
             }
             message.channel.send(i18n.msg('no-content', 'play', lang));

@@ -181,7 +181,7 @@ class MusicController {
                     audioonly: true
                 });
                 // audioonly is unreliable
-                video._stream = (!force && video._stream) || ffmpeg({
+                video.backupStream = (!force && video.backupStream) || ffmpeg({
                     source: ytdl(video.id, {
                         quality: 'lowest'
                     })
@@ -190,7 +190,7 @@ class MusicController {
                 .format('mp3');
             } else {
                 video.stream = null;
-                video._stream = null;
+                video.backupStream = null;
             }
         });
     }

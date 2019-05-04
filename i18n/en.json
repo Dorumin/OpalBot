@@ -357,6 +357,7 @@
     },
     "jump": {
         "not-playing": "Hey, I can't jump if I'm not playing music?",
+        "jumps": "*jumps*",
         "already-last": "I can't jump if we're playing the last track already!",
         "jumping": "*Jumping into the future!*"
     },

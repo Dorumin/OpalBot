@@ -8,7 +8,7 @@ module.exports = (OpalBot) => {
         controller = storage[message.guild.id];
 
         if (!controller || !controller.connection) {
-            message.channel.send(i18n.msg('not-playing', 'jump', lang));
+            message.channel.send(i18n.msg(Math.round(Math.random()) ? 'not-playing' : 'jumps', 'jump', lang));
             return;
         }
 

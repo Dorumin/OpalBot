@@ -75,7 +75,7 @@ module.exports = (OpalBot) => {
     client.on('guildCreate', async (guild) => {
         client.guilds
             .get('344422448403316748').channels
-            .get('387039127083679753')
+            .get('395094746227408907')
                 .send(`Joined guild ${guild} (${guild.id})`);
     
         const prefixes = OpalBot.prefixes[guild.id] || OpalBot.prefixes.default,

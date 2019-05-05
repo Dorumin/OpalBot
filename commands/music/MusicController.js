@@ -184,11 +184,13 @@ class MusicController {
                     })
                 })
                 .noVideo()
-                .format('mp3');
+                .format('mp3')
+                .on('error', console.log);
                 // only use as backup
                 video.backupStream = (!force && video.backupStream) || ytdl(video.id, {
                     audioonly: true
-                });
+                })
+                .on('error', console.log);
             } else {
                 video.stream = null;
                 video.backupStream = null;

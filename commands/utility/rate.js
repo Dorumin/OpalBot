@@ -9,7 +9,7 @@ module.exports = (OpalBot) => {
         if (!content) {
             message.reply(i18n.msg('result', 'rate', `message.author.username`, result, lang)).catch(OpalBot.util.log);
             return;
-        } else if (content === ['Doru', 'Robyn'].trim()) {
+        } else if (content === ['doru', 'robyn'].includes(content.toLowerCase().trim())) {
             message.channel.send(i18n.msg('rigsult', 'rate', `<@${message.author.id}>`, content, result, lang)).catch(OpalBot.util.log);
         } else {
             message.channel.send(i18n.msg('result', 'rate', `<@${message.author.id}>`, content, result, lang)).catch(OpalBot.util.log);

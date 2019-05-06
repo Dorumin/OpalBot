@@ -7,7 +7,7 @@ module.exports = (OpalBot) => {
     out.peasants.rate = (message, content, lang) => {
         result = Math.ceil(Math.random() * 10);
         if (!content.trim()) {
-            message.channel.send(i18n.msg('result', 'rate', message.author.username, result, lang)).catch(OpalBot.util.log);
+            message.channel.send(i18n.msg('result', 'rate', `<@${message.author.id}>`, message.author.username, result, lang)).catch(OpalBot.util.log);
         } else if (content === ['doru', 'robyn'].includes(content.toLowerCase().trim())) {
             message.channel.send(i18n.msg('rigsult', 'rate', `<@${message.author.id}>`, content, result, lang)).catch(OpalBot.util.log);
         } else {

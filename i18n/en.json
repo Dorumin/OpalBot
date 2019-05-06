@@ -374,7 +374,7 @@
         "title": "[$1] 1 new commit"
     },
     "rate": {
-        "result": "$1, I'd rate $2 a **$3**!",
-        "rigsult": "$1, I'd rate $2 a 11/10!" 
+        "result": "$1, I'd rate $2 a **$3**/10!",
+        "rigsult": "$1, I'd rate $2 a **11**/10!" 
     },
 }

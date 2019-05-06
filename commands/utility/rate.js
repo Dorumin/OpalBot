@@ -3,7 +3,7 @@ module.exports = (OpalBot) => {
     i18n = OpalBot.i18n;
     
     out.peasants = {};
-    out.peasants.r = 'rate';
+    // out.peasants.r = 'rate';
     out.peasants.rate = (message, content, lang) => {
         result = Math.ceil(Math.random() * 10);
         item = content;

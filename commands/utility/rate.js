@@ -10,7 +10,7 @@ module.exports = (OpalBot) => {
         if (item === 'Doru' || 'Robyn') {
             message.channel.send(i18n.msg('rigsult', 'rate', `<@${message.author.id}>`, item, lang)).catch(OpalBot.util.log);
         } else {
-        message.channel.send(i18n.msg('result', 'rate', `<@${message.author.id}>`, item, result + '/10', lang)).catch(OpalBot.util.log);
+        message.channel.send(i18n.msg('result', 'rate', `<@${message.author.id}>`, item, result, lang)).catch(OpalBot.util.log);
     } 
     return out;
 };

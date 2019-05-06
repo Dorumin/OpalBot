@@ -372,5 +372,8 @@
     },
     "fakegit": {
         "title": "[$1] 1 new commit"
-    }
+    },
+    "rate": {
+        "result": "$1, I'd rate $2 a **$3**!",
+    },
 }

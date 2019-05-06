@@ -11,7 +11,7 @@ module.exports = (OpalBot) => {
         } else if (content.trim() === ['doru', 'robyn'].includes(content.toLowerCase())) {
             message.channel.send(i18n.msg('rigsult', 'rate', `<@${message.author.id}>`, content, result, lang)).catch(OpalBot.util.log);
         } else {
-            message.channel.send(i18n.msg('result', 'rateI', `<@${message.author.id}>`, content, result, lang)).catch(OpalBot.util.log);
+            message.channel.send(i18n.msg('result', 'rate', `<@${message.author.id}>`, content, result, lang)).catch(OpalBot.util.log);
         }
     } 
     return out;

@@ -6,7 +6,8 @@ module.exports = (OpalBot) => {
     out.peasants.r = 'rate';
     out.peasants.rate = (message, content, lang) => {
         result = Math.ceil(Math.random() * 10);
-        message.channel.send(i18n.msg('result', 'rate', `<@${message.author.id}>`, (content), result, lang)).catch(OpalBot.util.log);
+        item = content;
+        message.channel.send(i18n.msg('result', 'rate', `<@${message.author.id}>`, item, result, lang)).catch(OpalBot.util.log);
     } 
     return out;
 };

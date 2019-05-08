@@ -20,6 +20,7 @@ module.exports = (OpalBot) => {
             embed: {
                 color: OpalBot.color,
                 title: i18n.msg('title', 'avatar', lang),
+                url: user.displayAvatarURL,
                 image: {
                     url: user.displayAvatarURL
                 },

@@ -11,11 +11,17 @@ module.exports = (OpalBot) => {
     out.peasants = {};
     // out.peasants.r = 'rate';
     out.peasants.rate = (message, content, lang) => {
-        const criteria = Math.floor(Math.random() * 10),
-        user = message.mentions.members.first() || content.trim() || message.member,
-        critName = i18n.msg('criteria-' + (criteria + 1), 'rate', lang),
+        const user = message.mentions.members.first() || content.trim() || message.member,
         identifier = user.id || user.toLowerCase(),
-        name = user.nickname || user.user && user.user.username || user,
+        mentioned = typeof user !== 'string',
+        name = mentioned
+            ? user.nickname || user.user.username
+            : user,
+        custom = mentioned
+            ? content.replace(/<!?@\d+>/g, '').trim()
+            : null,
+        criteria = custom ? 0 : Math.floor(Math.random() * 11),
+        critName = custom || i18n.msg('criteria-' + (criteria + 1), 'rate', lang),
         doru = [
             null,
             null,
@@ -63,7 +69,9 @@ module.exports = (OpalBot) => {
             opal,
             '348233224293449729': opal,
         },
-        result = rigged[identifier] || rand(identifier);
+        result = custom
+            ? rand(identifier + custom)
+            : rigged[identifier] || rand(identifier);
 
         message.channel.send(i18n.msg('result', 'rate', `<@${message.author.id}>`, name, result[criteria], critName, lang));
     } 

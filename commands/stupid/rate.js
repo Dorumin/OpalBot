@@ -25,6 +25,7 @@ module.exports = (OpalBot) => {
             '9',
             'immeasurable',
             '0',
+            '2'
         ],
         robyn = [
             '11',
@@ -35,12 +36,26 @@ module.exports = (OpalBot) => {
             '10',
             'not even trying',
             '11',
+            '10'
+        ],
+        opal = [
+            '10',
+            '10',
+            '10',
+            '10',
+            '5',
+            '10',
+            'not today satan',
+            '1',
+            '10'
         ],
         rigged = {
             doru,
             '155545848812535808': doru,
             robyn,
             '187524257280950272': robyn,
+            opal,
+            '348233224293449729': opal,
         },
         result = rigged[identifier] || rand(identifier);
 

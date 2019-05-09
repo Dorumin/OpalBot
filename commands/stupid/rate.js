@@ -11,22 +11,23 @@ module.exports = (OpalBot) => {
     out.peasants = {};
     // out.peasants.r = 'rate';
     out.peasants.rate = (message, content, lang) => {
-        const criteria = Math.floor(Math.random() * 8),
+        const criteria = Math.floor(Math.random() * 10),
         user = message.mentions.members.first() || content.trim() || message.member,
         critName = i18n.msg('criteria-' + (criteria + 1), 'rate', lang),
         identifier = user.id || user.toLowerCase(),
         name = user.nickname || user.user && user.user.username || user,
         doru = [
-            '-1',
-            '10',
+            null,
+            null,
             '11',
             '8',
-            '1',
-            '9',
+            null,
+            '10',
             'immeasurable',
             '0',
-            '2',
-            '10'
+            null,
+            '10',
+            '6',
         ],
         robyn = [
             '11',
@@ -39,6 +40,7 @@ module.exports = (OpalBot) => {
             '11',
             '10',
             '5',
+            '6.1',
         ],
         opal = [
             '10',
@@ -49,6 +51,7 @@ module.exports = (OpalBot) => {
             '10',
             'not today satan',
             '1',
+            '10',
             '10',
             '10'
         ],

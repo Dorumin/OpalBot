@@ -25,7 +25,8 @@ module.exports = (OpalBot) => {
             '9',
             'immeasurable',
             '0',
-            '2'
+            '2',
+            '10'
         ],
         robyn = [
             '11',
@@ -36,7 +37,8 @@ module.exports = (OpalBot) => {
             '10',
             'not even trying',
             '11',
-            '10'
+            '10',
+            '5',
         ],
         opal = [
             '10',
@@ -47,6 +49,7 @@ module.exports = (OpalBot) => {
             '10',
             'not today satan',
             '1',
+            '10',
             '10'
         ],
         rigged = {

@@ -18,7 +18,7 @@ module.exports = (OpalBot) => {
             ? user.nickname || user.user.username
             : user,
         custom = mentioned
-            ? content.replace(/<!?@\d+>/g, '').trim()
+            ? content.replace(/<@!?\d+>/g, '').trim()
             : null,
         criteria = custom ? 0 : Math.floor(Math.random() * 11),
         critName = custom || i18n.msg('criteria-' + (criteria + 1), 'rate', lang),

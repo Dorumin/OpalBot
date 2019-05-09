@@ -2,7 +2,7 @@ const sha256 = require('js-sha256'),
 rand = seed => sha256(seed)
     .split('')
     .map(char => isNaN(char) ? String.fromCharCode(char.charCodeAt(0) - 39) : char)
-    .map(char => Math.ceil(char.charCodeAt(0) / 1.6) - 30);
+    .map(char => Math.ceil(char.charCodeAt(0) / 1.777777) - 29);
 
 module.exports = (OpalBot) => {
     const out = {},

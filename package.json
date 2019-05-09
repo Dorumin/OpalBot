@@ -28,6 +28,7 @@
     "fast-json-stable-stringify": "^1.0.2",
     "fluent-ffmpeg": "^2.1.2",
     "got": "^9.6.0",
+    "js-sha256": "^0.9.0",
     "node-opus": "^0.2.9",
     "request": "^2.83.0",
     "request-promise-native": "^1.0.5",

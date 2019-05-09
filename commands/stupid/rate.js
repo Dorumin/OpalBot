@@ -1,3 +1,9 @@
+const sha256 = require('js-sha256'),
+rand = seed => sha256(seed)
+    .split('')
+    .map(char => isNaN(char) ? String.fromCharCode(char.charCodeAt(0) - 39) : char)
+    .map(char => Math.ceil(char.charCodeAt(0) / 1.6) - 30);
+
 module.exports = (OpalBot) => {
     const out = {},
     i18n = OpalBot.i18n;
@@ -5,14 +11,40 @@ module.exports = (OpalBot) => {
     out.peasants = {};
     // out.peasants.r = 'rate';
     out.peasants.rate = (message, content, lang) => {
-        result = Math.ceil(Math.random() * 10);
-        if (!content.trim()) {
-            message.channel.send(i18n.msg('result', 'rate', `<@${message.author.id}>`, message.author.username, result, lang)).catch(OpalBot.util.log);
-        } else if (content == 'Doru' || 'Robyn' || message.mentions.users.has('187524257280950272') || message.mentions.users.has('155545848812535808')) {
-            message.channel.send(i18n.msg('rigsult', 'rate', `<@${message.author.id}>`, content, lang)).catch(OpalBot.util.log);
-        } else {
-            message.channel.send(i18n.msg('result', 'rate', `<@${message.author.id}>`, content, result, lang)).catch(OpalBot.util.log);
-        }
+        const criteria = Math.floor(Math.random() * 8),
+        user = message.mentions.members.first() || content.trim() || message.member,
+        critName = i18n.msg('criteria-' + (criteria + 1), 'rate', lang),
+        identifier = user.id || user.toLowerCase(),
+        name = user.nickname || user.user && user.user.username || user,
+        doru = [
+            '-1',
+            '10',
+            '11',
+            '8',
+            '1',
+            '9',
+            'immeasurable',
+            '0',
+        ],
+        robyn = [
+            '11',
+            '10',
+            '7',
+            '1',
+            '1',
+            '10',
+            'not even trying',
+            '11',
+        ],
+        rigged = {
+            doru,
+            '155545848812535808': doru,
+            robyn,
+            '187524257280950272': robyn,
+        },
+        result = rigged[identifier] || rand(identifier);
+
+        message.channel.send(i18n.msg('result', 'rate', `<@${message.author.id}>`, name, result[criteria], critName, lang));
     } 
     return out;
 };

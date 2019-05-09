@@ -374,8 +374,15 @@
         "title": "[$1] 1 new commit"
     },
     "rate": {
-        "result": "$1, I'd rate $2 a **$3**/10!",
-        "rigsult": "$1, I'd rate $2 a **11**/10!" 
+        "criteria-1": "as a **friend**",
+        "criteria-2": "as a **lover**",
+        "criteria-3": "as an **entertainer**",
+        "criteria-4": "on their **knowledge**",
+        "criteria-5": "on their **dance moves**",
+        "criteria-6": "on their **music taste**",
+        "criteria-7": "with their **skills in bed**",
+        "criteria-8": "with their **clinginess**",
+        "result": "$1, I'd rate $2 a **$3**/10 $4!"
     },
     "pindump": {
         "no-pins": "There are no pins from this channel to post!",

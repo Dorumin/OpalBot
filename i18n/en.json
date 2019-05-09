@@ -376,5 +376,9 @@
     "rate": {
         "result": "$1, I'd rate $2 a **$3**/10!",
         "rigsult": "$1, I'd rate $2 a **11**/10!" 
+    },
+    "pindump": {
+        "no-pins": "There are no pins from this channel to post!",
+        "compilation": "Here ($1|is the link|are the links) to the ($1|compilation|compilations):"
     }
 }

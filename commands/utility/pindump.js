@@ -1,11 +1,11 @@
 const chunk = (array, maxlen) => {
-    const final = [''],
+    let final = [''],
     current = 0;
 
     for (let i = 0; i < array.length; i++) {
         const item = array[i];
-        if (item.length > maxlen) return;
-        if ((item[current] + item).length > maxlen) {
+        if (item.length > maxlen) continue;
+        if ((final[current] + item).length > maxlen) {
             current++;
             final[current] = item;
         } else {
@@ -14,7 +14,7 @@ const chunk = (array, maxlen) => {
     }
 
     return final;
-};
+}
 
 const escape = str => str.replace(/`/g, '\\`');
 
@@ -44,7 +44,7 @@ module.exports = (OpalBot) => {
                     : '\n';
             return content
                 + message.attachments.map(attachment => attachment.url + '\n').join('')
-                + ` > <https://discordapp.com/channels/${message.guild.id}/${message.channel.id}/${message.id}>`;
+                + `<https://discordapp.com/channels/${message.guild.id}/${message.channel.id}/${message.id}>`;
         });
         const chunked = chunk(pieces.reverse(), 2000);
         const links = [];

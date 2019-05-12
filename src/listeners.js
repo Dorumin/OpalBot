@@ -240,7 +240,7 @@ module.exports = (OpalBot) => {
             }
         });
 
-        if (message.guild.id == '359875425322663940') {
+        if (message.guild.id == '451010950997475328') {
             const matches = content.match(/https?:\/\/pokepast.es\/[0-9a-f]+/gi);
             if (matches) {
                 matches.forEach(async link => {

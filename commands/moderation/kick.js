@@ -19,14 +19,17 @@ module.exports = (OpalBot) => {
             message.reply(i18n.msg('masochist', 'kick', lang)).catch(OpalBot.util.log);
             return;
         }
+
         let reason = content.replace(/<@[!&]?\d+>/g, '').trim() || undefined,
         i = users.length,
         name = i == 1 ? users[0] : i18n.msg('users', 'kick', i, lang),
         unkick = users.find(user => !user.kickable);
+
         if (unkick) {
-            message.channel.send(i18n.msg('cannot-kick', 'kick', unkick.username, lang)).catch(OpalBot.util.log);
+            message.channel.send(i18n.msg('cannot-kick', 'kick', unkick.nickname || unkick.user.username, lang)).catch(OpalBot.util.log);
             return;
         }
+
         message.channel.send(i18n.msg('kicking' + (reason ? '-with-reason' : ''), 'kick', name, reason, lang)).catch(OpalBot.util.log);
         while (i--) {
             let user = users[i];

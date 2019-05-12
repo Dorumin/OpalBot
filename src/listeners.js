@@ -1,4 +1,6 @@
-const config = require('./config.js'),
+const got = require('got'),
+cheerio = require('cheerio'),
+config = require('./config.js'),
 start_activity = require('./activity.js');
 
 module.exports = (OpalBot) => {
@@ -237,5 +239,21 @@ module.exports = (OpalBot) => {
                 obj.callback(message, index);
             }
         });
+
+        if (message.guild.id == '451010950997475328') {
+            const matches = content.match(/https?:\/\/pokepast.es\/[0-9a-f]+/gi);
+            if (matches) {
+                matches.forEach(async link => {
+                    const { body } = await got(link);
+                    const $ = cheerio.load(body);
+                    const articles = $('article')
+                        .map((_, elem) => $(elem).text().trim())
+                        .toArray()
+                        .map(text => '```' + text + '```');
+
+                    message.channel.send(articles.join(''))
+                });
+            }
+        }
     });
 };

@@ -249,7 +249,7 @@ module.exports = (OpalBot) => {
                     const articles = $('article')
                         .map((_, elem) => $(elem).text().trim())
                         .toArray()
-                        .map(text => '```' + text + '```');
+                        .map(text => '```ldif\n' + text + '```');
 
                     message.channel.send(articles.join(''))
                 });

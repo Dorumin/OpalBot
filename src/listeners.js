@@ -240,16 +240,40 @@ module.exports = (OpalBot) => {
             }
         });
 
-        if (message.guild.id == '451010950997475328') {
+        if (message.guild.id == '359875425322663940') {
             const matches = content.match(/https?:\/\/pokepast.es\/[0-9a-f]+/gi);
             if (matches) {
                 matches.forEach(async link => {
                     const { body } = await got(link);
                     const $ = cheerio.load(body);
+                    const title = $('aside h1').text();
+                    const author = $('aside h2').text();
                     const articles = $('article')
-                        .map((_, elem) => $(elem).text().trim())
                         .toArray()
+                        .map(elem => $(elem).text().trim())
+                        .map(text =>
+                            text.split('\n')
+                                .map(line => line.trim())
+                                .sort((a, b) => {
+                                    if (a.startsWith('-')) return 1;
+                                    if (b.startsWith('-')) return -1;
+                                    if (a.includes(':')) return 1;
+                                    if (b.includes(':')) return -1;
+                                    return 0;
+                                })
+                                .join('\n')
+                        )
                         .map(text => '```ldif\n' + text + '```');
+
+                    if (title) {
+                        if (author) {
+                            articles.unshift('```coq\n' + title + author + '```');
+                        } else {
+                            articles.unshift('```' + title + '```');
+                        }
+                    } else if (author) {
+                        articles.push('```http\n' + author + '```');
+                    }
 
                     message.channel.send(articles.join(''))
                 });

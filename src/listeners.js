@@ -272,7 +272,7 @@ module.exports = (OpalBot) => {
                             articles.unshift('```' + title + '```');
                         }
                     } else if (author) {
-                        articles.push('```http\n' + author + '```');
+                        articles.push('```coq\n' + author + '```');
                     }
 
                     message.channel.send(articles.join(''))

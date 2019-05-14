@@ -72,8 +72,12 @@ module.exports = (OpalBot) => {
         result = custom
             ? rand(identifier + custom)
             : rigged[identifier] || rand(identifier);
-
-        message.channel.send(i18n.msg('result', 'rate', `<@${message.author.id}>`, name, result[criteria], critName, lang));
-    } 
+        
+        if (!mentioned && !rigged[identifier]) {
+            message.channel.send(i18n.msg('regsult', 'rate', `<@${message.author.id}>`, name, result[criteria], lang));
+        } else {
+            message.channel.send(i18n.msg('result', 'rate', `<@${message.author.id}>`, name, result[criteria], critName, lang));
+        }
+    };
     return out;
 };

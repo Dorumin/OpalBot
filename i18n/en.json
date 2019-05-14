@@ -385,7 +385,8 @@
         "criteria-9": "with their **cuteness**",
         "criteria-10": "on their **honesty**",
         "criteria-11": "on their **singing**",
-        "result": "$1, I'd rate $2 a **$3**/10 $4!"
+        "result": "$1, I'd rate $2 a **$3**/10 $4!",
+        "regsult": "$1, I'd rate $1 a **$3**/10!"
     },
     "pindump": {
         "no-pins": "There are no pins from this channel to post!",

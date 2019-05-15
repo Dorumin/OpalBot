@@ -717,7 +717,7 @@ class Video {
     get stream() {
         if (this._stream) return this._stream;
         return this._stream = ffmpeg({
-            source: ytdl(video.id, {
+            source: ytdl(this.id, {
                 quality: 'lowest'
             })
         })

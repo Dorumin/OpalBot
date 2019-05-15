@@ -178,14 +178,14 @@ class MusicController {
         this.queue.forEach((video, index) => {
             if (Math.abs(index - this.currentIndex) < 2) {
                 // audioonly is unreliable
-                video.stream = (!force && video.stream) || ffmpeg({
-                    source: ytdl(video.id, {
-                        quality: 'lowest'
-                    })
-                })
-                .noVideo()
-                .format('mp3')
-                .on('error', console.log);
+                // video.stream = (!force && video.stream) || ffmpeg({
+                //     source: ytdl(video.id, {
+                //         quality: 'lowest'
+                //     })
+                // })
+                // .noVideo()
+                // .format('mp3')
+                // .on('error', console.log);
                 // only use as backup
                 video.backupStream = (!force && video.backupStream) || ytdl(video.id, {
                     audioonly: true
@@ -712,12 +712,11 @@ class Video {
         this.thumbnail = `https://img.youtube.com/vi/${this.id}/0.jpg`;
         this.channel = channel;
         this.query = query || this.cleanTitle;
-        this.stream = null;
     }
 
     get stream() {
         if (this._stream) return this._stream;
-        return this.stream = ffmpeg({
+        return this._stream = ffmpeg({
             source: ytdl(video.id, {
                 quality: 'lowest'
             })

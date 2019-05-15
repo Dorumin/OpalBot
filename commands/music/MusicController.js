@@ -192,7 +192,7 @@ class MusicController {
                 })
                 .on('error', console.log);
             } else {
-                video.stream = null;
+                // video.stream = null;
                 video.backupStream = null;
             }
         });

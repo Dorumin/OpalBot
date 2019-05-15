@@ -74,6 +74,10 @@ module.exports = (OpalBot) => {
             : rigged[identifier] || rand(identifier);
         
         if (!mentioned && !rigged[identifier]) {
+            name = name.replace(/^(my|your)\b/ig, word => ({
+                'your': 'my',
+                'my': 'your'
+            })[word] || word);
             message.channel.send(i18n.msg('regsult', 'rate', `<@${message.author.id}>`, name, result[criteria], lang));
         } else {
             message.channel.send(i18n.msg('result', 'rate', `<@${message.author.id}>`, name, result[criteria], critName, lang));

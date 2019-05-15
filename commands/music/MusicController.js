@@ -86,7 +86,7 @@ class MusicController {
                 name: info.author.name,
                 url: info.author.channel_url
             }),
-            query: searched ? query : info.title, // TODO: Something with media
+            query: searched ? query : null, // TODO: Something with media
         });
 
         if (wait) {
@@ -219,6 +219,7 @@ class MusicController {
         backup,
     }) {
         const video = this.queue[index];
+        console.log(index);
 
         if (!video.stream) {
             console.log('wtf no stream');
@@ -710,8 +711,27 @@ class Video {
         this.live = live;
         this.thumbnail = `https://img.youtube.com/vi/${this.id}/0.jpg`;
         this.channel = channel;
-        this.query = query;
+        this.query = query || this.cleanTitle;
         this.stream = null;
+    }
+
+    get stream() {
+        if (this._stream) return this._stream;
+        return this.stream = ffmpeg({
+            source: ytdl(video.id, {
+                quality: 'lowest'
+            })
+        })
+        .noVideo()
+        .format('mp3');
+    }
+
+    async streamable() {
+        return new Promise(res => {
+            this.stream
+                .on('data', res.bind(this, true))
+                .on('error', res.bind(this, false));
+        });
     }
 
     get url() {
@@ -720,7 +740,7 @@ class Video {
 
     get cleanTitle() {
         return this.title
-            .replace(/\(.+?\)|\[.+?]/g, '')
+            .replace(/\(.+?\)|\[.+?]|{.+?}/g, '')
             .replace(/,.+?-/g, ' -')
             .replace(/\s+/g, ' ')
             .trim();

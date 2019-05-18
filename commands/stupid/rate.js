@@ -78,7 +78,7 @@ module.exports = (OpalBot) => {
                 'your': 'my',
                 'my': 'your'
             })[word] || word);
-            message.channel.send(i18n.msg('regsult', 'rate', `<@${message.author.id}>`, name, result[criteria], lang));
+            message.channel.send(i18n.msg('regsult', 'rate', `<@${message.author.id}>`, n, result[criteria], lang));
         } else {
             message.channel.send(i18n.msg('result', 'rate', `<@${message.author.id}>`, name, result[criteria], critName, lang));
         }

@@ -74,7 +74,7 @@ module.exports = (OpalBot) => {
             : rigged[identifier] || rand(identifier);
         
         if (!mentioned && !rigged[identifier]) {
-            const name = name.replace(/^(my|your)\b/ig, word => ({
+            const n = name.replace(/^(my|your)\b/ig, word => ({
                 'your': 'my',
                 'my': 'your'
             })[word] || word);

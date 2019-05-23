@@ -20,6 +20,7 @@ req.post = (obj) => req(obj, true);
 ffmpeg.setFfmpegPath(installer.path);
 
 function sanitize(str, backup) {
+    console.log(str);
     return sanitizeFile(str)
         .replace(/\(.+?\)|{.+?}|\[.+?\]|「.+? 」|,/g, '')
         .trim()
@@ -134,7 +135,7 @@ module.exports = (OpalBot) => {
         if (title) {
             title = title[1] || title[2];
         }
-        OpalBot.storage.mp3[id] = sanitize(title, info.title).replace(/,/g, '') + '.mp3';
+        OpalBot.storage.mp3[id] = sanitize(title, info.title) + '.mp3';
         let converting = await message.channel.send(i18n.msg('converting', 'mp3', lang));
         message.channel.startTyping();
         ffmpeg({
@@ -173,10 +174,12 @@ module.exports = (OpalBot) => {
                     } : null,
                     fields: [{
                         name: i18n.msg('size', 'mp3', lang),
-                        value: OpalBot.util.formatBytes(stats.size)
+                        value: OpalBot.util.formatBytes(stats.size),
+                        inline: true
                     }, {
                         name: i18n.msg('duration', 'mp3', lang),
-                        value: duration
+                        value: duration,
+                        inline: true
                     }]
                 }
             }).catch(OpalBot.util.log);

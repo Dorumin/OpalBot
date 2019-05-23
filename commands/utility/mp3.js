@@ -3,7 +3,7 @@ ytdl = require('ytdl-core'),
 installer = require('@ffmpeg-installer/ffmpeg'),
 config = require('../../src/config.js'),
 ffmpeg = require('fluent-ffmpeg'),
-sanitize = require('sanitize-filename'),
+sanitizeFile = require('sanitize-filename'),
 fs = require('fs'),
 req = (obj, POST) => {
     return new Promise((res, rej) => {
@@ -18,6 +18,13 @@ req = (obj, POST) => {
 };
 req.post = (obj) => req(obj, true);
 ffmpeg.setFfmpegPath(installer.path);
+
+function sanitize(str, backup) {
+    return sanitizeFile(str)
+        .replace(/\(.+?\)|{.+?}|\[.+?\]|「.+? 」|,/g, '')
+        .trim()
+        || backup;
+}
 
 module.exports = (OpalBot) => {
     const out = {},
@@ -127,7 +134,7 @@ module.exports = (OpalBot) => {
         if (title) {
             title = title[1] || title[2];
         }
-        OpalBot.storage.mp3[id] = (sanitize(title) || sanitize(info.title) || id).replace(/,/g, '') + '.mp3';
+        OpalBot.storage.mp3[id] = sanitize(title, info.title).replace(/,/g, '') + '.mp3';
         let converting = await message.channel.send(i18n.msg('converting', 'mp3', lang));
         message.channel.startTyping();
         ffmpeg({

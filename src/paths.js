@@ -353,7 +353,7 @@ module.exports = (OpalBot) => {
         }
     });
 
-    api.post('/paste', (req, res) => {
+    app.post('/paste', (req, res) => {
         OpalBot.storage.pastes = OpalBot.storage.pastes || {};
 
         const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'.split(''),
@@ -365,7 +365,7 @@ module.exports = (OpalBot) => {
         res.end(code);
     });
 
-    api.get('/paste/:code', (req, res) => {
+    app.get('/paste/:code', (req, res) => {
         const pastes = OpalBot.storage.pastes;
 
         if (!pastes || !pastes[req.params.code]) {

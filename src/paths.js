@@ -356,11 +356,10 @@ module.exports = (OpalBot) => {
     app.post('/paste', (req, res) => {
         OpalBot.storage.pastes = OpalBot.storage.pastes || {};
 
-        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'.split(''),
+        const chars = 'abcdefghijklmnopqrstuvwxyz0123456789'.split(''),
         code = new Array(6).fill(null).map(() => chars[Math.floor(Math.random() * chars.length)]).join('');
 
         OpalBot.storage.pastes[code] = req.body;
-
         
         res.writeHead(200, {
             'Access-Control-Allow-Origin': '*'
@@ -369,15 +368,16 @@ module.exports = (OpalBot) => {
     });
 
     app.get('/paste/:code', (req, res) => {
-        const pastes = OpalBot.storage.pastes;
+        const pastes = OpalBot.storage.pastes,
+        code = req.params.code.toLowerCase();
 
-        if (!pastes || !pastes[req.params.code]) {
+        if (!pastes || !pastes[code]) {
             res.status(404);
-            res.end('Not found.');
+            res.end('Not found: ' + code);
             return;
         }
 
-        res.end(pastes[req.params.code]);
+        res.end(pastes[code]);
     })
 
     // API

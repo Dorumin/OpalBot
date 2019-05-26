@@ -1,6 +1,7 @@
 const express = require('express'),
 cookie = require('cookie-parser'),
 minify = require('express-minify'),
+bodyParser = require('body-parser'),
 compression = require('compression'),
 request = require('request'),
 path = require('path'),
@@ -20,6 +21,7 @@ module.exports = (OpalBot) => {
         .use(compression())
         .use(minify())
         .use(cookie())
+        .use(bodyParser.text());
 
     require('./paths.js')(OpalBot);
 

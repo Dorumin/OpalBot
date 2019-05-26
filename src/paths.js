@@ -361,7 +361,10 @@ module.exports = (OpalBot) => {
 
         OpalBot.storage.pastes[code] = req.body;
 
-        res.status(200);
+        
+        res.writeHead(200, {
+            'Access-Control-Allow-Origin': '*'
+        })
         res.end(code);
     });
 

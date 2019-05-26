@@ -353,6 +353,30 @@ module.exports = (OpalBot) => {
         }
     });
 
+    api.post('/paste', (req, res) => {
+        OpalBot.storage.pastes = OpalBot.storage.pastes || {};
+
+        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'.split(''),
+        code = new Array(6).fill(null).map(() => chars[Math.floor(Math.random() * chars.length)]).join('');
+
+        OpalBot.storage.pastes[code] = req.body;
+
+        res.status(200);
+        res.end(code);
+    });
+
+    api.get('/paste/:code', (req, res) => {
+        const pastes = OpalBot.storage.pastes;
+
+        if (!pastes || !pastes[req.params.code]) {
+            res.status(404);
+            res.end('Not found.');
+            return;
+        }
+
+        res.end(pastes[req.params.code]);
+    })
+
     // API
     app.post('/ajax/:endpoint?', (req, res) => {
         const endpoint = req.params.endpoint;

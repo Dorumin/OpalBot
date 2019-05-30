@@ -261,9 +261,9 @@ module.exports = (OpalBot) => {
                                     if (b.includes(':')) return -1;
                                     return 0;
                                 })
-                                .join('\n')
                         )
-                        .map(text => '```ldif\n' + text + '```');
+                        .filter(lines => lines.length < 10)
+                        .map(lines => '```ldif\n' + lines.join('\n') + '```');
 
                     if (title) {
                         if (author) {

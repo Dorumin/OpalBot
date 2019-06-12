@@ -1,5 +1,5 @@
 const got = require('got');
-module.exports = (OpalBot) => {
+module.exports = async (OpalBot) => {
     const out = {}; 
     
     out.peasants = {};

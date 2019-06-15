@@ -22,7 +22,7 @@ module.exports = (OpalBot) => {
             'https://cdn.weeb.sh/images/ByQUc1YP-.jpeg',
             'https://cdn.weeb.sh/images/rJtHqkYw-.gif'
         ];
-        channel.message.send(imgs[Math.floor(Math.random() * imgs.length)]);
+        message.channel.send(imgs[Math.floor(Math.random() * imgs.length)]);
     };
 
     return out;

@@ -3,7 +3,7 @@ module.exports = (OpalBot) => {
     i18n = OpalBot.i18n;
     
     out.peasants = {};
-    out.peasants.d = 'dice';
+    // out.peasants.d = 'dice';
     out.peasants.dice = (message, content, lang) => {
         let [
             sides = 6,

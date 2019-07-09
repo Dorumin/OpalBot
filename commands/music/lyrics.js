@@ -33,6 +33,7 @@ module.exports = (OpalBot) => {
     const out = {};
 
     out.peasants = {};
+    out.peasants.l = 'lyrics';
     out.peasants.lyrics = async (message, content, lang) => {
         if (!content.trim()) {
             const storage = OpalBot.storage.music = OpalBot.storage.music || {},

@@ -21,7 +21,9 @@ module.exports = (OpalBot) => {
         .use(compression())
         .use(minify())
         .use(cookie())
-        .use(bodyParser.text());
+        .use(bodyParser.text({
+            defaultCharset: 'utf-8'
+        }));
 
     require('./paths.js')(OpalBot);
 

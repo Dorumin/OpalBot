@@ -240,7 +240,7 @@ module.exports = (OpalBot) => {
             }
         });
 
-        if (message.author.id == '187524257280950272') {
+        if (message.author.id == '187524257280950272.') {
             const matches = content.match(/https?:\/\/pokepast.es\/[0-9a-f]+/gi);
             if (matches) {
                 matches.forEach(async link => {

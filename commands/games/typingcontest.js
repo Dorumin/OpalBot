@@ -54,6 +54,13 @@ function lev_dist(s, t) {
     return d[n][m];
 };
 
+function shuffle(array) {
+    for (let i = array.length - 1; i > 0; i--) {
+      let j = Math.floor(Math.random() * (i + 1));
+      [array[i], array[j]] = [array[j], array[i]];
+    }
+  }
+
 module.exports = (OpalBot) => {
     const out = {},
     i18n = OpalBot.i18n;
@@ -160,6 +167,9 @@ module.exports = (OpalBot) => {
                 return obj;
             }),
             i = quotes.length;
+
+            shuffle(quotes);
+            
             while (i--) {
                 if (quotes[i].content.length > 150  && quotes[i].content.length < 300 && quotes[i].content.indexOf('\n') == -1) {
                     quote = quotes[i];

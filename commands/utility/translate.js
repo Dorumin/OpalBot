@@ -37,7 +37,7 @@ module.exports = (OpalBot) => {
             json: true
         });
 
-        OpalBot.util.log(JSON.stingify(body, null, 2));
+        OpalBot.util.log(JSON.stringify(body, null, 2));
 
         message.channel.send(`> ${text}\n${body[0][0][0]}`);
     };

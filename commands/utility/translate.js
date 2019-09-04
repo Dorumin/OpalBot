@@ -39,8 +39,8 @@ module.exports = (OpalBot) => {
 
         OpalBot.util.log(JSON.stringify(body, null, 2));
 
-        let results = body[0][0],
-        translation = results.map(res => res[0]).join('');
+        let results = body[0],
+        translation = results.map(res => res[0][0]).join('');
 
         message.channel.send(`> ${text}\n${translation}`);
     };

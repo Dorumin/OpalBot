@@ -30,7 +30,7 @@ module.exports = (OpalBot) => {
                 image: {
                     url: url
                 },
-                description: i18n.msg('description', 'imagesearch', yandex, tineye, iqdb, saucenao, trace imgops, lang)
+                description: i18n.msg('description', 'imagesearch', yandex, tineye, iqdb, saucenao, trace, imgops, lang)
             }
         }).catch(() => {
             message.reply(i18n.msg('invalid', 'imagesearch', lang)).catch(OpalBot.util.log);

@@ -41,7 +41,7 @@
     },
     "imagesearch": {
         "title": "Google Images",
-        "description": "[TinEye]($1) - [IQDB]($2) - [SauceNao]($3) - [Yandex]($4) - [ImgOps]($5)",
+        "description": "[Yandex]($1) - [TinEye]($2) - [IQDB]($3) - [SauceNao]($4) - [TraceMoe]($5) - [ImgOps]($6)",
         "invalid": "please provide a valid url!"
     },
     "ohyou": {

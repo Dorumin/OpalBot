@@ -19,6 +19,7 @@ module.exports = (OpalBot) => {
         iqdb = `https://www.iqdb.org/?url=${encoded}`,
         saucenao = `https://saucenao.com/search.php?sort=size&order=desc&url=${encoded}`,
         yandex = `https://yandex.com/images/search?rpt=imageview&img_url=${encoded}`,
+        trace = `https://trace.moe/?auto&url=${encoded}`,
         imgops = `http://imgops.com/${url}`;
 
         message.channel.send({
@@ -29,7 +30,7 @@ module.exports = (OpalBot) => {
                 image: {
                     url: url
                 },
-                description: i18n.msg('description', 'imagesearch', tineye, iqdb, saucenao, yandex, imgops, lang)
+                description: i18n.msg('description', 'imagesearch', yandex, tineye, iqdb, saucenao, trace imgops, lang)
             }
         }).catch(() => {
             message.reply(i18n.msg('invalid', 'imagesearch', lang)).catch(OpalBot.util.log);

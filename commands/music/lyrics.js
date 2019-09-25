@@ -35,7 +35,7 @@ module.exports = (OpalBot) => {
     out.peasants = {};
     out.peasants.l = 'lyrics';
     out.peasants.lyrics = async (message, content, lang) => {
-        if (!content.trim()) {
+        if (!content) {
             const storage = OpalBot.storage.music = OpalBot.storage.music || {},
             controller = storage[message.guild.id];
 
@@ -46,7 +46,11 @@ module.exports = (OpalBot) => {
                 }
             }
 
-            if (!content.trim()) {
+            if (!content && message.member.presence.game.name == 'Spotify') {
+                content = [message.member.presence.game.details, message.member.presence.game.state].filter(Boolean).join(' ');
+            }
+
+            if (!content) {
                 message.channel.send(OpalBot.i18n.msg('no-content', 'lyrics', lang));
                 return;
             }

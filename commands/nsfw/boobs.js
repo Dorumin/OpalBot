@@ -14,7 +14,7 @@ module.exports = (OpalBot) => {
             return;
         }
 
-        const { body } = await got('http://api.oboobs.ru/boobs/' + Math.floor(Math.random() * 10330), { json: true });
+        const { body } = await got('http://api.oboobs.ru/boobs/' + Math.floor(Math.random() * 13309), { json: true });
 
         if (body[0]) {
             message.channel.send('http://media.oboobs.ru/' + body[0].preview);

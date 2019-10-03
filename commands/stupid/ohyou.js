@@ -19,7 +19,7 @@ module.exports = (OpalBot) => {
         users = [
             iter.next().value || OpalBot.client.user,
             iter.next().value || message.author
-        ].map(user => user.displayAvatarURL);
+        ].map(user => user.displayAvatarURL.replace(/\.gif$/, '.png'));
         fs.readFile('www/img/ohyou.png', (err, buf) => {
             if (err) {
                 message.channel.send(i18n.msg('error', 'ohyou', lang));

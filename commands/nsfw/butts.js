@@ -13,7 +13,7 @@ module.exports = (OpalBot) => {
             return;
         }
 
-        const { body } = await got('http://api.obutts.ru/butts/' + Math.floor(Math.random() * 10330), { json: true });
+        const { body } = await got('http://api.obutts.ru/butts/' + Math.floor(Math.random() * 4335), { json: true });
 
         if (body[0]) {
             message.channel.send('http://media.obutts.ru/' + body[0].preview);

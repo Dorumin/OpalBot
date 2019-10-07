@@ -3,8 +3,8 @@ const got = require('got');
 module.exports = (OpalBot) => {
     const out = {};
     //note: 'v3' and 'nekoapi_v3.1' are not included due to not serving images, 'smallboobs' is not including due to the only image its serving is a 404 image.
-    const sfw = ['tickle', 'meow', 'poke', 'kiss', '8ball', 'lizard', 'slap', 'cuddle', 'goose', 'avatar', 'fox_girl', 'hug', 'pat', 'smug', 'kemonomimi', 'holo', 'wallpaper', 'woof', 'baka', 'feed', 'neko', 'waifu', 'erofeet', 'eroyuri', 'gecg', 'holoero', 'gasm', 'ero', 'eron', 'erokemo'];
-    const nsfw = [...sfw, 'femdom', 'classic', 'erok', 'les', 'hololewd', 'lewdk', 'keta', 'feetg', 'nsfw_neko_gif', 'kuni', 'tits', 'pussy_jpg', 'cum_jpg', 'pussy', 'lewdkemo', 'lewd', 'cum', 'spank', 'Random_hentai_gif', 'nsfw_avatar', 'boobs', 'feet', 'solog', 'bj', 'yuri', 'trap', 'anal', 'blowjob', 'hentai', 'futanari', 'solo', 'pwankg'];
+    const sfw = ['tickle', 'meow', 'poke', 'kiss', '8ball', 'lizard', 'slap', 'cuddle', 'goose', 'avatar', 'fox_girl', 'hug', 'pat', 'smug', 'kemonomimi', 'holo', 'wallpaper', 'woof', 'baka', 'feed', 'neko', 'waifu', 'gecg', 'gasm'];
+    const nsfw = [...sfw, 'femdom', 'classic', 'erok', 'les', 'hololewd', 'lewdk', 'keta', 'feetg', 'nsfw_neko_gif', 'kuni', 'tits', 'pussy_jpg', 'cum_jpg', 'pussy', 'lewdkemo', 'lewd', 'cum', 'spank', 'Random_hentai_gif', 'nsfw_avatar', 'boobs', 'feet', 'solog', 'bj', 'yuri', 'trap', 'anal', 'blowjob', 'hentai', 'futanari', 'solo', 'pwankg', 'erofeet', 'eroyuri', 'ero', 'eron', 'erokemo', 'holoero'];
 
     out.peasants = {};
     out.peasants.nl = 'view';

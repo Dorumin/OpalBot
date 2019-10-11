@@ -16,7 +16,7 @@ module.exports = (OpalBot) => {
     out.peasants.rcg = 'cyanide';
     out.peasants.cyanide = async (message, content, lang) => {
         const { body: page } = await got('http://explosm.net/rcg/view/');
-        const urls = page.match(/https:\/\/rcg-cdn\.explosm\.net\/panels\/[A-Z0-9].png/g);
+        const urls = page.match(/https:\/\/rcg-cdn\.explosm\.net\/panels\/[A-Z0-9]+\.png/g);
         if (!urls) return;
 
         const images = await Promise.all(

@@ -22,11 +22,12 @@ module.exports = (OpalBot) => {
         const images = await Promise.all(
             urls.map(url => got(url, { encoding: null }))
         );
-        const canvas = new Canvas(275 * 3, 398);
+        const canvas = new Canvas(275 * 3, 398),
+        context = canvas.getContext('2d');
         images.forEach((buffer, i) => {
             const panel = new Image();
             panel.src = buffer;
-            canvas.drawImage(panel, 275 * i, 0, 275, 398);
+            context.drawImage(panel, 275 * i, 0, 275, 398);
         });
         message.channel.send({
             file: canvas.toBuffer()

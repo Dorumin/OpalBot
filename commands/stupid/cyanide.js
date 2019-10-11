@@ -30,7 +30,7 @@ module.exports = (OpalBot) => {
             buffers.map((buffer) => {
                 return new Promise((res, rej) => {
                     const panel = new Image();
-                    panel.onload = res;
+                    panel.onload = () => res(panel);
                     panel.onerror = rej;
                     panel.src = buffer.body;
                 });

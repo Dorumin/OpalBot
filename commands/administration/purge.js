@@ -19,7 +19,7 @@ module.exports = (OpalBot) => {
         }
         message.channel.send(i18n.msg('loading', 'purge', lang));
         let ids = new Set(),
-        messages = await OpalBot.util.getChannelMessages(message.channel, null, coll => {
+        messages = await OpalBot.util.getChannelMessages(message.channel, 1, coll => {
             let l = coll.filter(model => {
                 return member ? (isId ? model.author.id == member : model.author.username + '#' + model.author.discriminator == member) : true;
             }).size;

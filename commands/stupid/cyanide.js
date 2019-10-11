@@ -26,14 +26,16 @@ module.exports = (OpalBot) => {
         const canvas = new Canvas(275 * 3, 398),
         context = canvas.getContext('2d');
 
-        const images = await buffers.map((buffer, i) => {
-            return new Promise((res, rej) => {
-                const panel = new Image();
-                panel.src = buffer;
-                panel.onload = res;
-                panel.onerror = rej;
-            });
-        });
+        const images = await Promise.all(
+            buffers.map((buffer) => {
+                return new Promise((res, rej) => {
+                    const panel = new Image();
+                    panel.src = buffer;
+                    panel.onload = res;
+                    panel.onerror = rej;
+                });
+            })
+        );
 
         images.forEach((image, i) => {
             context.drawImage(image, 275 * i, 0, 275, 398);

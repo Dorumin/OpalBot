@@ -19,16 +19,26 @@ module.exports = (OpalBot) => {
         const urls = page.match(/https:\/\/rcg-cdn\.explosm\.net\/panels\/[A-Z0-9]+\.png/g);
         if (!urls) return;
 
-        const images = await Promise.all(
+        const buffers = await Promise.all(
             urls.map(url => got(url, { encoding: null }))
         );
+
         const canvas = new Canvas(275 * 3, 398),
         context = canvas.getContext('2d');
-        images.forEach((buffer, i) => {
-            const panel = new Image();
-            panel.src = buffer;
-            context.drawImage(panel, 275 * i, 0, 275, 398);
+
+        const images = await buffers.map((buffer, i) => {
+            return new Promise((res, rej) => {
+                const panel = new Image();
+                panel.src = buffer;
+                panel.onload = res;
+                panel.onerror = rej;
+            });
         });
+
+        images.forEach((image, i) => {
+            context.drawImage(image, 275 * i, 0, 275, 398);
+        });
+
         message.channel.send({
             file: canvas.toBuffer()
         });

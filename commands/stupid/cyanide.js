@@ -6,7 +6,6 @@ try {
 } catch(e) {}
 
 const got = require('got');
-const request = require('request').defaults({ encoding: null });
 
 module.exports = (OpalBot) => {
     const out = {},
@@ -21,17 +20,7 @@ module.exports = (OpalBot) => {
         if (!urls) return;
 
         const buffers = await Promise.all(
-            urls.map(url => {
-                return new Promise((res, rej) => {
-                    request(url, (err, r, body) => {
-                        if (err) {
-                            rej(err);
-                            return;
-                        }
-                        res(body);
-                    });
-                });
-            })
+            urls.map(url => got(url, { encoding: null }))
         );
 
         const canvas = new Canvas(275 * 3, 398),
@@ -43,7 +32,7 @@ module.exports = (OpalBot) => {
                     const panel = new Image();
                     panel.onload = res;
                     panel.onerror = rej;
-                    panel.src = buffer;
+                    panel.src = buffer.body;
                 });
             })
         );

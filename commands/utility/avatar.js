@@ -16,7 +16,7 @@ module.exports = (OpalBot) => {
                 user = message.author;
             }
         }
-        const message = i18n.msg(
+        const msg = i18n.msg(
             user.id == OpalBot.client.user.id
                 ? 'own-description'
                 : 'description',
@@ -26,7 +26,7 @@ module.exports = (OpalBot) => {
         ).replace(user.username.slice(0, -1) + "s's", user.username + "'");
 
         message.channel.send(
-            message,
+            msg,
             {
                 file: user.displayAvatarURL
             }

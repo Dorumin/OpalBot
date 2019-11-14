@@ -1,7 +1,7 @@
 module.exports = (OpalBot) => {
     const out = {},
     i18n = OpalBot.i18n;
-    
+
     out.peasants = {};
     out.peasants.a = 'avatar';
     out.peasants.avi = 'avatar';
@@ -16,24 +16,21 @@ module.exports = (OpalBot) => {
                 user = message.author;
             }
         }
-        message.channel.send({
-            embed: {
-                color: OpalBot.color,
-                title: i18n.msg('title', 'avatar', lang),
-                url: user.displayAvatarURL,
-                image: {
-                    url: user.displayAvatarURL
-                },
-                description: i18n.msg(
-                    user.id == OpalBot.client.user.id
-                        ? 'own-description'
-                        : 'description',
-                    'avatar',
-                    user.username,
-                    lang
-                ).replace(user.username.slice(0, -1) + "s's", user.username + "'")
+        const message = i18n.msg(
+            user.id == OpalBot.client.user.id
+                ? 'own-description'
+                : 'description',
+            'avatar',
+            user.username,
+            lang
+        ).replace(user.username.slice(0, -1) + "s's", user.username + "'");
+
+        message.channel.send(
+            message,
+            {
+                file: user.displayAvatarURL
             }
-        }).catch(OpalBot.util.log);
+        ).catch(OpalBot.util.log);
     };
 
     return out;

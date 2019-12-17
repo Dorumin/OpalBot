@@ -62,10 +62,10 @@ class Connect4 {
             case 7:
             case '7':
                 return ':seven:';
-            case 'x': 
+            case 'x':
                 return ':regional_indicator_x:';
-            case 'blue': 
-                return ':large_blue_circle:';
+            case 'blue':
+                return ':blue_circle:';
             case 'blue2':
                 return ':large_blue_diamond:';
             case 'red':
@@ -168,7 +168,7 @@ class Connect4 {
                     }
                 }
 
-                
+
                 for (var i = 0; i < 4; i++) {
                     if (x < 3) break;
                     if (m[x - i][y + i] == disc) {
@@ -186,7 +186,7 @@ class Connect4 {
                 }
             }
         }
-        
+
         return this.is_draw();
     }
 

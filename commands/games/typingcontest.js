@@ -1,5 +1,6 @@
 const request = require('request'),
 config = require('../../src/config.js'),
+races = require('./texts.json'),
 req = (obj, POST) => {
     return new Promise((res, rej) => {
         (POST ? request.post : request)(obj, (e, r, body) => {
@@ -91,6 +92,7 @@ module.exports = (OpalBot) => {
         },
         reg = new RegExp( Object.keys(fancy_characters).join('|'), 'g' ),
         leaderboard = i18n.msg('leaderboard', 'typingcontest', lang).split('|').includes(content.trim());
+
         if (leaderboard) {
             let db = await OpalBot.db,
             games = db.games || {},
@@ -154,29 +156,18 @@ module.exports = (OpalBot) => {
             return;
         }
         storage[message.channel.id] = true;
-        while (!quote) {
-            let {body} = await req('http://quotesondesign.com/wp-json/posts?filter[orderby]=rand&filter[posts_per_page]=40'),
-            quotes = JSON.parse(body).map(obj => {
-                obj.content = obj.content
-                    .replace(/&#\d+;/g, str => {
-                        return String.fromCharCode(str.slice(2, -1));
-                    })
-                    .replace(/<[a-z-\s\/]+>/gi, '')
-                    .replace(reg, char => fancy_characters[char])
-                    .trim();
-                return obj;
-            }),
-            i = quotes.length;
 
-            shuffle(quotes);
-            
-            while (i--) {
-                if (quotes[i].content.length > 150  && quotes[i].content.length < 300 && quotes[i].content.indexOf('\n') == -1) {
-                    quote = quotes[i];
-                    break;
-                }
-            }
+        if (!quote) {
+            const i = Math.floor(Math.random() * races.length),
+            selected = races[i];
+
+            quote = {
+                content: selected,
+                ID: `tr-${i}`,
+                title: 'TypeRacer'
+            };
         }
+
         storage[quote.ID] = quote;
         let stupid_chars = quote.content.match(/#%&"~-\/\(\)\^\$/g) || [],
         timeout = quote.content.length * 1000 / 3 + 3 + stupid_chars.length;
@@ -381,7 +372,7 @@ module.exports = (OpalBot) => {
             // Close session
             delete storage[message.channel.id];
         });
-    };    
+    };
 
     return out;
 };

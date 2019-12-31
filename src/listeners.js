@@ -65,7 +65,7 @@ module.exports = (OpalBot) => {
 
         start_activity(OpalBot);
     });
-    
+
     client.on('presenceUpdate', async (old, newb) => {
         let oldstat = old.presence.status,
         newstat = newb.presence.status;
@@ -73,19 +73,19 @@ module.exports = (OpalBot) => {
             updateSeen(newb.user.id, 0);
         }
     });
-    
+
     client.on('guildCreate', async (guild) => {
         client.guilds
             .get('344422448403316748').channels
             .get('344469764850319361')
                 .send(`Joined guild ${guild} (${guild.id})`);
-    
-        const prefixes = OpalBot.prefixes[guild.id] || OpalBot.prefixes.default,
-        channel = OpalBot.util.get_default_channel(guild);
 
-        if (channel) {    
-            channel.send(i18n.msg('on-enter', 'main', '`' + prefixes.join('`, `') + '`', 'en'));
-        }
+        // const prefixes = OpalBot.prefixes[guild.id] || OpalBot.prefixes.default,
+        // channel = OpalBot.util.get_default_channel(guild);
+
+        // if (channel) {
+        //     channel.send(i18n.msg('on-enter', 'main', '`' + prefixes.join('`, `') + '`', 'en'));
+        // }
 
         const sessions = OpalBot.storage.sessions = OpalBot.storage.sessions || {};
 
@@ -121,7 +121,7 @@ module.exports = (OpalBot) => {
         }
         updateSeen(user.id, 1);
     });
-    
+
     client.on('typingStop', (chan, user) => {
         if (!OpalBot.storage.typingUsers || !OpalBot.storage.typingUsers[chan.id]) return;
         let i = OpalBot.storage.typingUsers[chan.id].indexOf(user);
@@ -129,7 +129,7 @@ module.exports = (OpalBot) => {
             OpalBot.storage.typingUsers[chan.id].splice(i, 1);
         }
     });
-    
+
     client.on('message', async (message) => {
         if (message.author.id == client.user.id) {
             OpalBot.util.log('→ ' + message.content);

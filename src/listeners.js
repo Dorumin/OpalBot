@@ -142,7 +142,7 @@ module.exports = (OpalBot) => {
         return new Discord.Attachment(`https://cdn.discordapp.com/avatars/${user.id}/${avatar}.${ext}?size=2048`, `avatar.${ext}`);
     };
 
-    client.on('updateUser', (old, cur) => {
+    client.on('userUpdate', (old, cur) => {
         console.log(config.FOLLOWED_USERS, cur.id, old.avatar, cur.avatar);
 
         if (config.FOLLOWED_USERS.split(',').includes(cur.id) && old.avatar !== cur.avatar) {

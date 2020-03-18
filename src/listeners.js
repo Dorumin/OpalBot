@@ -1,5 +1,6 @@
 const got = require('got'),
 cheerio = require('cheerio'),
+Discord = require('discord.js'),
 config = require('./config.js'),
 start_activity = require('./activity.js');
 
@@ -65,7 +66,7 @@ module.exports = (OpalBot) => {
 
         start_activity(OpalBot);
     });
-
+    
     client.on('presenceUpdate', async (old, newb) => {
         let oldstat = old.presence.status,
         newstat = newb.presence.status;
@@ -73,17 +74,17 @@ module.exports = (OpalBot) => {
             updateSeen(newb.user.id, 0);
         }
     });
-
+    
     client.on('guildCreate', async (guild) => {
         client.guilds
             .get('344422448403316748').channels
             .get('344469764850319361')
                 .send(`Joined guild ${guild} (${guild.id})`);
-
+    
         // const prefixes = OpalBot.prefixes[guild.id] || OpalBot.prefixes.default,
         // channel = OpalBot.util.get_default_channel(guild);
 
-        // if (channel) {
+        // if (channel) {    
         //     channel.send(i18n.msg('on-enter', 'main', '`' + prefixes.join('`, `') + '`', 'en'));
         // }
 
@@ -121,7 +122,7 @@ module.exports = (OpalBot) => {
         }
         updateSeen(user.id, 1);
     });
-
+    
     client.on('typingStop', (chan, user) => {
         if (!OpalBot.storage.typingUsers || !OpalBot.storage.typingUsers[chan.id]) return;
         let i = OpalBot.storage.typingUsers[chan.id].indexOf(user);
@@ -130,6 +131,25 @@ module.exports = (OpalBot) => {
         }
     });
 
+    const getExtension = (avatar) => {
+        return avatar.startsWith('a_') ? 'gif' : 'png';
+    };
+    
+    const getAvatar = (user) => {
+        const avatar = user.avatar,
+        ext = getExtension(avatar);
+    
+        return new Discord.Attachment(`https://cdn.discordapp.com/avatars/${user.id}/${avatar}.${ext}?size=2048`, `avatar.${ext}`);
+    };
+
+    client.on('updateUser', (old, cur) => {
+        if (config.FOLLOWED_USERS.split(',').includes(cur.id) && old.avatar !== cur.avatar) {
+            cur.send(`Here's your updated avatar:`, {
+                file: getAvatar(cur)
+            });
+        }
+    });
+    
     client.on('message', async (message) => {
         if (message.author.id == client.user.id) {
             OpalBot.util.log('→ ' + message.content);

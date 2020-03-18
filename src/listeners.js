@@ -143,10 +143,12 @@ module.exports = (OpalBot) => {
     };
 
     client.on('updateUser', (old, cur) => {
+        console.log(config.FOLLOWED_USERS, cur.id, old.avatar, cur.avatar);
+
         if (config.FOLLOWED_USERS.split(',').includes(cur.id) && old.avatar !== cur.avatar) {
             cur.send(`Here's your updated avatar:`, {
                 file: getAvatar(cur)
-            });
+            }).catch(OpalBot.util.log);
         }
     });
     

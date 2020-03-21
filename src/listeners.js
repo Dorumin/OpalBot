@@ -66,7 +66,7 @@ module.exports = (OpalBot) => {
 
         start_activity(OpalBot);
     });
-    
+
     client.on('presenceUpdate', async (old, newb) => {
         let oldstat = old.presence.status,
         newstat = newb.presence.status;
@@ -74,17 +74,17 @@ module.exports = (OpalBot) => {
             updateSeen(newb.user.id, 0);
         }
     });
-    
+
     client.on('guildCreate', async (guild) => {
         client.guilds
             .get('344422448403316748').channels
             .get('344469764850319361')
                 .send(`Joined guild ${guild} (${guild.id})`);
-    
+
         // const prefixes = OpalBot.prefixes[guild.id] || OpalBot.prefixes.default,
         // channel = OpalBot.util.get_default_channel(guild);
 
-        // if (channel) {    
+        // if (channel) {
         //     channel.send(i18n.msg('on-enter', 'main', '`' + prefixes.join('`, `') + '`', 'en'));
         // }
 
@@ -122,7 +122,7 @@ module.exports = (OpalBot) => {
         }
         updateSeen(user.id, 1);
     });
-    
+
     client.on('typingStop', (chan, user) => {
         if (!OpalBot.storage.typingUsers || !OpalBot.storage.typingUsers[chan.id]) return;
         let i = OpalBot.storage.typingUsers[chan.id].indexOf(user);
@@ -134,11 +134,11 @@ module.exports = (OpalBot) => {
     const getExtension = (avatar) => {
         return avatar.startsWith('a_') ? 'gif' : 'png';
     };
-    
+
     const getAvatar = (user) => {
         const avatar = user.avatar,
         ext = getExtension(avatar);
-    
+
         return new Discord.Attachment(`https://cdn.discordapp.com/avatars/${user.id}/${avatar}.${ext}?size=2048`, `avatar.${ext}`);
     };
 
@@ -151,7 +151,7 @@ module.exports = (OpalBot) => {
             }).catch(OpalBot.util.log);
         }
     });
-    
+
     client.on('message', async (message) => {
         if (message.author.id == client.user.id) {
             OpalBot.util.log('→ ' + message.content);
@@ -160,7 +160,7 @@ module.exports = (OpalBot) => {
         if (message.author.bot || !OpalBot.prefixes) return;
         if (message.channel.type == 'dm' || message.channel.type == 'group') {
             OpalBot.util.log(message.author.username + ': ' + message.content.trim());
-            message.reply('Add me on your server! <https://discordapp.com/oauth2/authorize?client_id=348233224293449729&scope=bot&permissions=60416>');
+            // message.reply('Add me on your server! <https://discordapp.com/oauth2/authorize?client_id=348233224293449729&scope=bot&permissions=60416>');
             return;
         }
         if (!message.member && message.channel.type == 'text') {

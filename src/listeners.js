@@ -185,7 +185,9 @@ module.exports = (OpalBot) => {
         }
         if (!content) return;
         OpalBot.util.log(pad(d.getUTCHours()) + ':' + pad(d.getUTCMinutes()) + ':' + pad(d.getUTCSeconds()) + ' ' + name + ': ' + content + (message.channel.type == 'text' ? ' @ ' + message.guild.name + '#' + message.channel.name : '') + message.attachments.map(attachment => '\n' + attachment.url).join('\n'));
-        if (message.channel.type != 'text') return;
+		if (message.channel.type != 'text') return;
+		if (config.IGNORED_USERS.split(',').includes(message.author.id)) return;
+
         if (tu && tu[message.channel.id]) {
             let idx = tu[message.channel.id].indexOf(message.author);
             if (idx != -1) {

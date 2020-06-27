@@ -6,7 +6,7 @@ module.exports = (OpalBot) => {
         if (isNaN(content)) {
             return message.react('⚠');
         }
-        message.channel.send(`https://http.cats/${content}.jpg`);
+        message.channel.send(`https://http.cat/${content}.jpg`);
     };
 
     return out;

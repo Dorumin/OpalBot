@@ -3,7 +3,7 @@ module.exports = (OpalBot) => {
     
     out.peasants = {};
     out.peasants.http = (message, content, lang) => {
-        if (isNaN(content)) {
+        if (!parseInt(content)) {
             return message.react('⚠');
         }
         message.channel.send(`https://http.cat/${content}.jpg`);

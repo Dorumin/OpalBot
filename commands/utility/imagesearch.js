@@ -18,7 +18,7 @@ module.exports = (OpalBot) => {
         tineye = `https://www.tineye.com/search?url=${encoded}`,
         iqdb = `https://www.iqdb.org/?url=${encoded}`,
         saucenao = `https://saucenao.com/search.php?sort=size&order=desc&url=${encoded}`,
-        yandex = `https://yandex.com/images/search?rpt=imageview&img_url=${encoded}`,
+        yandex = `https://yandex.com/images/search?rpt=imageview&url=${encoded}`,
         trace = `https://trace.moe/?auto&url=${encoded}`,
         imgops = `http://imgops.com/${url}`;
 

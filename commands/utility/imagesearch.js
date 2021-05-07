@@ -27,9 +27,9 @@ module.exports = (OpalBot) => {
                 color: OpalBot.color,
                 title: i18n.msg('title', 'imagesearch', lang),
                 url: google,
-                image: {
-                    url: url
-                },
+                // image: {
+                //     url: url
+                // },
                 description: i18n.msg('description', 'imagesearch', yandex, tineye, iqdb, saucenao, trace, imgops, lang)
             }
         }).catch(() => {
